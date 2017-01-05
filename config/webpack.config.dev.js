@@ -43,27 +43,26 @@ module.exports = {
       {
         test: /\.js$/,
         include: paths.appSrc,
-        exclude: /node_modules/,
         loader: 'babel',
-        query: require('./babel.dev')
+        query: require('./babel.dev'),
       },
       {
         test: /\.css$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'style!css!postcss'
+        loader: 'style!css!postcss',
       },
       {
         test: /\.json$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'json'
+        loader: 'json',
       },
       {
         test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'file',
         query: {
-          name: 'static/media/[name].[ext]'
-        }
+          name: 'static/media/[name].[ext]',
+        },
       },
       {
         test: /\.(mp4|webm)(\?.*)?$/,
@@ -71,10 +70,10 @@ module.exports = {
         loader: 'url',
         query: {
           limit: 10000,
-          name: 'static/media/[name].[ext]'
-        }
-      }
-    ]
+          name: 'static/media/[name].[ext]',
+        },
+      },
+    ],
   },
   postcss: function() {
     return [autoprefixer];
