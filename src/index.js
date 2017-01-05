@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import PeopleContainer from './components';
 import './index.css';
 import {Provider} from 'react-redux';
 import configureStore from './store/configure-store';
@@ -14,6 +15,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Route path="/" component={App}>
+        <Route path="people" component={PeopleContainer} />
       </Route>
     </Router>
   </Provider>,
