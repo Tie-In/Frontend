@@ -1,3 +1,7 @@
+import Login from './Login';
 import PeopleContainer from './People/PeopleContainer';
 
-export default PeopleContainer;
+module.exports = {
+  Login,
+  PeopleContainer,
+};
