@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap-theme.css';
 import configureStore from './store/configure-store';
 import { Router, Route, browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
+import RegisterContainer from './components';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store)
@@ -17,6 +18,7 @@ ReactDOM.render(
     <Router history={history}>
       <Route path="/" component={App}>
         <Route path="people" component={PeopleContainer} />
+        <Route path="register" component={RegisterContainer} />
       </Route>
     </Router>
   </Provider>,
