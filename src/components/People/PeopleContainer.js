@@ -31,7 +31,7 @@ PeopleContainer.propTypes = {
   actions: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     people: state.people,
   };

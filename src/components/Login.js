@@ -1,12 +1,32 @@
 import { Form, FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import axios from 'axios';
 import BackgroundImage from 'react-background-image-loader';
-import logo from '../images/logo.png';
+import logo from '../images/logo-login.png';
 import Background from '../images/BG-white.png';
+import * as userActions from '../actions/user-actions';
 
 class Login extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: '',
+      password: '',
+      user: {},
+    };
+
+    this.handleEmail = this.handleEmail.bind(this);
+    this.handlePassword = this.handlePassword.bind(this);
+    this.login = this.login.bind(this);
+    this.register = this.register.bind(this);
+  }
+
   componentWillMount() {
+    // set background style
     document.body.style.backgroundImage = `url(${Background})`;
     document.body.style.backgroundRepeat = 'no-repeat';
     document.body.style.backgroundSize = 'cover';
@@ -14,11 +34,41 @@ class Login extends Component {
     document.body.style.backgroundAttachment = 'fixed';
   }
 
+  login() {
+    let user = {};
+    console.log(this.state.password);
+    axios.post('/api/sessions', {
+      session: {
+        email: this.state.email,
+        password: this.state.password,
+      },
+    }).then((response) => {
+      user = response.data;
+      this.props.actions.setUser(user);
+    }).catch((response) => {
+      console.log(response);
+    });
+  }
+
+  handleEmail(event) {
+    this.setState({ email: event.target.value });
+  }
+
+  handlePassword(event) {
+    this.setState({ password: event.target.value });
+  }
+
+  doSomething(e) {
+    e.preventDefault();
+  }
+
+  register() {
+    console.log(this.props.user);
+  }
   render() {
     const logoMargin = {
       marginBottom: 50,
-    }
-
+    };
     const loginBlogStyle = {
       width: '25%',
       height: 'auto',
@@ -29,7 +79,7 @@ class Login extends Component {
     };
 
     const logoStyle = {
-      width: '40%',
+      width: '35%',
       height: 'auto',
       display: 'block',
       margin: 'auto',
@@ -56,29 +106,39 @@ class Login extends Component {
           <div style={logoMargin}>
             <img style={logoStyle} src={logo} alt="logo" />
           </div>
-          <form>
+          <form onSubmit={this.doSomething}>
             <FormGroup>
               <ControlLabel>Username or Email</ControlLabel>
               <FormControl
-                id="formControlsText"
                 style={inputStyle}
+                onChange={this.handleEmail}
               />
             </FormGroup>
             <FormGroup>
               <ControlLabel>Password</ControlLabel>
               <FormControl
-                id="formControlsText"
                 style={inputStyle}
+                onChange={this.handlePassword}
+                type="password"
               />
             </FormGroup>
             <FormGroup>
               <Col sm={6}>
-                <Button style={registerButton} type="submit" block>
+                <Button
+                  style={registerButton}
+                  onClick={this.register}
+                  block
+                >
                   Register
                 </Button>
               </Col>
               <Col sm={6}>
-                <Button style={signinButton} type="submit" block>
+                <Button
+                  style={signinButton}
+                  onClick={this.login}
+                  type="submit"
+                  block
+                >
                   Sign in
                 </Button>
               </Col>
@@ -89,4 +149,22 @@ class Login extends Component {
     );
   }
 }
-export default Login;
+
+Login.propTypes = {
+  user: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(userActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

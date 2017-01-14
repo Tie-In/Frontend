@@ -147,6 +147,9 @@ function runDevServer(port) {
     hot: true, // Note: only CSS is currently hot reloaded
     publicPath: config.output.publicPath,
     quiet: true,
+    proxy: {
+      '/api/**': 'http://localhost:3000/',
+    },
     watchOptions: {
       ignored: /node_modules/
     }
