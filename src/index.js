@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { Login, PeopleContainer } from './components';
+import { Login, PeopleContainer, Register } from './components';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
@@ -19,6 +19,7 @@ ReactDOM.render(
         <Route path="people" component={PeopleContainer} />
       </Route>
       <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
     </Router>
   </Provider>,
   document.getElementById('root')
