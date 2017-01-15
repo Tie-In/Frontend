@@ -1,13 +1,39 @@
 import React, { PropTypes, Component } from 'react';
-import { ResponsiveEmbed } from 'react-bootstrap';
+import { img } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 class RegisterContainer extends Component {
+  articleStyles() {
+    return {
+      position: 'relative',
+      margin: '0 auto',
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)'
+    }
+  }
+
+  buttonDefaultStyle() {
+    return {
+      position: 'absolute',
+      backgroundImage: 'none',
+      backgroundColor: '#A25E5D',
+      color: '#ffffff',
+      textShadow: 'none',
+      borderColor: '#A25E5D',
+      left: '50%',
+      transform: 'translate(-50%, 0)',
+      marginTop: '8px'
+    }
+  }
+
   render() {
     return (
-      <div style={{width: 660, height: 'auto'}}>
-        <ResponsiveEmbed a16by9>
-          <embed type="image/svg+xml" src="http://s31.postimg.org/cq2pz5z23/hamster.jpg?noredir=1" />
-        </ResponsiveEmbed>
+      <div style={this.articleStyles()}>
+        <img src={"src/components/Register/addOrg.png"} alt="Image"/>
+        <p/>
+        <Button style={this.buttonDefaultStyle()}>Create organization</Button>
       </div>
     );
   }
