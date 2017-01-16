@@ -23,7 +23,7 @@ class Register extends Component {
         phone_number: '',
       },
       isError: false,
-      tryCheck: false,
+      createClicked: false,
       user: {},
     };
 
@@ -33,7 +33,7 @@ class Register extends Component {
 
   create() {
     let pass = true;
-    this.setState({ tryCheck: true });
+    this.setState({ createClicked: true });
     Object.keys(this.state.input).forEach((key) => {
       const value = this.state.input[key];
       if (value === '') {
@@ -41,11 +41,13 @@ class Register extends Component {
         this.setState({ isError: true });
       }
     });
-    if (pass) {
+    if (pass && this.state.input.password === this.state.input.password_confirmation) {
       axios.post('/api/users', {
         user: this.state.input,
       }).then((response) => {
-        console.log(response);
+        this.props.actions.setUser(response.data);
+      }).catch((error) => {
+        console.log(error.response);
       });
     }
   }
@@ -59,7 +61,7 @@ class Register extends Component {
   }
 
   validateEmpty(value) {
-    if (value === '' && this.state.tryCheck) {
+    if (value === '' && this.state.createClicked) {
       return false;
     }
     return true;
@@ -149,6 +151,7 @@ class Register extends Component {
               >
                 <ControlLabel>Password</ControlLabel>
                 <FormControl
+                  type="password"
                   placeholder="Password"
                   valueLink={linkState(this, 'input.password')}
                 />
@@ -160,6 +163,7 @@ class Register extends Component {
               >
                 <ControlLabel>Confirm password</ControlLabel>
                 <FormControl
+                  type="password"
                   placeholder="Confirm password"
                   valueLink={linkState(this, 'input.password_confirmation')}
                 />
