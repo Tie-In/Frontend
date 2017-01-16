@@ -22,21 +22,31 @@ class Register extends Component {
         birth_date: '',
         phone_number: '',
       },
+      error: {
+        email: '',
+        password: '',
+        firstname: '',
+        lastname: '',
+        username: '',
+        password_confirmation: '',
+        birth_date: '',
+        phone_number: '',
+      },
       isError: false,
       createClicked: false,
       user: {},
     };
 
     this.create = this.create.bind(this);
-    this.validateEmpty = this.validateEmpty.bind(this);
+    this.validate = this.validate.bind(this);
   }
 
   create() {
     let pass = true;
     this.setState({ createClicked: true });
-    Object.keys(this.state.input).forEach((key) => {
-      const value = this.state.input[key];
-      if (value === '') {
+    Object.keys(this.state.error).forEach((key) => {
+      const value = this.state.error[key];
+      if (value !== '') {
         pass = false;
         this.setState({ isError: true });
       }
@@ -46,8 +56,14 @@ class Register extends Component {
         user: this.state.input,
       }).then((response) => {
         this.props.actions.setUser(response.data);
+        // go next
       }).catch((error) => {
-        console.log(error.response);
+        console.log(error.response.data);
+        const err = error.response.data.errors;
+        const errState = this.state.error;
+        if (err.email.length > 0) {
+          errState.email = err.email[0];
+        }
       });
     }
   }
@@ -60,11 +76,34 @@ class Register extends Component {
     return re.test(email);
   }
 
-  validateEmpty(value) {
-    if (value === '' && this.state.createClicked) {
-      return false;
+  validate(inputType) {
+    const input = this.state.input;
+    const err = this.state.error;
+    const value = input[inputType];
+    if (this.state.createClicked) {
+      if (value === '') {
+        err[inputType] = 'is required';
+        return false;
+      } else if (inputType === 'email' && !this.validateEmail(value)) {
+        err[inputType] = 'is incorrect format';
+        return false;
+      } else if (inputType === 'password_confirmation' && value !== input.password) {
+        err[inputType] = 'is not match to password';
+        return false;
+      }
+      err[inputType] = '';
     }
     return true;
+  }
+  errorLabel(inputType) {
+    const errorStyle = {
+      color: '#d9534f',
+      marginLeft: '25px',
+    };
+    if (this.state.error[inputType] !== '') {
+      return (<h6 style={errorStyle}>{inputType} {this.state.error[inputType]}</h6>);
+    }
+    return null;
   }
 
   render() {
@@ -83,10 +122,6 @@ class Register extends Component {
       borderColor: '#A25E5D',
       color: '#A25E5D',
     };
-    const createButton = {
-      background: '#A25E5D',
-      color: 'white',
-    };
     const lineColor = {
       borderColor: 'black',
     };
@@ -98,32 +133,33 @@ class Register extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validateEmpty(this.state.input.firstname) ? null : 'error'}
+                validationState={this.validate('firstname') ? null : 'error'}
               >
                 <ControlLabel>Firstname</ControlLabel>
                 <FormControl
                   placeholder="Firstname"
                   valueLink={linkState(this, 'input.firstname')}
                 />
+                {this.errorLabel('firstname')}
               </FormGroup>
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validateEmpty(this.state.input.lastname) ? null : 'error'}
+                validationState={this.validate('lastname') ? null : 'error'}
               >
                 <ControlLabel>Lastname</ControlLabel>
                 <FormControl
                   placeholder="Lastname"
                   valueLink={linkState(this, 'input.lastname')}
                 />
+                {this.errorLabel('lastname')}
               </FormGroup>
             </Col>
           </Row>
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validateEmpty(this.state.input.email) &&
-                  this.validateEmail(this.state.input.email) ? null : 'error'}
+                validationState={this.validate('email') ? null : 'error'}
               >
                 <ControlLabel>Email address</ControlLabel>
                 <FormControl
@@ -131,23 +167,25 @@ class Register extends Component {
                   valueLink={linkState(this, 'input.email')}
                 />
               </FormGroup>
+              {this.errorLabel('email')}
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validateEmpty(this.state.input.username) ? null : 'error'}
+                validationState={this.validate('username') ? null : 'error'}
               >
                 <ControlLabel>Username</ControlLabel>
                 <FormControl
                   placeholder="Username"
                   valueLink={linkState(this, 'input.username')}
                 />
+                {this.errorLabel('username')}
               </FormGroup>
             </Col>
           </Row>
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validateEmpty(this.state.input.password) ? null : 'error'}
+                validationState={this.validate('password') ? null : 'error'}
               >
                 <ControlLabel>Password</ControlLabel>
                 <FormControl
@@ -155,11 +193,12 @@ class Register extends Component {
                   placeholder="Password"
                   valueLink={linkState(this, 'input.password')}
                 />
+                {this.errorLabel('password')}
               </FormGroup>
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validateEmpty(this.state.input.password_confirmation) ? null : 'error'}
+                validationState={this.validate('password_confirmation') ? null : 'error'}
               >
                 <ControlLabel>Confirm password</ControlLabel>
                 <FormControl
@@ -167,30 +206,33 @@ class Register extends Component {
                   placeholder="Confirm password"
                   valueLink={linkState(this, 'input.password_confirmation')}
                 />
+                {this.errorLabel('password_confirmation')}
               </FormGroup>
             </Col>
           </Row>
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validateEmpty(this.state.input.birth_date) ? null : 'error'}
+                validationState={this.validate('birth_date') ? null : 'error'}
               >
                 <ControlLabel>Date of Birth</ControlLabel>
                 <FormControl
                   placeholder="MM/DD/YYYY"
                   valueLink={linkState(this, 'input.birth_date')}
                 />
+                {this.errorLabel('birth_date')}
               </FormGroup>
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validateEmpty(this.state.input.phone_number) ? null : 'error'}
+                validationState={this.validate('phone_number') ? null : 'error'}
               >
                 <ControlLabel>Phone number</ControlLabel>
                 <FormControl
                   placeholder="Phone number"
                   valueLink={linkState(this, 'input.phone_number')}
                 />
+                {this.errorLabel('phone_number')}
               </FormGroup>
             </Col>
           </Row>
@@ -216,7 +258,7 @@ class Register extends Component {
               </Col>
               <Col sm={4}>
                 <Button
-                  style={createButton}
+                  bsStyle="primary"
                   onClick={this.create}
                   block
                 >

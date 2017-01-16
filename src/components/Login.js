@@ -95,11 +95,6 @@ class Login extends Component {
       borderColor: 'black',
     };
 
-    const signinButton = {
-      background: '#A25E5D',
-      color: 'white',
-    };
-
     return (
       <div>
         <div style={loginBlogStyle}>
@@ -134,7 +129,7 @@ class Login extends Component {
               </Col>
               <Col sm={6}>
                 <Button
-                  style={signinButton}
+                  bsStyle="primary"
                   onClick={this.login}
                   type="submit"
                   block
