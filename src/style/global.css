@@ -1,0 +1,13 @@
+button.btn.btn-primary {
+  background-image: none;
+  background-color: #A25E5D;
+  color: #ffffff;
+  text-shadow: none;
+  border-color: #A25E5D;
+  box-shadow: none;
+}
+
+button.btn.btn-primary:active{
+  background-color: #8e5251;
+  border-color: #704141;
+}
