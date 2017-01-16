@@ -11,7 +11,8 @@ module.exports = {
     require.resolve('webpack-dev-server/client') + '?/',
     require.resolve('webpack/hot/dev-server'),
     require.resolve('./polyfills'),
-    path.join(paths.appSrc, 'index')
+    path.join(paths.appSrc, 'index'),
+    path.join(paths.appSrc, 'style/global.css')
   ],
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:
