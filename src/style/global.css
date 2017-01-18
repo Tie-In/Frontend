@@ -1,4 +1,5 @@
-button.btn.btn-primary {
+/* Red button */
+.btn.btn-default {
   background-image: none;
   background-color: #A25E5D;
   color: #ffffff;
@@ -7,7 +8,40 @@ button.btn.btn-primary {
   box-shadow: none;
 }
 
-button.btn.btn-primary:active{
-  background-color: #8e5251;
-  border-color: #704141;
+.btn.btn-default:hover {
+  background-image: none;
+  background-color: #905d5b;
+  border-color: #905d5b;
+  color: #ffffff;
+}
+
+.btn.btn-default:hover:active {
+  background-image: none;
+  background-color: #704a4a;
+  border-color: #704a4a;
+  color: #ffffff;
+}
+
+/* White button */
+.btn.btn-primary {
+  background-image: none;
+  background-color: #ffffff;
+  color: #A25E5D;
+  text-shadow: none;
+  border-color: #A25E5D;
+  box-shadow: none;
+}
+
+.btn.btn-primary:hover {
+  background-image: none;
+  background-color: #ffffff;
+  border-color: #905d5b;
+  color: #905d5b;
+}
+
+.btn.btn-primary:active {
+  background-image: none;
+  background-color: #ffffff;
+  border-color: #704a4a;
+  color: #704a4a;
 }

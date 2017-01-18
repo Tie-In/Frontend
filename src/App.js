@@ -36,7 +36,7 @@ class App extends Component {
                   <div className="searchBox input-group pull-right">
                     <input type="text" className="form-control" placeholder="Search"></input>
                     <span className="input-group-btn">
-                      <button className="btn btn-default" type="submit">
+                      <button className="btn" type="submit">
                         <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
                       </button>
                     </span>
