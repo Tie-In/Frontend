@@ -106,6 +106,10 @@ class Register extends Component {
     return null;
   }
 
+  cancel() {
+    document.location.href = '/login';
+  }
+
   render() {
     const containerStyle = {
       width: '70%',
@@ -250,6 +254,7 @@ class Register extends Component {
             <FormGroup>
               <Col smOffset={2} sm={4}>
                 <Button
+                  onClick={this.cancel}
                   bsStyle="primary"
                   block
                 >
