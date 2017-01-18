@@ -2,6 +2,7 @@ import { Form, FormGroup, Col, Button, FormControl, ControlLabel } from 'react-b
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router'
 import axios from 'axios';
 import BackgroundImage from 'react-background-image-loader';
 import logo from '../images/logo-login.png';
@@ -63,7 +64,7 @@ class Login extends Component {
   }
 
   register() {
-    console.log(this.props.user);
+    document.location.href = '/register';
   }
   render() {
     const logoMargin = {
@@ -73,7 +74,7 @@ class Login extends Component {
       width: '25%',
       height: 'auto',
       right: '50%',
-      bottom: '50%',
+      bottom: '60%',
       transform: 'translate(50%,50%)',
       position: 'absolute',
     };
@@ -93,6 +94,7 @@ class Login extends Component {
     const registerButton = {
       background: 'transparent',
       borderColor: 'black',
+      color: 'black',
     };
 
     return (
@@ -129,7 +131,6 @@ class Login extends Component {
               </Col>
               <Col sm={6}>
                 <Button
-                  bsStyle="primary"
                   onClick={this.login}
                   type="submit"
                   block

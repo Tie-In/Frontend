@@ -250,7 +250,7 @@ class Register extends Component {
             <FormGroup>
               <Col smOffset={2} sm={4}>
                 <Button
-                  style={cancelButton}
+                  bsStyle="primary"
                   block
                 >
                   Cancel
@@ -258,7 +258,6 @@ class Register extends Component {
               </Col>
               <Col sm={4}>
                 <Button
-                  bsStyle="primary"
                   onClick={this.create}
                   block
                 >
