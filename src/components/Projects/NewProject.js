@@ -1,13 +1,14 @@
 import {
   Row, FormGroup, Col, Button, FormControl,
   ControlLabel, InputGroup,
-  Glyphicon, OverlayTrigger,
+  Glyphicon, Media, Image,
 } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
 import axios from 'axios';
+import logo from '../../images/logo-login.png';
 
 class NewProject extends Component {
 
@@ -57,10 +58,15 @@ class NewProject extends Component {
       borderColor: 'black',
     };
     const scrollableContainer = {
+      marginTop: '25px',
       borderLeft: 'solid 1px',
       height: '200px',
       widht: 'auto',
       overflowY: 'scroll',
+      overflowX: 'hidden',
+    };
+    const userButton = {
+      border: 'none',
     };
     return (
       <div style={containerStyle}>
@@ -118,17 +124,20 @@ class NewProject extends Component {
             </Col>
             <Col sm={5}>
               <div style={scrollableContainer}>
-                <Row>asdasdasd</Row>
-                <Row>asdasdasd</Row>
-                <Row>asdasdasd</Row>
-                <Row>asdasdasd</Row>
-                <Row>asdasdasd</Row>
-                <Row>asdasdasd</Row>
-                <Row>asdasdasd</Row>
-                <Row>asdasdasd</Row>
-                <Row>asdasdasd</Row>
-                <Row>asdasdasd</Row>
-                <Row>asdasdasd</Row>
+                <Button bsStyle="primary" style={userButton}>
+                  <Row>
+                    <Col smOffset={1} sm={10}>
+                      <Media>
+                        <Media.Left>
+                          <Image width={32} height={32} src={logo} alt="user" circle />
+                        </Media.Left>
+                        <Media.Body>
+                          <p>pongsachon.p@ku.th</p>
+                        </Media.Body>
+                      </Media>
+                    </Col>
+                  </Row>
+                </Button>
               </div>
             </Col>
           </Row>
