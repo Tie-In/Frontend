@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { Login, PeopleContainer, Register } from './components';
+import {
+  Login,
+  FeaturePlanningContainer,
+  Register,
+} from './components';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
@@ -16,7 +20,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Route path="/" component={App}>
-        <Route path="people" component={PeopleContainer} />
+        <Route path="/project/1/planning/features" component={FeaturePlanningContainer} />
       </Route>
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
