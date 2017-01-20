@@ -65,9 +65,6 @@ class NewProject extends Component {
       overflowY: 'scroll',
       overflowX: 'hidden',
     };
-    const userButton = {
-      border: 'none',
-    };
     return (
       <div style={containerStyle}>
         <h3 style={headerStyle}>Create new project</h3>
@@ -122,25 +119,24 @@ class NewProject extends Component {
                 </InputGroup>
               </FormGroup>
             </Col>
-            <Col sm={5}>
+            <Col smOffset={1} sm={5}>
               <div style={scrollableContainer}>
-                <Button bsStyle="primary" style={userButton}>
-                  <Row>
-                    <Col smOffset={1} sm={10}>
-                      <Media>
-                        <Media.Left>
-                          <Image width={32} height={32} src={logo} alt="user" circle />
-                        </Media.Left>
-                        <Media.Body>
-                          <p>pongsachon.p@ku.th</p>
-                        </Media.Body>
-                      </Media>
-                    </Col>
-                  </Row>
-                </Button>
+                <Row>
+                  <Col smOffset={1} sm={10}>
+                    <Media>
+                      <Media.Left>
+                        <Image width={32} height={32} src={logo} alt="user" circle />
+                      </Media.Left>
+                      <Media.Body>
+                        <p>pongsachon.p@ku.th</p>
+                      </Media.Body>
+                    </Media>
+                  </Col>
+                </Row>
               </div>
             </Col>
           </Row>
+          <br />
           <Row>
             <FormGroup>
               <Col smOffset={2} sm={4}>
