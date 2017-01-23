@@ -16,8 +16,8 @@ header[role="banner"] #logo-main {
   display: inline-block;
   float: none;
 }
-#navbar-primary.navbar-default .navbar-nav > li:hover > a {
-  color: #A25E5D;
+#navbar-primary.navbar-default .navbar-nav > li:hover > a, .active {
+  color: #A25E5D !important;
   font-weight: bold;
 }
 #navbar-primary.navbar-default .navbar-nav > li.active > a {
@@ -31,7 +31,4 @@ header[role="banner"] #logo-main {
 .searchBox {
   width: 150px;
   margin-top: 10px;
-}
-.active {
-  color: #A25E5D !important;
 }

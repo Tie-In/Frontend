@@ -16,7 +16,6 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Route path="/" component={App}>
-        <Route path="people" component={PeopleContainer} />
       </Route>
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />

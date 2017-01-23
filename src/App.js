@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import NavStyle from './style/navstyle.css';
 import logo from './images/logo.png';
 import { Link } from 'react-router';
-import classNames from '../node_modules/classnames/bind';
-
 
 class App extends Component {
   constructor(props) {
@@ -37,9 +35,6 @@ class App extends Component {
 
     return (
       <div className="App" style={NavStyle}>
-        <div className="container">
-          {this.props.children}
-        </div>
         <header role="banner">
           <nav id="navbar-primary" className="navbar navbar-default" role="navigation">
             <div className="container-fluid">
@@ -69,6 +64,9 @@ class App extends Component {
             </div>
           </nav>
         </header>
+        <div className="container">
+          {this.props.children}
+        </div>
       </div>
     );
   }
