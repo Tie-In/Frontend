@@ -5,6 +5,7 @@ import {
   Login,
   FeaturePlanningContainer,
   Register,
+  EffortEstimationContainer,
 } from './components';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -21,6 +22,7 @@ ReactDOM.render(
     <Router history={history}>
       <Route path="/" component={App}>
         <Route path="/project/1/planning/features" component={FeaturePlanningContainer} />
+        <Route path="/project/1/planning/effort_estimation" component={EffortEstimationContainer} />
       </Route>
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
