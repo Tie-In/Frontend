@@ -34,13 +34,13 @@ class Container extends Component {
         <FactorsTable
           title="Calcuate Technical Complexity"
           factors={technicalFactors}
-          resultLabel="TCF (Technical Complexity Factor)"
+          resultLabel="TFactor (Technical Factor)"
         />
         <br />
         <FactorsTable
           title="Calcuate Environmental Complexity"
           factors={environmentalFactors}
-          resultLabel="ECF (Environmental Complexity Factor)"
+          resultLabel="EFactor (Environmental Factor)"
         />
         <br />
         <br />
