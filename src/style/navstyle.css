@@ -16,6 +16,14 @@ header[role="banner"] #logo-main {
   display: inline-block;
   float: none;
 }
+#navbar-primary.navbar-default .navbar-nav > li:hover > a {
+  color: #A25E5D;
+  font-weight: bold;
+}
+#navbar-primary.navbar-default .navbar-nav > li.active > a {
+  color: #A25E5D;
+  font-weight: bold;
+}
 #navbar-primary.navbar-default .navbar-nav > li > a {
   padding-left: 10px;
   padding-right: 10px;
@@ -23,4 +31,7 @@ header[role="banner"] #logo-main {
 .searchBox {
   width: 150px;
   margin-top: 10px;
+}
+.active {
+  color: #A25E5D !important;
 }
