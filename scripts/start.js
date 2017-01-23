@@ -11,7 +11,7 @@ var prompt = require('./utils/prompt');
 var config = require('../config/webpack.config.dev');
 
 // Tools like Cloud9 rely on this
-var DEFAULT_PORT = process.env.PORT || 3000;
+var DEFAULT_PORT = process.env.PORT || 3100;
 var compiler;
 
 // TODO: hide this behind a flag and eliminate dead code on eject.
@@ -141,12 +141,19 @@ function openBrowser(port) {
   opn('http://localhost:' + port + '/');
 }
 
+// || 'https://tieinservice.herokuapp.com/'
 function runDevServer(port) {
   new WebpackDevServer(compiler, {
     historyApiFallback: true,
     hot: true, // Note: only CSS is currently hot reloaded
     publicPath: config.output.publicPath,
     quiet: true,
+    proxy: {
+      '/api/**': {
+        target: 'http://localhost:3000/',
+        changeOrigin: true,
+      },
+    },
     watchOptions: {
       ignored: /node_modules/
     }
