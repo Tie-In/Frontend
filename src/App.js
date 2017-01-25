@@ -5,7 +5,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Button href="register">no bsStyle (default)</Button>
+        <Button href="/no-organization">no bsStyle (default)</Button>
         <Button bsStyle="primary">bsStyle="primary"</Button>
         <div className="container">
           {this.props.children}

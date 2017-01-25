@@ -1,4 +1,9 @@
 import PeopleContainer from './People/PeopleContainer';
-import RegisterContainer from './Register/RegisterContainer';
+import NoOrgContainer from './Organization/NoOrgContainer';
+import NewOrgContainer from './Organization/NewOrgContainer';
 
-export default (PeopleContainer,RegisterContainer);
+module.exports = {
+  PeopleContainer,
+  NoOrgContainer,
+  NewOrgContainer,
+};

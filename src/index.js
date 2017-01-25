@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import PeopleContainer from './components';
+import { PeopleContainer, NoOrgContainer, NewOrgContainer } from './components';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import configureStore from './store/configure-store';
 import { Router, Route, browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
-import RegisterContainer from './components';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store)
@@ -18,7 +17,8 @@ ReactDOM.render(
     <Router history={history}>
       <Route path="/" component={App}>
         <Route path="people" component={PeopleContainer} />
-        <Route path="register" component={RegisterContainer} />
+        <Route path="no-organization" component={NoOrgContainer} />
+        <Route path="new-organization" component={NewOrgContainer} />
       </Route>
     </Router>
   </Provider>,
