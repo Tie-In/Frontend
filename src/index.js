@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import StartApp from './StartApp'
 import {
   Login,
   FeaturePlanningContainer,
   Register,
   EffortEstimationContainer,
-  NoOrgContainer,
-  NewOrgContainer,
+  OrganizationContainer,
 } from './components';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -25,11 +25,12 @@ ReactDOM.render(
       <Route path="/" component={App}>
         <Route path="/project/1/planning/features" component={FeaturePlanningContainer} />
         <Route path="/project/1/planning/effort_estimation" component={EffortEstimationContainer} />
-        <Route path="no-organization" component={NoOrgContainer} />
-        <Route path="new-organization" component={NewOrgContainer} />
+        <Route path="/organizations" component={OrganizationContainer} />
+      </Route>
+      <Route path="/" component={StartApp}>
+        <Route path="/register" component={Register} />
       </Route>
       <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
     </Router>
   </Provider>,
   document.getElementById('root')

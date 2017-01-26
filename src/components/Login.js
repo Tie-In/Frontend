@@ -46,6 +46,7 @@ class Login extends Component {
     }).then((response) => {
       user = response.data;
       this.props.actions.setUser(user);
+      document.location.href = '/organizations';
     }).catch((response) => {
       console.log(response);
     });

@@ -1,6 +1,10 @@
 import rootReducer from '../reducers';
-import {createStore} from 'redux';
+import { compose, createStore } from 'redux';
+import persistState from 'redux-localstorage'
 
 export default (initialState) => {
-  return createStore(rootReducer, initialState);
+  const enhancer = compose(
+    persistState(),
+  );
+  return createStore(rootReducer, initialState, enhancer);
 };
