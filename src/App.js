@@ -39,13 +39,13 @@ class App extends Component {
         <header role="banner">
           <nav id="navbar-primary" className="navbar navbar-default" role="navigation">
             <div className="container-fluid">
-              <img id="logo-main" src={logo} alt="Logo Thing main logo"></img>
+              <img id="logo-main" src={logo} alt="Logo Thing main logo" />
               <div className="navbar-header">
                 <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-primary-collapse">
                   <span className="sr-only">Toggle navigation</span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
+                  <span className="icon-bar" />
+                  <span className="icon-bar" />
+                  <span className="icon-bar" />
                 </button>
               </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
@@ -53,10 +53,10 @@ class App extends Component {
                   <li className="pull-left" id="slide-sidebar"><a href="#sidebar-nav">Organization <span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a></li>
                   {menuNode}
                   <div className="searchBox input-group pull-right">
-                    <input type="text" className="form-control" placeholder="Search"></input>
+                    <input type="text" className="form-control" placeholder="Search" />
                     <span className="input-group-btn">
                       <button className="btn" type="submit">
-                        <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        <span className="glyphicon glyphicon-search" aria-hidden="true" />
                       </button>
                     </span>
                   </div>
