@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import NavStyle from './style/navstyle.css';
 import logo from './images/logo.png';
 import { Link } from 'react-router';
+import 'simple-line-icons/css/simple-line-icons.css';
 
 class App extends Component {
   constructor(props) {
@@ -49,7 +50,7 @@ class App extends Component {
               </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav">
-                  <li className="pull-left" id="slide-sidebar"><a href="#">Organization</a></li>
+                  <li className="pull-left" id="slide-sidebar"><a href="#sidebar-nav">Organization <span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a></li>
                   {menuNode}
                   <div className="searchBox input-group pull-right">
                     <input type="text" className="form-control" placeholder="Search"></input>
@@ -64,6 +65,16 @@ class App extends Component {
             </div>
           </nav>
         </header>
+        <nav id="sidebar-nav">
+          <ul id="sidebar-nav-list">
+            <li className="sidebar-nav-item"><a href="#">Organization A</a></li>
+            <li className="sidebar-nav-item"><a href="#">Organization B</a></li>
+            <li className="sidebar-nav-item"><a href="#">Organization A</a></li>
+            <li className="sidebar-nav-item"><a href="#">Organization B</a></li>
+            <li className="sidebar-nav-item" id="createOrg"><a href="#"><span className="icon-plus"></span> Create organization</a></li>
+          </ul>
+        </nav>
+        <a id="nav-screen-overlay" href="#"></a>
         <div className="container">
           {this.props.children}
         </div>
