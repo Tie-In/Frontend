@@ -8,6 +8,8 @@ header[role="banner"] #logo-main {
   background: #FAFBF5;
   border: none;
   height: 120px;
+  width: 100%;
+  position: fixed;
 }
 #navbar-primary.navbar-default .navbar-nav {
   width: 100%;
@@ -35,10 +37,10 @@ header[role="banner"] #logo-main {
 }
 /*-------------Sidebar------------*/
 #sidebar-nav {
-  position: absolute;
+  position: fixed;
   z-index: 3;
   top: 120px;
-  height: 100vh;
+  height: 100%;
   width: 230px;
   background-color: #6C5A56;
   -webkit-transform: translateX(-400px);
@@ -61,6 +63,7 @@ header[role="banner"] #logo-main {
   background-repeat: no-repeat;
   background-size: auto 24px;
   opacity: 0;
+  border-bottom: 1px solid rgba(265,265,265,0.5);
   -webkit-transform: translateX(-30px);
           transform: translateX(-30px);
   -webkit-transition: all 0.25s ease-in-out;
@@ -72,11 +75,10 @@ header[role="banner"] #logo-main {
   display: block;
   height: 100%;
   width: 100%;
-  padding: 0px 0px 10px 0px;
+  padding: 5px 0px 5px 0px;
   color: #FFFFFF;
   text-decoration: none;
   opacity: 0.5;
-  border-bottom:1px solid rgba(265,265,265,0.5);
 }
 #sidebar-nav #sidebar-nav-list .sidebar-nav-item:hover a {
   opacity: 1;
@@ -94,7 +96,6 @@ header[role="banner"] #logo-main {
   pointer-events: auto;
   opacity: 0.3;
 }
-
 #nav-screen-overlay {
   position: fixed;
   z-index: 2;
@@ -106,7 +107,6 @@ header[role="banner"] #logo-main {
   -webkit-transition: opacity 0.5s ease-in-out;
   transition: opacity 0.5s ease-in-out;
 }
-
 @-webkit-keyframes nav-item-fade-in {
   to {
     opacity: 1;
@@ -114,11 +114,14 @@ header[role="banner"] #logo-main {
             transform: translateX(0px);
   }
 }
-
 @keyframes nav-item-fade-in {
   to {
     opacity: 1;
     -webkit-transform: translateX(0px);
             transform: translateX(0px);
   }
+}
+.createOrg {
+  margin-top: 450px;
+  border-bottom: 0px !important;
 }

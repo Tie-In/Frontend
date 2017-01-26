@@ -65,15 +65,15 @@ class App extends Component {
             </div>
           </nav>
         </header>
-        <nav id="sidebar-nav">
+        <div id="sidebar-nav">
           <ul id="sidebar-nav-list">
             <li className="sidebar-nav-item"><a href="#">Organization A</a></li>
             <li className="sidebar-nav-item"><a href="#">Organization B</a></li>
             <li className="sidebar-nav-item"><a href="#">Organization A</a></li>
             <li className="sidebar-nav-item"><a href="#">Organization B</a></li>
-            <li className="sidebar-nav-item" id="createOrg"><a href="#"><span className="icon-plus"></span> Create organization</a></li>
+            <li className="sidebar-nav-item createOrg"><a href="#"><span className="icon-plus"></span> Create organization</a></li>
           </ul>
-        </nav>
+        </div>
         <a id="nav-screen-overlay" href="#"></a>
         <div className="container">
           {this.props.children}
