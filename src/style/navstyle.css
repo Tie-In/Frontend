@@ -1,3 +1,4 @@
+/*-------------Navbar------------*/
 header[role="banner"] #logo-main {
   display: block;
   margin: 15px auto;
@@ -16,6 +17,14 @@ header[role="banner"] #logo-main {
   display: inline-block;
   float: none;
 }
+#navbar-primary.navbar-default .navbar-nav > li:hover > a, .active {
+  color: #A25E5D !important;
+  font-weight: bold;
+}
+#navbar-primary.navbar-default .navbar-nav > li.active > a {
+  color: #A25E5D;
+  font-weight: bold;
+}
 #navbar-primary.navbar-default .navbar-nav > li > a {
   padding-left: 10px;
   padding-right: 10px;
@@ -23,4 +32,93 @@ header[role="banner"] #logo-main {
 .searchBox {
   width: 150px;
   margin-top: 10px;
+}
+/*-------------Sidebar------------*/
+#sidebar-nav {
+  position: absolute;
+  z-index: 3;
+  top: 120px;
+  height: 100vh;
+  width: 230px;
+  background-color: #6C5A56;
+  -webkit-transform: translateX(-400px);
+          transform: translateX(-400px);
+  -webkit-transition: -webkit-transform 0.5s ease-in-out;
+  transition: -webkit-transform 0.5s ease-in-out;
+  transition: transform 0.5s ease-in-out;
+  transition: transform 0.5s ease-in-out, -webkit-transform 0.5s ease-in-out;
+}
+#sidebar-nav #sidebar-nav-list {
+  position: relative;
+  list-style-type: none;
+  top: 20px;
+  padding: 0em 2.8em;
+}
+#sidebar-nav #sidebar-nav-list .sidebar-nav-item {
+  position: relative;
+  z-index: 4;
+  background-position: 30px center;
+  background-repeat: no-repeat;
+  background-size: auto 24px;
+  opacity: 0;
+  -webkit-transform: translateX(-30px);
+          transform: translateX(-30px);
+  -webkit-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+#sidebar-nav #sidebar-nav-list .sidebar-nav-item a {
+  display: block;
+  height: 100%;
+  width: 100%;
+  padding: 0px 0px 10px 0px;
+  color: #FFFFFF;
+  text-decoration: none;
+  opacity: 0.5;
+  border-bottom:1px solid rgba(265,265,265,0.5);
+}
+#sidebar-nav #sidebar-nav-list .sidebar-nav-item:hover a {
+  opacity: 1;
+}
+#sidebar-nav:target {
+  -webkit-transform: translateX(0px);
+          transform: translateX(0px);
+}
+#sidebar-nav:target .sidebar-nav-item {
+  -webkit-animation: nav-item-fade-in 1s ease-in-out;
+          animation: nav-item-fade-in 1s ease-in-out;
+}
+#sidebar-nav:target + #nav-screen-overlay {
+  display: block;
+  pointer-events: auto;
+  opacity: 0.3;
+}
+
+#nav-screen-overlay {
+  position: fixed;
+  z-index: 2;
+  height: 100vh;
+  width: 100vw;
+  opacity: 0;
+  cursor: default;
+  pointer-events: none;
+  -webkit-transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+}
+
+@-webkit-keyframes nav-item-fade-in {
+  to {
+    opacity: 1;
+    -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+  }
+}
+
+@keyframes nav-item-fade-in {
+  to {
+    opacity: 1;
+    -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+  }
 }

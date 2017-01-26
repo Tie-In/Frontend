@@ -1,10 +1,39 @@
 import React, { Component } from 'react';
 import NavStyle from './style/navstyle.css';
-//import { Button, Navbar, FormGroup, FormControl, NavDropdown, Nav, NavItem, MenuItem } from 'react-bootstrap';
 import logo from './images/logo.png';
+import { Link } from 'react-router';
+import 'simple-line-icons/css/simple-line-icons.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      menus: []
+    };
+  }
+
+  componentDidMount() {
+    const data = [
+      { id: 1, class: '', name: 'Project', path: '/project' },
+      { id: 2, name: 'Backlog', path: '/backlog' },
+      { id: 3, name: 'New task', path: '/newTask' },
+      { id: 4, name: 'Planning', path: '/planning' },
+      { id: 5, name: 'Active sprint', path: '/activeSprint' },
+      { id: 6, name: 'Retrospective', path: '/retrospective' },
+      { id: 7, name: 'Dashboard', path: '/dashboard' },
+      { id: 8, name: 'Admin', path: '/admin' },
+    ];
+    // Update state
+    this.setState({ menus: data });
+  }
+
   render() {
+    const menuNode = this.state.menus.map((menu) => {
+      return (
+        <li><Link to={menu.path} activeClassName="active" key={menu.id}> {menu.name}</Link></li>
+      )
+    });
+
     return (
       <div className="App" style={NavStyle}>
         <header role="banner">
@@ -21,15 +50,8 @@ class App extends Component {
               </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav">
-                  <li className="pull-left"><a href="#">Organization</a></li>
-                  <li className="active"><a href="#">Project</a></li>
-                  <li><a href="#">Backlog</a></li>
-                  <li><a href="#">New task</a></li>
-                  <li><a href="#">Planning</a></li>
-                  <li><a href="#">Active sprint</a></li>
-                  <li><a href="#">Retrospective</a></li>
-                  <li><a href="#">Dashboard</a></li>
-                  <li><a href="#">Admin</a></li>
+                  <li className="pull-left" id="slide-sidebar"><a href="#sidebar-nav">Organization <span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a></li>
+                  {menuNode}
                   <div className="searchBox input-group pull-right">
                     <input type="text" className="form-control" placeholder="Search"></input>
                     <span className="input-group-btn">
@@ -43,6 +65,16 @@ class App extends Component {
             </div>
           </nav>
         </header>
+        <nav id="sidebar-nav">
+          <ul id="sidebar-nav-list">
+            <li className="sidebar-nav-item"><a href="#">Organization A</a></li>
+            <li className="sidebar-nav-item"><a href="#">Organization B</a></li>
+            <li className="sidebar-nav-item"><a href="#">Organization A</a></li>
+            <li className="sidebar-nav-item"><a href="#">Organization B</a></li>
+            <li className="sidebar-nav-item" id="createOrg"><a href="#"><span className="icon-plus"></span> Create organization</a></li>
+          </ul>
+        </nav>
+        <a id="nav-screen-overlay" href="#"></a>
         <div className="container">
           {this.props.children}
         </div>
