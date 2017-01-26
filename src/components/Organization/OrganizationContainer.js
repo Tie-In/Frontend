@@ -12,10 +12,14 @@ class OrganizationContainer extends Component {
   }
 
   render() {
-    console.log(this.props.user);
+    const { user } = this.props;
     return (
       <div>
-        <NoOrgContainer />
+        { user.organizations.length > 0 ?
+          <NoOrgContainer />
+        :
+          <h3>Have Organization</h3>
+        }
       </div>
     );
   }

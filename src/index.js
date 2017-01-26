@@ -8,6 +8,7 @@ import {
   Register,
   EffortEstimationContainer,
   OrganizationContainer,
+  NewOrgContainer,
 } from './components';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -26,6 +27,7 @@ ReactDOM.render(
         <Route path="/project/1/planning/features" component={FeaturePlanningContainer} />
         <Route path="/project/1/planning/effort_estimation" component={EffortEstimationContainer} />
         <Route path="/organizations" component={OrganizationContainer} />
+        <Route path="/organizations/new" component={NewOrgContainer} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="/register" component={Register} />

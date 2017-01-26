@@ -1,6 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Button, Grid, Col, Row, Form, FormGroup, ControlLabel, FormControl, InputGroup, Glyphicon, Media, Image } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
+import axios from 'axios';
+import * as organizationActions from '../../actions/organization-actions';
 
 class NewOrgContainer extends Component {
   constructor() {
@@ -10,12 +14,35 @@ class NewOrgContainer extends Component {
       input: {
         name: '',
         description: '',
+        users: [
+          {
+            id: 2,
+          },
+        ],
       },
     };
-  }lop
+
+    this.create = this.create.bind(this);
+  }
+
+  create() {
+    axios({
+      method: 'POST',
+      url: '/api/organizations',
+      headers: {
+        Authorization: this.props.user.auth_token,
+      },
+      data: {
+        organization: this.state.input,
+      },
+    }).then((response) => {
+      this.props.actions.setOrganization(response.data);
+    }).catch((error) => {
+      console.log(error.response.data);
+    });
+  }
 
   render() {
-    console.log(this.state.input);
     const lineColor = {
       borderColor: '#7E8281',
     };
@@ -121,7 +148,7 @@ class NewOrgContainer extends Component {
                   </Button>
                 </Col>
                 <Col xs={12} md={3}>
-                  <Button style={singleButton} type="submit" block>
+                  <Button style={singleButton} onClick={this.create} block>
                     Create
                   </Button>
                 </Col>
@@ -134,4 +161,23 @@ class NewOrgContainer extends Component {
   }
 }
 
-export default NewOrgContainer;
+NewOrgContainer.propTypes = {
+  user: PropTypes.object.isRequired,
+  organization: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    organization: state.organization,
+    user: state.user,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(organizationActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewOrgContainer);
