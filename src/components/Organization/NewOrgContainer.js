@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Grid, Col, Row, Form, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { Button, Grid, Col, Row, Form, FormGroup, ControlLabel, FormControl, InputGroup, Glyphicon, Media, Image } from 'react-bootstrap';
 import linkState from 'react-link-state';
 
 class NewOrgContainer extends Component {
@@ -23,7 +23,25 @@ class NewOrgContainer extends Component {
       color: '#A25E5D',
     };
     const buttonGroup = {
-      marginTop: '30px',
+      marginTop: '20px',
+    };
+    const singleButton = {
+      marginTop: '10px',
+    };
+    const contributorList = {
+      height: '200px',
+      position: 'relative',
+      // backgroundColor: 'pink',
+
+    };
+    const scrollableContainer = {
+      // borderLeft: 'solid 1px',
+      borderLeft: '1px solid #7E8281',
+      position: 'absolute',
+      height: '85%',
+      width: 'auto',
+      overflowY: 'hidden',
+      overflowX: 'hidden',
     };
 
     return (
@@ -53,14 +71,57 @@ class NewOrgContainer extends Component {
               </Col>
             </Row>
             <Row>
+              <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
+                <FormGroup controlId="formInlineContributor">
+                  <ControlLabel>
+                    Contributor
+                  </ControlLabel>
+                  <InputGroup>
+                    <FormControl
+                      placeholder="Find user"
+                      valueLink={linkState(this, 'input.duration')}
+                    />
+                    <InputGroup.Addon>
+                      <Glyphicon glyph="plus" />
+                    </InputGroup.Addon>
+                  </InputGroup>
+                </FormGroup>
+              </Col>
+              <Col style={contributorList} xs={12} md={4}>
+                <ControlLabel style={{ color: 'white' }}>
+                  List of contributors
+                </ControlLabel>
+                <Row style={scrollableContainer}>
+                  <Col smOffset={0} sm={11}>
+                    <Media>
+                      <Media.Left>
+                        <Image width={32} height={32} src="src/images/logo-login.png" alt="user" circle />
+                      </Media.Left>
+                      <Media.Body>
+                        <p>pongsachon.p@ku.th</p>
+                      </Media.Body>
+                    </Media>
+                    <Media>
+                      <Media.Left>
+                        <Image width={32} height={32} src="src/images/logo-login.png" alt="user" circle />
+                      </Media.Left>
+                      <Media.Body>
+                        <p>pongsachon.p@ku.th</p>
+                      </Media.Body>
+                    </Media>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+            <Row>
               <FormGroup style={buttonGroup}>
                 <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                  <Button bsStyle="primary" href="/no-organization" block>
+                  <Button style={singleButton} bsStyle="primary" href="/no-organization" block>
                     Cancel
                   </Button>
                 </Col>
                 <Col xs={12} md={3}>
-                  <Button type="submit" block>
+                  <Button style={singleButton} type="submit" block>
                     Create
                   </Button>
                 </Col>

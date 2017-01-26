@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 class NoOrgContainer extends Component {
   render() {
     const articleStyles = {
-      position: 'relative',
       margin: '0 auto',
       position: 'fixed',
       top: '50%',
