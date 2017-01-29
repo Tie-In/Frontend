@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import NavStyle from '../../style/navstyle.css';
 import logo from '../../images/logo.png';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import 'simple-line-icons/css/simple-line-icons.css';
+import * as userActions from '../../actions/user-actions';
 
 class NormalNavbar extends Component {
   constructor(props) {
@@ -84,4 +87,21 @@ class NormalNavbar extends Component {
   }
 }
 
-export default NormalNavbar;
+NormalNavbar.propTypes = {
+  user: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(userActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NormalNavbar);
