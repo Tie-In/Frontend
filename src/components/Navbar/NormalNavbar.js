@@ -31,10 +31,21 @@ class NormalNavbar extends Component {
   }
 
   render() {
+    console.log(this.props.user);
     const menuNode = this.state.menus.map((menu) => {
       return (
-        <li><Link to={menu.path} activeClassName="active" key={menu.id}> {menu.name}</Link></li>
-      )
+        <li key={menu.id}>
+          <Link to={menu.path} activeClassName="active"> {menu.name}</Link>
+        </li>
+      );
+    });
+
+    const organizationNodes = this.props.user.organizations.map((org) => {
+      return (
+        <li key={org.id} className="sidebar-nav-item">
+          <a href={`${org.id}`}>{org.name}</a>
+        </li>
+      );
     });
 
     return (
@@ -53,7 +64,11 @@ class NormalNavbar extends Component {
               </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav">
-                  <li className="pull-left" id="slide-sidebar"><a href="#sidebar-nav">Organization <span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a></li>
+                  <li className="pull-left" id="slide-sidebar">
+                    <a href="#sidebar-nav">
+                      {this.props.organization.name} <span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
+                    </a>
+                  </li>
                   {menuNode}
                   <div className="searchBox input-group pull-right">
                     <input type="text" className="form-control" placeholder="Search" />
@@ -68,20 +83,15 @@ class NormalNavbar extends Component {
             </div>
           </nav>
         </header>
-        <nav id="sidebar-nav">
+        <div id="sidebar-nav">
           <ul id="sidebar-nav-list">
-            <li className="sidebar-nav-item"><a href="#">Organization A</a></li>
-            <li className="sidebar-nav-item"><a href="#">Organization B</a></li>
-            <li className="sidebar-nav-item"><a href="#">Organization A</a></li>
-            <li className="sidebar-nav-item"><a href="#">Organization B</a></li>
-            <li className="sidebar-nav-item" id="createOrg">
-              <a href="#"><span className="icon-plus" />
-                Create organization
-              </a>
+            {organizationNodes}
+            <li className="sidebar-nav-item">
+              <a href="#"><span className="icon-plus" /> Create organization</a>
             </li>
           </ul>
-        </nav>
-        <a id="nav-screen-overlay" href="#"></a>
+        </div>
+        <a id="nav-screen-overlay" href="#" />
       </div>
     );
   }
@@ -89,12 +99,14 @@ class NormalNavbar extends Component {
 
 NormalNavbar.propTypes = {
   user: PropTypes.object.isRequired,
+  organization: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     user: state.user,
+    organization: state.organization,
   };
 }
 

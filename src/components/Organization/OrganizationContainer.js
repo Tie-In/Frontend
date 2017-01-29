@@ -1,7 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import NoOrgContainer from './NoOrgContainer';
+import axios from 'axios';
+import { Button } from 'react-bootstrap';
+import ProjectCard from './ProjectCard';
+import * as organizationActions from '../../actions/organization-actions';
 
 class OrganizationContainer extends Component {
   constructor(props) {
@@ -11,15 +14,39 @@ class OrganizationContainer extends Component {
     };
   }
 
+  componentDidMount() {
+    axios({
+      method: 'GET',
+      url: '/api/organizations/'.concat(this.props.params.organizationId),
+      headers: {
+        Authorization: this.props.user.auth_token,
+      },
+    }).then((response) => {
+      const org = response.data;
+      this.props.organizationActions.setOrganization(org);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
   render() {
-    const { user } = this.props;
+    const articleStyles = {
+      width: '70%',
+      height: 'auto',
+      right: '50%',
+      transform: 'translate(50%)',
+      position: 'absolute',
+    };
+    const { user, organization } = this.props;
+    console.log(organization);
     return (
-      <div>
-        { user.organizations.length > 0 ?
-          <NoOrgContainer />
-        :
-          <h3>Have Organization</h3>
+      <div style={articleStyles}>
+        {
+          organization.projects.map((project) => {
+            <h2>Have</h2>
+          })
         }
+        <Button href="/project-new">Create new project</Button>
       </div>
     );
   }
@@ -27,12 +54,21 @@ class OrganizationContainer extends Component {
 
 OrganizationContainer.propTypes = {
   user: PropTypes.object.isRequired,
+  organization: PropTypes.object.isRequired,
+  organizationActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     user: state.user,
+    organization: state.organization,
   };
 }
 
-export default connect(mapStateToProps)(OrganizationContainer);
+function mapDispatchToProps(dispatch) {
+  return {
+    organizationActions: bindActionCreators(organizationActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrganizationContainer);

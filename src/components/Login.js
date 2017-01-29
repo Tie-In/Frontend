@@ -37,7 +37,6 @@ class Login extends Component {
 
   login() {
     let user = {};
-    console.log(this.state.password);
     axios.post('/api/sessions', {
       session: {
         email: this.state.email,
@@ -45,8 +44,9 @@ class Login extends Component {
       },
     }).then((response) => {
       user = response.data;
-      this.props.actions.setUser(user);
-      document.location.href = '/organizations';
+      this.props.userActions.setUser(user);
+      const firstOrg = user.organizations[0].id || 0;
+      document.location.href = '/organizations/' + firstOrg;
     }).catch((response) => {
       console.log(response);
     });
@@ -149,7 +149,7 @@ class Login extends Component {
 
 Login.propTypes = {
   user: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
+  userActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -160,7 +160,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(userActions, dispatch),
+    userActions: bindActionCreators(userActions, dispatch),
   };
 }
 

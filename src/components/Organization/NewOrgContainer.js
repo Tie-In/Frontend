@@ -36,7 +36,9 @@ class NewOrgContainer extends Component {
         organization: this.state.input,
       },
     }).then((response) => {
-      this.props.actions.setOrganization(response.data);
+      const org = response.data;
+      this.props.actions.setOrganization(org);
+      document.location.href = `/organizations/${org.id}`;
     }).catch((error) => {
       console.log(error.response.data);
     });

@@ -57,6 +57,7 @@ class Register extends Component {
       }).then((response) => {
         this.props.actions.setUser(response.data);
         // go next
+        document.location.href = '/';
       }).catch((error) => {
         console.log(error.response.data);
         const err = error.response.data.errors;
@@ -119,11 +120,6 @@ class Register extends Component {
       position: 'absolute',
     };
     const headerStyle = {
-      color: '#A25E5D',
-    };
-    const cancelButton = {
-      background: 'transparent',
-      borderColor: '#A25E5D',
       color: '#A25E5D',
     };
     const lineColor = {
