@@ -46,7 +46,7 @@ class OrganizationContainer extends Component {
             <h2>Have</h2>
           })
         }
-        <Button href="/project-new">Create new project</Button>
+        <Button href={`./${this.props.params.organizationId}/project-new`}>Create new project</Button>
       </div>
     );
   }

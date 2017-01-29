@@ -43,7 +43,7 @@ class NormalNavbar extends Component {
     const organizationNodes = this.props.user.organizations.map((org) => {
       return (
         <li key={org.id} className="sidebar-nav-item">
-          <a href={`${org.id}`}>{org.name}</a>
+          <a href={`/organizations/${org.id}`}>{org.name}</a>
         </li>
       );
     });
@@ -87,7 +87,7 @@ class NormalNavbar extends Component {
           <ul id="sidebar-nav-list">
             {organizationNodes}
             <li className="sidebar-nav-item">
-              <a href="#"><span className="icon-plus" /> Create organization</a>
+              <a href="/organization-new"><span className="icon-plus" /> Create organization</a>
             </li>
           </ul>
         </div>

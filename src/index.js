@@ -10,6 +10,7 @@ import {
   OrganizationContainer,
   NewOrgContainer,
   NoOrgContainer,
+  NewProject,
 } from './components';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -26,10 +27,16 @@ ReactDOM.render(
     <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={NoOrgContainer} />
-        <Route path="project/1/planning/features" component={FeaturePlanningContainer} />
-        <Route path="project/1/planning/effort_estimation" component={EffortEstimationContainer} />
-        <Route path="organizations/:organizationId" component={OrganizationContainer} />
-        <Route path="organizations-new" component={NewOrgContainer} />
+        <Route path="organizations/:organizationId">
+          <IndexRoute component={OrganizationContainer} />
+          <Route path="project-new" component={NewProject} />
+          <Route path="project">
+            <Route path="planning/features" component={FeaturePlanningContainer} />
+            <Route path="planning/effort_estimation" component={EffortEstimationContainer} />
+          </Route>
+        </Route>
+        <Route path="project-new" component={NewProject} />
+        <Route path="organization-new" component={NewOrgContainer} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="/register" component={Register} />

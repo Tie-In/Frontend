@@ -1,28 +1,32 @@
-import React, { Component, PropTypes } from 'react';
 import {
   Button, Grid, Col, Row, Form,
   FormGroup, ControlLabel, FormControl,
   InputGroup, Glyphicon, Media, Image,
 } from 'react-bootstrap';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
 import axios from 'axios';
-import * as organizationActions from '../../actions/organization-actions';
+import logo from '../../images/logo-login.png';
+import * as projectActions from '../../actions/project-actions';
 
-class NewOrgContainer extends Component {
-  constructor() {
-    super();
+class NewProject extends Component {
+
+  constructor(props) {
+    super(props);
 
     this.state = {
       input: {
         name: '',
         description: '',
+        sprint_duration: '',
         users: [
           {
             id: 2,
           },
         ],
+        organization_id: this.props.params.organizationId,
       },
     };
 
@@ -32,19 +36,20 @@ class NewOrgContainer extends Component {
   create() {
     axios({
       method: 'POST',
-      url: '/api/organizations',
+      url: '/api/projects',
       headers: {
         Authorization: this.props.user.auth_token,
       },
       data: {
-        organization: this.state.input,
+        project: this.state.input,
       },
     }).then((response) => {
-      const org = response.data;
-      this.props.actions.setOrganization(org);
-      document.location.href = `/organizations/${org.id}`;
+      console.log(response);
+      const project = response.data;
+      this.props.projectActions.setProject(project);
+      document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
     }).catch((error) => {
-      console.log(error.response.data);
+      console.log(error);
     });
   }
 
@@ -64,11 +69,9 @@ class NewOrgContainer extends Component {
     const contributorList = {
       height: '200px',
       position: 'relative',
-      // backgroundColor: 'pink',
 
     };
     const scrollableContainer = {
-      // borderLeft: 'solid 1px',
       borderLeft: '1px solid #7E8281',
       position: 'absolute',
       height: '85%',
@@ -76,14 +79,13 @@ class NewOrgContainer extends Component {
       overflowY: 'hidden',
       overflowX: 'hidden',
     };
-
     return (
       <div>
         <Grid>
           <Form>
             <Row>
               <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                <h3 style={titleColor}>Create new organization</h3>
+                <h3 style={titleColor}>Create new project</h3>
                 <hr style={lineColor} />
                 <FormGroup controlId="formInlineName">
                   <ControlLabel>
@@ -105,6 +107,16 @@ class NewOrgContainer extends Component {
             </Row>
             <Row>
               <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
+                <FormGroup controlId="formInlineDetail">
+                  <ControlLabel>
+                    Sprint duration
+                  </ControlLabel>
+                  <FormControl type="number" min="0" placeholder="Sprint duration (week)" valueLink={linkState(this, 'input.sprint_duration')} />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
                 <FormGroup controlId="formInlineContributor">
                   <ControlLabel>
                     Contributor
@@ -112,7 +124,7 @@ class NewOrgContainer extends Component {
                   <InputGroup>
                     <FormControl
                       placeholder="Find user"
-                      valueLink={linkState(this, 'input.duration')}
+                      valueLink={linkState(this, 'input.u')}
                     />
                     <InputGroup.Addon>
                       <Glyphicon glyph="plus" />
@@ -167,23 +179,21 @@ class NewOrgContainer extends Component {
   }
 }
 
-NewOrgContainer.propTypes = {
-  user: PropTypes.object.isRequired,
-  organization: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
-};
-
+// Register.propTypes = {
+//   user: PropTypes.object.isRequired,
+//   actions: PropTypes.object.isRequired,
+// };
+//
 function mapStateToProps(state) {
   return {
-    organization: state.organization,
     user: state.user,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(organizationActions, dispatch),
+    projectActions: bindActionCreators(projectActions, dispatch),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewOrgContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(NewProject);
