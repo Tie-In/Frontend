@@ -31,7 +31,6 @@ class NormalNavbar extends Component {
   }
 
   render() {
-    console.log(this.props.user);
     const menuNode = this.state.menus.map((menu) => {
       return (
         <li key={menu.id}>

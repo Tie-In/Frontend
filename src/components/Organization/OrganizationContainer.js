@@ -2,17 +2,11 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from 'axios';
-import { Button } from 'react-bootstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 import ProjectCard from './ProjectCard';
 import * as organizationActions from '../../actions/organization-actions';
 
 class OrganizationContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      org: '',
-    };
-  }
 
   componentDidMount() {
     axios({
@@ -30,23 +24,19 @@ class OrganizationContainer extends Component {
   }
 
   render() {
-    const articleStyles = {
-      width: '70%',
-      height: 'auto',
-      right: '50%',
-      transform: 'translate(50%)',
-      position: 'absolute',
-    };
     const { user, organization } = this.props;
-    console.log(organization);
     return (
-      <div style={articleStyles}>
-        {
-          organization.projects.map((project) => {
-            <h2>Have</h2>
-          })
-        }
-        <Button href={`./${this.props.params.organizationId}/project-new`}>Create new project</Button>
+      <div>
+        <Row>
+          <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+            {
+              organization.projects.map((project) => {
+                return <ProjectCard key={project.id} project={project} />
+              })
+            }
+            <Button href={`./${this.props.params.organizationId}/project-new`}>Create new project</Button>
+          </Col>
+        </Row>
       </div>
     );
   }
