@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Button } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import axios from 'axios';
 import * as projectActions from '../../actions/project-actions';
 
@@ -25,7 +27,9 @@ class ProjectHomeContainer extends Component {
   render() {
     return (
       <div>
-        Start Planning {this.props.project.id}
+        <LinkContainer to={`/organizations/${this.props.project.organization_id}/projects/${this.props.project.id}/planning/features`}>
+          <Button>Start Planning </Button>
+        </LinkContainer>
       </div>
     );
   }

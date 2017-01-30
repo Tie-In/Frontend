@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import {
-  StartNavbar,
+  OrganizationNavbar,
 } from './components';
 
-class StartApp extends Component {
+class OrganizationApp extends Component {
   render() {
     return (
       <div className="App">
-        <StartNavbar />
+        <OrganizationNavbar />
         <div className="container registerContainer">
           {this.props.children}
         </div>
@@ -16,4 +16,4 @@ class StartApp extends Component {
   }
 }
 
-export default StartApp;
+export default OrganizationApp;

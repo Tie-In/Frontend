@@ -7,8 +7,9 @@ import NewOrgContainer from './Organization/NewOrgContainer';
 import OrganizationContainer from './Organization/OrganizationContainer';
 import NormalNavbar from './Navbar/NormalNavbar';
 import StartNavbar from './Navbar/StartNavbar';
+import OrganizationNavbar from './Navbar/OrganizationNavbar';
 import NewProject from './Projects/NewProject';
-import ProjectHomeContainer from './Projects/ProjectHomeContainer'
+import ProjectHomeContainer from './Projects/ProjectHomeContainer';
 
 module.exports = {
   Login,
@@ -22,4 +23,5 @@ module.exports = {
   NoOrgContainer,
   NewProject,
   ProjectHomeContainer,
+  OrganizationNavbar,
 };

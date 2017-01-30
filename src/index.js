@@ -7,6 +7,7 @@ import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import App from './App';
 import StartApp from './StartApp';
+import OrganizationApp from './OrganizationApp';
 import {
   Login,
   FeaturePlanningContainer,
@@ -26,23 +27,23 @@ const history = syncHistoryWithStore(browserHistory, store);
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={App}>
+      <Route path="/" component={OrganizationApp}>
         <IndexRoute component={NoOrgContainer} />
         <Route path="organization-new" component={NewOrgContainer} />
         <Route path="organizations/:organizationId">
           <IndexRoute component={OrganizationContainer} />
           <Route path="project-new" component={NewProject} />
-          <Route path="projects/:projectId">
-            <IndexRoute component={ProjectHomeContainer} />
-            <Route path="planning/features" component={FeaturePlanningContainer} />
-            <Route path="planning/effort_estimation" component={EffortEstimationContainer} />
-          </Route>
         </Route>
       </Route>
-      <Route path="/" component={StartApp}>
-        <Route path="/register" component={Register} />
+      <Route path="/organizations/:organizationId/projects/:projectId" component={App}>
+        <IndexRoute component={ProjectHomeContainer} />
+        <Route path="planning/features" component={FeaturePlanningContainer} />
+        <Route path="planning/effort_estimation" component={EffortEstimationContainer} />
       </Route>
-      <Route path="/login" component={Login} />
+      <Route path="/" component={StartApp}>
+        <Route path="register" component={Register} />
+      </Route>
+      <Route path="login" component={Login} />
     </Router>
   </Provider>,
   document.getElementById('root'),
