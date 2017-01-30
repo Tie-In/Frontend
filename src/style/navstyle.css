@@ -34,6 +34,20 @@ header[role="banner"] #logo-main {
 .searchBox {
   width: 150px;
   margin-top: 10px;
+  margin-right: 10px;
+}
+#avatar {
+  width: 30px;
+}
+#profile-dropdown {
+  margin-right: 10px;
+  margin-top: 7px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+#profile-dropdown:after {
+  background: transparent;
 }
 /*-------------Sidebar------------*/
 #sidebar-nav {

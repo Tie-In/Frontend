@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import NavStyle from './style/navstyle.css';
 import logo from './images/logo.png';
+import avatar from './images/logo-login.png';
 import { Link } from 'react-router';
+import { Dropdown, MenuItem, ButtonToolbar } from 'react-bootstrap';
 import 'simple-line-icons/css/simple-line-icons.css';
 
 class App extends Component {
@@ -52,6 +54,17 @@ class App extends Component {
                 <ul className="nav navbar-nav">
                   <li className="pull-left" id="slide-sidebar"><a href="#sidebar-nav">Organization <span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a></li>
                   {menuNode}
+                  <Dropdown className="pull-right" id="profile-dropdown">
+                    <Dropdown.Toggle>
+                      <img id="avatar" src={avatar} alt="avatar"></img>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <MenuItem eventKey="1">Profile</MenuItem>
+                      <MenuItem eventKey="2">Setting</MenuItem>
+                      <MenuItem divider />
+                      <MenuItem eventKey="3">Sign Out</MenuItem>
+                    </Dropdown.Menu>
+                  </Dropdown>
                   <div className="searchBox input-group pull-right">
                     <input type="text" className="form-control" placeholder="Search"></input>
                     <span className="input-group-btn">
