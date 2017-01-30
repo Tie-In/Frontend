@@ -8,7 +8,7 @@ import * as organizationActions from '../../actions/organization-actions';
 
 class OrganizationContainer extends Component {
 
-  componentDidMount() {
+  componentWillMount() {
     axios({
       method: 'GET',
       url: '/api/organizations/'.concat(this.props.params.organizationId),
@@ -16,6 +16,7 @@ class OrganizationContainer extends Component {
         Authorization: this.props.user.auth_token,
       },
     }).then((response) => {
+      console.log(response);
       const org = response.data;
       this.props.organizationActions.setOrganization(org);
     }).catch((error) => {
@@ -23,8 +24,15 @@ class OrganizationContainer extends Component {
     });
   }
 
+  // checkHaveOrganization() {
+  //   if (this.props.organization) {
+  //     document.location.href = '/';
+  //   }
+  // }
+
   render() {
     const { user, organization } = this.props;
+    console.log(organization);
     return (
       <div>
         <Row>

@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
 import axios from 'axios';
 import * as organizationActions from '../../actions/organization-actions';
+import * as userActions from '../../actions/user-actions';
 
 class NewOrgContainer extends Component {
   constructor() {
@@ -40,11 +41,13 @@ class NewOrgContainer extends Component {
         organization: this.state.input,
       },
     }).then((response) => {
-      const org = response.data;
-      this.props.actions.setOrganization(org);
+      const org = response.data.organization;
+      const user = response.data.user;
+      this.props.organizationActions.setOrganization(org);
+      this.props.userActions.setUser(user);
       document.location.href = `/organizations/${org.id}`;
     }).catch((error) => {
-      console.log(error.response.data);
+      console.log(error.response);
     });
   }
 
@@ -169,20 +172,20 @@ class NewOrgContainer extends Component {
 
 NewOrgContainer.propTypes = {
   user: PropTypes.object.isRequired,
-  organization: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
+  organizationActions: PropTypes.object.isRequired,
+  userActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    organization: state.organization,
     user: state.user,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(organizationActions, dispatch),
+    organizationActions: bindActionCreators(organizationActions, dispatch),
+    userActions: bindActionCreators(userActions, dispatch),
   };
 }
 
