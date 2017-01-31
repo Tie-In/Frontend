@@ -19,6 +19,9 @@ class OrganizationNavbar extends Component {
     const customStyle = {
       height: '70px',
     };
+    const sidebarStyle = {
+      top: '70px',
+    };
     const organizationNodes = this.props.user.organizations.map((org) => {
       return (
         <li key={org.id} className="sidebar-nav-item">
@@ -32,20 +35,20 @@ class OrganizationNavbar extends Component {
         <header role="banner">
           <nav id="navbar-primary" className="navbar navbar-default" style={customStyle} role="navigation">
             <div className="container-fluid">
-              <img id="logo-main" src={logo} alt="Logo Thing main logo" />
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav">
-                  <li className="pull-left" id="slide-sidebar">
+                  <li className="pull-left" id="slide-sidebar" style={{marginTop: 10}}>
                     <a href="#sidebar-nav">
                       {this.props.organization.name} <span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
                     </a>
                   </li>
+                  <img id="logo-main" src={logo} alt="Logo Thing main logo" />
                 </ul>
               </div>
             </div>
           </nav>
         </header>
-        <div id="sidebar-nav">
+        <div id="sidebar-nav" style={sidebarStyle}>
           <ul id="sidebar-nav-list">
             {organizationNodes}
             <li className="sidebar-nav-item">
