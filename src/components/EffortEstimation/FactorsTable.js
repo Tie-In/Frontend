@@ -11,15 +11,21 @@ class FactorsTable extends Component {
 
     this.state = {
       ratings: [],
+      impacts: [],
     };
 
     this.setRatings = this.setRatings.bind(this);
   }
 
-  setRatings(index, rating) {
-    const temp = this.state.ratings;
-    temp[index] = rating;
-    this.setState({ ratings: temp });
+  setRatings(index, rating, impact) {
+    const tempRating = this.state.ratings;
+    const tempImpact = this.state.impacts;
+    tempRating[index] = rating;
+    tempImpact[index] = impact;
+    this.setState({
+      ratings: tempRating,
+      impacts: tempImpact,
+    });
   }
 
   renderRows() {
@@ -38,9 +44,11 @@ class FactorsTable extends Component {
 
   computeResult() {
     let temp = 0;
-    this.state.ratings.map((data) => {
+    this.state.impacts.map((data) => {
       temp += parseFloat(data);
     });
+    this.props.setValue(this.props.valueTitle, temp);
+    this.props.setElements(this.props.elementsTitle, this.state.ratings);
     return temp;
   }
 
@@ -90,6 +98,8 @@ FactorsTable.propTypes = {
   title: PropTypes.string.isRequired,
   factors: PropTypes.arrayOf(PropTypes.object).isRequired,
   resultLabel: PropTypes.string.isRequired,
+  valueTitle: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
 };
 
 export default FactorsTable;

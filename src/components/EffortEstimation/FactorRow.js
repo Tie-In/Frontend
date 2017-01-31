@@ -19,7 +19,7 @@ class FactorRow extends Component {
   updateRating(e) {
     this.setState({ rating: e.target.value });
     const value = e.target.value * this.props.weight;
-    this.props.returnImpact(this.props.index, value);
+    this.props.returnImpact(this.props.index, e.target.value, value);
   }
 
   render() {

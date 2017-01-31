@@ -15,19 +15,52 @@ class Container extends Component {
 
     this.state = {
       project_id: this.props.project.id,
-      technicals: [],
-      environmentals: [],
+      technicals: {},
+      environmentals: {},
       t_factor: null,
       e_factor: null,
       uucp: null,
     };
 
     this.setValue = this.setValue.bind(this);
+    this.setElements = this.setElements.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   setValue(name, value) {
     const state = this.state;
     state[name] = value;
+  }
+
+  setElements(name, elements) {
+    console.log(elements);
+    const temp = {};
+    for (let i = 0; i < elements.length; i += 1) {
+      temp[`rating_factor${i + 1}`] = elements[i];
+    }
+    const state = this.state;
+    state[name] = temp;
+  }
+
+  submit() {
+    axios({
+      method: 'POST',
+      url: '/api/effort_estimations',
+      headers: {
+        Authorization: this.props.user.auth_token,
+      },
+      data: {
+        effort_estimations: this.state,
+        features: this.props.planning.features,
+        technicals: this.state.technicals,
+        environmentals: this.state.environmentals,
+      },
+    }).then((response) => {
+      console.log(response.data);
+      // document.location.href = `/organizations/${org.id}`;
+    }).catch((error) => {
+      console.log(error.response);
+    });
   }
 
   render() {
@@ -56,6 +89,9 @@ class Container extends Component {
           factors={technicalFactors}
           resultLabel="TFactor (Technical Factor)"
           setValue={this.setValue}
+          valueTitle="t_factor"
+          elementsTitle="technicals"
+          setElements={this.setElements}
         />
         <br />
         <FactorsTable
@@ -63,6 +99,9 @@ class Container extends Component {
           factors={environmentalFactors}
           resultLabel="EFactor (Environmental Factor)"
           setValue={this.setValue}
+          valueTitle="e_factor"
+          elementsTitle="environmentals"
+          setElements={this.setElements}
         />
         <br />
         <br />
@@ -71,7 +110,7 @@ class Container extends Component {
             <Button bsStyle="primary" block>Back</Button>
           </Col>
           <Col sm={4}>
-            <Button block>Next</Button>
+            <Button onClick={this.submit} block>Next</Button>
           </Col>
         </Row>
         <br />
