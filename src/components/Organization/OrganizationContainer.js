@@ -32,15 +32,14 @@ class OrganizationContainer extends Component {
 
   render() {
     const { user, organization } = this.props;
-    console.log(organization);
     return (
       <div>
         <Row>
           <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-            {
+            { organization.projects !== undefined ?
               organization.projects.map((project) => {
-                return <ProjectCard key={project.id} project={project} />
-              })
+                return <ProjectCard key={project.id} project={project} />;
+              }) : null
             }
             <Button href={`./${this.props.params.organizationId}/project-new`}>Create new project</Button>
           </Col>

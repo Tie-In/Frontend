@@ -18,6 +18,7 @@ class Login extends Component {
       email: '',
       password: '',
       user: {},
+      error: '',
     };
 
     this.handleEmail = this.handleEmail.bind(this);
@@ -52,7 +53,9 @@ class Login extends Component {
         document.location.href = '/';
       }
     }).catch((response) => {
-      console.log(response);
+      console.log(response.response.data.errors);
+      const errors = response.response.data.errors;
+      this.setState({ error: errors });
     });
   }
 
@@ -124,6 +127,7 @@ class Login extends Component {
                 type="password"
               />
             </FormGroup>
+            <p style={{color: 'red'}}>{this.state.error}</p>
             <FormGroup>
               <Col sm={6}>
                 <Button

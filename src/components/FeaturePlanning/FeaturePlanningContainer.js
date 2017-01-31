@@ -8,15 +8,15 @@ import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
 import axios from 'axios';
 import List from './List';
-// import * as userActions from '../actions/user-actions';
+import * as planningActions from '../../actions/planning-actions';
 
 class FeaturePlanningContainer extends Component {
 
   constructor(props) {
     super(props);
-
+    console.log(this.props.planning);
     this.state = {
-      features: [],
+      features: this.props.planning.features,
       input: {
         name: '',
         complexity: '',
@@ -24,6 +24,7 @@ class FeaturePlanningContainer extends Component {
     };
 
     this.addFeature = this.addFeature.bind(this);
+    this.sendFeatures = this.sendFeatures.bind(this);
   }
 
   addFeature() {
@@ -39,7 +40,13 @@ class FeaturePlanningContainer extends Component {
     });
   }
 
+  sendFeatures() {
+    this.props.planningActions.setFeatures(this.state.features);
+    document.location.href = 'effort-estimation';
+  }
+
   render() {
+    console.log(this.props);
     const containerStyle = {
       width: '70%',
       height: 'auto',
@@ -55,7 +62,7 @@ class FeaturePlanningContainer extends Component {
     };
     return (
       <div style={containerStyle}>
-        <h3 style={headerStyle}>Add Feature</h3>
+        <h3 style={headerStyle}>Add Planning Feature</h3>
         <hr style={lineColor} />
         <form>
           <Row>
@@ -95,7 +102,7 @@ class FeaturePlanningContainer extends Component {
         })}
         <Row>
           <Col smOffset={4} sm={4}>
-            <Button block>Next</Button>
+            <Button block onClick={this.sendFeatures}>Next</Button>
           </Col>
         </Row>
       </div>
@@ -103,17 +110,17 @@ class FeaturePlanningContainer extends Component {
   }
 }
 
-// function mapStateToProps(state) {
-//   return {
-//     user: state.user,
-//   };
-// }
-//
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     actions: bindActionCreators(userActions, dispatch),
-//   };
-// }
-//
-// export default connect(mapStateToProps, mapDispatchToProps)(FeaturePlanningContainer);
-export default FeaturePlanningContainer;
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+    planning: state.planning,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    planningActions: bindActionCreators(planningActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FeaturePlanningContainer);

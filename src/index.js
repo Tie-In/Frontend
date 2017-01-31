@@ -38,7 +38,7 @@ ReactDOM.render(
       <Route path="/organizations/:organizationId/projects/:projectId" component={App}>
         <IndexRoute component={ProjectHomeContainer} />
         <Route path="planning/features" component={FeaturePlanningContainer} />
-        <Route path="planning/effort_estimation" component={EffortEstimationContainer} />
+        <Route path="planning/effort-estimation" component={EffortEstimationContainer} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="register" component={Register} />

@@ -7,11 +7,22 @@ import React, { PropTypes, Component } from 'react';
 
 class FeaturePoint extends Component {
 
+  countComplexity(complexity) {
+    let count = 0;
+    this.props.features.map((feature) => {
+      if (feature.complexity === complexity) {
+        count += 1;
+      }
+    });
+    return count;
+  }
+
   render() {
+    const { features } = this.props;
     const temp = {
-      simple: 5,
-      medium: 7,
-      complex: 10,
+      simple: this.countComplexity('simple'),
+      medium: this.countComplexity('medium'),
+      complex: this.countComplexity('complex'),
     };
     const product = {
       simple: 5 * temp.simple,
@@ -33,6 +44,7 @@ class FeaturePoint extends Component {
       marginRight: '10px',
     };
     const UUCP = product.simple + product.medium + product.complex;
+    this.props.setValue('uucp', UUCP);
     return (
       <div>
         <h4>Calcuate UUCPs</h4>

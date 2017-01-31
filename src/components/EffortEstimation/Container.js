@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import linkState from 'react-link-state';
 import axios from 'axios';
 import { Button, Row, Col } from 'react-bootstrap';
 import FeaturePoint from './FeaturePoint';
@@ -11,7 +10,28 @@ import { technicalFactors, environmentalFactors } from './informations';
 
 class Container extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      project_id: this.props.project.id,
+      technicals: [],
+      environmentals: [],
+      t_factor: null,
+      e_factor: null,
+      uucp: null,
+    };
+
+    this.setValue = this.setValue.bind(this);
+  }
+
+  setValue(name, value) {
+    const state = this.state;
+    state[name] = value;
+  }
+
   render() {
+    const { project, planning } = this.props;
     const containerStyle = {
       width: '70%',
       height: 'auto',
@@ -29,18 +49,20 @@ class Container extends Component {
       <div className="effortEstimation" style={containerStyle}>
         <h3 style={headerStyle}>Effort Estimation</h3>
         <hr style={lineColor} />
-        <FeaturePoint />
+        <FeaturePoint features={planning.features} setValue={this.setValue} />
         <br />
         <FactorsTable
           title="Calcuate Technical Complexity"
           factors={technicalFactors}
           resultLabel="TFactor (Technical Factor)"
+          setValue={this.setValue}
         />
         <br />
         <FactorsTable
           title="Calcuate Environmental Complexity"
           factors={environmentalFactors}
           resultLabel="EFactor (Environmental Factor)"
+          setValue={this.setValue}
         />
         <br />
         <br />
@@ -58,17 +80,24 @@ class Container extends Component {
   }
 }
 
-// function mapStateToProps(state) {
-//   return {
-//     user: state.user,
-//   };
-// }
-//
+Container.propTypes = {
+  user: PropTypes.object.isRequired,
+  project: PropTypes.object.isRequired,
+  planning: PropTypes.object.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+    project: state.project,
+    planning: state.planning,
+  };
+}
+
 // function mapDispatchToProps(dispatch) {
 //   return {
 //     actions: bindActionCreators(userActions, dispatch),
 //   };
 // }
-//
-// export default connect(mapStateToProps, mapDispatchToProps)(FeaturePlanningContainer);
-export default Container;
+
+export default connect(mapStateToProps)(Container);
