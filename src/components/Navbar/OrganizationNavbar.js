@@ -44,7 +44,7 @@ class OrganizationNavbar extends Component {
           <nav id="navbar-primary" className="navbar navbar-default" style={customStyle} role="navigation">
             <div className="container-fluid">
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
-                <ul className="nav navbar-nav">
+                <ul className="nav navbar-nav" style={customStyle}>
                   <li className="pull-left" id="slide-sidebar" style={{ marginTop: 10 }}>
                     <a href="#sidebar-nav">
                       {this.props.organization.name} <span className="glyphicon glyphicon-menu-down" aria-hidden="true" />

@@ -89,7 +89,7 @@ class NewProject extends Component {
                 <hr style={lineColor} />
                 <FormGroup controlId="formInlineName">
                   <ControlLabel>
-                    Organization&#39;s name
+                    Project&#39;s name
                   </ControlLabel>
                   <FormControl type="text" placeholder="Name" valueLink={linkState(this, 'input.name')} />
                 </FormGroup>
@@ -140,7 +140,7 @@ class NewProject extends Component {
                   <Col smOffset={0} sm={11}>
                     <Media>
                       <Media.Left>
-                        <Image width={32} height={32} src="src/images/logo-login.png" alt="user" circle />
+                        <Image width={32} height={32} src={logo} alt="user" circle />
                       </Media.Left>
                       <Media.Body>
                         <p>pongsachon.p@ku.th</p>
@@ -148,7 +148,7 @@ class NewProject extends Component {
                     </Media>
                     <Media>
                       <Media.Left>
-                        <Image width={32} height={32} src="src/images/logo-login.png" alt="user" circle />
+                        <Image width={32} height={32} src={logo} alt="user" circle />
                       </Media.Left>
                       <Media.Body>
                         <p>pongsachon.p@ku.th</p>
