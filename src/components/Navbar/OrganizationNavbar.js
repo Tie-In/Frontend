@@ -4,6 +4,8 @@ import logo from '../../images/logo.png';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Dropdown, MenuItem, ButtonToolbar } from 'react-bootstrap';
+import avatar from '../../images/logo-login.png';
 import 'simple-line-icons/css/simple-line-icons.css';
 import * as userActions from '../../actions/user-actions';
 
@@ -15,6 +17,11 @@ class OrganizationNavbar extends Component {
     };
   }
 
+  logout() {
+    localStorage.clear();
+    document.location.href = '/login';
+  }
+
   render() {
     const customStyle = {
       height: '70px',
@@ -22,7 +29,8 @@ class OrganizationNavbar extends Component {
     const sidebarStyle = {
       top: '70px',
     };
-    const organizationNodes = this.props.user.organizations.map((org) => {
+    const organizationsFromUser = this.props.user.organizations || [];
+    const organizationNodes = organizationsFromUser.map((org) => {
       return (
         <li key={org.id} className="sidebar-nav-item">
           <a href={`/organizations/${org.id}`}>{org.name}</a>
@@ -37,12 +45,25 @@ class OrganizationNavbar extends Component {
             <div className="container-fluid">
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav">
-                  <li className="pull-left" id="slide-sidebar" style={{marginTop: 10}}>
+                  <li className="pull-left" id="slide-sidebar" style={{ marginTop: 10 }}>
                     <a href="#sidebar-nav">
                       {this.props.organization.name} <span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
                     </a>
                   </li>
                   <img id="logo-main" src={logo} alt="Logo Thing main logo" />
+                  <li className="pull-right">
+                    <Dropdown id="profile-dropdown">
+                      <Dropdown.Toggle>
+                        <img id="avatar" src={avatar} alt="avatar"></img>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <MenuItem eventKey="1">Profile</MenuItem>
+                        <MenuItem eventKey="2">Setting</MenuItem>
+                        <MenuItem divider />
+                        <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </li>
                 </ul>
               </div>
             </div>

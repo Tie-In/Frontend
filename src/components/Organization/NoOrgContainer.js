@@ -1,7 +1,15 @@
 import { Image, Button } from 'react-bootstrap';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class NoOrgContainer extends Component {
+  componentWillMount() {
+    if (this.props.user.organizations.length > 0) {
+      const firstOrg = this.props.user.organizations[0];
+      document.location.href = '/organizations/' + firstOrg.id;
+    }
+  }
+
   render() {
     const articleStyles = {
       margin: '0 auto',
@@ -26,4 +34,10 @@ class NoOrgContainer extends Component {
   }
 }
 
-export default NoOrgContainer;
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
+
+export default connect(mapStateToProps)(NoOrgContainer);

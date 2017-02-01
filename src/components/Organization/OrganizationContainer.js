@@ -9,6 +9,10 @@ import * as organizationActions from '../../actions/organization-actions';
 class OrganizationContainer extends Component {
 
   componentWillMount() {
+    this.fetchData();
+  }
+
+  fetchData() {
     axios({
       method: 'GET',
       url: '/api/organizations/'.concat(this.props.params.organizationId),
@@ -20,30 +24,31 @@ class OrganizationContainer extends Component {
       const org = response.data;
       this.props.organizationActions.setOrganization(org);
     }).catch((error) => {
+      // no permission or not founded
+      document.location.href = '/login';
       console.log(error);
     });
   }
-
-  // checkHaveOrganization() {
-  //   if (this.props.organization) {
-  //     document.location.href = '/';
-  //   }
-  // }
 
   render() {
     const { user, organization } = this.props;
     return (
       <div>
-        <Row>
-          <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-            { organization.projects !== undefined ?
-              organization.projects.map((project) => {
-                return <ProjectCard key={project.id} project={project} />;
-              }) : null
-            }
-            <Button href={`./${this.props.params.organizationId}/project-new`}>Create new project</Button>
-          </Col>
-        </Row>
+        { organization.projects !== undefined ?
+          <Row>
+            <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+              {
+                organization.projects.map((project) => {
+                  return <ProjectCard key={project.id} project={project} />;
+                })
+              }
+              <Button href={`./${this.props.params.organizationId}/project-new`}>
+                Create new project
+              </Button>
+            </Col>
+          </Row>
+          : null
+        }
       </div>
     );
   }

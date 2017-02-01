@@ -28,12 +28,24 @@ class Login extends Component {
   }
 
   componentWillMount() {
+    if (this.props.user.auth_token !== undefined) {
+      this.findPath(this.props.user);
+    }
     // set background style
     document.body.style.backgroundImage = `url(${Background})`;
     document.body.style.backgroundRepeat = 'no-repeat';
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundPosition = 'center';
     document.body.style.backgroundAttachment = 'fixed';
+  }
+
+  findPath(user) {
+    const firstOrg = user.organizations[0];
+    if (firstOrg) {
+      document.location.href = '/organizations/' + firstOrg.id;
+    } else {
+      document.location.href = '/';
+    }
   }
 
   login() {
@@ -46,12 +58,7 @@ class Login extends Component {
     }).then((response) => {
       user = response.data;
       this.props.userActions.setUser(user);
-      const firstOrg = user.organizations[0];
-      if (firstOrg) {
-        document.location.href = '/organizations/' + firstOrg.id;
-      } else {
-        document.location.href = '/';
-      }
+      this.findPath(user);
     }).catch((response) => {
       console.log(response.response.data.errors);
       const errors = response.response.data.errors;
