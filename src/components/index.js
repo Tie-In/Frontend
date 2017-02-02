@@ -2,6 +2,7 @@ import Login from './Login';
 import Register from './Register';
 import FeaturePlanningContainer from './FeaturePlanning/FeaturePlanningContainer';
 import EffortEstimationContainer from './EffortEstimation/Container';
+import ResultPlanningContainer from './ResultPlanning/Container';
 import NoOrgContainer from './Organization/NoOrgContainer';
 import NewOrgContainer from './Organization/NewOrgContainer';
 import OrganizationContainer from './Organization/OrganizationContainer';
@@ -24,4 +25,5 @@ module.exports = {
   NewProject,
   ProjectHomeContainer,
   OrganizationNavbar,
+  ResultPlanningContainer,
 };

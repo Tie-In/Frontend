@@ -14,7 +14,7 @@ class FeaturePlanningContainer extends Component {
 
   constructor(props) {
     super(props);
-    console.log(this.props.planning);
+
     this.state = {
       features: this.props.planning.features,
       input: {

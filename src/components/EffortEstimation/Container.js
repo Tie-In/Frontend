@@ -1,12 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import linkState from 'react-link-state';
 import axios from 'axios';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col, FormGroup, FormControl } from 'react-bootstrap';
 import FeaturePoint from './FeaturePoint';
 import FactorsTable from './FactorsTable';
 import { technicalFactors, environmentalFactors } from './informations';
-// import * as userActions from '../actions/user-actions';
+import * as planningActions from '../../actions/planning-actions';
 
 class Container extends Component {
 
@@ -20,6 +21,7 @@ class Container extends Component {
       t_factor: null,
       e_factor: null,
       uucp: null,
+      developer: 0,
     };
 
     this.setValue = this.setValue.bind(this);
@@ -33,7 +35,6 @@ class Container extends Component {
   }
 
   setElements(name, elements) {
-    console.log(elements);
     const temp = {};
     for (let i = 0; i < elements.length; i += 1) {
       temp[`rating_factor${i + 1}`] = elements[i];
@@ -57,9 +58,11 @@ class Container extends Component {
       },
     }).then((response) => {
       console.log(response.data);
-      // document.location.href = `/organizations/${org.id}`;
+      this.props.planningActions.setEffortEstimation(response.data);
+
+      document.location.href = `/organizations/${this.props.params.organizationId}/projects/${this.state.project_id}/planning`;
     }).catch((error) => {
-      console.log(error.response);
+      console.log(error);
     });
   }
 
@@ -104,6 +107,20 @@ class Container extends Component {
           setElements={this.setElements}
         />
         <br />
+        <Row>
+          <Col sm={8}>
+            <h4>Total number of developers</h4>
+          </Col>
+          <Col sm={4}>
+            <FormGroup>
+              <FormControl
+                placeholder=""
+                type="number"
+                valueLink={linkState(this, 'developers')}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
         <br />
         <Row>
           <Col smOffset={2} sm={4}>
@@ -133,10 +150,10 @@ function mapStateToProps(state) {
   };
 }
 
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     actions: bindActionCreators(userActions, dispatch),
-//   };
-// }
+function mapDispatchToProps(dispatch) {
+  return {
+    planningActions: bindActionCreators(planningActions, dispatch),
+  };
+}
 
-export default connect(mapStateToProps)(Container);
+export default connect(mapStateToProps, mapDispatchToProps)(Container);

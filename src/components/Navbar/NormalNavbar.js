@@ -22,12 +22,14 @@ class NormalNavbar extends Component {
     document.location.href = '/login';
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    console.log(this.props);
+    const path = `/organizations/${this.props.organization.id}/projects/${this.props.project.id}`;
     const data = [
-      { id: 1, name: 'Project', path: '/project' },
+      { id: 1, name: 'Project', path: `${path}/` },
       { id: 2, name: 'Backlog', path: '/backlog' },
       { id: 3, name: 'New task', path: '/newTask' },
-      { id: 4, name: 'Planning', path: '/planning' },
+      { id: 4, name: 'Planning', path: `${path}/planning` },
       { id: 5, name: 'Active sprint', path: '/activeSprint' },
       { id: 6, name: 'Retrospective', path: '/retrospective' },
       { id: 7, name: 'Dashboard', path: '/dashboard' },
@@ -113,6 +115,7 @@ class NormalNavbar extends Component {
 NormalNavbar.propTypes = {
   user: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
+  project: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
 };
 
@@ -120,6 +123,7 @@ function mapStateToProps(state) {
   return {
     user: state.user,
     organization: state.organization,
+    project: state.project
   };
 }
 

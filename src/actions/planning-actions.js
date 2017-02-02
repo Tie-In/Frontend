@@ -6,3 +6,10 @@ export const setFeatures = (features) => {
     features,
   };
 };
+
+export const setEffortEstimation = (effortEstimation) => {
+  return {
+    type: types.SET_EFFORT_ESTIMATIONS,
+    effortEstimation,
+  };
+};
