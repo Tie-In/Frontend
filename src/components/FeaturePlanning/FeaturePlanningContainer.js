@@ -25,6 +25,7 @@ class FeaturePlanningContainer extends Component {
 
     this.addFeature = this.addFeature.bind(this);
     this.sendFeatures = this.sendFeatures.bind(this);
+    this.removeFeature = this.removeFeature.bind(this);
   }
 
   addFeature() {
@@ -45,8 +46,11 @@ class FeaturePlanningContainer extends Component {
     document.location.href = 'effort-estimation';
   }
 
+  removeFeature(index) {
+    this.state.features.splice(index);
+  }
+
   render() {
-    console.log(this.props);
     const containerStyle = {
       width: '70%',
       height: 'auto',
@@ -98,7 +102,9 @@ class FeaturePlanningContainer extends Component {
           </Row>
         </form>
         {this.state.features.map(function(data) {
-          return <List name={data.name} complexity={data.complexity} />;
+          return <List
+            name={data.name} complexity={data.complexity}
+          />;
         })}
         <Row>
           <Col smOffset={4} sm={4}>

@@ -2,10 +2,9 @@ import { Row, Col, Glyphicon, ButtonToolbar, Button } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 
 class List extends Component {
-
-  constructor(props) {
-    super(props);
-  }
+  // removeFeature(){
+  //   this.props.remove(this.props.index);
+  // }
 
   render() {
     const { name, complexity } = this.props;
@@ -22,14 +21,16 @@ class List extends Component {
             {complexity}
           </Col>
           <Col sm={2}>
-            <ButtonToolbar>
+            <Col sm={2}>
               <Button bsStyle="primary">
                 <Glyphicon glyph="pencil" />
               </Button>
+            </Col>
+            <Col sm={2} smOffset={3}>
               <Button bsStyle="primary">
                 <Glyphicon glyph="remove" />
               </Button>
-            </ButtonToolbar>
+            </Col>
           </Col>
         </Row>
       </div>

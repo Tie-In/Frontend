@@ -65,7 +65,7 @@ class Container extends Component {
               <thead>
                 <tr>
                   <th>Feature names</th>
-                  <th>Last Name</th>
+                  <th>Complexity</th>
                 </tr>
               </thead>
               <tbody>
