@@ -10,6 +10,7 @@ header[role="banner"] #logo-main {
   height: 120px;
   width: 100%;
   position: fixed;
+  z-index: 99;
 }
 #navbar-primary.navbar-default .navbar-nav {
   width: 100%;
@@ -136,6 +137,8 @@ header[role="banner"] #logo-main {
   }
 }
 .createOrg {
-  margin-top: 450px;
-  border-bottom: 0px !important;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }

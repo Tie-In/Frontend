@@ -18,6 +18,7 @@ class Login extends Component {
       email: '',
       password: '',
       user: {},
+      error: '',
     };
 
     this.handleEmail = this.handleEmail.bind(this);
@@ -27,6 +28,9 @@ class Login extends Component {
   }
 
   componentWillMount() {
+    if (this.props.user.auth_token !== undefined) {
+      this.findPath(this.props.user);
+    }
     // set background style
     document.body.style.backgroundImage = `url(${Background})`;
     document.body.style.backgroundRepeat = 'no-repeat';
@@ -35,9 +39,17 @@ class Login extends Component {
     document.body.style.backgroundAttachment = 'fixed';
   }
 
+  findPath(user) {
+    const firstOrg = user.organizations[0];
+    if (firstOrg) {
+      document.location.href = '/organizations/' + firstOrg.id;
+    } else {
+      document.location.href = '/';
+    }
+  }
+
   login() {
     let user = {};
-    console.log(this.state.password);
     axios.post('/api/sessions', {
       session: {
         email: this.state.email,
@@ -45,9 +57,12 @@ class Login extends Component {
       },
     }).then((response) => {
       user = response.data;
-      this.props.actions.setUser(user);
+      this.props.userActions.setUser(user);
+      this.findPath(user);
     }).catch((response) => {
-      console.log(response);
+      console.log(response.response.data.errors);
+      const errors = response.response.data.errors;
+      this.setState({ error: errors });
     });
   }
 
@@ -119,6 +134,7 @@ class Login extends Component {
                 type="password"
               />
             </FormGroup>
+            <p style={{color: 'red'}}>{this.state.error}</p>
             <FormGroup>
               <Col sm={6}>
                 <Button
@@ -148,7 +164,7 @@ class Login extends Component {
 
 Login.propTypes = {
   user: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
+  userActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -159,7 +175,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(userActions, dispatch),
+    userActions: bindActionCreators(userActions, dispatch),
   };
 }
 

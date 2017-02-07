@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import {
-  NormalNavbar,
+  OrganizationNavbar,
 } from './components';
 
-class App extends Component {
+class OrganizationApp extends Component {
+
   componentWillMount() {
     if (this.props.user.auth_token === undefined) {
       document.location.href = '/login';
@@ -14,8 +15,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <NormalNavbar />
-        <div className="container mainContainer">
+        <OrganizationNavbar />
+        <div className="container registerContainer">
           {this.props.children}
         </div>
       </div>
@@ -23,7 +24,7 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
+OrganizationApp.propTypes = {
   user: PropTypes.object.isRequired,
 }
 
@@ -33,4 +34,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(OrganizationApp);
