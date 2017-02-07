@@ -53,6 +53,10 @@ module.exports = {
         loader: 'style!css!postcss',
       },
       {
+        test: /\.styl$/,
+        loader: 'style!css!stylus-loader',
+      },
+      {
         test: /\.json$/,
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'json',
