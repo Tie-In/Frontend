@@ -152,7 +152,7 @@ class NewOrgContainer extends Component {
             <Row>
               <FormGroup style={buttonGroup}>
                 <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                  <Button style={singleButton} bsStyle="primary" href="/no-organization" block>
+                  <Button style={singleButton} bsStyle="primary" href="/" block>
                     Cancel
                   </Button>
                 </Col>

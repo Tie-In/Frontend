@@ -1,5 +1,5 @@
 import { Image, Button } from 'react-bootstrap';
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
 class NoOrgContainer extends Component {
@@ -33,6 +33,11 @@ class NoOrgContainer extends Component {
     );
   }
 }
+
+NoOrgContainer.propTypes = {
+  user: PropTypes.object.isRequired,
+};
+
 
 function mapStateToProps(state) {
   return {

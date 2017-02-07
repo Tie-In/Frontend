@@ -1,10 +1,8 @@
-import { Form, FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bootstrap';
+import { FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router'
 import axios from 'axios';
-import BackgroundImage from 'react-background-image-loader';
 import logo from '../images/logo-login.png';
 import Background from '../images/BG-white.png';
 import * as userActions from '../actions/user-actions';
@@ -134,7 +132,7 @@ class Login extends Component {
                 type="password"
               />
             </FormGroup>
-            <p style={{color: 'red'}}>{this.state.error}</p>
+            <p style={{ color: 'red' }}>{this.state.error}</p>
             <FormGroup>
               <Col sm={6}>
                 <Button
