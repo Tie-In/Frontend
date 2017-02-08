@@ -12,11 +12,11 @@ export default (state = initialState, action) => {
         features: action.features,
       });
     case types.SET_EFFORT_ESTIMATIONS:
-      console.log(action.effortEstimation);
-      console.log(state);
       return Object.assign({}, state, {
         effortEstimation: action.effortEstimation,
       });
+    case types.CLEAR_PLANNING:
+      return Object.assign({}, initialState);
     default:
       return state;
   }

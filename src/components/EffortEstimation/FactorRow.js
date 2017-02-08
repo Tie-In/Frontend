@@ -4,7 +4,6 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
-import linkState from 'react-link-state';
 
 class FactorRow extends Component {
   constructor(props) {
@@ -28,6 +27,9 @@ class FactorRow extends Component {
     const factorStyle = {
       marginLeft: '10px',
     };
+    const inputStyle = {
+      width: '50px',
+    };
     const impact = weight * this.state.rating;
     return (
       <tr>
@@ -41,6 +43,7 @@ class FactorRow extends Component {
         <td className="text-center">
           <input
             type="number" min="0" max="5"
+            style={inputStyle}
             onChange={this.updateRating}
           />
         </td>

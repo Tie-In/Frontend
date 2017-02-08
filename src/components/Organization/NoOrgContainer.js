@@ -26,7 +26,7 @@ class NoOrgContainer extends Component {
     };
     return (
       <div style={articleStyles}>
-        <Image src={'src/components/Organization/addOrg.png'} alt="Image" />
+        <Image src={'src/images/add-org.png'} alt="Image" />
         <p />
         <Button href="/organization-new" style={buttonDefaultStyle}>Create new organization</Button>
       </div>

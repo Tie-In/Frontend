@@ -32,7 +32,6 @@ class Container extends Component {
   }
 
   render() {
-    const { planning } = this.props;
     const containerStyle = {
       width: '70%',
       height: 'auto',
@@ -51,9 +50,9 @@ class Container extends Component {
         <h3 style={headerStyle}>Planning Result</h3>
         <hr style={lineColor} />
         <div>
-          <p>Most used week: {Math.ceil(planning.effortEstimation.upper_weeks)}</p>
-          <p>Low used week: {Math.floor(planning.effortEstimation.lower_weeks)}</p>
-          <p>Developerd number: {Math.floor(planning.effortEstimation.developers)}</p>
+          <p>Most used week: {Math.ceil(this.state.effort_estimation.upper_weeks)}</p>
+          <p>Low used week: {Math.floor(this.state.effort_estimation.lower_weeks)}</p>
+          <p>Developerd number: {Math.floor(this.state.effort_estimation.developers)}</p>
           <ProgressBar now={60} />
           <hr />
         </div>
@@ -139,14 +138,12 @@ class Container extends Component {
 Container.propTypes = {
   user: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
-  planning: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     user: state.user,
     project: state.project,
-    planning: state.planning,
   };
 }
 
