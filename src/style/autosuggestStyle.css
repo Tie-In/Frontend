@@ -73,7 +73,23 @@
   background-repeat: no-repeat;
 }
 
-.dancounsell {
+.user1 {
+  background-image: url('../images/user1.png');
+}
+
+.user2 {
+  background-image: url('../images/user2.png');
+}
+
+.user3 {
+  background-image: url('../images/user3.png');
+}
+
+.user4 {
+  background-image: url('../images/user4.png');
+}
+
+/*.dancounsell {
   background-image: url(https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/48.jpg);
 }
 
@@ -87,7 +103,7 @@
 
 .steveodom {
   background-image: url(https://s3.amazonaws.com/uifaces/faces/twitter/steveodom/48.jpg);
-}
+}*/
 
 .name {
   margin-left: 68px;

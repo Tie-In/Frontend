@@ -17,22 +17,22 @@ const people = [
   {
     first: 'Charlie',
     last: 'Brown',
-    twitter: 'dancounsell',
+    twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
     first: 'Charlotte',
     last: 'White',
-    twitter: 'mtnmissy',
+    twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
     first: 'Chloe',
     last: 'Jones',
-    twitter: 'ladylexy',
+    twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
     first: 'Cooper',
     last: 'King',
-    twitter: 'steveodom',
+    twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
 ];
 
@@ -40,29 +40,12 @@ function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-const getSuggestions = value => {
-  const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
-  // const inputLength = inputValue.length;
-
-  // return inputLength === 0 ? [] : people.filter(person =>
-  //   person.first.toLowerCase().slice(0, inputLength) === inputValue
-  // );
-  if (inputValue === '') {
-    return [];
-  }
-
-  const regex = new RegExp('\\b' + inputValue, 'i');
-
-  return people.filter(person => regex.test(getSuggestionValue(person)));
-};
-
 function getSuggestionValue(suggestion) {
   return `${suggestion.first} ${suggestion.last}`;
 }
 
 function renderSuggestion(suggestion) {
   const suggestionText = `${suggestion.first} ${suggestion.last}`;
-
   return (
     <span className={'suggestion-content ' + suggestion.twitter}>
       <span className="name">
@@ -71,6 +54,15 @@ function renderSuggestion(suggestion) {
     </span>
   );
 }
+
+const getSuggestions = value => {
+  const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
+  if (inputValue === '') {
+    return [];
+  }
+  const regex = new RegExp('\\b' + inputValue, 'i');
+  return people.filter(person => regex.test(getSuggestionValue(person)));
+};
 
 class NewOrgContainer extends Component {
   constructor() {
