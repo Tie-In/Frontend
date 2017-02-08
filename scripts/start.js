@@ -150,7 +150,7 @@ function runDevServer(port) {
     quiet: true,
     proxy: {
       '/api/**': {
-        target: 'http://localhost:3000/',
+        target: 'https://tieinservice.herokuapp.com/',
         changeOrigin: true,
       },
     },
