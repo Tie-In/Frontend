@@ -22,14 +22,17 @@ class NoOrgContainer extends Component {
       position: 'absolute',
       left: '50%',
       transform: 'translate(-50%, 0)',
-      marginTop: '8px',
+      // marginTop: '8px',
+    };
+    const pStyle = {
+      margin: '0 0 0',
     };
     return (
       <div style={articleStyles} href="/organization-new">
         <a href="/organization-new">
           <Image src={'src/images/add-org.png'} alt="Image" />
         </a>
-        <p />
+        <p style={pStyle} />
         <Button href="/organization-new" style={buttonDefaultStyle}>Create new organization</Button>
       </div>
     );
