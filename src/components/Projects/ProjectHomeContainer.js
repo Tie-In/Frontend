@@ -8,7 +8,7 @@ import * as projectActions from '../../actions/project-actions';
 
 class ProjectHomeContainer extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
     axios({
       method: 'GET',
       url: `/api/projects/${this.props.params.projectId}`,
@@ -17,7 +17,7 @@ class ProjectHomeContainer extends Component {
       },
     }).then((response) => {
       const project = response.data;
-      console.log(project);
+      console.log(project)
       this.props.projectActions.setProject(project);
     }).catch((error) => {
       console.log(error);
@@ -25,16 +25,11 @@ class ProjectHomeContainer extends Component {
   }
 
   render() {
-    const { project } = this.props;
     return (
       <div>
-        {
-          (project.effort_estimation === undefined ?
-            <LinkContainer to={`/organizations/${this.props.project.organization_id}/projects/${this.props.project.id}/planning/features`}>
-              <Button>Start Planning </Button>
-            </LinkContainer> : null
-          )
-        }
+        <LinkContainer to={`/organizations/${this.props.project.organization_id}/projects/${this.props.project.id}/planning/features`}>
+          <Button>Start Planning </Button>
+        </LinkContainer>
       </div>
     );
   }
@@ -44,7 +39,6 @@ ProjectHomeContainer.propTypes = {
   user: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   projectActions: PropTypes.object.isRequired,
-  params: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

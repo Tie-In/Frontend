@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Jumbotron } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 class ProjectCard extends Component {

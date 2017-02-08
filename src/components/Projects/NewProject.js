@@ -179,12 +179,11 @@ class NewProject extends Component {
   }
 }
 
-NewProject.propTypes = {
-  user: PropTypes.object.isRequired,
-  projectActions: PropTypes.object.isRequired,
-  params: PropTypes.object.isRequired,
-};
-
+// Register.propTypes = {
+//   user: PropTypes.object.isRequired,
+//   actions: PropTypes.object.isRequired,
+// };
+//
 function mapStateToProps(state) {
   return {
     user: state.user,

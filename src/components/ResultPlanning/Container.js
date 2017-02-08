@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { Row, Col, ProgressBar, Table } from 'react-bootstrap';
+import { Button, Row, Col, ProgressBar, Table } from 'react-bootstrap';
 import { technicalFactors, environmentalFactors } from './informations';
 
 class Container extends Component {
@@ -138,7 +138,7 @@ class Container extends Component {
 
 Container.propTypes = {
   user: PropTypes.object.isRequired,
-  params: PropTypes.object.isRequired,
+  project: PropTypes.object.isRequired,
   planning: PropTypes.object.isRequired,
 };
 

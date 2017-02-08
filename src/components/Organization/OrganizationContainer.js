@@ -31,7 +31,7 @@ class OrganizationContainer extends Component {
   }
 
   render() {
-    const { organization } = this.props;
+    const { user, organization } = this.props;
     return (
       <div>
         { organization.projects !== undefined ?
