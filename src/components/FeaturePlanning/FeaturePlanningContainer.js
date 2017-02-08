@@ -6,7 +6,6 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
-import axios from 'axios';
 import List from './List';
 import * as planningActions from '../../actions/planning-actions';
 
@@ -46,7 +45,6 @@ class FeaturePlanningContainer extends Component {
   }
 
   render() {
-    console.log(this.props);
     const containerStyle = {
       width: '70%',
       height: 'auto',

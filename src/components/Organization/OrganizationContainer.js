@@ -31,7 +31,7 @@ class OrganizationContainer extends Component {
   }
 
   render() {
-    const { user, organization } = this.props;
+    const { organization } = this.props;
     return (
       <div>
         { organization.projects !== undefined ?
@@ -58,6 +58,7 @@ OrganizationContainer.propTypes = {
   user: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
   organizationActions: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
