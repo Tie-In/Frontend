@@ -11,6 +11,66 @@ import axios from 'axios';
 import Autosuggest from 'react-autosuggest';
 import * as organizationActions from '../../actions/organization-actions';
 import * as userActions from '../../actions/user-actions';
+import autosuggestStyle from '../../style/autosuggestStyle.css';
+
+const people = [
+  {
+    first: 'Charlie',
+    last: 'Brown',
+    twitter: 'dancounsell',
+  },
+  {
+    first: 'Charlotte',
+    last: 'White',
+    twitter: 'mtnmissy',
+  },
+  {
+    first: 'Chloe',
+    last: 'Jones',
+    twitter: 'ladylexy',
+  },
+  {
+    first: 'Cooper',
+    last: 'King',
+    twitter: 'steveodom',
+  },
+];
+
+function escapeRegexCharacters(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+const getSuggestions = value => {
+  const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
+  // const inputLength = inputValue.length;
+
+  // return inputLength === 0 ? [] : people.filter(person =>
+  //   person.first.toLowerCase().slice(0, inputLength) === inputValue
+  // );
+  if (inputValue === '') {
+    return [];
+  }
+
+  const regex = new RegExp('\\b' + inputValue, 'i');
+
+  return people.filter(person => regex.test(getSuggestionValue(person)));
+};
+
+function getSuggestionValue(suggestion) {
+  return `${suggestion.first} ${suggestion.last}`;
+}
+
+function renderSuggestion(suggestion) {
+  const suggestionText = `${suggestion.first} ${suggestion.last}`;
+
+  return (
+    <span className={'suggestion-content ' + suggestion.twitter}>
+      <span className="name">
+        <span>{suggestionText}</span>
+      </span>
+    </span>
+  );
+}
 
 class NewOrgContainer extends Component {
   constructor() {
@@ -26,10 +86,30 @@ class NewOrgContainer extends Component {
           },
         ],
       },
+      value: '',
+      suggestions: [],
     };
 
     this.create = this.create.bind(this);
   }
+
+  onChange = (event, { newValue }) => {
+    this.setState({
+      value: newValue,
+    });
+  };
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: getSuggestions(value),
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: [],
+    });
+  };
 
   create() {
     axios({
@@ -68,10 +148,8 @@ class NewOrgContainer extends Component {
     const contributorList = {
       height: '200px',
       position: 'relative',
-      // backgroundColor: 'pink',
     };
     const scrollableContainer = {
-      // borderLeft: 'solid 1px',
       borderLeft: '1px solid #7E8281',
       position: 'absolute',
       height: '85%',
@@ -79,9 +157,15 @@ class NewOrgContainer extends Component {
       overflowY: 'hidden',
       overflowX: 'hidden',
     };
+    const { value, suggestions } = this.state;
+    const inputProps = {
+      placeholder: 'Find user',
+      value,
+      onChange: this.onChange,
+    };
 
     return (
-      <div>
+      <div style={autosuggestStyle}>
         <Grid>
           <Form>
             <Row>
@@ -112,15 +196,14 @@ class NewOrgContainer extends Component {
                   <ControlLabel>
                     Contributor
                   </ControlLabel>
-                  <InputGroup>
-                    <FormControl
-                      placeholder="Find user"
-                      valueLink={linkState(this, 'value')}
-                    />
-                    <InputGroup.Addon>
-                      <Glyphicon glyph="plus" />
-                    </InputGroup.Addon>
-                  </InputGroup>
+                  <Autosuggest
+                    suggestions={suggestions}
+                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                    onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                    getSuggestionValue={getSuggestionValue}
+                    renderSuggestion={renderSuggestion}
+                    inputProps={inputProps}
+                  />
                 </FormGroup>
               </Col>
               <Col style={contributorList} xs={12} md={4}>
