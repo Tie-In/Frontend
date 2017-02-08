@@ -45,7 +45,7 @@ function getSuggestionValue(suggestion) {
 }
 
 function renderSuggestion(suggestion) {
-  const suggestionText = `${suggestion.first} ${suggestion.last}`;
+  const suggestionText = `${suggestion.first} ${suggestion.last}`
   return (
     <span className={'suggestion-content ' + suggestion.twitter}>
       <span className="name">
@@ -55,14 +55,19 @@ function renderSuggestion(suggestion) {
   );
 }
 
-const getSuggestions = value => {
+function getSuggestions(value) {
   const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
   if (inputValue === '') {
     return [];
   }
   const regex = new RegExp('\\b' + inputValue, 'i');
   return people.filter(person => regex.test(getSuggestionValue(person)));
-};
+}
+
+// function onSuggestionSelected(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) {
+//   console.log(suggestionValue);
+//   const parent = document.getElementsByClassName("react-autosuggest__container");
+// }
 
 class NewOrgContainer extends Component {
   constructor() {
@@ -102,6 +107,15 @@ class NewOrgContainer extends Component {
       suggestions: [],
     });
   };
+
+  onSuggestionSelected = (event, { suggestionValue }) => {
+    if (suggestionValue !== undefined){
+      console.log(suggestionValue);
+    }
+    this.setState({
+      value: '',
+    });
+  }
 
   create() {
     axios({
@@ -154,6 +168,7 @@ class NewOrgContainer extends Component {
       placeholder: 'Find user',
       value,
       onChange: this.onChange,
+      onClick: this.onSuggestionSelected,
     };
 
     return (
@@ -195,6 +210,7 @@ class NewOrgContainer extends Component {
                     getSuggestionValue={getSuggestionValue}
                     renderSuggestion={renderSuggestion}
                     inputProps={inputProps}
+                    onSuggestionSelected={this.onSuggestionSelected}
                   />
                 </FormGroup>
               </Col>
