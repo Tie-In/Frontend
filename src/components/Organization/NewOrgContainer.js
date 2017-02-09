@@ -17,21 +17,25 @@ const people = [
   {
     first: 'Charlie',
     last: 'Brown',
+    id: '1',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
     first: 'Charlotte',
     last: 'White',
+    id: '2',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
     first: 'Chloe',
     last: 'Jones',
+    id: '3',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
     first: 'Cooper',
     last: 'King',
+    id: '4',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
 ];
@@ -85,6 +89,7 @@ class NewOrgContainer extends Component {
       },
       value: '',
       suggestions: [],
+      usernames: [],
     };
 
     this.create = this.create.bind(this);
@@ -108,13 +113,15 @@ class NewOrgContainer extends Component {
     });
   };
 
-  onSuggestionSelected = (event, { suggestionValue }) => {
-    if (suggestionValue !== undefined){
-      console.log(suggestionValue);
+  onSuggestionSelected = (event, { suggestion }) => {
+    if (suggestion !== undefined) {
+      const newArray = this.state.usernames.slice();
+      newArray.push(suggestion);
+      this.setState({
+        usernames: newArray,
+        value: '',
+      });
     }
-    this.setState({
-      value: '',
-    });
   }
 
   create() {
