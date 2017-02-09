@@ -2,9 +2,10 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from 'axios';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col, Image } from 'react-bootstrap';
 import ProjectCard from './ProjectCard';
 import * as organizationActions from '../../actions/organization-actions';
+import AddProject from '../../images/add-org.png';
 
 class OrganizationContainer extends Component {
 
@@ -30,8 +31,37 @@ class OrganizationContainer extends Component {
     });
   }
 
+  buttonType(projects) {
+    const newProjectPath = `./${this.props.params.organizationId}/project-new`;
+    const articleStyles = {
+      margin: '0 auto',
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+    };
+    const buttonDefaultStyle = {
+      position: 'absolute',
+      left: '50%',
+      transform: 'translate(-50%, 0)',
+    };
+    if (projects.length > 0) {
+      return (<Button href={newProjectPath}>
+        Create new project
+      </Button>);
+    }
+    return (
+      <div style={articleStyles}>
+        <Image src={AddProject} alt="Images" />
+        <p />
+        <Button href={newProjectPath} style={buttonDefaultStyle}>Create new project</Button>
+      </div>
+    );
+  }
+
   render() {
-    const { user, organization } = this.props;
+    const { organization } = this.props;
+
     return (
       <div>
         { organization.projects !== undefined ?
@@ -42,9 +72,7 @@ class OrganizationContainer extends Component {
                   return <ProjectCard key={project.id} project={project} />;
                 })
               }
-              <Button href={`./${this.props.params.organizationId}/project-new`}>
-                Create new project
-              </Button>
+              {this.buttonType(organization.projects)}
             </Col>
           </Row>
           : null
@@ -58,6 +86,7 @@ OrganizationContainer.propTypes = {
   user: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
   organizationActions: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
