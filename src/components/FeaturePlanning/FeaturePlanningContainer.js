@@ -18,7 +18,7 @@ class FeaturePlanningContainer extends Component {
       features: this.props.planning.features,
       input: {
         name: '',
-        complexity: '',
+        complexity: 'simple',
       },
     };
 
@@ -44,25 +44,16 @@ class FeaturePlanningContainer extends Component {
     document.location.href = 'effort-estimation';
   }
 
+  doSomething(e) {
+    e.preventDefault();
+  }
+
   render() {
-    const containerStyle = {
-      width: '70%',
-      height: 'auto',
-      right: '50%',
-      transform: 'translate(50%)',
-      position: 'absolute',
-    };
-    const headerStyle = {
-      color: '#A25E5D',
-    };
-    const lineColor = {
-      borderColor: 'black',
-    };
     return (
-      <div style={containerStyle}>
-        <h3 style={headerStyle}>Add Planning Feature</h3>
-        <hr style={lineColor} />
-        <form>
+      <div className="tieinContainer">
+        <h3 className="headerLabel">Add Planning Feature</h3>
+        <hr className="headerLine" />
+        <form onSubmit={this.doSomething}>
           <Row>
             <Col sm={8}>
               <FormGroup>
@@ -90,7 +81,7 @@ class FeaturePlanningContainer extends Component {
             <Col sm={2}>
               <FormGroup>
                 <ControlLabel>Add</ControlLabel>
-                <Button onClick={this.addFeature} block>Add</Button>
+                <Button onClick={this.addFeature} type="submit" block>Add</Button>
               </FormGroup>
             </Col>
           </Row>

@@ -142,6 +142,7 @@ function openBrowser(port) {
 }
 
 // || 'https://tieinservice.herokuapp.com/'
+// 'http://localhost:3000'
 function runDevServer(port) {
   new WebpackDevServer(compiler, {
     historyApiFallback: true,
@@ -150,7 +151,7 @@ function runDevServer(port) {
     quiet: true,
     proxy: {
       '/api/**': {
-        target: 'http://localhost:3000/',
+        target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },

@@ -3,10 +3,6 @@ import React, { PropTypes, Component } from 'react';
 
 class List extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { name, complexity } = this.props;
     const listStyle = {

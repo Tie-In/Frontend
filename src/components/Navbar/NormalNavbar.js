@@ -50,7 +50,7 @@ class NormalNavbar extends Component {
         <header role="banner">
           <nav id="navbar-primary" className="navbar navbar-default" role="navigation">
             <div className="container-fluid">
-              <img id="logo-main" src={logo} alt="Logo Thing main logo"></img>
+              <img id="logo-main" src={logo} alt="Logo Thing main logo" />
               <div className="navbar-header">
                 <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-primary-collapse">
                   <span className="sr-only">Toggle navigation</span>
@@ -61,7 +61,7 @@ class NormalNavbar extends Component {
               </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav">
-                  <li className="pull-left" id="slide-sidebar"><a href="#sidebar-nav">Organization <span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a></li>
+                  <li className="pull-left" id="slide-sidebar"><a href="#sidebar-nav">{this.props.organization.name}<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a></li>
                   {menuNode}
                   <Dropdown className="pull-right" id="profile-dropdown">
                     <Dropdown.Toggle>

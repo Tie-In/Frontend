@@ -68,7 +68,6 @@ class NewOrgContainer extends Component {
       height: '200px',
       position: 'relative',
       // backgroundColor: 'pink',
-
     };
     const scrollableContainer = {
       // borderLeft: 'solid 1px',
@@ -115,7 +114,7 @@ class NewOrgContainer extends Component {
                   <InputGroup>
                     <FormControl
                       placeholder="Find user"
-                      valueLink={linkState(this, 'input.duration')}
+                      valueLink={linkState(this, 'value')}
                     />
                     <InputGroup.Addon>
                       <Glyphicon glyph="plus" />
