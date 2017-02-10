@@ -29,6 +29,9 @@ class OrganizationNavbar extends Component {
     const sidebarStyle = {
       top: '70px',
     };
+    const addMarginStyle = {
+      top: '10px',
+    };
     const organizationsFromUser = this.props.user.organizations || [];
     const organizationNodes = organizationsFromUser.map((org) => {
       return (
@@ -44,14 +47,14 @@ class OrganizationNavbar extends Component {
           <nav id="navbar-primary" className="navbar navbar-default" style={customStyle} role="navigation">
             <div className="container-fluid">
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
-                <ul className="nav navbar-nav" style={customStyle}>
-                  <li className="pull-left" id="slide-sidebar" style={{ marginTop: 10 }}>
+                <ul className="nav navbar-nav">
+                  <li className="pull-left" id="slide-sidebar" style={addMarginStyle}>
                     <a href="#sidebar-nav">
                       {this.props.organization.name} <span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
                     </a>
                   </li>
-                  <img id="logo-main" src={logo} alt="Logo Thing main logo" />
-                  <li className="pull-right">
+                  <li><img id="logo-main" src={logo} alt="Logo Thing main logo" /></li>
+                  <li className="pull-right" style={addMarginStyle}>
                     <Dropdown id="profile-dropdown">
                       <Dropdown.Toggle>
                         <img id="avatar" src={avatar} alt="avatar"></img>
