@@ -53,3 +53,27 @@
 .registerContainer {
   padding-top: 100px;
 }
+
+.tieinContainer {
+  width: 60%;
+  height: auto;
+  right: 50%;
+  transform: translate(50%);
+  position: absolute;
+}
+
+.headerLabel {
+  color: #A25E5D;
+}
+
+.headerLine {
+  border-color: black;
+}
+
+.tieinContainer {
+  width: 60%;
+  height: auto;
+  right: 50%;
+  transform: translate(50%);
+  position: absolute;
+}

@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
 import axios from 'axios';
-import Autosuggest from 'react-autosuggest';
 import * as organizationActions from '../../actions/organization-actions';
 import * as userActions from '../../actions/user-actions';
 

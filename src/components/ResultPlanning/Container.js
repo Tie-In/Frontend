@@ -32,23 +32,10 @@ class Container extends Component {
   }
 
   render() {
-    const containerStyle = {
-      width: '70%',
-      height: 'auto',
-      right: '50%',
-      transform: 'translate(50%)',
-      position: 'absolute',
-    };
-    const headerStyle = {
-      color: '#A25E5D',
-    };
-    const lineColor = {
-      borderColor: 'black',
-    };
     return (
-      <div className="effortEstimation" style={containerStyle}>
-        <h3 style={headerStyle}>Planning Result</h3>
-        <hr style={lineColor} />
+      <div className="tieinContainer">
+        <h3 className="headerLabel">Planning Result</h3>
+        <hr className="headerLine" />
         <div>
           <p>Most used week: {Math.ceil(this.state.effort_estimation.upper_weeks)}</p>
           <p>Low used week: {Math.floor(this.state.effort_estimation.lower_weeks)}</p>
@@ -58,8 +45,8 @@ class Container extends Component {
         </div>
         <Row>
           <Col sm={6}>
-            <h4 style={headerStyle}>Planning Features</h4>
-            <hr style={lineColor} />
+            <h4 className="headerLabel">Planning Features</h4>
+            <hr className="headerLine" />
             <Table striped bordered condensed hover>
               <thead>
                 <tr>
@@ -80,8 +67,8 @@ class Container extends Component {
           </Col>
           <Col sm={6}>
             <Row>
-              <h4 style={headerStyle}>Technical Factors</h4>
-              <hr style={lineColor} />
+              <h4 className="headerLabel">Technical Factors</h4>
+              <hr className="headerLine" />
               <Table striped bordered condensed hover>
                 <thead>
                   <tr>
@@ -104,8 +91,8 @@ class Container extends Component {
               </Table>
             </Row>
             <Row>
-              <h4 style={headerStyle}>Environmental Factors</h4>
-              <hr style={lineColor} />
+              <h4 className="headerLabel">Environmental Factors</h4>
+              <hr className="headerLine" />
               <Table striped bordered condensed hover>
                 <thead>
                   <tr>
