@@ -19,6 +19,7 @@ import {
   NewProject,
   ProjectHomeContainer,
   ResultPlanningContainer,
+  BacklogContainer,
 } from './components';
 import configureStore from './store/configure-store';
 
@@ -48,6 +49,7 @@ ReactDOM.render(
         <Route path="register" component={Register} />
       </Route>
       <Route path="login" component={Login} />
+      <Route path="backlog" component={BacklogContainer} />
     </Router>
   </Provider>,
   document.getElementById('root'),
