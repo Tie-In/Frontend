@@ -29,6 +29,9 @@ class OrganizationNavbar extends Component {
     const sidebarStyle = {
       top: '70px',
     };
+    const addMarginStyle = {
+      top: '10px',
+    };
     const organizationsFromUser = this.props.user.organizations || [];
     const organizationNodes = organizationsFromUser.map((org) => {
       return (
