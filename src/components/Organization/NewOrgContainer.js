@@ -18,24 +18,28 @@ const people = [
     first: 'Charlie',
     last: 'Brown',
     id: '1',
+    username: 'CBrown',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
     first: 'Charlotte',
     last: 'White',
     id: '2',
+    username: 'CWhite',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
     first: 'Chloe',
     last: 'Jones',
     id: '3',
+    username: 'CJones',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
     first: 'Cooper',
     last: 'King',
     id: '4',
+    username: 'CKing',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
 ];
@@ -68,10 +72,20 @@ function getSuggestions(value) {
   return people.filter(person => regex.test(getSuggestionValue(person)));
 }
 
-// function onSuggestionSelected(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) {
-//   console.log(suggestionValue);
-//   const parent = document.getElementsByClassName("react-autosuggest__container");
-// }
+function Contributor(props) {
+  const content = props.posts.map((post) =>
+    <span className={'suggestion-content ' + post.twitter} key={post.id}>
+      <span className="name">
+        <span>{post.username}</span>
+      </span>
+    </span>
+  );
+  return (
+    <div>
+      {content}
+    </div>
+  );
+}
 
 class NewOrgContainer extends Component {
   constructor() {
@@ -171,8 +185,8 @@ class NewOrgContainer extends Component {
       position: 'absolute',
       height: '85%',
       width: 'auto',
-      overflowY: 'hidden',
-      overflowX: 'hidden',
+      overflowY: 'auto',
+      overflowX: 'auto',
     };
     const { value, suggestions } = this.state;
     const inputProps = {
@@ -231,22 +245,7 @@ class NewOrgContainer extends Component {
                 </ControlLabel>
                 <Row style={scrollableContainer}>
                   <Col smOffset={0} sm={11}>
-                    <Media>
-                      <Media.Left>
-                        <Image width={32} height={32} src="src/images/logo-login.png" alt="user" circle />
-                      </Media.Left>
-                      <Media.Body>
-                        <p>pongsachon.p@ku.th</p>
-                      </Media.Body>
-                    </Media>
-                    <Media>
-                      <Media.Left>
-                        <Image width={32} height={32} src="src/images/logo-login.png" alt="user" circle />
-                      </Media.Left>
-                      <Media.Body>
-                        <p>pongsachon.p@ku.th</p>
-                      </Media.Body>
-                    </Media>
+                    <Contributor posts={this.state.usernames} />
                   </Col>
                 </Row>
               </Col>
