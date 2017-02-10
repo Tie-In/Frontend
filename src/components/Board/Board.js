@@ -5,7 +5,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import * as ListsActions from '../../actions/list-actions';
-
+import '../../style/board.css';
 import CardsContainer from './Cards/CardsContainer';
 import CustomDragLayer from './CustomDragLayer';
 

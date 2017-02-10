@@ -29,6 +29,15 @@
 	height: 161px;
 	background-color: rgba(208,208,208,1);
 }
+.desk-head{
+	position: relative;
+	padding: 5px 8px;
+}
+.desk-name{
+	font-weight: bold;
+	white-space: normal;
+	width: 100%;
+}
 .item{
 	width: 90%;
 	margin: 0 auto 10px;
@@ -68,9 +77,9 @@
 }
 .item-content{
 	white-space: normal;
-	p{
-		margin: 5px 0;
-	}
+}
+.item-content > p{
+	margin: 5px 0;
 }
 .item-content > .item-author{
 	font-size: 16px;
@@ -78,30 +87,13 @@
 }
 .item-perfomers{
 	padding: 5px 10px;
-	.add-perfomers{
-		float: left;
-	}
-	.delete-perfomers{
-		float: right;
-	}
-	.add-perfomers, .delete-perfomers{
-		a {
-			display: block;
-			float: left;
-			margin-right: 3px;
-			img{
-				width: 15px;
-				height: 15px;
-			}
-		}
-	}
 }
 .perfomer{
-	float: left;
+	float: right;
 }
 .perfomer > img{
-		display: block;
-		width: 15px;
-		height: 15px;
-		border-radius: 50%;
+	display: block;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
 }

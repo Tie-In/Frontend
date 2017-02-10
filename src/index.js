@@ -8,7 +8,6 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import App from './App';
 import StartApp from './StartApp';
 import OrganizationApp from './OrganizationApp';
-import './style/temp.css';
 import {
   Login,
   FeaturePlanningContainer,
@@ -45,12 +44,12 @@ ReactDOM.render(
           <Route path="features" component={FeaturePlanningContainer} />
           <Route path="effort-estimation" component={EffortEstimationContainer} />
         </Route>
+        <Route path="board" component={Board} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="register" component={Register} />
       </Route>
       <Route path="login" component={Login} />
-      <Route path="board" component={Board} />
     </Router>
   </Provider>,
   document.getElementById('root'),
