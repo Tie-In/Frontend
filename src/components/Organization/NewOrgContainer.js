@@ -115,11 +115,15 @@ class NewOrgContainer extends Component {
 
   onSuggestionSelected = (event, { suggestion }) => {
     if (suggestion !== undefined) {
-      const newArray = this.state.usernames.slice();
-      newArray.push(suggestion);
+      const newUsernames = this.state.usernames.slice();
+      const newUsers = this.state.input.users.slice();
+      newUsernames.push(suggestion);
+      newUsers.push({ id: suggestion.id });
+
       this.setState({
-        usernames: newArray,
+        usernames: newUsernames,
         value: '',
+        input: { users: newUsers },
       });
     }
   }
