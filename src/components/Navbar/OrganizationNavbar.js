@@ -4,7 +4,7 @@ import logo from '../../images/logo.png';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Dropdown, MenuItem, ButtonToolbar } from 'react-bootstrap';
+import { Dropdown, MenuItem, Row, Col } from 'react-bootstrap';
 import avatar from '../../images/logo-login.png';
 import 'simple-line-icons/css/simple-line-icons.css';
 import * as userActions from '../../actions/user-actions';
@@ -45,16 +45,15 @@ class OrganizationNavbar extends Component {
             <div className="container-fluid">
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav" style={customStyle}>
-                  <li className="pull-left" id="slide-sidebar" style={{ marginTop: 10 }}>
+                  <li className="pull-left" id="slide-sidebar" style={{ marginTop: 10, width: '30%', textAlign: 'left' }}>
                     <a href="#sidebar-nav">
                       {this.props.organization.name} <span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
                     </a>
                   </li>
-                  <img id="logo-main" src={logo} alt="Logo Thing main logo" />
-                  <li className="pull-right">
+                  <li className="pull-right" style={{ marginTop: 5, width: '30%', paddingLeft: '20%' }}>
                     <Dropdown id="profile-dropdown">
                       <Dropdown.Toggle>
-                        <img id="avatar" src={avatar} alt="avatar"></img>
+                        <img id="avatar" src={avatar} alt="avatar" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         <MenuItem eventKey="1">Profile</MenuItem>
@@ -64,6 +63,7 @@ class OrganizationNavbar extends Component {
                       </Dropdown.Menu>
                     </Dropdown>
                   </li>
+                  <img id="logo-main" src={logo} alt="Logo Thing main logo" />
                 </ul>
               </div>
             </div>
