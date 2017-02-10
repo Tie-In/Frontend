@@ -11,7 +11,8 @@ import StartNavbar from './Navbar/StartNavbar';
 import OrganizationNavbar from './Navbar/OrganizationNavbar';
 import NewProject from './Projects/NewProject';
 import ProjectHomeContainer from './Projects/ProjectHomeContainer';
-import BacklogContainer from './Projects/BacklogContainer';
+import BacklogContainer from './Backlog/BacklogContainer';
+import Board from './Board/Board';
 
 module.exports = {
   Login,
@@ -27,5 +28,9 @@ module.exports = {
   ProjectHomeContainer,
   OrganizationNavbar,
   ResultPlanningContainer,
+<<<<<<< HEAD
   BacklogContainer,
+=======
+  Board,
+>>>>>>> kanban
 };

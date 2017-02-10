@@ -20,6 +20,7 @@ import {
   ProjectHomeContainer,
   ResultPlanningContainer,
   BacklogContainer,
+  Board,
 } from './components';
 import configureStore from './store/configure-store';
 
@@ -44,6 +45,7 @@ ReactDOM.render(
           <Route path="features" component={FeaturePlanningContainer} />
           <Route path="effort-estimation" component={EffortEstimationContainer} />
         </Route>
+        <Route path="board" component={Board} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="register" component={Register} />

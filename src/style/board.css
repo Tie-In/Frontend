@@ -1,0 +1,99 @@
+.main{
+	padding: 50px 10px;
+	overflow-x: auto;
+	overflow-y: hidden;
+	height: 100%;
+	white-space: nowrap;
+}
+
+.desk, .desk-placeholder, .desk-placeholder:hover {
+	width: 270px;
+	display: inline-block;
+	height: 100%;
+	overflow: hidden;
+	min-height: 100px;
+	background-color: #e2e4e6;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.5);
+	border-radius: 3px;
+	padding-bottom: 20px;
+	margin-right: 20px;
+	vertical-align: top;
+}
+.desk-items{
+	overflow-y: auto;
+	height: 100%;
+	padding-bottom: 20px;
+}
+
+.desk-items > .placeholder, .placeholder:hover{
+	height: 161px;
+	background-color: rgba(208,208,208,1);
+}
+.desk-head{
+	position: relative;
+	padding: 5px 8px;
+}
+.desk-name{
+	font-weight: bold;
+	white-space: normal;
+	width: 100%;
+}
+.item{
+	width: 90%;
+	margin: 0 auto 10px;
+	background: #fff;
+	min-height: 100px;
+	border-radius: 5px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+	transition: 0.15s;
+	cursor: pointer;
+}
+.item:hover{
+		background: #f7f7f7;
+}
+.item-name{
+		padding: 5px 10px;
+		border-bottom: 1px solid #dbdbdb;
+		white-space: normal;
+		word-break: break-all;
+		word-wrap: break-world;
+}
+.item-container{
+		padding: 10px;
+		border-bottom: 1px solid #dbdbdb;
+}
+.item-avatar-wrap{
+	width: 70px;
+	float: left;
+	margin-bottom: 5px;
+}
+.item-avatar-wrap > img{
+	width: 50px;
+	height: 50px;
+	display: block;
+	margin: 0 auto;
+	border-radius: 50%;
+	border: 1px solid #dbdbdb;
+}
+.item-content{
+	white-space: normal;
+}
+.item-content > p{
+	margin: 5px 0;
+}
+.item-content > .item-author{
+	font-size: 16px;
+	font-weight: bolder;
+}
+.item-perfomers{
+	padding: 5px 10px;
+}
+.perfomer{
+	float: right;
+}
+.perfomer > img{
+	display: block;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+}
