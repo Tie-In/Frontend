@@ -1,12 +1,12 @@
 import { Image, Button } from 'react-bootstrap';
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
 class NoOrgContainer extends Component {
   componentWillMount() {
     if (this.props.user.organizations.length > 0) {
       const firstOrg = this.props.user.organizations[0];
-      document.location.href = '/organizations/' + firstOrg.id;
+      document.location.href = `/organizations/${firstOrg.id}`;
     }
   }
 
@@ -26,13 +26,17 @@ class NoOrgContainer extends Component {
     };
     return (
       <div style={articleStyles}>
-        <Image src={'src/components/Organization/addOrg.png'} alt="Image" />
+        <Image src={'src/images/add-org.png'} alt="Image" />
         <p />
         <Button href="/organization-new" style={buttonDefaultStyle}>Create new organization</Button>
       </div>
     );
   }
 }
+
+NoOrgContainer.propTypes = {
+  user: PropTypes.object.isRequired,
+};
 
 function mapStateToProps(state) {
   return {

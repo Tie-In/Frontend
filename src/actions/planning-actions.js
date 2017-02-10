@@ -13,3 +13,9 @@ export const setEffortEstimation = (effortEstimation) => {
     effortEstimation,
   };
 };
+
+export const clearPlanning = () => {
+  return {
+    type: types.CLEAR_PLANNING,
+  };
+}

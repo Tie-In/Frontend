@@ -58,7 +58,7 @@ class Container extends Component {
       },
     }).then((response) => {
       console.log(response.data);
-      this.props.planningActions.setEffortEstimation(response.data);
+      this.props.planningActions.clearPlanning();
 
       document.location.href = `/organizations/${this.props.params.organizationId}/projects/${this.state.project_id}/planning`;
     }).catch((error) => {
@@ -67,7 +67,7 @@ class Container extends Component {
   }
 
   render() {
-    const { project, planning } = this.props;
+    const { planning } = this.props;
     const containerStyle = {
       width: '70%',
       height: 'auto',
@@ -140,6 +140,8 @@ Container.propTypes = {
   user: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   planning: PropTypes.object.isRequired,
+  planningActions: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

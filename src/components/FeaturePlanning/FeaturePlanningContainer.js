@@ -6,7 +6,6 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
-import axios from 'axios';
 import List from './List';
 import * as planningActions from '../../actions/planning-actions';
 
@@ -25,7 +24,6 @@ class FeaturePlanningContainer extends Component {
 
     this.addFeature = this.addFeature.bind(this);
     this.sendFeatures = this.sendFeatures.bind(this);
-    this.removeFeature = this.removeFeature.bind(this);
   }
 
   addFeature() {
@@ -44,10 +42,6 @@ class FeaturePlanningContainer extends Component {
   sendFeatures() {
     this.props.planningActions.setFeatures(this.state.features);
     document.location.href = 'effort-estimation';
-  }
-
-  removeFeature(index) {
-    this.state.features.splice(index);
   }
 
   render() {
@@ -102,9 +96,7 @@ class FeaturePlanningContainer extends Component {
           </Row>
         </form>
         {this.state.features.map(function(data) {
-          return <List
-            name={data.name} complexity={data.complexity}
-          />;
+          return <List name={data.name} complexity={data.complexity} />;
         })}
         <Row>
           <Col smOffset={4} sm={4}>

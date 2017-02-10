@@ -274,7 +274,6 @@ class Register extends Component {
 }
 
 Register.propTypes = {
-  user: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
 };
 

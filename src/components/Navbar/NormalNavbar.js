@@ -10,23 +10,16 @@ import 'simple-line-icons/css/simple-line-icons.css';
 import * as userActions from '../../actions/user-actions';
 
 class NormalNavbar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      menus: []
-    };
-  }
 
   logout() {
     localStorage.clear();
     document.location.href = '/login';
   }
 
-  componentWillMount() {
-    console.log(this.props);
+  render() {
     const path = `/organizations/${this.props.organization.id}/projects/${this.props.project.id}`;
     const data = [
-      { id: 1, name: 'Project', path: `${path}/` },
+      { id: 1, name: 'Project', path: `${path}#` },
       { id: 2, name: 'Backlog', path: '/backlog' },
       { id: 3, name: 'New task', path: '/newTask' },
       { id: 4, name: 'Planning', path: `${path}/planning` },
@@ -35,12 +28,8 @@ class NormalNavbar extends Component {
       { id: 7, name: 'Dashboard', path: '/dashboard' },
       { id: 8, name: 'Admin', path: '/admin' },
     ];
-    // Update state
-    this.setState({ menus: data });
-  }
 
-  render() {
-    const menuNode = this.state.menus.map((menu) => {
+    const menuNode = data.map((menu) => {
       return (
         <li key={menu.id}>
           <Link to={menu.path} activeClassName="active"> {menu.name}</Link>
