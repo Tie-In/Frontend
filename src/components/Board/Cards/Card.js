@@ -6,10 +6,6 @@ const propTypes = {
   style: PropTypes.object
 };
 
-const galPng = require('../../../images/gal.png');
-const delPng = require('../../../images/del.png');
-
-
 const Card = (props) => {
   const { style, item } = props;
 
@@ -21,10 +17,8 @@ const Card = (props) => {
       </div>
       <div className="item-container">
         <div className="item-content">
-          <p>Lorem ipsum dolor sit amet</p>
+          <p>Lorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit amet</p>
         </div>
-      </div>
-      <div className="item-perfomers">
         <Label bsStyle="success">Issue</Label>
         <div className="perfomer">
           <img

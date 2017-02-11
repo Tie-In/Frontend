@@ -50,6 +50,7 @@ ReactDOM.render(
         <Route path="register" component={Register} />
       </Route>
       <Route path="login" component={Login} />
+      <Route path="board" component={Board} />
     </Router>
   </Provider>,
   document.getElementById('root'),

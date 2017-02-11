@@ -9,11 +9,10 @@
 .desk, .desk-placeholder, .desk-placeholder:hover {
 	width: 270px;
 	display: inline-block;
-	height: 100%;
+	height: 550px;
 	overflow: hidden;
 	min-height: 100px;
-	background-color: #e2e4e6;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.5);
+	background-color: #FAFBF5;
 	border-radius: 3px;
 	padding-bottom: 20px;
 	margin-right: 20px;
@@ -32,6 +31,8 @@
 .desk-head{
 	position: relative;
 	padding: 5px 8px;
+	background-color: #E5DAD6;
+	margin-bottom: 10px;
 }
 .desk-name{
 	font-weight: bold;

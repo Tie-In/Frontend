@@ -8,7 +8,8 @@ import { CARD_HEIGHT, CARD_MARGIN, OFFSET_HEIGHT } from '../../../constants.js';
 
 function getPlaceholderIndex(y, scrollY) {
   // shift placeholder if y position more than card height / 2
-  const yPos = y - OFFSET_HEIGHT + scrollY;
+  // 80 is move from navbar
+  const yPos = (y - (80 + OFFSET_HEIGHT)) + scrollY;
   let placeholderIndex;
   if (yPos < CARD_HEIGHT / 2) {
     placeholderIndex = -1; // place at the start
@@ -116,6 +117,7 @@ export default class Cards extends Component {
         if (i === 0 && placeholderIndex === -1) {
           cardList.push(<div key="placeholder" className="item placeholder" />);
         } else if (placeholderIndex > i) {
+          console.log(`i = ${i}, place=${placeholderIndex}`);
           isPlaceHold = true;
         }
       }
