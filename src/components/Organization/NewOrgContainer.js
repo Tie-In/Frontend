@@ -15,31 +15,27 @@ import autosuggestStyle from '../../style/autosuggestStyle.css';
 
 const people = [
   {
-    first: 'Charlie',
-    last: 'Brown',
     id: '1',
-    username: 'CBrown',
+    username: 'CharlieBrown',
+    email: 'brown@mail.com',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
-    first: 'Charlotte',
-    last: 'White',
     id: '2',
-    username: 'CWhite',
+    username: 'CharlotteWhite',
+    email: 'white@mail.com',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
-    first: 'Chloe',
-    last: 'Jones',
     id: '3',
-    username: 'CJones',
+    username: 'ChloeJones',
+    email: 'jones@mail.com',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
   {
-    first: 'Cooper',
-    last: 'King',
     id: '4',
-    username: 'CKing',
+    username: 'CooperKing',
+    email: 'king@mail.com',
     twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
   },
 ];
@@ -49,11 +45,11 @@ function escapeRegexCharacters(str) {
 }
 
 function getSuggestionValue(suggestion) {
-  return `${suggestion.first} ${suggestion.last}`;
+  return `${suggestion.username} ${suggestion.email}`;
 }
 
 function renderSuggestion(suggestion) {
-  const suggestionText = `${suggestion.first} ${suggestion.last}`
+  const suggestionText = `${suggestion.username} (${suggestion.email})`;
   return (
     <span className={'suggestion-content ' + suggestion.twitter}>
       <span className="name">
@@ -63,13 +59,18 @@ function renderSuggestion(suggestion) {
   );
 }
 
-function getSuggestions(value) {
+Array.prototype.diff = function(a) {
+    return this.filter(function(i) {return a.indexOf(i) < 0;});
+};
+
+function getSuggestions(value, contributors) {
   const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
   if (inputValue === '') {
     return [];
   }
+  const availableUsers = people.diff(contributors);
   const regex = new RegExp('\\b' + inputValue, 'i');
-  return people.filter(person => regex.test(getSuggestionValue(person)));
+  return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
 }
 
 function Contributor(props) {
@@ -103,7 +104,7 @@ class NewOrgContainer extends Component {
       },
       value: '',
       suggestions: [],
-      usernames: [],
+      contributors: [],
     };
 
     this.create = this.create.bind(this);
@@ -117,7 +118,7 @@ class NewOrgContainer extends Component {
 
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      suggestions: getSuggestions(value),
+      suggestions: getSuggestions(value, this.state.contributors),
     });
   };
 
@@ -129,13 +130,13 @@ class NewOrgContainer extends Component {
 
   onSuggestionSelected = (event, { suggestion }) => {
     if (suggestion !== undefined) {
-      const newUsernames = this.state.usernames.slice();
+      const newUsernames = this.state.contributors.slice();
       const newUsers = this.state.input.users.slice();
       newUsernames.push(suggestion);
       newUsers.push({ id: suggestion.id });
 
       this.setState({
-        usernames: newUsernames,
+        contributors: newUsernames,
         value: '',
         input: { users: newUsers },
       });
@@ -184,7 +185,7 @@ class NewOrgContainer extends Component {
       borderLeft: '1px solid #7E8281',
       position: 'absolute',
       height: '85%',
-      width: 'auto',
+      width: '100%',
       overflowY: 'auto',
       overflowX: 'auto',
     };
@@ -245,7 +246,7 @@ class NewOrgContainer extends Component {
                 </ControlLabel>
                 <Row style={scrollableContainer}>
                   <Col smOffset={0} sm={11}>
-                    <Contributor posts={this.state.usernames} />
+                    <Contributor posts={this.state.contributors} />
                   </Col>
                 </Row>
               </Col>
