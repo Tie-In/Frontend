@@ -75,11 +75,18 @@ function getSuggestions(value, contributors) {
 
 function Contributor(props) {
   const content = props.posts.map((post) =>
-    <span className={'suggestion-content ' + post.twitter} key={post.id}>
-      <span className="name">
-        <span>{post.username}</span>
-      </span>
-    </span>
+    <Row key={post.id}>
+      <Col smOffset={0} xs={9} md={10}>
+        <span className={'suggestion-content ' + post.twitter}>
+          <span className="name">
+            <span>{post.username}</span>
+          </span>
+        </span>
+      </Col>
+      <Col smOffset={0} xs={2} md={2}>
+        <Button bsStyle="primary"><Glyphicon glyph="remove" /></Button>
+      </Col>
+    </Row>
   );
   return (
     <div>
@@ -96,11 +103,7 @@ class NewOrgContainer extends Component {
       input: {
         name: '',
         description: '',
-        users: [
-          {
-            id: 2,
-          },
-        ],
+        users: [],
       },
       value: '',
       suggestions: [],
