@@ -4,29 +4,29 @@ import { connect } from 'react-redux';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import * as ListsActions from '../../actions/list-actions';
+import * as listsActions from '../../actions/list-actions';
 import '../../style/board.css';
 import CardsContainer from './Cards/CardsContainer';
 import CustomDragLayer from './CustomDragLayer';
 
-// function mapStateToProps(state) {
-//   return {
-//     lists: state.lists.lists,
-//   };
-// }
-//
-// function mapDispatchToProps(dispatch) {
-//   return bindActionCreators(ListsActions, dispatch);
-// }
+function mapStateToProps(state) {
+  return {
+    lists: state.lists.lists,
+  };
+}
 
-// @connect(mapStateToProps, mapDispatchToProps)
+function mapDispatchToProps(dispatch) {
+  return {
+    listsActions: bindActionCreators(listsActions, dispatch),
+  };
+}
+
+@connect(mapStateToProps, mapDispatchToProps)
 @DragDropContext(HTML5Backend)
 export default class Board extends Component {
   static propTypes = {
-    // getLists: PropTypes.func.isRequired,
-    // moveCard: PropTypes.func.isRequired,
-    // moveList: PropTypes.func.isRequired,
-    // lists: PropTypes.array.isRequired,
+    listsActions: PropTypes.func.isRequired,
+    lists: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
   constructor(props) {
@@ -43,7 +43,10 @@ export default class Board extends Component {
   }
 
   componentWillMount() {
-    // this.props.getLists(10);
+    const mock = [{"id":0,"name":"Incredible Metal Hat","cards":[{"id":0,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"},{"id":1,"firstName":"Lela","lastName":"Braun","title":"Internal Web Technician"},{"id":2,"firstName":"Roy","lastName":"Friesen","title":"Investor Paradigm Designer"},{"id":3,"firstName":"Bria","lastName":"Hoppe","title":"Chief Factors Director"},{"id":4,"firstName":"Walton","lastName":"Kautzer","title":"Product Communications Designer"},{"id":5,"firstName":"Tierra","lastName":"Wehner","title":"Human Interactions Strategist"},{"id":6,"firstName":"Elinor","lastName":"Quitzon","title":"Global Configuration Associate"},{"id":7,"firstName":"Coleman","lastName":"Koss","title":"National Intranet Strategist"}]},
+        {"id":1,"name":"Increasadasds","cards":[{"id":10,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"},{"id":11,"firstName":"Lela","lastName":"Braun","title":"Internal Web Technician"},{"id":12,"firstName":"Roy","lastName":"Friesen","title":"Investor Paradigm Designer"},{"id":13,"firstName":"Bria","lastName":"Hoppe","title":"Chief Factors Director"},{"id":14,"firstName":"Walton","lastName":"Kautzer","title":"Product Communications Designer"},{"id":15,"firstName":"Tierra","lastName":"Wehner","title":"Human Interactions Strategist"},{"id":16,"firstName":"Elinor","lastName":"Quitzon","title":"Global Configuration Associate"},{"id":17,"firstName":"Coleman","lastName":"Koss","title":"National Intranet Strategist"}]}];
+
+    this.props.listsActions.setList(mock);
   }
 
   startScrolling(direction) {
@@ -80,38 +83,33 @@ export default class Board extends Component {
   }
 
   moveCard(lastX, lastY, nextX, nextY) {
-    // this.props.moveCard(lastX, lastY, nextX, nextY);
-    console.log(lastX, lastY, nextX, nextY);
+    this.props.listsActions.moveCard(lastX, lastY, nextX, nextY);
   }
 
   moveList(listId, nextX) {
     const { lastX } = this.findList(listId);
-    // this.props.moveList(lastX, nextX);
-    console.log(lastX, nextX);
+    this.props.listsActions.moveList(lastX, nextX);
   }
 
   findList(id) {
     const { lists } = this.props;
-    const mock = [{"id":0,"name":"Incredible Metal Hat","cards":[{"id":0,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"},{"id":1,"firstName":"Lela","lastName":"Braun","title":"Internal Web Technician"},{"id":2,"firstName":"Roy","lastName":"Friesen","title":"Investor Paradigm Designer"},{"id":3,"firstName":"Bria","lastName":"Hoppe","title":"Chief Factors Director"},{"id":4,"firstName":"Walton","lastName":"Kautzer","title":"Product Communications Designer"},{"id":5,"firstName":"Tierra","lastName":"Wehner","title":"Human Interactions Strategist"},{"id":6,"firstName":"Elinor","lastName":"Quitzon","title":"Global Configuration Associate"},{"id":7,"firstName":"Coleman","lastName":"Koss","title":"National Intranet Strategist"}]},
-        {"id":1,"name":"Increasadasds","cards":[{"id":0,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"},{"id":1,"firstName":"Lela","lastName":"Braun","title":"Internal Web Technician"},{"id":2,"firstName":"Roy","lastName":"Friesen","title":"Investor Paradigm Designer"},{"id":3,"firstName":"Bria","lastName":"Hoppe","title":"Chief Factors Director"},{"id":4,"firstName":"Walton","lastName":"Kautzer","title":"Product Communications Designer"},{"id":5,"firstName":"Tierra","lastName":"Wehner","title":"Human Interactions Strategist"},{"id":6,"firstName":"Elinor","lastName":"Quitzon","title":"Global Configuration Associate"},{"id":7,"firstName":"Coleman","lastName":"Koss","title":"National Intranet Strategist"}]}];
 
-    const list = mock.filter(l => l.id === id)[0];
+    const list = lists.filter(l => l.id === id)[0];
 
     return {
       list,
-      lastX: mock.indexOf(list)
+      lastX: lists.indexOf(list),
     };
   }
 
   render() {
     const { lists } = this.props;
-    const mock = [{"id":0,"name":"Incredible Metal Hat","cards":[{"id":0,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"},{"id":1,"firstName":"Lela","lastName":"Braun","title":"Internal Web Technician"},{"id":2,"firstName":"Roy","lastName":"Friesen","title":"Investor Paradigm Designer"},{"id":3,"firstName":"Bria","lastName":"Hoppe","title":"Chief Factors Director"},{"id":4,"firstName":"Walton","lastName":"Kautzer","title":"Product Communications Designer"},{"id":5,"firstName":"Tierra","lastName":"Wehner","title":"Human Interactions Strategist"},{"id":6,"firstName":"Elinor","lastName":"Quitzon","title":"Global Configuration Associate"},{"id":7,"firstName":"Coleman","lastName":"Koss","title":"National Intranet Strategist"}]},
-    {"id":1,"name":"Incredible Metal Hat","cards":[{"id":10,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"},{"id":11,"firstName":"Lela","lastName":"Braun","title":"Internal Web Technician"},{"id":12,"firstName":"Roy","lastName":"Friesen","title":"Investor Paradigm Designer"},{"id":13,"firstName":"Bria","lastName":"Hoppe","title":"Chief Factors Director"},{"id":14,"firstName":"Walton","lastName":"Kautzer","title":"Product Communications Designer"},{"id":15,"firstName":"Tierra","lastName":"Wehner","title":"Human Interactions Strategist"},{"id":16,"firstName":"Elinor","lastName":"Quitzon","title":"Global Configuration Associate"},{"id":17,"firstName":"Coleman","lastName":"Koss","title":"National Intranet Strategist"}]}];
+
     return (
       <main>
         <div>
           <CustomDragLayer snapToGrid={false} />
-          {mock.map((item, i) =>
+          {lists.map((item, i) =>
             <CardsContainer
               key={item.id}
               id={item.id}

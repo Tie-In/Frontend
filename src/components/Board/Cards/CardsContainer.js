@@ -35,6 +35,7 @@ const listTarget = {
     }
     const { id: listId } = monitor.getItem();
     const { id: nextX } = props;
+    // console.log('move');
     if (listId !== nextX) {
       props.moveList(listId, props.x);
     }
@@ -70,7 +71,7 @@ export default class CardsContainer extends Component {
       <div className="desk" style={{ opacity }}>
         <div className="desk-head">
           <div className="desk-name">
-            Slot name
+            Slot name {this.props.id}
           </div>
         </div>
         <Cards

@@ -51,7 +51,7 @@ function collectDragSource(connectDragSource, monitor) {
   return {
     connectDragSource: connectDragSource.dragSource(),
     connectDragPreview: connectDragSource.dragPreview(),
-    isDragging: monitor.isDragging()
+    isDragging: monitor.isDragging(),
   };
 }
 
