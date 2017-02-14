@@ -17,7 +17,7 @@ function getItemStyles(props) {
       display: 'none',
     };
   }
-  // asdasds
+  // 100 from navbar
   let { x, y } = currentOffset;
   if (props.snapToGrid) {
     x -= initialOffset.x;
@@ -39,7 +39,7 @@ function getItemStyles(props) {
   itemType: monitor.getItemType(),
   initialOffset: monitor.getInitialSourceClientOffset(),
   currentOffset: monitor.getSourceClientOffset(),
-  isDragging: monitor.isDragging()
+  isDragging: monitor.isDragging(),
 }))
 export default class CustomDragLayer extends Component {
   static propTypes = {
@@ -74,7 +74,6 @@ export default class CustomDragLayer extends Component {
     if (!isDragging) {
       return null;
     }
-
 
     return (
       <div style={layerStyles}>
