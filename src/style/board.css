@@ -18,6 +18,19 @@
 	margin-right: 20px;
 	vertical-align: top;
 }
+
+.desk-new{
+	width: 270px;
+	display: inline-block;
+	border-radius: 3px;
+	padding-bottom: 20px;
+	margin-right: 20px;
+}
+
+.desk-new:hover {
+	cursor: pointer;
+}
+
 .desk-items{
 	overflow-y: auto;
 	height: 100%;
@@ -28,12 +41,22 @@
 	height: 161px;
 	background-color: rgba(208,208,208,1);
 }
-.desk-head{
+.desk > .desk-head{
 	position: relative;
 	padding: 5px 8px;
 	background-color: #E5DAD6;
 	margin-bottom: 10px;
 }
+.desk-new > .desk-head{
+	position: relative;
+	padding: 5px 8px;
+	background-color: #F4F0EF;
+	margin-bottom: 10px;
+}
+.desk-new > .desk-head:hover{
+	background-color: #E5DAD6;
+}
+
 .desk-name{
 	font-weight: bold;
 	white-space: normal;

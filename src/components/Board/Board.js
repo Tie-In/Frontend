@@ -8,6 +8,7 @@ import * as listsActions from '../../actions/list-actions';
 import '../../style/board.css';
 import CardsContainer from './Cards/CardsContainer';
 import CustomDragLayer from './CustomDragLayer';
+import NewList from './Cards/NewList';
 
 @DragDropContext(HTML5Backend)
 class Board extends Component {
@@ -26,17 +27,16 @@ class Board extends Component {
     this.scrollLeft = this.scrollLeft.bind(this);
     this.stopScrolling = this.stopScrolling.bind(this);
     this.startScrolling = this.startScrolling.bind(this);
+    this.createList = this.createList.bind(this);
     this.state = { isScrolling: false };
   }
 
   componentWillMount() {
     const mock = [
-        {"id":0,"name":"Incredible Metal Hat","cards":[{"id":0,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"}]},
-        {"id":1,"name":"Increasadasds","cards":[{"id":10,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"}]},
-        {"id":2,"name":"Incasdasd", "cards": []},
-        {"id":3,"name":"Incasdasdaaa", "cards": []},
-        {"id":4,"name":"Incasdasaaaad", "cards": []},
-      ];
+      {"id": 0,"name":"Incredible Metal Hat","cards":[{"id":0,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"}]},
+      {"id": 1,"name":"Increasadasds","cards":[{"id":10,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"}]},
+      {"id": 2,"name":"Incasdasd", "cards": []},
+    ];
 
     this.props.listsActions.setList(mock);
   }
@@ -83,6 +83,14 @@ class Board extends Component {
     this.props.listsActions.moveList(lastX, nextX);
   }
 
+  createList(listName) {
+    const { lists } = this.props;
+    const temp = { id: lists.length, name: listName, cards: [] };
+    lists.push(temp);
+    this.setState({ isScrolling: true }, this.scrollRight());
+    this.props.listsActions.setList(lists);
+  }
+
   findList(id) {
     const { lists } = this.props;
     const list = lists.filter(l => l.id === id)[0];
@@ -95,7 +103,7 @@ class Board extends Component {
 
   render() {
     const { lists } = this.props;
-    const width = 100 + ((lists.length - 3) * 20);
+    const width = 100 + ((lists.length - 2) * 20);
     const customWidth = {
       width: `${width}%`,
     };
@@ -107,6 +115,7 @@ class Board extends Component {
           <CardsContainer
             key={item.id}
             id={item.id}
+            name={item.name}
             item={item}
             moveCard={this.moveCard}
             moveList={this.moveList}
@@ -116,6 +125,7 @@ class Board extends Component {
             x={i}
           />
         )}
+        <NewList createList={this.createList} />
       </main>
     );
   }

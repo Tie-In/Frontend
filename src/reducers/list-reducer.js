@@ -9,7 +9,6 @@ import {
 
 /* eslint-disable new-cap */
 const initialState = {
-  isFetching: false,
   lists: [],
   isDragging: false,
 };
@@ -20,6 +19,7 @@ const initialState = {
 export default function lists(state = initialState, action) {
   switch (action.type) {
     case SET_LIST:
+      console.log(action.lists);
       return Object.assign({}, state, {
         lists: action.lists,
       });
