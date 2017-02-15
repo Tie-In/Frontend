@@ -59,6 +59,10 @@ function renderSuggestion(suggestion) {
   );
 }
 
+function removeContributor(id) {
+  console.log(id);
+}
+
 Array.prototype.diff = function(a) {
     return this.filter(function(i) {return a.indexOf(i) < 0;});
 };
@@ -84,7 +88,7 @@ function Contributor(props) {
         </span>
       </Col>
       <Col smOffset={0} xs={2} md={2}>
-        <Button bsStyle="primary"><Glyphicon glyph="remove" /></Button>
+        <Button bsStyle="primary" onClick={() => removeContributor(post.id)}><Glyphicon glyph="remove" /></Button>
       </Col>
     </Row>
   );
@@ -111,6 +115,16 @@ class NewOrgContainer extends Component {
     };
 
     this.create = this.create.bind(this);
+  }
+
+  getSuggestions(value, contributors) {
+    const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
+    if (inputValue === '') {
+      return [];
+    }
+    const availableUsers = people.diff(contributors);
+    const regex = new RegExp('\\b' + inputValue, 'i');
+    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
   }
 
   onChange = (event, { newValue }) => {
@@ -205,7 +219,7 @@ class NewOrgContainer extends Component {
         <Grid>
           <Form>
             <Row>
-              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+              <Col xs={12} md={8} mdOffset={2}>
                 <h3 style={titleColor}>Create new organization</h3>
                 <hr style={lineColor} />
                 <FormGroup controlId="formInlineName">
@@ -217,7 +231,7 @@ class NewOrgContainer extends Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+              <Col xs={12} md={8} mdOffset={2}>
                 <FormGroup controlId="formInlineDetail">
                   <ControlLabel>
                     Description
@@ -227,7 +241,7 @@ class NewOrgContainer extends Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
+              <Col xs={12} md={4} mdOffset={2}>
                 <FormGroup controlId="formInlineContributor">
                   <ControlLabel>
                     Contributor
