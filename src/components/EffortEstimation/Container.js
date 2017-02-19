@@ -66,6 +66,16 @@ class Container extends Component {
     });
   }
 
+  contributor(props) {
+    return (
+      props.posts.map((post) => {
+        <Row>
+          
+        </Row>
+      })
+    )
+  }
+
   render() {
     const { planning } = this.props;
     const containerStyle = {

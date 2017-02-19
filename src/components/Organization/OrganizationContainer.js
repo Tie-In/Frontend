@@ -14,7 +14,6 @@ class OrganizationContainer extends Component {
   }
 
   fetchData() {
-    console.log('adadasdasd');
     axios({
       method: 'GET',
       url: '/api/organizations/'.concat(this.props.params.organizationId),
