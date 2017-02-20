@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { DropTarget, DragSource } from 'react-dnd';
-import { Glyphicon } from 'react-bootstrap';
+import { Glyphicon, Dropdown, MenuItem } from 'react-bootstrap';
 
 import Cards from './Cards';
 
@@ -75,7 +75,15 @@ export default class CardsContainer extends Component {
       <div className="desk" style={{ opacity }}>
         <div className="desk-head">
           <div className="desk-name">
-            {name}
+            {name} <Dropdown className="pull-right" id="card-container-dropdown">
+              <Dropdown.Toggle noCaret>
+                <Glyphicon glyph="option-vertical" />
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <MenuItem eventKey="1">Edit name</MenuItem>
+                <MenuItem eventKey="2">Delete</MenuItem>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         </div>
         <Cards

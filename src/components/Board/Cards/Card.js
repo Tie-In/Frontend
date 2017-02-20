@@ -13,7 +13,6 @@ const Card = (props) => {
     <div style={style} className="item" id={style ? item.id : null}>
       <div className="item-name">
         Card ID {item.id}
-        <Glyphicon className="pull-right" glyph="option-vertical" />
       </div>
       <div className="item-container">
         <div className="item-content">
