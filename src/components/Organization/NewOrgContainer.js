@@ -160,12 +160,18 @@ class NewOrgContainer extends Component {
     });
   }
 
-  removeContributor() {
-    console.log('click');
-  }
+  removeContributor(id) {
+    const array = this.state.contributors;
+    const index = array.indexOf(id);
+    array.splice(index, 1);
 
-  deleteRow(index) {
-    console.log(12);
+    const users = this.state.input.users;
+    const uindex = users.indexOf(id);
+    users.splice(uindex, 1);
+    this.setState({
+      contributors: array,
+      input: { users: users },
+    });
   }
 
   contributor() {
@@ -179,7 +185,7 @@ class NewOrgContainer extends Component {
           </span>
         </Col>
         <Col smOffset={0} xs={2} md={2}>
-          <Button bsStyle="primary" onClick={() => this.deleteRow(12)}><Glyphicon glyph="remove" /></Button>
+          <Button bsStyle="primary" onClick={() => this.removeContributor(contributor.id)}><Glyphicon glyph="remove" /></Button>
         </Col>
       </Row>
     );
