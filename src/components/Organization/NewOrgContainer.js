@@ -59,10 +59,6 @@ function renderSuggestion(suggestion) {
   );
 }
 
-function removeContributor(id) {
-  console.log(id);
-}
-
 Array.prototype.diff = function(a) {
     return this.filter(function(i) {return a.indexOf(i) < 0;});
 };
@@ -75,28 +71,6 @@ function getSuggestions(value, contributors) {
   const availableUsers = people.diff(contributors);
   const regex = new RegExp('\\b' + inputValue, 'i');
   return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
-}
-
-function Contributor(props) {
-  const content = props.posts.map((post) =>
-    <Row key={post.id}>
-      <Col smOffset={0} xs={9} md={10}>
-        <span className={'suggestion-content ' + post.twitter}>
-          <span className="name">
-            <span>{post.username}</span>
-          </span>
-        </span>
-      </Col>
-      <Col smOffset={0} xs={2} md={2}>
-        <Button bsStyle="primary" onClick={() => removeContributor(post.id)}><Glyphicon glyph="remove" /></Button>
-      </Col>
-    </Row>
-  );
-  return (
-    <div>
-      {content}
-    </div>
-  );
 }
 
 class NewOrgContainer extends Component {
@@ -181,6 +155,36 @@ class NewOrgContainer extends Component {
     });
   }
 
+  removeContributor() {
+    console.log('click');
+  }
+
+  deleteRow(index) {
+    console.log(12);
+  }
+
+  contributor(props) {
+    const content = props.map((post) =>
+      <Row key={post.id}>
+        <Col smOffset={0} xs={9} md={10}>
+          <span className={'suggestion-content ' + post.twitter}>
+            <span className="name">
+              <span>{post.username}</span>
+            </span>
+          </span>
+        </Col>
+        <Col smOffset={0} xs={2} md={2}>
+          <Button bsStyle="primary" onClick={() => this.deleteRow(12)}><Glyphicon glyph="remove" /></Button>
+        </Col>
+      </Row>
+    );
+    return (
+      <div>
+        {content}
+      </div>
+    );
+  }
+
   render() {
     const lineColor = {
       borderColor: '#7E8281',
@@ -263,7 +267,7 @@ class NewOrgContainer extends Component {
                 </ControlLabel>
                 <Row style={scrollableContainer}>
                   <Col smOffset={0} sm={11}>
-                    <Contributor posts={this.state.contributors} />
+                    {this.contributor(this.state.contributors)}
                   </Col>
                 </Row>
               </Col>
