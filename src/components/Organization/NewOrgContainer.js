@@ -13,32 +13,32 @@ import * as organizationActions from '../../actions/organization-actions';
 import * as userActions from '../../actions/user-actions';
 import autosuggestStyle from '../../style/autosuggestStyle.css';
 
-const people = [
-  {
-    id: '1',
-    username: 'CharlieBrown',
-    email: 'brown@mail.com',
-    twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
-  },
-  {
-    id: '2',
-    username: 'CharlotteWhite',
-    email: 'white@mail.com',
-    twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
-  },
-  {
-    id: '3',
-    username: 'ChloeJones',
-    email: 'jones@mail.com',
-    twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
-  },
-  {
-    id: '4',
-    username: 'CooperKing',
-    email: 'king@mail.com',
-    twitter: 'user'.concat(Math.ceil(Math.random() * 4)),
-  },
-];
+// const people = [
+//   {
+//     id: '1',
+//     username: 'CharlieBrown',
+//     email: 'brown@mail.com',
+//     image: 'user'.concat(Math.ceil(Math.random() * 4)),
+//   },
+//   {
+//     id: '2',
+//     username: 'CharlotteWhite',
+//     email: 'white@mail.com',
+//     image: 'user'.concat(Math.ceil(Math.random() * 4)),
+//   },
+//   {
+//     id: '3',
+//     username: 'ChloeJones',
+//     email: 'jones@mail.com',
+//     image: 'user'.concat(Math.ceil(Math.random() * 4)),
+//   },
+//   {
+//     id: '4',
+//     username: 'CooperKing',
+//     email: 'king@mail.com',
+//     image: 'user'.concat(Math.ceil(Math.random() * 4)),
+//   },
+// ];
 
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -51,7 +51,7 @@ function getSuggestionValue(suggestion) {
 function renderSuggestion(suggestion) {
   const suggestionText = `${suggestion.username} (${suggestion.email})`;
   return (
-    <span className={'suggestion-content ' + suggestion.twitter}>
+    <span className={'suggestion-content ' + suggestion.image}>
       <span className="name">
         <span>{suggestionText}</span>
       </span>
@@ -60,24 +60,15 @@ function renderSuggestion(suggestion) {
 }
 
 Array.prototype.diff = function(a) {
-    return this.filter(function(i) {return a.indexOf(i) < 0;});
+  return this.filter(function(i) {return a.indexOf(i) < 0;});
 };
-
-function getSuggestions(value, contributors) {
-  const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
-  if (inputValue === '') {
-    return [];
-  }
-  const availableUsers = people.diff(contributors);
-  const regex = new RegExp('\\b' + inputValue, 'i');
-  return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
-}
 
 class NewOrgContainer extends Component {
   constructor() {
     super();
 
     this.state = {
+      allUsers: [],
       input: {
         name: '',
         description: '',
@@ -91,12 +82,26 @@ class NewOrgContainer extends Component {
     this.create = this.create.bind(this);
   }
 
-  getSuggestions(value, contributors) {
+  componentWillMount() {
+    axios({
+      method: 'GET',
+      url: '/api/users',
+    }).then((response) => {
+      const users = response.data
+      this.setState({
+        allUsers: users,
+      })
+    }).catch((error) => {
+      console.log(error.response);
+    });
+  }
+
+  getSuggestions(value) {
     const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
     if (inputValue === '') {
       return [];
     }
-    const availableUsers = people.diff(contributors);
+    const availableUsers = this.state.allUsers.diff(this.state.contributors);
     const regex = new RegExp('\\b' + inputValue, 'i');
     return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
   }
@@ -109,7 +114,7 @@ class NewOrgContainer extends Component {
 
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      suggestions: getSuggestions(value, this.state.contributors),
+      suggestions: this.getSuggestions(value),
     });
   };
 
@@ -163,13 +168,13 @@ class NewOrgContainer extends Component {
     console.log(12);
   }
 
-  contributor(props) {
-    const content = props.map((post) =>
-      <Row key={post.id}>
+  contributor() {
+    const content = this.state.contributors.map((contributor) =>
+      <Row key={contributor.id}>
         <Col smOffset={0} xs={9} md={10}>
-          <span className={'suggestion-content ' + post.twitter}>
+          <span className={'suggestion-content ' + contributor.image}>
             <span className="name">
-              <span>{post.username}</span>
+              <span>{contributor.username}</span>
             </span>
           </span>
         </Col>
@@ -267,7 +272,7 @@ class NewOrgContainer extends Component {
                 </ControlLabel>
                 <Row style={scrollableContainer}>
                   <Col smOffset={0} sm={11}>
-                    {this.contributor(this.state.contributors)}
+                    {this.contributor()}
                   </Col>
                 </Row>
               </Col>
