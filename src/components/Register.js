@@ -21,6 +21,7 @@ class Register extends Component {
         password_confirmation: '',
         birth_date: '',
         phone_number: '',
+        image: 'user'.concat(Math.ceil(Math.random() * 4)),
       },
       error: {
         email: '',
