@@ -46,12 +46,12 @@ ReactDOM.render(
           <Route path="effort-estimation" component={EffortEstimationContainer} />
         </Route>
         <Route path="board" component={Board} />
+        <Route path="backlog" component={BacklogContainer} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="register" component={Register} />
       </Route>
       <Route path="login" component={Login} />
-      <Route path="backlog" component={BacklogContainer} />
     </Router>
   </Provider>,
   document.getElementById('root'),

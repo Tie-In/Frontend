@@ -28,9 +28,6 @@ module.exports = {
   ProjectHomeContainer,
   OrganizationNavbar,
   ResultPlanningContainer,
-<<<<<<< HEAD
   BacklogContainer,
-=======
   Board,
->>>>>>> kanban
 };

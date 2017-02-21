@@ -1,0 +1,47 @@
+.backlogContainer {
+  width: 70%;
+  height: auto;
+  right: 50%;
+  transform: translate(50%);
+  position: absolute;
+}
+h4 {
+  color: #A25E5D;
+}
+hr {
+  border-color: black;
+}
+span #addButton, span #removeButton {
+  padding: 0px;
+  color: #A25E5D;
+}
+/*.backlog #removeButton {
+  display: none;
+}
+.thisSprint #addButton {
+  display: none;
+}*/
+#tasklist {
+  list-style-type: none;
+  padding: 0px;
+  vertical-align: middle;
+}
+.sprint #taskName {
+  text-decoration: none;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+ul>.row:hover {
+  color: white;
+  background-color: #A25E5D;
+  cursor: pointer;
+}
+.modal-container {
+  position: relative;
+  height: 200px;
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
+}
