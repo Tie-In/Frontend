@@ -7,9 +7,9 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
-import axios from 'axios';
 import * as organizationActions from '../../actions/organization-actions';
 import * as userActions from '../../actions/user-actions';
+import * as apiHelper from '../../helpers/apiHelper';
 
 class NewOrgContainer extends Component {
   constructor() {
@@ -30,25 +30,19 @@ class NewOrgContainer extends Component {
     this.create = this.create.bind(this);
   }
 
-  create() {
-    axios({
-      method: 'POST',
-      url: '/api/organizations',
-      headers: {
-        Authorization: this.props.user.auth_token,
-      },
-      data: {
+  async create() {
+    try {
+      const response = await apiHelper.post('/api/organizations', {
         organization: this.state.input,
-      },
-    }).then((response) => {
+      });
       const org = response.data.organization;
       const user = response.data.user;
       this.props.organizationActions.setOrganization(org);
       this.props.userActions.setUser(user);
       document.location.href = `/organizations/${org.id}`;
-    }).catch((error) => {
-      console.log(error.response);
-    });
+    } catch (err) {
+      console.log(err.response);
+    }
   }
 
   render() {

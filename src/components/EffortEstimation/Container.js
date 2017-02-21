@@ -2,12 +2,12 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
-import axios from 'axios';
 import { Button, Row, Col, FormGroup, FormControl } from 'react-bootstrap';
 import FeaturePoint from './FeaturePoint';
 import FactorsTable from './FactorsTable';
 import { technicalFactors, environmentalFactors } from './informations';
 import * as planningActions from '../../actions/planning-actions';
+import * as apiHelper from '../../helpers/apiHelper';
 
 class Container extends Component {
 
@@ -43,37 +43,19 @@ class Container extends Component {
     state[name] = temp;
   }
 
-  submit() {
-    axios({
-      method: 'POST',
-      url: '/api/effort_estimations',
-      headers: {
-        Authorization: this.props.user.auth_token,
-      },
-      data: {
+  async submit() {
+    try {
+      await apiHelper.post('/api/effort_estimations', {
         effort_estimations: this.state,
         features: this.props.planning.features,
         technicals: this.state.technicals,
         environmentals: this.state.environmentals,
-      },
-    }).then((response) => {
-      console.log(response.data);
+      });
       this.props.planningActions.clearPlanning();
-
       document.location.href = `/organizations/${this.props.params.organizationId}/projects/${this.state.project_id}/planning`;
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
-
-  contributor(props) {
-    return (
-      props.posts.map((post) => {
-        <Row>
-          
-        </Row>
-      })
-    )
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
@@ -147,7 +129,6 @@ class Container extends Component {
 }
 
 Container.propTypes = {
-  user: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   planning: PropTypes.object.isRequired,
   planningActions: PropTypes.object.isRequired,
@@ -156,7 +137,6 @@ Container.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    user: state.user,
     project: state.project,
     planning: state.planning,
   };

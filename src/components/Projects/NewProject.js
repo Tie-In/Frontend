@@ -7,9 +7,9 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
-import axios from 'axios';
 import logo from '../../images/logo-login.png';
 import * as projectActions from '../../actions/project-actions';
+import * as apiHelper from '../../helpers/apiHelper';
 
 class NewProject extends Component {
 
@@ -33,24 +33,17 @@ class NewProject extends Component {
     this.create = this.create.bind(this);
   }
 
-  create() {
-    axios({
-      method: 'POST',
-      url: '/api/projects',
-      headers: {
-        Authorization: this.props.user.auth_token,
-      },
-      data: {
+  async create() {
+    try {
+      const response = await apiHelper.post('/api/projects', {
         project: this.state.input,
-      },
-    }).then((response) => {
-      console.log(response);
+      });
       const project = response.data;
       this.props.projectActions.setProject(project);
       document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
-    }).catch((error) => {
-      console.log(error);
-    });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
@@ -180,7 +173,6 @@ class NewProject extends Component {
 }
 
 NewProject.propTypes = {
-  user: PropTypes.object.isRequired,
   projectActions: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
 };

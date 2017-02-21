@@ -1,8 +1,7 @@
 import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
-import axios from 'axios';
 import { Row, Col, ProgressBar, Table } from 'react-bootstrap';
 import { technicalFactors, environmentalFactors } from './informations';
+import * as apiHelper from '../../helpers/apiHelper';
 
 class Container extends Component {
   constructor(props) {
@@ -16,19 +15,14 @@ class Container extends Component {
     };
   }
 
-  componentWillMount() {
-    axios({
-      method: 'GET',
-      url: '/api/effort_estimations/'.concat(this.props.params.projectId),
-      headers: {
-        Authorization: this.props.user.auth_token,
-      },
-    }).then((response) => {
+  async componentWillMount() {
+    try {
+      const response = await apiHelper.get(`/api/effort_estimations/${this.props.params.projectId}`);
       const data = response.data;
       this.setState(data);
-    }).catch((error) => {
-      console.log(error);
-    });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
@@ -123,15 +117,8 @@ class Container extends Component {
 }
 
 Container.propTypes = {
-  user: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    user: state.user,
-    project: state.project,
-  };
-}
 
-export default connect(mapStateToProps)(Container);
+export default Container;

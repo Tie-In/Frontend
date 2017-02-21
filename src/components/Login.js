@@ -128,9 +128,7 @@ class Login extends Component {
             <p style={{ color: 'red' }}>{this.state.error}</p>
             <FormGroup>
               <Col sm={6}>
-                <LinkContainer to={{ pathname: 'register' }}>
-                  <Button style={registerButton} block>Register</Button>
-                </LinkContainer>
+                <Button style={registerButton} onClick={this.register} block>Register</Button>
               </Col>
               <Col sm={6}>
                 <Button onClick={this.login} type="submit" block>

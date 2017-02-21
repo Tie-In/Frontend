@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import NavStyle from '../../style/navstyle.css';
 import logo from '../../images/logo.png';
-import { Link } from 'react-router';
 import 'simple-line-icons/css/simple-line-icons.css';
 
 class StartNavbar extends Component {

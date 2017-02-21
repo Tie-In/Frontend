@@ -98,10 +98,13 @@ class FeaturePlanningContainer extends Component {
     );
   }
 }
+FeaturePlanningContainer.propTypes = {
+  planning: PropTypes.object.isRequired,
+  planningActions: PropTypes.object.isRequired,
+};
 
 function mapStateToProps(state) {
   return {
-    user: state.user,
     planning: state.planning,
   };
 }
