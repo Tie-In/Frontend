@@ -14,6 +14,7 @@ class OrganizationContainer extends Component {
   }
 
   fetchData() {
+    console.log('adadasdasd');
     axios({
       method: 'GET',
       url: '/api/organizations/'.concat(this.props.params.organizationId),
@@ -26,6 +27,7 @@ class OrganizationContainer extends Component {
       this.props.organizationActions.setOrganization(org);
     }).catch((error) => {
       // no permission or not founded
+      localStorage.clear();
       document.location.href = '/login';
       console.log(error);
     });
