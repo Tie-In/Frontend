@@ -13,33 +13,6 @@ import * as organizationActions from '../../actions/organization-actions';
 import * as userActions from '../../actions/user-actions';
 import autosuggestStyle from '../../style/autosuggestStyle.css';
 
-// const people = [
-//   {
-//     id: '1',
-//     username: 'CharlieBrown',
-//     email: 'brown@mail.com',
-//     image: 'user'.concat(Math.ceil(Math.random() * 4)),
-//   },
-//   {
-//     id: '2',
-//     username: 'CharlotteWhite',
-//     email: 'white@mail.com',
-//     image: 'user'.concat(Math.ceil(Math.random() * 4)),
-//   },
-//   {
-//     id: '3',
-//     username: 'ChloeJones',
-//     email: 'jones@mail.com',
-//     image: 'user'.concat(Math.ceil(Math.random() * 4)),
-//   },
-//   {
-//     id: '4',
-//     username: 'CooperKing',
-//     email: 'king@mail.com',
-//     image: 'user'.concat(Math.ceil(Math.random() * 4)),
-//   },
-// ];
-
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -130,11 +103,12 @@ class NewOrgContainer extends Component {
       const newUsers = this.state.input.users.slice();
       newUsernames.push(suggestion);
       newUsers.push({ id: suggestion.id });
-
+      const newInput = this.state.input;
+      newInput.users = newUsers;
       this.setState({
         contributors: newUsernames,
         value: '',
-        input: { users: newUsers },
+        input: newInput,
       });
     }
   }
@@ -167,10 +141,14 @@ class NewOrgContainer extends Component {
 
     const users = this.state.input.users;
     const uindex = users.indexOf(id);
+
+    const newInput = this.state.input;
     users.splice(uindex, 1);
+    newInput.users = users;
+
     this.setState({
       contributors: array,
-      input: { users: users },
+      input: newInput,
     });
   }
 
@@ -286,12 +264,12 @@ class NewOrgContainer extends Component {
             <Row>
               <FormGroup style={buttonGroup}>
                 <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                  <Button style={singleButton} bsStyle="primary" href="/no-organization" block>
+                  <Button style={singleButton} bsStyle="primary" href="/" key="cancel" block>
                     Cancel
                   </Button>
                 </Col>
                 <Col xs={12} md={3}>
-                  <Button style={singleButton} onClick={this.create} block>
+                  <Button style={singleButton} onClick={this.create} key="submit" block>
                     Create
                   </Button>
                 </Col>
