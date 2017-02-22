@@ -11,10 +11,11 @@ export function post(path, body) {
   });
 }
 
-export function get(path) {
+export function get(path, parameter) {
   return axios({
     method: 'GET',
     url: path,
+    params: parameter,
     headers: {
       Authorization: `${localStorage.getItem('token') || ''}`,
     },
