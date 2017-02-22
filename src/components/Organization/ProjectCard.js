@@ -8,6 +8,7 @@ class ProjectCard extends Component {
       height: '150px',
       width: '100%',
       border: 'solid 1px #E5E5E5',
+      borderRadius: '4px',
       marginBottom: '50px',
     };
     const { project } = this.props;
