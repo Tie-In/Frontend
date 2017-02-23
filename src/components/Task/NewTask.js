@@ -1,7 +1,6 @@
 import {
   Button, Grid, Col, Row, Form,
   FormGroup, ControlLabel, FormControl,
-  InputGroup, Glyphicon, Label,
 } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
@@ -9,8 +8,10 @@ import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
 import * as projectActions from '../../actions/project-actions';
 import * as apiHelper from '../../helpers/apiHelper';
+import AutosuggestionBlock from './AutosuggestionBlock';
+import '../../style/autosuggestStyle.css';
 
-class NewTask extends Component {
+class NewProject extends Component {
 
   constructor(props) {
     super(props);
@@ -19,30 +20,54 @@ class NewTask extends Component {
       input: {
         name: '',
         description: '',
-        sprint_duration: '',
-        users: [
-          {
-            id: 2,
-          },
-        ],
-        organization_id: this.props.params.organizationId,
+        assignee_id: '',
+        project_id: this.props.params.projectId,
+        feature_id: '',
       },
     };
 
     this.create = this.create.bind(this);
+    this.setAssignee = this.setAssignee.bind(this);
+    this.setFeature = this.setFeature.bind(this);
   }
 
-  async create() {
+  async componentWillMount() {
     try {
-      const response = await apiHelper.post('/api/projects', {
-        project: this.state.input,
+      const response = await apiHelper.get('/api/users', {
+        project: this.props.params.projectId,
       });
-      const project = response.data;
-      this.props.projectActions.setProject(project);
-      document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
+      const users = response.data;
+      console.log(users);
+      this.setState({ allUsers: users });
     } catch (err) {
       console.log(err);
     }
+  }
+
+  async create() {
+    console.log(this.state);
+    // try {
+    //   const response = await apiHelper.post('/api/projects', {
+    //     project: this.state.input,
+    //   });
+    //   const project = response.data;
+    //   this.props.projectActions.setProject(project);
+    //   document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
+    // } catch (err) {
+    //   console.log(err);
+    // }
+  }
+
+  setAssignee(id) {
+    const temp = this.state.input;
+    temp.assignee_id = id;
+    this.setState({ input: temp });
+  }
+
+  setFeature(id) {
+    const temp = this.state.input;
+    temp.feature_id = id;
+    this.setState({ input: temp });
   }
 
   render() {
@@ -58,6 +83,8 @@ class NewTask extends Component {
     const singleButton = {
       marginTop: '10px',
     };
+    const previousURL = `/organizations/${this.state.input.organizationId}`;
+
     return (
       <div>
         <Grid>
@@ -80,72 +107,40 @@ class NewTask extends Component {
                   <ControlLabel>
                     Description
                   </ControlLabel>
-                  <FormControl type="text" placeholder="Description" valueLink={linkState(this, 'input.description')} />
+                  <FormControl type="text" placeholder="Description of task" valueLink={linkState(this, 'input.description')} />
                 </FormGroup>
               </Col>
             </Row>
             <Row>
               <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
-                <FormGroup controlId="formInlineContributor">
-                  <ControlLabel>
-                    Feature
-                  </ControlLabel>
-                  <InputGroup>
-                    <FormControl
-                      placeholder="Select feature"
-                      valueLink={linkState(this, 'input.u')}
-                    />
-                    <InputGroup.Addon>
-                      <Glyphicon glyph="menu-down" />
-                    </InputGroup.Addon>
-                  </InputGroup>
-                </FormGroup>
+                <AutosuggestionBlock title="Feature" data={this.props.project.features} setValue={this.setFeature} />
               </Col>
-              <Col xs={12} md={4} xsOffset={0}>
+              <Col xs={12} md={4}>
+                <AutosuggestionBlock title="Assignee (Optional)" data={this.state.allUsers} setValue={this.setAssignee} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={4} mdOffset={2}>
                 <FormGroup controlId="formInlineDetail">
-                  <ControlLabel>
-                    Assignee (Optional)
-                  </ControlLabel>
-                  <FormControl type="text" placeholder="Find user" valueLink={linkState(this, 'input.description')} />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
-                <FormGroup controlId="formInlineContributor">
                   <ControlLabel>
                     Tags
                   </ControlLabel>
-                  <InputGroup>
-                    <FormControl
-                      placeholder="Define tags"
-                      valueLink={linkState(this, 'input.u')}
-                    />
-                    <InputGroup.Addon>
-                      <Glyphicon glyph="plus" />
-                    </InputGroup.Addon>
-                  </InputGroup>
+                  <FormControl
+                    placeholder="Add tag"
+                    valueLink={linkState(this, 'input.tags')}
+                  />
                 </FormGroup>
-              </Col>
-              <Col xs={12} md={4}>
-                <Row style={{ paddingTop: 20 }}>
-                  <Col smOffset={0} sm={11}>
-                    <h4>
-                      <Label bsStyle="success">Issue</Label>
-                    </h4>
-                  </Col>
-                </Row>
               </Col>
             </Row>
             <Row>
               <FormGroup style={buttonGroup}>
                 <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                  <Button style={singleButton} bsStyle="primary" href="/no-organization" block>
+                  <Button style={singleButton} bsStyle="primary" href={previousURL} key="cancel" block>
                     Cancel
                   </Button>
                 </Col>
                 <Col xs={12} md={3}>
-                  <Button style={singleButton} onClick={this.create} block>
+                  <Button style={singleButton} onClick={this.create} key="submitProject" block>
                     Create
                   </Button>
                 </Col>
@@ -158,7 +153,8 @@ class NewTask extends Component {
   }
 }
 
-NewTask.propTypes = {
+NewProject.propTypes = {
+  project: PropTypes.object.isRequired,
   projectActions: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
 };
@@ -166,6 +162,7 @@ NewTask.propTypes = {
 function mapStateToProps(state) {
   return {
     user: state.user,
+    project: state.project,
   };
 }
 
@@ -175,4 +172,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewTask);
+export default connect(mapStateToProps, mapDispatchToProps)(NewProject);
