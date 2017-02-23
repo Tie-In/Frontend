@@ -9,6 +9,7 @@ import linkState from 'react-link-state';
 import * as projectActions from '../../actions/project-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 import AutosuggestionBlock from './AutosuggestionBlock';
+import TagRow from './TagRow';
 import '../../style/autosuggestStyle.css';
 
 class NewProject extends Component {
@@ -71,6 +72,12 @@ class NewProject extends Component {
   }
 
   render() {
+    const tags = [
+      { id: 1, name: 'Tag A', color: 'green', },
+      { id: 2, name: 'Tag B', color: 'red', },
+      { id: 3, name: 'Tag C', color: 'yellow', },
+      { id: 4, name: 'Tag D', color: 'blue', },
+    ];
     const lineColor = {
       borderColor: '#7E8281',
     };
@@ -120,17 +127,7 @@ class NewProject extends Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={12} md={4} mdOffset={2}>
-                <FormGroup controlId="formInlineDetail">
-                  <ControlLabel>
-                    Tags
-                  </ControlLabel>
-                  <FormControl
-                    placeholder="Add tag"
-                    valueLink={linkState(this, 'input.tags')}
-                  />
-                </FormGroup>
-              </Col>
+              <TagRow data={tags} />
             </Row>
             <Row>
               <FormGroup style={buttonGroup}>

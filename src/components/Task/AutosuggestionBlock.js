@@ -1,6 +1,6 @@
 import {
-  Button, Grid, Col, Row, Form,
-  FormGroup, ControlLabel, FormControl, Glyphicon,
+  Button, Col, Row,
+  FormGroup, ControlLabel, Glyphicon,
 } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import Autosuggest from 'react-autosuggest';
