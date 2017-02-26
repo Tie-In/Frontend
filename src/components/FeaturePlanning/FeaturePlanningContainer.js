@@ -33,7 +33,7 @@ class FeaturePlanningContainer extends Component {
     this.setState({
       input: {
         name: '',
-        complexity: '',
+        complexity: 'simple',
       },
       features: featuresTemp,
     });

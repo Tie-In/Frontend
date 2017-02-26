@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import {
   Button, Col, Row,
-  FormGroup, ControlLabel, Glyphicon, Label,
+  FormGroup, ControlLabel, Glyphicon, Label, Dropdown, FormControl,
 } from 'react-bootstrap';
+import linkState from 'react-link-state';
 import Autosuggest from 'react-autosuggest';
+import WrapperColorpicker from './WrapperColorpicker';
+import * as apiHelper from '../../helpers/apiHelper';
 import '../../style/autosuggestStyle.css';
 
 function escapeRegexCharacters(str) {
@@ -15,9 +18,19 @@ function getSuggestionValue(suggestion) {
 }
 
 function renderSuggestion(suggestion) {
+  const canvasStyle = {
+    backgroundColor: suggestion.color,
+  };
   return (
     <span className="suggestion-content">
-      <span>{suggestion.name}</span>
+      <Row>
+        <Col xs={2}>
+          <canvas width="15" height="15" style={canvasStyle} />
+        </Col>
+        <Col xs={6}>
+          <span>{suggestion.name}</span>
+        </Col>
+      </Row>
     </span>
   );
 }
@@ -36,7 +49,15 @@ class TagRow extends Component {
       suggestions: [],
       selected: [],
       isShow: true,
+      openDropdown: false,
+      newName: '',
     };
+
+    this.color = '';
+    this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.inputClick = this.inputClick.bind(this);
+    this.selectColor = this.selectColor.bind(this);
+    this.createTag = this.createTag.bind(this);
   }
 
   onChange = (event, { newValue }) => {
@@ -67,9 +88,10 @@ class TagRow extends Component {
       this.setState({
         selected: selectedTemp,
         value: '',
-        users: resultTemp,
+        result: resultTemp,
         isShow: false,
       });
+      this.props.setValue(resultTemp);
     } else {
       this.setState({
         suggestions: this.getSuggestions(''),
@@ -100,6 +122,7 @@ class TagRow extends Component {
       users: tempResult,
       value: '',
     });
+    this.props.setValue(tempResult);
   }
 
   result() {
@@ -134,13 +157,49 @@ class TagRow extends Component {
     );
   }
 
+  inputClick(e) {
+    this.setState({ openDropdown: true });
+  }
+
+  toggleDropdown() {
+    this.setState({ openDropdown: !this.state.openDropdown });
+  }
+
+  selectColor(colorHex) {
+    this.color = colorHex;
+  }
+
+  async createTag() {
+    const newTag = {
+      name: this.state.newName,
+      color: this.color,
+      project_id: this.props.projectId,
+    };
+    const temp = this.state.selected;
+    const resultTemp = this.state.result;
+    const response = await apiHelper.post('/api/tags', newTag);
+    temp.push(response.data);
+    resultTemp.push({ id: response.data.id });
+    this.props.setValue(resultTemp);
+    this.setState({
+      openDropdown: false,
+      selected: temp,
+      newName: '',
+      result: resultTemp,
+    });
+    this.color = '';
+  }
+
   render() {
-    const { value, suggestions } = this.state;
+    const { value, suggestions, openDropdown } = this.state;
     const inputProps = {
-      placeholder: 'Find user',
+      placeholder: 'Select tag',
       value,
       onChange: this.onChange,
       onClick: this.onSuggestionSelected,
+    };
+    const menuStyle = {
+      padding: '5px 5px 5px 5px',
     };
 
     return (
@@ -163,12 +222,31 @@ class TagRow extends Component {
           </FormGroup>
         </Col>
         <Col xs={4} md={2}>
-          <Button bsStyle="primary" style={{ marginTop: 25 }}>New tag</Button>
+          <Dropdown open={openDropdown} dropup>
+            <div bsRole="toggle">
+              <Button
+                onClick={this.toggleDropdown}
+                bsStyle="primary"
+                style={{ marginTop: 25 }}
+              >
+                New tag
+              </Button>
+            </div>
+            <div className="dropdown-menu" style={menuStyle} bsRole="menu">
+              <FormGroup>
+                <FormControl
+                  type="text" placeholder="Tag name"
+                  onClick={this.inputClick} valueLink={linkState(this, 'newName')}
+                />
+              </FormGroup>
+              <WrapperColorpicker setColor={this.selectColor} />
+              <br />
+              <Button onClick={this.createTag}>Create</Button>
+            </div>
+          </Dropdown>
         </Col>
         <Col xs={12} md={4}>
-          <ControlLabel style={{ color: 'white' }}>
-            List of contributors
-          </ControlLabel>
+          <ControlLabel />
           <Row>
             <Col smOffset={0} sm={11}>
               {this.result()}
@@ -182,6 +260,8 @@ class TagRow extends Component {
 
 TagRow.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setValue: PropTypes.func.isRequired,
+  projectId: PropTypes.string.isRequired,
 };
 
 export default TagRow;

@@ -24,39 +24,42 @@ class NewProject extends Component {
         assignee_id: '',
         project_id: this.props.params.projectId,
         feature_id: '',
+        tags: [],
       },
     };
 
     this.create = this.create.bind(this);
     this.setAssignee = this.setAssignee.bind(this);
     this.setFeature = this.setFeature.bind(this);
+    this.setTags = this.setTags.bind(this);
   }
 
   async componentWillMount() {
     try {
-      const response = await apiHelper.get('/api/users', {
+      const responseUser = await apiHelper.get('/api/users', {
         project: this.props.params.projectId,
       });
-      const users = response.data;
-      console.log(users);
+      const users = responseUser.data;
       this.setState({ allUsers: users });
+
+      const responseTag = await apiHelper.get('/api/tags', {
+        project: this.props.params.projectId,
+      });
+      this.setState({ allTags: responseTag.data });
     } catch (err) {
       console.log(err);
     }
   }
 
   async create() {
-    console.log(this.state);
-    // try {
-    //   const response = await apiHelper.post('/api/projects', {
-    //     project: this.state.input,
-    //   });
-    //   const project = response.data;
-    //   this.props.projectActions.setProject(project);
-    //   document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const response = await apiHelper.post('/api/tasks', this.state.input);
+      const task = response.data;
+      console.log(task);
+      // document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   setAssignee(id) {
@@ -71,13 +74,13 @@ class NewProject extends Component {
     this.setState({ input: temp });
   }
 
+  setTags(idArr) {
+    const temp = this.state.input;
+    temp.tags = idArr;
+    this.setState({ input: temp });
+  }
+
   render() {
-    const tags = [
-      { id: 1, name: 'Tag A', color: 'green', },
-      { id: 2, name: 'Tag B', color: 'red', },
-      { id: 3, name: 'Tag C', color: 'yellow', },
-      { id: 4, name: 'Tag D', color: 'blue', },
-    ];
     const lineColor = {
       borderColor: '#7E8281',
     };
@@ -127,7 +130,7 @@ class NewProject extends Component {
               </Col>
             </Row>
             <Row>
-              <TagRow data={tags} />
+              <TagRow data={this.state.allTags} setValue={this.setTags} projectId={this.props.params.projectId} />
             </Row>
             <Row>
               <FormGroup style={buttonGroup}>
