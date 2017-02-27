@@ -23,7 +23,7 @@ function getSuggestionValue(suggestion) {
 function renderSuggestion(suggestion) {
   const suggestionText = `${suggestion.username} (${suggestion.email})`;
   return (
-    <span className={`suggestion-content${suggestion.image}`}>
+    <span className={`suggestion-content ${suggestion.image}`}>
       <span className="name">
         <span>{suggestionText}</span>
       </span>
@@ -58,6 +58,7 @@ class NewOrgContainer extends Component {
     try {
       const response = await apiHelper.get('/api/users');
       const users = response.data;
+      console.log(users);
       this.setState({ allUsers: users });
     } catch (err) {
       console.log(err);
