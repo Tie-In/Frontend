@@ -21,13 +21,21 @@ export default function lists(state = initialState, action) {
     case MOVE_CARD: {
       const newLists = [...state.lists];
       const { lastX, lastY, nextX, nextY } = action;
+      const movedTask = newLists[lastX].tasks[lastY];
       if (lastX === nextX) {
         newLists[lastX].tasks.splice(nextY, 0, newLists[lastX].tasks.splice(lastY, 1)[0]);
+        apiHelper.put(`/api/tasks/${movedTask.id}`, {
+          row_index: nextY,
+        });
       } else {
         // move element to new place
         newLists[nextX].tasks.splice(nextY, 0, newLists[lastX].tasks[lastY]);
         // delete element from old place
         newLists[lastX].tasks.splice(lastY, 1);
+        apiHelper.put(`/api/tasks/${movedTask.id}`, {
+          row_index: nextY,
+          column_id: newLists[nextX].id,
+        });
       }
       return Object.assign({}, state, {
         lists: newLists,
