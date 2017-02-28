@@ -22,4 +22,15 @@ export function get(path, parameter) {
   });
 }
 
+export function put(path, parameter) {
+  return axios({
+    method: 'PUT',
+    url: path,
+    params: parameter,
+    headers: {
+      Authorization: `${localStorage.getItem('token') || ''}`,
+    },
+  });
+}
+
 // export default { apiPost, apiGet };

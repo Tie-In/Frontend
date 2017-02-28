@@ -9,6 +9,7 @@ import '../../style/board.css';
 import CardsContainer from './Cards/CardsContainer';
 import CustomDragLayer from './CustomDragLayer';
 import NewList from './Cards/NewList';
+import * as apiHelper from '../../helpers/apiHelper';
 
 @DragDropContext(HTML5Backend)
 class Board extends Component {
@@ -31,14 +32,16 @@ class Board extends Component {
     this.state = { isScrolling: false };
   }
 
-  componentWillMount() {
-    const mock = [
-      {"id": 0,"name":"Incredible Metal Hat","cards":[{"id":0,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"}]},
-      {"id": 1,"name":"Increasadasds","cards":[{"id":10,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"}]},
-      {"id": 2,"name":"Incasdasd", "cards": []},
-    ];
-
-    this.props.listsActions.setList(mock);
+  async componentWillMount() {
+    try {
+      const responseSprint = await apiHelper.get('/api/sprints/1');
+      const sprint = responseSprint.data;
+      const statuses = sprint.statuses;
+      console.log(statuses);
+      this.props.listsActions.setList(statuses);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   startScrolling(direction) {
@@ -83,9 +86,16 @@ class Board extends Component {
     this.props.listsActions.moveList(lastX, nextX);
   }
 
-  createList(listName) {
+  async createList(listName) {
     const { lists } = this.props;
-    const temp = { id: lists.length, name: listName, cards: [] };
+    // const temp = { id: lists.length, name: listName, cards: [] };
+    const response = await apiHelper.post('/api/statuses', {
+      name: listName,
+      project_id: this.props.params.projectId,
+      column: lists.length,
+    });
+    const temp = response.data;
+
     lists.push(temp);
     this.setState({ isScrolling: true }, this.scrollRight());
     this.props.listsActions.setList(lists);
