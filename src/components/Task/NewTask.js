@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
 import * as projectActions from '../../actions/project-actions';
 import * as apiHelper from '../../helpers/apiHelper';
-import AutosuggestionBlock from './AutosuggestionBlock';
+import AutosuggestionBlock from '../shared/AutosuggestionBlock';
 import TagRow from './TagRow';
 import '../../style/autosuggestStyle.css';
 
@@ -123,10 +123,20 @@ class NewProject extends Component {
             </Row>
             <Row>
               <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
-                <AutosuggestionBlock title="Feature" data={this.props.project.features} setValue={this.setFeature} />
+                <FormGroup controlId="formInlineDetail">
+                  <ControlLabel>
+                    Feature
+                  </ControlLabel>
+                  <AutosuggestionBlock data={this.props.project.features} setValue={this.setFeature} />
+                </FormGroup>
               </Col>
               <Col xs={12} md={4}>
-                <AutosuggestionBlock title="Assignee (Optional)" data={this.state.allUsers} setValue={this.setAssignee} />
+                <FormGroup controlId="formInlineDetail">
+                  <ControlLabel>
+                    Assignee (Optional)
+                  </ControlLabel>
+                  <AutosuggestionBlock data={this.state.allUsers} setValue={this.setAssignee} />
+                  </FormGroup>
               </Col>
             </Row>
             <Row>

@@ -3,18 +3,15 @@ import { Label } from 'react-bootstrap';
 import image1 from '../../../images/user1.png';
 import EditModal from './EditModal';
 
-const propTypes = {
-  item: PropTypes.object.isRequired,
-  style: PropTypes.object,
-};
-
-
 class Card extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       openModal: false,
+      allFeatures: [],
+      allUsers: [],
+      allTags: [],
     };
 
     this.setModal = this.setModal.bind(this);
@@ -61,6 +58,9 @@ class Card extends Component {
   }
 }
 
-Card.propTypes = propTypes;
+Card.propTypes = {
+  item: PropTypes.object.isRequired,
+  style: PropTypes.object,
+};
 
 export default Card;

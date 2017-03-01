@@ -44,6 +44,14 @@ class Board extends Component {
     }
   }
 
+  // shouldComponentUpdate(nextProps) {
+  //   if (this.props.lists !== nextProps.lists) {
+  //     console.log(true);
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
   startScrolling(direction) {
     // if (!this.state.isScrolling) {
     switch (direction) {
@@ -113,6 +121,7 @@ class Board extends Component {
 
   render() {
     const { lists } = this.props;
+    console.log(lists);
     const width = 100 + ((lists.length - 2) * 20);
     const customWidth = {
       width: `${width}%`,
