@@ -18,9 +18,9 @@ class Card extends Component {
     this.setModal = this.setModal.bind(this);
   }
 
-  setModal(isOpen, statuses) {
-    if (statuses !== undefined) {
-      this.setState({ item: statuses[0].tasks[0] });
+  setModal(isOpen, task) {
+    if (task !== undefined) {
+      this.setState({ item: task });
     }
     this.setState({ openModal: isOpen });
   }

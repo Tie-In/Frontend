@@ -29,6 +29,8 @@ class Board extends Component {
     this.stopScrolling = this.stopScrolling.bind(this);
     this.startScrolling = this.startScrolling.bind(this);
     this.createList = this.createList.bind(this);
+    this.deleteStatus = this.deleteStatus.bind(this);
+    this.editStatus = this.editStatus.bind(this);
     this.state = { isScrolling: false };
   }
 
@@ -42,14 +44,6 @@ class Board extends Component {
       console.log(err);
     }
   }
-
-  // shouldComponentUpdate(nextProps) {
-  //   if (this.props.lists !== nextProps.lists) {
-  //     console.log(true);
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   startScrolling(direction) {
     // if (!this.state.isScrolling) {
@@ -118,9 +112,24 @@ class Board extends Component {
     };
   }
 
+  async deleteStatus(status) {
+    if (status.tasks.length === 0) {
+      const response = await apiHelper.del(`/api/statuses/${status.id}`);
+      this.props.listsActions.setList(response.data);
+    } else {
+      alert('Cannot deleted');
+    }
+  }
+
+  async editStatus(status, n) {
+    const response = await apiHelper.put(`/api/statuses/${status.id}`, {
+      name: n,
+    });
+    this.props.listsActions.setList(response.data);
+  }
+
   render() {
     const { lists } = this.props;
-    console.log(lists);
     const width = 100 + ((lists.length - 2) * 20);
     const customWidth = {
       width: `${width}%`,
@@ -141,6 +150,8 @@ class Board extends Component {
             stopScrolling={this.stopScrolling}
             isScrolling={this.state.isScrolling}
             x={i}
+            deleteStatus={this.deleteStatus}
+            editStatus={this.editStatus}
           />
         )}
         <NewList createList={this.createList} />

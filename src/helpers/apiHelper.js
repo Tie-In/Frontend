@@ -33,4 +33,12 @@ export function put(path, parameter) {
   });
 }
 
-// export default { apiPost, apiGet };
+export function del(path) {
+  return axios({
+    method: 'DELETE',
+    url: path,
+    headers: {
+      Authorization: `${localStorage.getItem('token') || ''}`,
+    },
+  });
+}

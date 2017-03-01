@@ -3,8 +3,8 @@ import { Modal, Col, Button, FormGroup, ControlLabel, FormControl, Form } from '
 import linkState from 'react-link-state';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as listsActions from '../../../actions/list-actions';
 import AutosuggestionBlock from '../../shared/AutosuggestionBlock';
+import * as listsActions from '../../../actions/list-actions';
 import * as apiHelper from '../../../helpers/apiHelper';
 
 class EditModal extends Component {
@@ -68,9 +68,10 @@ class EditModal extends Component {
   async closeModal() {
     try {
       const response = await apiHelper.put(`/api/tasks/${this.props.item.id}`, this.state.input);
-      const task = response.data;
+      const task = response.data.task;
+      const statuses = response.data.statuses;
       this.props.setShow(false, task);
-      this.props.listsActions.setList(task);
+      this.props.listsActions.setList(statuses);
     } catch (err) {
       console.log(err);
     }
@@ -185,6 +186,7 @@ EditModal.propTypes = {
   show: PropTypes.bool.isRequired,
   project: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
+
 function mapStateToProps(state) {
   return {
     project: state.project,
