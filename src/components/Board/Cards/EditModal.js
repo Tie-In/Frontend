@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import AutosuggestionBlock from '../../shared/AutosuggestionBlock';
 import * as listsActions from '../../../actions/list-actions';
 import * as apiHelper from '../../../helpers/apiHelper';
+import TagRow from './TagRow';
 
 class EditModal extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class EditModal extends Component {
         end_date: item.end_date,
         estimate_time: item.estimate_time,
         story_point: item.story_point,
+        tags: item.tags,
       },
       allUsers: [],
       allTags: [],
@@ -32,6 +34,7 @@ class EditModal extends Component {
     this.findItem = this.findItem.bind(this);
     this.setAssignee = this.setAssignee.bind(this);
     this.setFeature = this.setFeature.bind(this);
+    this.setTags = this.setTags.bind(this);
   }
 
   async componentWillMount() {
@@ -77,11 +80,11 @@ class EditModal extends Component {
     }
   }
 
-  // setTags(idArr) {
-  //   const temp = this.state.input;
-  //   temp.tags = idArr;
-  //   this.setState({ input: temp });
-  // }
+  setTags(idArr) {
+    const temp = this.state.input;
+    temp.tags = idArr;
+    this.setState({ input: temp });
+  }
 
   findItem(item) {
     return item.id === this.props.item.assignee_id;
@@ -136,6 +139,13 @@ class EditModal extends Component {
                     initSelect={this.state.allUsers.find(this.findItem)}
                   />
                 </Col>
+              </FormGroup>
+              <FormGroup>
+                <TagRow
+                  data={this.state.allTags} setValue={this.setTags}
+                  projectId={this.props.project.id}
+                  initSelect={item.tags}
+                />
               </FormGroup>
               <FormGroup>
                 <Col xs={3} componentClass={ControlLabel}>
