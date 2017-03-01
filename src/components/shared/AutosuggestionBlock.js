@@ -42,7 +42,6 @@ class AutosuggestionBlock extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.initSelect);
     if (this.props.initSelect) {
       this.setState({
         selected_id: this.props.initSelect.id,

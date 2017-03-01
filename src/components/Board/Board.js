@@ -37,7 +37,6 @@ class Board extends Component {
       const responseSprint = await apiHelper.get('/api/sprints/1');
       const sprint = responseSprint.data;
       const statuses = sprint.statuses;
-      console.log(statuses);
       this.props.listsActions.setList(statuses);
     } catch (err) {
       console.log(err);

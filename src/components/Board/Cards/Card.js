@@ -8,6 +8,7 @@ class Card extends Component {
     super(props);
 
     this.state = {
+      item: this.props.item,
       openModal: false,
       allFeatures: [],
       allUsers: [],
@@ -17,12 +18,16 @@ class Card extends Component {
     this.setModal = this.setModal.bind(this);
   }
 
-  setModal(isOpen) {
+  setModal(isOpen, statuses) {
+    if (statuses !== undefined) {
+      this.setState({ item: statuses[0].tasks[0] });
+    }
     this.setState({ openModal: isOpen });
   }
 
   render() {
-    const { style, item } = this.props;
+    const { style } = this.props;
+    const { item } = this.state;
 
     return (
       <div

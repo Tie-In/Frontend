@@ -69,7 +69,7 @@ class EditModal extends Component {
     try {
       const response = await apiHelper.put(`/api/tasks/${this.props.item.id}`, this.state.input);
       const task = response.data;
-      this.props.setShow(false);
+      this.props.setShow(false, task);
       this.props.listsActions.setList(task);
     } catch (err) {
       console.log(err);
