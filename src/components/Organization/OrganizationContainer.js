@@ -1,36 +1,24 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import axios from 'axios';
 import { Button, Row, Col, Image } from 'react-bootstrap';
 import ProjectCard from './ProjectCard';
 import * as organizationActions from '../../actions/organization-actions';
-import AddProject from '../../images/add-org.png';
+import AddProject from '../../images/newproject.png';
+import * as apiHelper from '../../helpers/apiHelper';
 
 class OrganizationContainer extends Component {
 
-  componentWillMount() {
-    this.fetchData();
-  }
-
-  fetchData() {
-    console.log('adadasdasd');
-    axios({
-      method: 'GET',
-      url: '/api/organizations/'.concat(this.props.params.organizationId),
-      headers: {
-        Authorization: this.props.user.auth_token,
-      },
-    }).then((response) => {
-      console.log(response);
+  async componentWillMount() {
+    try {
+      const response = await apiHelper.get(`/api/organizations/${this.props.params.organizationId}`);
       const org = response.data;
       this.props.organizationActions.setOrganization(org);
-    }).catch((error) => {
-      // no permission or not founded
+    } catch (err) {
+      console.log(err);
       localStorage.clear();
       document.location.href = '/login';
-      console.log(error);
-    });
+    }
   }
 
   buttonType(projects) {
@@ -47,15 +35,20 @@ class OrganizationContainer extends Component {
       left: '50%',
       transform: 'translate(-50%, 0)',
     };
+    const pStyle = {
+      margin: '0 0 0',
+    };
     if (projects.length > 0) {
       return (<Button href={newProjectPath}>
         Create new project
       </Button>);
     }
     return (
-      <div style={articleStyles}>
-        <Image src={AddProject} alt="Images" />
-        <p />
+      <div style={articleStyles} href={newProjectPath}>
+        <a href="/organization-new">
+          <Image src={AddProject} alt="Image" />
+        </a>
+        <p style={pStyle} />
         <Button href={newProjectPath} style={buttonDefaultStyle}>Create new project</Button>
       </div>
     );
@@ -85,7 +78,6 @@ class OrganizationContainer extends Component {
 }
 
 OrganizationContainer.propTypes = {
-  user: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
   organizationActions: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
@@ -93,7 +85,6 @@ OrganizationContainer.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    user: state.user,
     organization: state.organization,
   };
 }

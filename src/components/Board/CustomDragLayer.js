@@ -4,23 +4,21 @@ import { DragLayer } from 'react-dnd';
 import CardDragPreview from './CardDragPreview';
 import snapToGrid from './snapToGrid';
 
-
 const layerStyles = {
   position: 'fixed',
   pointerEvents: 'none',
-  zIndex: 100000
+  zIndex: 100000,
 };
 
 function getItemStyles(props) {
   const { initialOffset, currentOffset } = props;
   if (!initialOffset || !currentOffset) {
     return {
-      display: 'none'
+      display: 'none',
     };
   }
-
+  // 100 from navbar
   let { x, y } = currentOffset;
-
   if (props.snapToGrid) {
     x -= initialOffset.x;
     y -= initialOffset.y;
@@ -29,10 +27,10 @@ function getItemStyles(props) {
     y += initialOffset.y;
   }
 
-  const transform = `translate(${x}px, ${y}px)`;
+  const transform = `translate(${x - 100}px, ${y - 100}px)`;
   return {
     WebkitTransform: transform,
-    transform
+    transform,
   };
 }
 
@@ -41,7 +39,7 @@ function getItemStyles(props) {
   itemType: monitor.getItemType(),
   initialOffset: monitor.getInitialSourceClientOffset(),
   currentOffset: monitor.getSourceClientOffset(),
-  isDragging: monitor.isDragging()
+  isDragging: monitor.isDragging(),
 }))
 export default class CustomDragLayer extends Component {
   static propTypes = {
@@ -76,7 +74,6 @@ export default class CustomDragLayer extends Component {
     if (!isDragging) {
       return null;
     }
-
 
     return (
       <div style={layerStyles}>

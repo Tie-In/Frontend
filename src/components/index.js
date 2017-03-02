@@ -13,6 +13,7 @@ import NewProject from './Projects/NewProject';
 import ProjectHomeContainer from './Projects/ProjectHomeContainer';
 import BacklogContainer from './Backlog/BacklogContainer';
 import Board from './Board/Board';
+import NewTask from './Task/NewTask';
 
 module.exports = {
   Login,
@@ -30,4 +31,5 @@ module.exports = {
   ResultPlanningContainer,
   BacklogContainer,
   Board,
+  NewTask,
 };

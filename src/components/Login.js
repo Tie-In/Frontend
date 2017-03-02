@@ -1,11 +1,13 @@
 import { FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import linkState from 'react-link-state';
 import { bindActionCreators } from 'redux';
-import axios from 'axios';
+import { LinkContainer } from 'react-router-bootstrap';
 import logo from '../images/logo-login.png';
 import Background from '../images/BG-white.png';
 import * as userActions from '../actions/user-actions';
+import * as apiHelper from '../helpers/apiHelper';
 
 class Login extends Component {
 
@@ -19,8 +21,6 @@ class Login extends Component {
       error: '',
     };
 
-    this.handleEmail = this.handleEmail.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
     this.login = this.login.bind(this);
     this.register = this.register.bind(this);
   }
@@ -46,30 +46,22 @@ class Login extends Component {
     }
   }
 
-  login() {
-    let user = {};
-    axios.post('/api/sessions', {
+  async login() {
+    const data = {
       session: {
         email: this.state.email,
         password: this.state.password,
       },
-    }).then((response) => {
-      user = response.data;
+    };
+    try {
+      const response = await apiHelper.post('/api/sessions', data);
+      const user = response.data;
       this.props.userActions.setUser(user);
       this.findPath(user);
-    }).catch((response) => {
-      console.log(response.response.data.errors);
-      const errors = response.response.data.errors;
+    } catch (err) {
+      const errors = err.response.data.errors;
       this.setState({ error: errors });
-    });
-  }
-
-  handleEmail(event) {
-    this.setState({ email: event.target.value });
-  }
-
-  handlePassword(event) {
-    this.setState({ password: event.target.value });
+    }
   }
 
   doSomething(e) {
@@ -79,6 +71,7 @@ class Login extends Component {
   register() {
     document.location.href = '/register';
   }
+
   render() {
     const logoMargin = {
       marginBottom: 50,
@@ -121,34 +114,24 @@ class Login extends Component {
               <ControlLabel>Username or Email</ControlLabel>
               <FormControl
                 style={inputStyle}
-                onChange={this.handleEmail}
+                valueLink={linkState(this, 'email')}
               />
             </FormGroup>
             <FormGroup>
               <ControlLabel>Password</ControlLabel>
               <FormControl
                 style={inputStyle}
-                onChange={this.handlePassword}
+                valueLink={linkState(this, 'password')}
                 type="password"
               />
             </FormGroup>
             <p style={{ color: 'red' }}>{this.state.error}</p>
             <FormGroup>
               <Col sm={6}>
-                <Button
-                  style={registerButton}
-                  onClick={this.register}
-                  block
-                >
-                  Register
-                </Button>
+                <Button style={registerButton} onClick={this.register} block>Register</Button>
               </Col>
               <Col sm={6}>
-                <Button
-                  onClick={this.login}
-                  type="submit"
-                  block
-                >
+                <Button onClick={this.login} type="submit" block>
                   Sign in
                 </Button>
               </Col>

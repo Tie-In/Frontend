@@ -21,6 +21,7 @@ import {
   ResultPlanningContainer,
   BacklogContainer,
   Board,
+  NewTask,
 } from './components';
 import configureStore from './store/configure-store';
 
@@ -47,11 +48,13 @@ ReactDOM.render(
         </Route>
         <Route path="board" component={Board} />
         <Route path="backlog" component={BacklogContainer} />
+        <Route path="task-new" component={NewTask} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="register" component={Register} />
       </Route>
       <Route path="login" component={Login} />
+      <Route path="board" component={Board} />
     </Router>
   </Provider>,
   document.getElementById('root'),

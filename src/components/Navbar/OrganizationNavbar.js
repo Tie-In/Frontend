@@ -1,19 +1,16 @@
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
+import { Dropdown, MenuItem } from 'react-bootstrap';
+import avatar from '../../images/logo-login.png';
 import NavStyle from '../../style/navstyle.css';
 import logo from '../../images/logo.png';
-import { Link } from 'react-router';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Dropdown, MenuItem, Row, Col } from 'react-bootstrap';
-import avatar from '../../images/logo-login.png';
 import 'simple-line-icons/css/simple-line-icons.css';
-import * as userActions from '../../actions/user-actions';
 
 class OrganizationNavbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      menus: []
+      menus: [],
     };
   }
 
@@ -28,9 +25,6 @@ class OrganizationNavbar extends Component {
     };
     const sidebarStyle = {
       top: '70px',
-    };
-    const addMarginStyle = {
-      top: '10px',
     };
     const organizationsFromUser = this.props.user.organizations || [];
     const organizationNodes = organizationsFromUser.map((org) => {
@@ -89,7 +83,6 @@ class OrganizationNavbar extends Component {
 OrganizationNavbar.propTypes = {
   user: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -99,10 +92,4 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(userActions, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(OrganizationNavbar);
+export default connect(mapStateToProps)(OrganizationNavbar);

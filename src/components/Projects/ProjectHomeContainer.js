@@ -3,25 +3,19 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import axios from 'axios';
 import * as projectActions from '../../actions/project-actions';
+import * as apiHelper from '../../helpers/apiHelper';
 
 class ProjectHomeContainer extends Component {
 
-  componentDidMount() {
-    axios({
-      method: 'GET',
-      url: `/api/projects/${this.props.params.projectId}`,
-      headers: {
-        Authorization: this.props.user.auth_token,
-      },
-    }).then((response) => {
+  async componentWillMount() {
+    try {
+      const response = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
       const project = response.data;
-      console.log(project);
       this.props.projectActions.setProject(project);
-    }).catch((error) => {
-      console.log(error);
-    });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
@@ -50,15 +44,12 @@ class ProjectHomeContainer extends Component {
 }
 
 ProjectHomeContainer.propTypes = {
-  user: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   projectActions: PropTypes.object.isRequired,
-  params: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    user: state.user,
     project: state.project,
   };
 }

@@ -1,8 +1,11 @@
 import { Row, Col, Glyphicon, ButtonToolbar, Button } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 
-class List extends Component {
+function titleCase(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
+class List extends Component {
   render() {
     const { name, complexity } = this.props;
     const listStyle = {
@@ -15,7 +18,7 @@ class List extends Component {
             {name}
           </Col>
           <Col sm={2}>
-            {complexity}
+            {titleCase(complexity)}
           </Col>
           <Col sm={2}>
             <ButtonToolbar>
@@ -32,5 +35,9 @@ class List extends Component {
     );
   }
 }
+List.propTypes = {
+  name: PropTypes.string.isRequired,
+  complexity: PropTypes.string.isRequired,
+};
 
 export default List;

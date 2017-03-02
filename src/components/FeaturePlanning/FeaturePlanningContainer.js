@@ -33,7 +33,7 @@ class FeaturePlanningContainer extends Component {
     this.setState({
       input: {
         name: '',
-        complexity: '',
+        complexity: 'simple',
       },
       features: featuresTemp,
     });
@@ -98,10 +98,13 @@ class FeaturePlanningContainer extends Component {
     );
   }
 }
+FeaturePlanningContainer.propTypes = {
+  planning: PropTypes.object.isRequired,
+  planningActions: PropTypes.object.isRequired,
+};
 
 function mapStateToProps(state) {
   return {
-    user: state.user,
     planning: state.planning,
   };
 }

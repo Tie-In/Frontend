@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { DropTarget, DragSource } from 'react-dnd';
+import { Glyphicon, Dropdown, MenuItem } from 'react-bootstrap';
 
 import Cards from './Cards';
 
@@ -35,6 +36,7 @@ const listTarget = {
     }
     const { id: listId } = monitor.getItem();
     const { id: nextX } = props;
+
     if (listId !== nextX) {
       props.moveList(listId, props.x);
     }
@@ -59,17 +61,30 @@ export default class CardsContainer extends Component {
     isDragging: PropTypes.bool,
     startScrolling: PropTypes.func,
     stopScrolling: PropTypes.func,
-    isScrolling: PropTypes.bool
+    isScrolling: PropTypes.bool,
+    name: PropTypes.string,
+    createList: PropTypes.func.isRequired,
   }
 
   render() {
-    const { connectDropTarget, connectDragSource, item, x, moveCard, isDragging } = this.props;
+    const { connectDropTarget, connectDragSource, item, x, moveCard,
+      isDragging, name } = this.props;
     const opacity = isDragging ? 0.5 : 1;
 
     return connectDragSource(connectDropTarget(
       <div className="desk" style={{ opacity }}>
         <div className="desk-head">
-          <div className="desk-name">Slot name</div>
+          <div className="desk-name">
+            {name} <Dropdown className="pull-right" id="card-container-dropdown">
+              <Dropdown.Toggle noCaret>
+                <Glyphicon glyph="option-vertical" />
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <MenuItem eventKey="1">Edit name</MenuItem>
+                <MenuItem eventKey="2">Delete</MenuItem>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
         </div>
         <Cards
           moveCard={moveCard}

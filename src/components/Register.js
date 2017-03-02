@@ -2,9 +2,10 @@ import { Row, FormGroup, Col, Button, FormControl, ControlLabel, Checkbox } from
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { LinkContainer } from 'react-router-bootstrap';
 import linkState from 'react-link-state';
-import axios from 'axios';
 import * as userActions from '../actions/user-actions';
+import * as apiHelper from '../helpers/apiHelper';
 
 class Register extends Component {
 
@@ -21,6 +22,7 @@ class Register extends Component {
         password_confirmation: '',
         birth_date: '',
         phone_number: '',
+        image: 'user'.concat(Math.ceil(Math.random() * 4)),
       },
       error: {
         email: '',
@@ -41,7 +43,7 @@ class Register extends Component {
     this.validate = this.validate.bind(this);
   }
 
-  create() {
+  async create() {
     let pass = true;
     this.setState({ createClicked: true });
     Object.keys(this.state.error).forEach((key) => {
@@ -52,20 +54,21 @@ class Register extends Component {
       }
     });
     if (pass && this.state.input.password === this.state.input.password_confirmation) {
-      axios.post('/api/users', {
+      const data = {
         user: this.state.input,
-      }).then((response) => {
-        this.props.actions.setUser(response.data);
-        // go next
+      };
+      try {
+        const response = await apiHelper.post('/api/users', data);
+        const user = response.data;
+        this.props.userActions.setUser(user);
         document.location.href = '/';
-      }).catch((error) => {
-        console.log(error.response.data);
-        const err = error.response.data.errors;
+      } catch (err) {
+        const errors = err.response.data.errors;
         const errState = this.state.error;
-        if (err.email.length > 0) {
-          errState.email = err.email[0];
+        if (errors.email.length > 0) {
+          errState.email = errors.email[0];
         }
-      });
+      }
     }
   }
 
@@ -105,10 +108,6 @@ class Register extends Component {
       return (<h6 style={errorStyle}>{inputType} {this.state.error[inputType]}</h6>);
     }
     return null;
-  }
-
-  cancel() {
-    document.location.href = '/login';
   }
 
   render() {
@@ -249,13 +248,11 @@ class Register extends Component {
           <Row>
             <FormGroup>
               <Col smOffset={2} sm={4}>
-                <Button
-                  onClick={this.cancel}
-                  bsStyle="primary"
-                  block
-                >
-                  Cancel
-                </Button>
+                <LinkContainer to={{ pathname: 'login' }}>
+                  <Button bsStyle="primary" block>
+                    Cancel
+                  </Button>
+                </LinkContainer>
               </Col>
               <Col sm={4}>
                 <Button
@@ -274,7 +271,7 @@ class Register extends Component {
 }
 
 Register.propTypes = {
-  actions: PropTypes.object.isRequired,
+  userActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -285,7 +282,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(userActions, dispatch),
+    userActions: bindActionCreators(userActions, dispatch),
   };
 }
 

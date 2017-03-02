@@ -28,6 +28,16 @@ class FactorsTable extends Component {
     });
   }
 
+  computeResult() {
+    let temp = 0;
+    this.state.impacts.map((data) => {
+      temp += parseFloat(data);
+    });
+    this.props.setValue(this.props.valueTitle, temp);
+    this.props.setElements(this.props.elementsTitle, this.state.ratings);
+    return temp;
+  }
+
   renderRows() {
     const rows = [];
     this.props.factors.map((data) => {
@@ -40,16 +50,6 @@ class FactorsTable extends Component {
       );
     });
     return rows;
-  }
-
-  computeResult() {
-    let temp = 0;
-    this.state.impacts.map((data) => {
-      temp += parseFloat(data);
-    });
-    this.props.setValue(this.props.valueTitle, temp);
-    this.props.setElements(this.props.elementsTitle, this.state.ratings);
-    return temp;
   }
 
   render() {
@@ -99,7 +99,9 @@ FactorsTable.propTypes = {
   factors: PropTypes.arrayOf(PropTypes.object).isRequired,
   resultLabel: PropTypes.string.isRequired,
   valueTitle: PropTypes.string.isRequired,
+  elementsTitle: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,
+  setElements: PropTypes.func.isRequired,
 };
 
 export default FactorsTable;

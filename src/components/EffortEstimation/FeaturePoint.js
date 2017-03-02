@@ -3,7 +3,6 @@ import {
   Glyphicon,
 } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
-// import * as userActions from '../actions/user-actions';
 
 class FeaturePoint extends Component {
 
@@ -18,7 +17,7 @@ class FeaturePoint extends Component {
   }
 
   render() {
-    const { features } = this.props;
+    const { setValue } = this.props;
     const temp = {
       simple: this.countComplexity('simple'),
       medium: this.countComplexity('medium'),
@@ -44,7 +43,7 @@ class FeaturePoint extends Component {
       marginRight: '10px',
     };
     const UUCP = product.simple + product.medium + product.complex;
-    this.props.setValue('uucp', UUCP);
+    setValue('uucp', UUCP);
     return (
       <div>
         <h4>Calcuate UUCPs</h4>
@@ -86,5 +85,10 @@ class FeaturePoint extends Component {
     );
   }
 }
+
+FeaturePoint.propTypes = {
+  features: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setValue: PropTypes.func.isRequired,
+};
 
 export default FeaturePoint;
