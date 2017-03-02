@@ -14,14 +14,12 @@ hr {
 span #addButton, span #removeButton {
   padding: 0px;
   color: #A25E5D;
+  text-decoration: none;
+  outline:none;
+  border: none;
+  box-shadow: none;
 }
-/*.backlog #removeButton {
-  display: none;
-}
-.thisSprint #addButton {
-  display: none;
-}*/
-#tasklist {
+#taskslist {
   list-style-type: none;
   padding: 0px;
   vertical-align: middle;
@@ -38,6 +36,13 @@ ul>.row:hover {
   background-color: #A25E5D;
   cursor: pointer;
 }
+.backlog .completed{
+  color: grey;
+  font-style: italic;
+  text-decoration: line-through;
+}
+
+/*Modal*/
 .modal-container {
   position: relative;
   height: 200px;

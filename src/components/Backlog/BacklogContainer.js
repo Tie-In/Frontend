@@ -10,61 +10,80 @@ class BacklogContainer extends Component {
     super(props);
     this.state = {
       show: false,
-      status: '',
+      data: [
+        { id: 0, name: 'task wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdf', completed: false },
+        { id: 1, name: 'wf;l,pqwlkgp[wpoekgasfsafAsf]', completed: false },
+        { id: 2, name: 'fsegeryweoprpqwol;f,p[aqf]', completed: false },
+        { id: 3, name: 'eswtweoitowpktiuq0[ro]', completed: false },
+        { id: 4, name: 'wetawkeipotiwpoeltkkoww sprint', completed: false },
+        { id: 5, name: 'ewrwrp3oprlokdg,ld', completed: false },
+        { id: 6, name: 'ssdger[prkewjfk]', completed: false },
+        { id: 7, name: 'wrw3twqr', completed: false },
+      ],
     };
+    this.close = this.close.bind(this);
+    this.toggleTask = this.toggleTask.bind(this);
+  }
+
+  toggleTask(id) {
+    const tasks = this.state.data;
+    const task = tasks[id];
+    const completed = task.completed;
+    task.completed = !completed;
+
+    this.setState({
+      data: tasks,
+    });
+  }
+
+  close() {
+    this.setState({ show: false });
   }
 
   render() {
-    let close = () => this.setState({ show: false });
-    const data = [
-      { id: 1, name: 'task wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdf' },
-      { id: 2, name: 'wf;l,pqwlkgp[wpoekgasfsafAsf]' },
-      { id: 3, name: 'fsegeryweoprpqwol;f,p[aqf]' },
-      { id: 4, name: 'eswtweoitowpktiuq0[ro]' },
-      { id: 5, name: 'wetawkeipotiwpoeltkkoww sprint' },
-      { id: 6, name: 'ewrwrp3oprlokdg,ld' },
-      { id: 7, name: 'ssdger[prkewjfk]' },
-      { id: 8, name: 'wrw3twqr' },
-    ];
-    const backlogTaskNode = data.map((task) => {
+    const backlogTaskNode = this.state.data.map((task) => {
       return (
         <Row>
-          <li key={task.id} id="task">
-            <Col xs={10} md={11}><span id="taskName" onClick={() => this.setState({ show: true })}>{task.name}</span></Col>
-            <Col xs={1} md={1}><span className="icon-plus" role="button" id="addButton" /></Col>
+          <li key={task.id}>
+            <Col xs={10} md={11}><span className={task.completed === true ? 'completed' : ''} id="taskName" onClick={() => this.setState({ show: true })}>{task.name}</span></Col>
+            <Col xs={1} md={1}><span className="icon-plus" id="addButton" disabled={task.completed === true ? 'disabled' : ''} onClick={() => this.toggleTask(task.id)} /></Col>
           </li>
         </Row>
       );
     });
-    const sprintTaskNode = data.map((task) => {
-      return (
-        <Row>
-          <li key={task.id} id="task">
-            <Col xs={10} md={10}>
-              <span id="taskName" onClick={() => this.setState({ show: true })}>{task.name}</span></Col>
-            <Col xs={1} md={1}><span className="icon-close" role="button" id="addButton" /></Col>
-          </li>
-        </Row>
-      );
+    const sprintTaskNode = this.state.data.map((task) => {
+      if (task.completed) {
+        console.log(task);
+        return (
+          <Row>
+            <li key={task.id} className={task.completed === true ? 'completed' : ''}>
+              <Col xs={10} md={10}><span className={task.completed === true ? 'completed' : ''} id="taskName" onClick={() => this.setState({ show: true })}>{task.name}</span></Col>
+              <Col xs={1} md={1}><span className="icon-close" role="button" id="removeButton" onClick={() => this.toggleTask(task.id)}/></Col>
+            </li>
+          </Row>
+        );
+      }
+      return null;
     });
+
     return (
       <div className="backlogContainer" style={Style}>
         <Row>
           <Col sm={8}>
             <h4>Backlog</h4>
             <hr />
-            <ul className="backlog" id="tasklist">{backlogTaskNode}</ul>
+            <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
           </Col>
           <Col sm={4}>
             <h4>This sprint: </h4>
             <hr />
-            <ul className="sprint" id="tasklist">{sprintTaskNode}</ul>
+            <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
           </Col>
         </Row>
         <div className="modal-container">
           <Modal
             show={this.state.show}
-            onHide={close}
+            onHide={this.close}
             container={this}
             aria-labelledby="contained-modal-title"
           >
@@ -76,13 +95,11 @@ class BacklogContainer extends Component {
               wqfklm;lwEM
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={close}>Close</Button>
+              <Button onClick={this.close}>Close</Button>
             </Modal.Footer>
           </Modal>
         </div>
       </div>
-
-
     );
   }
 }
