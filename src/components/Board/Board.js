@@ -130,16 +130,16 @@ class Board extends Component {
 
   render() {
     const { lists } = this.props;
-    const width = 100 + ((lists.length - 2) * 20);
+    const width = 300 * (lists.length + 1);
     const customWidth = {
-      width: `${width}%`,
+      width: `${width}px`,
     };
 
     return (
       <main style={customWidth}>
         <CustomDragLayer snapToGrid={false} />
-        {lists.map((item, i) =>
-          <CardsContainer
+        {lists.map((item, i) => {
+          return (<CardsContainer
             key={item.id}
             id={item.id}
             name={item.name}
@@ -152,7 +152,8 @@ class Board extends Component {
             x={i}
             deleteStatus={this.deleteStatus}
             editStatus={this.editStatus}
-          />
+          />);
+        },
         )}
         <NewList createList={this.createList} />
       </main>
