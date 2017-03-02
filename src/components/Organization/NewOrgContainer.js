@@ -23,7 +23,7 @@ function getSuggestionValue(suggestion) {
 function renderSuggestion(suggestion) {
   const suggestionText = `${suggestion.username} (${suggestion.email})`;
   return (
-    <span className={`suggestion-content ${suggestion.image}`}>
+    <span className={`suggestion-content${suggestion.image}`}>
       <span className="name">
         <span>{suggestionText}</span>
       </span>
@@ -58,7 +58,6 @@ class NewOrgContainer extends Component {
     try {
       const response = await apiHelper.get('/api/users');
       const users = response.data;
-      console.log(users);
       this.setState({ allUsers: users });
     } catch (err) {
       console.log(err);
@@ -111,11 +110,14 @@ class NewOrgContainer extends Component {
   onSuggestionSelected = (event, { suggestion }) => {
     if (suggestion !== undefined) {
       const newUsernames = this.state.contributors.slice();
-      const newUsers = this.state.input.users.slice();
       newUsernames.push(suggestion);
+
+      const newUsers = this.state.input.users.slice();
       newUsers.push({ id: suggestion.id });
+
       const newInput = this.state.input;
       newInput.users = newUsers;
+
       this.setState({
         contributors: newUsernames,
         value: '',

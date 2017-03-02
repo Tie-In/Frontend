@@ -70,10 +70,10 @@
   border-color: black;
 }
 
-.tieinContainer {
-  width: 60%;
+/*.tieinContainer {
+  width: 100%;
   height: auto;
   right: 50%;
   transform: translate(50%);
   position: absolute;
-}
+}*/

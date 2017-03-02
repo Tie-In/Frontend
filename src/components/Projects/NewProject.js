@@ -89,11 +89,14 @@ class NewProject extends Component {
   onSuggestionSelected = (event, { suggestion }) => {
     if (suggestion !== undefined) {
       const newUsernames = this.state.contributors.slice();
-      const newUsers = this.state.input.users.slice();
       newUsernames.push(suggestion);
+
+      const newUsers = this.state.input.users.slice();
       newUsers.push({ id: suggestion.id });
+
       const newInput = this.state.input;
       newInput.users = newUsers;
+
       this.setState({
         contributors: newUsernames,
         value: '',
