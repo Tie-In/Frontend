@@ -31,15 +31,20 @@ span #addButton, span #removeButton {
   overflow: hidden;
   white-space: nowrap;
 }
-ul>.row:hover {
+.backlog .completed {
+  color: grey;
+}
+.backlog .completed #taskName{
+  font-style: italic;
+  text-decoration: line-through;
+}
+.row .completed:hover {
+  color: white;
+}
+ul .row:hover {
   color: white;
   background-color: #A25E5D;
   cursor: pointer;
-}
-.backlog .completed{
-  color: grey;
-  font-style: italic;
-  text-decoration: line-through;
 }
 
 /*Modal*/

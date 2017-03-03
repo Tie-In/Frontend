@@ -10,6 +10,7 @@ class BacklogContainer extends Component {
     super(props);
     this.state = {
       show: false,
+      taskID: 0,
       data: [
         { id: 0, name: 'task wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdftask wealgmlew;sdf', completed: false },
         { id: 1, name: 'wf;l,pqwlkgp[wpoekgasfsafAsf]', completed: false },
@@ -22,6 +23,7 @@ class BacklogContainer extends Component {
       ],
     };
     this.close = this.close.bind(this);
+    this.openModal = this.openModal.bind(this);
     this.toggleTask = this.toggleTask.bind(this);
   }
 
@@ -31,22 +33,27 @@ class BacklogContainer extends Component {
     const completed = task.completed;
     task.completed = !completed;
 
-    this.setState({
-      data: tasks,
-    });
+    this.setState({ data: tasks });
   }
 
   close() {
     this.setState({ show: false });
   }
 
+  openModal(id) {
+    this.setState({
+      show: true,
+      taskID: id,
+    });
+  }
+
   render() {
     const backlogTaskNode = this.state.data.map((task) => {
       return (
         <Row>
-          <li key={task.id}>
-            <Col xs={10} md={11}><span className={task.completed === true ? 'completed' : ''} id="taskName" onClick={() => this.setState({ show: true })}>{task.name}</span></Col>
-            <Col xs={1} md={1}><span className="icon-plus" id="addButton" disabled={task.completed === true ? 'disabled' : ''} onClick={() => this.toggleTask(task.id)} /></Col>
+          <li key={task.id} id="task" className={task.completed === true ? 'completed' : ''}>
+            <Col xs={10} md={11}><span id="taskName" onClick={() => this.openModal(task.id)}>{task.name}</span></Col>
+            <Col xs={1} md={1}><span className="icon-plus" id="addButton" onClick={() => this.toggleTask(task.id)} /></Col>
           </li>
         </Row>
       );
@@ -56,8 +63,8 @@ class BacklogContainer extends Component {
         console.log(task);
         return (
           <Row>
-            <li key={task.id} className={task.completed === true ? 'completed' : ''}>
-              <Col xs={10} md={10}><span className={task.completed === true ? 'completed' : ''} id="taskName" onClick={() => this.setState({ show: true })}>{task.name}</span></Col>
+            <li key={task.id} id="task" className={task.completed === true ? 'completed' : ''}>
+              <Col xs={10} md={10}><span id="taskName" onClick={() => this.openModal(task.id)}>{task.name}</span></Col>
               <Col xs={1} md={1}><span className="icon-close" role="button" id="removeButton" onClick={() => this.toggleTask(task.id)}/></Col>
             </li>
           </Row>
@@ -88,7 +95,7 @@ class BacklogContainer extends Component {
             aria-labelledby="contained-modal-title"
           >
             <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title">Contained Modal</Modal.Title>
+              <Modal.Title id="contained-modal-title">{this.state.data[this.state.taskID].name}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               Elit est explicabo .
