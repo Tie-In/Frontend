@@ -31,14 +31,18 @@ class Board extends Component {
     this.createList = this.createList.bind(this);
     this.deleteStatus = this.deleteStatus.bind(this);
     this.editStatus = this.editStatus.bind(this);
-    this.state = { isScrolling: false };
+    this.state = {
+      isScrolling: false,
+      sprintNumber: '',
+    };
   }
 
   async componentWillMount() {
     try {
-      const responseSprint = await apiHelper.get('/api/sprints/1');
-      const sprint = responseSprint.data;
-      const statuses = sprint.statuses;
+      const responseSprint = await apiHelper.get('/api/sprints/7');
+      const data = responseSprint.data;
+      this.setState({ sprintNumber: data.sprint.number });
+      const statuses = data.statuses;
       this.props.listsActions.setList(statuses);
     } catch (err) {
       console.log(err);
@@ -137,25 +141,30 @@ class Board extends Component {
 
     return (
       <main style={customWidth}>
-        <CustomDragLayer snapToGrid={false} />
-        {lists.map((item, i) => {
-          return (<CardsContainer
-            key={item.id}
-            id={item.id}
-            name={item.name}
-            item={item}
-            moveCard={this.moveCard}
-            moveList={this.moveList}
-            startScrolling={this.startScrolling}
-            stopScrolling={this.stopScrolling}
-            isScrolling={this.state.isScrolling}
-            x={i}
-            deleteStatus={this.deleteStatus}
-            editStatus={this.editStatus}
-          />);
-        },
-        )}
-        <NewList createList={this.createList} />
+        <div>
+          Sprint {this.state.sprintNumber}
+        </div>
+        <div>
+          <CustomDragLayer snapToGrid={false} />
+          {lists.map((item, i) => {
+            return (<CardsContainer
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              item={item}
+              moveCard={this.moveCard}
+              moveList={this.moveList}
+              startScrolling={this.startScrolling}
+              stopScrolling={this.stopScrolling}
+              isScrolling={this.state.isScrolling}
+              x={i}
+              deleteStatus={this.deleteStatus}
+              editStatus={this.editStatus}
+            />);
+          },
+          )}
+          <NewList createList={this.createList} />
+        </div>
       </main>
     );
   }
