@@ -7,6 +7,14 @@ import linkState from 'react-link-state';
 import * as userActions from '../actions/user-actions';
 import * as apiHelper from '../helpers/apiHelper';
 
+function validateEmail(email) {
+  if (email === '') {
+    return true;
+  }
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
 class Register extends Component {
 
   constructor(props) {
@@ -34,7 +42,7 @@ class Register extends Component {
         birth_date: '',
         phone_number: '',
       },
-      isError: false,
+      hasError: false,
       createClicked: false,
       user: {},
     };
@@ -44,13 +52,12 @@ class Register extends Component {
   }
 
   async create() {
-    let pass = true;
     this.setState({ createClicked: true });
-    Object.keys(this.state.error).forEach((key) => {
-      const value = this.state.error[key];
-      if (value !== '') {
+    let pass = true;
+    Object.keys(this.state.input).forEach((key) => {
+      const noError = this.validate(key);
+      if (!noError) {
         pass = false;
-        this.setState({ isError: true });
       }
     });
     if (pass && this.state.input.password === this.state.input.password_confirmation) {
@@ -65,40 +72,32 @@ class Register extends Component {
       } catch (err) {
         const errors = err.response.data.errors;
         const errState = this.state.error;
-        if (errors.email.length > 0) {
+        if (errors.email && errors.email.length > 0) {
           errState.email = errors.email[0];
         }
       }
     }
   }
 
-  validateEmail(email) {
-    if (email === '') {
-      return true;
-    }
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  }
-
   validate(inputType) {
     const input = this.state.input;
     const err = this.state.error;
     const value = input[inputType];
-    if (this.state.createClicked) {
-      if (value === '') {
-        err[inputType] = 'is required';
-        return false;
-      } else if (inputType === 'email' && !this.validateEmail(value)) {
-        err[inputType] = 'is incorrect format';
-        return false;
-      } else if (inputType === 'password_confirmation' && value !== input.password) {
-        err[inputType] = 'is not match to password';
-        return false;
-      }
-      err[inputType] = '';
+    let pass = false;
+    err[inputType] = '';
+    if (value === '') {
+      err[inputType] = 'is required';
+    } else if (inputType === 'email' && !validateEmail(value)) {
+      err.email = 'is incorrect format';
+    } else if (inputType === 'password_confirmation' && value !== input.password) {
+      err.password_confirmation = 'is not match to password';
+    } else {
+      pass = true;
     }
-    return true;
+    this.setState({ error: err });
+    return pass;
   }
+
   errorLabel(inputType) {
     const errorStyle = {
       color: '#d9534f',
@@ -132,7 +131,7 @@ class Register extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validate('firstname') ? null : 'error'}
+                validationState={this.state.error.firstname === '' ? null : 'error'}
               >
                 <ControlLabel>Firstname</ControlLabel>
                 <FormControl
@@ -144,7 +143,7 @@ class Register extends Component {
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validate('lastname') ? null : 'error'}
+                validationState={this.state.error.lastname === '' ? null : 'error'}
               >
                 <ControlLabel>Lastname</ControlLabel>
                 <FormControl
@@ -158,7 +157,7 @@ class Register extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validate('email') ? null : 'error'}
+                validationState={this.state.error.email === '' ? null : 'error'}
               >
                 <ControlLabel>Email address</ControlLabel>
                 <FormControl
@@ -170,7 +169,7 @@ class Register extends Component {
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validate('username') ? null : 'error'}
+                validationState={this.state.error.username === '' ? null : 'error'}
               >
                 <ControlLabel>Username</ControlLabel>
                 <FormControl
@@ -184,7 +183,7 @@ class Register extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validate('password') ? null : 'error'}
+                validationState={this.state.error.password === '' ? null : 'error'}
               >
                 <ControlLabel>Password</ControlLabel>
                 <FormControl
@@ -197,7 +196,7 @@ class Register extends Component {
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validate('password_confirmation') ? null : 'error'}
+                validationState={this.state.error.password_confirmation === '' ? null : 'error'}
               >
                 <ControlLabel>Confirm password</ControlLabel>
                 <FormControl
@@ -212,7 +211,7 @@ class Register extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validate('birth_date') ? null : 'error'}
+                validationState={this.state.error.birth_date === '' ? null : 'error'}
               >
                 <ControlLabel>Date of Birth</ControlLabel>
                 <FormControl
@@ -224,7 +223,7 @@ class Register extends Component {
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.validate('phone_number') ? null : 'error'}
+                validationState={this.state.error.phone_number === '' ? null : 'error'}
               >
                 <ControlLabel>Phone number</ControlLabel>
                 <FormControl
