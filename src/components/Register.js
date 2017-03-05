@@ -78,10 +78,14 @@ class Register extends Component {
         document.location.href = '/';
       } catch (err) {
         const errors = err.response.data.errors;
-        const errState = this.state.error;
+        const errTemp = this.state.error;
         if (errors.email && errors.email.length > 0) {
-          errState.email = errors.email[0];
+          errTemp.email = errors.email[0];
         }
+        if (errors.username && errors.username.length > 0) {
+          errTemp.username = errors.username[0];
+        }
+        this.setState({ error: errTemp });
       }
     }
   }
@@ -110,8 +114,10 @@ class Register extends Component {
       color: '#d9534f',
       marginLeft: '25px',
     };
+    const errorBreak = inputType.replace('_', ' ');
+    const errorWord = errorBreak.charAt(0).toUpperCase() + errorBreak.substr(1);
     if (this.state.error[inputType] !== '') {
-      return (<h6 style={errorStyle}>{inputType} {this.state.error[inputType]}</h6>);
+      return (<h6 style={errorStyle}>{errorWord} {this.state.error[inputType]}</h6>);
     }
     return null;
   }
