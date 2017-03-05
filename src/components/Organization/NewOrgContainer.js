@@ -32,7 +32,7 @@ function renderSuggestion(suggestion) {
 }
 
 Array.prototype.diff = function(a) {
-  return this.filter(function(i) {return a.indexOf(i) < 0;});
+  return this.filter((i) => { return a.indexOf(i) < 0; });
 };
 
 class NewOrgContainer extends Component {
@@ -59,7 +59,6 @@ class NewOrgContainer extends Component {
     try {
       const response = await apiHelper.get('/api/users');
       const users = response.data;
-      console.log(users);
       this.setState({ allUsers: users });
     } catch (err) {
       console.log(err);
@@ -114,7 +113,7 @@ class NewOrgContainer extends Component {
     let noError = true;
     if (this.state.input.name === '') {
       noError = false;
-      this.setState({ nameError: "Organization's is required" });
+      this.setState({ nameError: "Organization's name is required" });
     }
     if (noError) {
       try {
