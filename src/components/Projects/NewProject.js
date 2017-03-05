@@ -43,7 +43,7 @@ class NewProject extends Component {
       input: {
         name: '',
         description: '',
-        sprint_duration: '',
+        sprint_duration: 2,
         users: [],
         organization_id: this.props.params.organizationId,
       },
@@ -113,15 +113,30 @@ class NewProject extends Component {
   }
 
   async create() {
-    try {
-      const response = await apiHelper.post('/api/projects', {
-        project: this.state.input,
-      });
-      const project = response.data;
-      this.props.projectActions.setProject(project);
-      document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
-    } catch (err) {
-      console.log(err);
+    let noError = true;
+    if (this.state.input.name === '') {
+      noError = false;
+      this.setState({ nameError: "Organization's name is required" });
+    }
+    if (this.state.input.sprint_duration === '') {
+      noError = false;
+      this.setState({ sprintError: 'Sprint duration is required' });
+    }
+    if (noError) {
+      try {
+        const response = await apiHelper.post('/api/projects', {
+          project: this.state.input,
+        });
+        const project = response.data;
+        this.props.projectActions.setProject(project);
+        document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
+      } catch (err) {
+        const errData = err.response.data.errors;
+        if (errData.name) {
+          this.setState({ nameError: errData.name });
+        }
+        console.log(errData);
+      }
     }
   }
 
@@ -144,8 +159,8 @@ class NewProject extends Component {
   }
 
   contributor() {
-    const content = this.state.contributors.map((contributor) =>
-      <Row key={contributor.id}>
+    const content = this.state.contributors.map((contributor) => {
+      return (<Row key={contributor.id}>
         <Col smOffset={0} xs={9} md={10}>
           <span className={`suggestion-content ${contributor.image}`}>
             <span className="name">
@@ -154,11 +169,12 @@ class NewProject extends Component {
           </span>
         </Col>
         <Col smOffset={0} xs={2} md={2}>
-          <Button bsStyle="primary" onClick={() => this.removeContributor(contributor.id)}>
+          <Button bsStyle="primary" onClick={() => { this.removeContributor(contributor.id); }}>
             <Glyphicon glyph="remove" />
           </Button>
         </Col>
-      </Row>
+      </Row>);
+    },
     );
     return (
       <div>
@@ -168,12 +184,6 @@ class NewProject extends Component {
   }
 
   render() {
-    const lineColor = {
-      borderColor: '#7E8281',
-    };
-    const titleColor = {
-      color: '#A25E5D',
-    };
     const buttonGroup = {
       marginTop: '20px',
     };
@@ -200,6 +210,10 @@ class NewProject extends Component {
       onChange: this.onChange,
       onClick: this.onSuggestionSelected,
     };
+    const errorStyle = {
+      color: '#d9534f',
+      marginLeft: '25px',
+    };
     const previousURL = `/organizations/${this.state.input.organizationId}`;
 
     return (
@@ -208,13 +222,14 @@ class NewProject extends Component {
           <Form>
             <Row>
               <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                <h3 style={titleColor}>Create new project</h3>
-                <hr style={lineColor} />
+                <h3 className="header-label">Create new project</h3>
+                <hr className="header-line" />
                 <FormGroup controlId="formInlineName">
                   <ControlLabel>
                     Project&#39;s name
                   </ControlLabel>
                   <FormControl type="text" placeholder="Name" valueLink={linkState(this, 'input.name')} />
+                  <h6 style={errorStyle}>{this.state.nameError}</h6>
                 </FormGroup>
               </Col>
             </Row>
@@ -222,7 +237,7 @@ class NewProject extends Component {
               <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
                 <FormGroup controlId="formInlineDetail">
                   <ControlLabel>
-                    Description
+                    Description (optional)
                   </ControlLabel>
                   <FormControl type="text" placeholder="Description of organization" valueLink={linkState(this, 'input.description')} />
                 </FormGroup>
@@ -232,9 +247,10 @@ class NewProject extends Component {
               <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
                 <FormGroup controlId="formInlineDetail">
                   <ControlLabel>
-                    Sprint duration
+                    Sprint duration (weeks)
                   </ControlLabel>
-                  <FormControl type="number" min="0" placeholder="Sprint duration (week)" valueLink={linkState(this, 'input.sprint_duration')} />
+                  <FormControl type="number" min="1" placeholder="Sprint duration (week)" valueLink={linkState(this, 'input.sprint_duration')} />
+                  <h6 style={errorStyle}>{this.state.sprintError}</h6>
                 </FormGroup>
               </Col>
             </Row>
