@@ -4,8 +4,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import linkState from 'react-link-state';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 import * as userActions from '../actions/user-actions';
 import * as apiHelper from '../helpers/apiHelper';
+import 'react-datepicker/dist/react-datepicker.css';
+import '../style/customDatepicker.css';
 
 function validateEmail(email) {
   if (email === '') {
@@ -42,6 +46,7 @@ class Register extends Component {
         birth_date: '',
         phone_number: '',
       },
+      selectedDate: '',
       hasError: false,
       createClicked: false,
       user: {},
@@ -49,11 +54,13 @@ class Register extends Component {
 
     this.create = this.create.bind(this);
     this.validate = this.validate.bind(this);
+    this.handleChangeDate = this.handleChangeDate.bind(this);
   }
 
   async create() {
     this.setState({ createClicked: true });
     let pass = true;
+    // check have error
     Object.keys(this.state.input).forEach((key) => {
       const noError = this.validate(key);
       if (!noError) {
@@ -108,6 +115,16 @@ class Register extends Component {
     }
     return null;
   }
+
+  handleChangeDate(date) {
+    const temp = this.state.input;
+    temp.birth_date = date.format('L');
+    this.setState({
+      input: temp,
+      selectedDate: date,
+    });
+  }
+
 
   render() {
     const containerStyle = {
@@ -214,9 +231,14 @@ class Register extends Component {
                 validationState={this.state.error.birth_date === '' ? null : 'error'}
               >
                 <ControlLabel>Date of Birth</ControlLabel>
-                <FormControl
-                  placeholder="MM/DD/YYYY"
-                  valueLink={linkState(this, 'input.birth_date')}
+                <DatePicker
+                  selected={this.state.selectedDate}
+                  onChange={this.handleChangeDate}
+                  placeholderText="MM/DD/YYYY"
+                  maxDate={moment()}
+                  className="form-control"
+                  peekNextMonth showMonthDropdown showYearDropdown
+                  dropdownMode="select"
                 />
                 {this.errorLabel('birth_date')}
               </FormGroup>
