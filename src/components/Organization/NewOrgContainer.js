@@ -46,6 +46,7 @@ class NewOrgContainer extends Component {
         description: '',
         users: [],
       },
+      nameError: '',
       value: '',
       suggestions: [],
       contributors: [],
@@ -69,31 +70,6 @@ class NewOrgContainer extends Component {
       value: newValue,
     });
   };
-
-  getSuggestions(value) {
-    const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
-    if (inputValue === '') {
-      return [];
-    }
-    const availableUsers = this.state.allUsers.diff(this.state.contributors);
-    const regex = new RegExp('\\b' + inputValue, 'i');
-    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
-  }
-
-  async create() {
-    try {
-      const response = await apiHelper.post('/api/organizations', {
-        organization: this.state.input,
-      });
-      const org = response.data.organization;
-      const user = response.data.user;
-      this.props.organizationActions.setOrganization(org);
-      this.props.userActions.setUser(user);
-      document.location.href = `/organizations/${org.id}`;
-    } catch (err) {
-      console.log(err.response);
-    }
-  }
 
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
@@ -120,6 +96,38 @@ class NewOrgContainer extends Component {
         value: '',
         input: newInput,
       });
+    }
+  }
+
+  getSuggestions(value) {
+    const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
+    if (inputValue === '') {
+      return [];
+    }
+    const availableUsers = this.state.allUsers.diff(this.state.contributors);
+    const regex = new RegExp('\\b' + inputValue, 'i');
+    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
+  }
+
+  async create() {
+    let noError = true;
+    if (this.state.input.name === '') {
+      noError = false;
+      this.setState({ nameError: "Organization's is required" });
+    }
+    if (noError) {
+      try {
+        const response = await apiHelper.post('/api/organizations', {
+          organization: this.state.input,
+        });
+        const org = response.data.organization;
+        const user = response.data.user;
+        this.props.organizationActions.setOrganization(org);
+        this.props.userActions.setUser(user);
+        document.location.href = `/organizations/${org.id}`;
+      } catch (err) {
+        console.log(err.response);
+      }
     }
   }
 
@@ -218,7 +226,7 @@ class NewOrgContainer extends Component {
               <Col xs={12} md={8} mdOffset={2}>
                 <FormGroup controlId="formInlineDetail">
                   <ControlLabel>
-                    Description
+                    Description (optional)
                   </ControlLabel>
                   <FormControl type="text" placeholder="Description of organization" valueLink={linkState(this, 'input.description')} />
                 </FormGroup>
