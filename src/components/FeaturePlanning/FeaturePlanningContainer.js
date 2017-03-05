@@ -51,8 +51,8 @@ class FeaturePlanningContainer extends Component {
   render() {
     return (
       <div className="tieinContainer">
-        <h3 className="headerLabel">Add Planning Feature</h3>
-        <hr className="headerLine" />
+        <h3 className="header-label">Add Planning Feature</h3>
+        <hr className="header-line" />
         <form onSubmit={this.doSomething}>
           <Row>
             <Col sm={8}>

@@ -151,8 +151,8 @@ class NewOrgContainer extends Component {
   }
 
   contributor() {
-    const content = this.state.contributors.map((contributor) =>
-      <Row key={contributor.id}>
+    const content = this.state.contributors.map((contributor) => {
+      return (<Row key={contributor.id}>
         <Col smOffset={0} xs={9} md={10}>
           <span className={`suggestion-content ${contributor.image}`}>
             <span className="name">
@@ -161,11 +161,12 @@ class NewOrgContainer extends Component {
           </span>
         </Col>
         <Col smOffset={0} xs={2} md={2}>
-          <Button bsStyle="primary" onClick={() => this.removeContributor(contributor.id)}>
+          <Button bsStyle="primary" onClick={() => { this.removeContributor(contributor.id); }}>
             <Glyphicon glyph="remove" />
           </Button>
         </Col>
-      </Row>
+      </Row>);
+    },
     );
     return (
       <div>
@@ -175,12 +176,6 @@ class NewOrgContainer extends Component {
   }
 
   render() {
-    const lineColor = {
-      borderColor: '#7E8281',
-    };
-    const titleColor = {
-      color: '#A25E5D',
-    };
     const buttonGroup = {
       marginTop: '20px',
     };
@@ -206,6 +201,10 @@ class NewOrgContainer extends Component {
       onChange: this.onChange,
       onClick: this.onSuggestionSelected,
     };
+    const errorStyle = {
+      color: '#d9534f',
+      marginLeft: '25px',
+    };
 
     return (
       <div>
@@ -213,13 +212,14 @@ class NewOrgContainer extends Component {
           <Form>
             <Row>
               <Col xs={12} md={8} mdOffset={2}>
-                <h3 style={titleColor}>Create new organization</h3>
-                <hr style={lineColor} />
-                <FormGroup controlId="formInlineName">
+                <h3 className="header-label">Create new organization</h3>
+                <hr className="header-line" />
+                <FormGroup validationState={this.state.nameError === '' ? null : 'error'}>
                   <ControlLabel>
                     Organization&#39;s name
                   </ControlLabel>
                   <FormControl type="text" placeholder="Name" valueLink={linkState(this, 'input.name')} />
+                  <h6 style={errorStyle}>{this.state.nameError}</h6>
                 </FormGroup>
               </Col>
             </Row>
