@@ -20,23 +20,30 @@ class FeaturePlanningContainer extends Component {
         name: '',
         complexity: 'simple',
       },
+      error: false,
     };
 
     this.addFeature = this.addFeature.bind(this);
     this.sendFeatures = this.sendFeatures.bind(this);
+    this.removeFeature = this.removeFeature.bind(this);
   }
 
   addFeature() {
-    const temp = this.state.input;
-    const featuresTemp = this.state.features;
-    featuresTemp.push(temp);
-    this.setState({
-      input: {
-        name: '',
-        complexity: 'simple',
-      },
-      features: featuresTemp,
-    });
+    if (this.state.input.name === '') {
+      this.setState({ error: true });
+    } else {
+      this.setState({ error: false });
+      const temp = this.state.input;
+      const featuresTemp = this.state.features;
+      featuresTemp.push(temp);
+      this.setState({
+        input: {
+          name: '',
+          complexity: 'simple',
+        },
+        features: featuresTemp,
+      });
+    }
   }
 
   sendFeatures() {
@@ -48,7 +55,14 @@ class FeaturePlanningContainer extends Component {
     e.preventDefault();
   }
 
+  removeFeature(index) {
+    const temp = this.state.features;
+    temp.splice(index, 1);
+    this.setState({ features: temp });
+  }
+
   render() {
+    const { features } = this.state;
     return (
       <div className="tieinContainer">
         <h3 className="header-label">Add Planning Feature</h3>
@@ -56,7 +70,7 @@ class FeaturePlanningContainer extends Component {
         <form onSubmit={this.doSomething}>
           <Row>
             <Col sm={8}>
-              <FormGroup>
+              <FormGroup validationState={this.state.error ? 'error' : null}>
                 <ControlLabel>Feature</ControlLabel>
                 <FormControl
                   placeholder="Feature name"
@@ -86,8 +100,14 @@ class FeaturePlanningContainer extends Component {
             </Col>
           </Row>
         </form>
-        {this.state.features.map(function(data) {
-          return <List name={data.name} complexity={data.complexity} />;
+        {features.map((data) => {
+          const index = features.indexOf(data);
+          return (<List
+            key={index}
+            name={data.name} index={index}
+            complexity={data.complexity}
+            remove={this.removeFeature}
+          />);
         })}
         <Row>
           <Col smOffset={4} sm={4}>

@@ -33,7 +33,7 @@ class Container extends Component {
         <div>
           <p>Most used week: {Math.ceil(this.state.effort_estimation.upper_weeks)}</p>
           <p>Low used week: {Math.floor(this.state.effort_estimation.lower_weeks)}</p>
-          <p>Developerd number: {Math.floor(this.state.effort_estimation.developers)}</p>
+          <p>Developer number: {Math.floor(this.state.effort_estimation.developers)}</p>
           <ProgressBar now={60} />
           <hr />
         </div>
