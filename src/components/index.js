@@ -12,6 +12,7 @@ import OrganizationNavbar from './Navbar/OrganizationNavbar';
 import NewProject from './Projects/NewProject';
 import ProjectHomeContainer from './Projects/ProjectHomeContainer';
 import Board from './Board/Board';
+import NewTask from './Task/NewTask';
 
 module.exports = {
   Login,
@@ -28,4 +29,5 @@ module.exports = {
   OrganizationNavbar,
   ResultPlanningContainer,
   Board,
+  NewTask,
 };

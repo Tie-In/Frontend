@@ -21,7 +21,7 @@ class NormalNavbar extends Component {
     const data = [
       { id: 1, name: 'Project', path: `${path}#` },
       { id: 2, name: 'Backlog', path: '/backlog' },
-      { id: 3, name: 'New task', path: '/newTask' },
+      { id: 3, name: 'New task', path: `${path}/task-new` },
       { id: 4, name: 'Planning', path: `${path}/planning` },
       { id: 5, name: 'Active sprint', path: `${path}/board` },
       { id: 6, name: 'Retrospective', path: '/retrospective' },
