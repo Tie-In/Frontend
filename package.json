@@ -1,7 +1,6 @@
 {
   "name": "Tie-InFrontend",
   "version": "0.0.1",
-  "private": true,
   "devDependencies": {
     "autoprefixer": "6.3.7",
     "babel-core": "6.11.4",
@@ -52,10 +51,14 @@
     "faker": "^3.1.0",
     "immutable": "^3.8.1",
     "jquery": "^3.1.1",
+    "moment": "^2.17.1",
+    "moment-range": "^3.0.3",
     "react": "^15.4.2",
     "react-autosuggest": "^8.0.0",
     "react-background-image-loader": "0.0.1",
     "react-bootstrap": "^0.30.7",
+    "react-datepicker": "^0.41.1",
+    "react-color": "^2.11.1",
     "react-dnd": "^2.2.0",
     "react-dnd-html5-backend": "^2.2.0",
     "react-dom": "^15.2.1",
