@@ -49,14 +49,17 @@ class BacklogContainer extends Component {
 
   render() {
     const backlogTaskNode = this.state.data.map((task) => {
-      return (
-        <Row>
-          <li key={task.id} id="task" className={task.completed === true ? 'completed' : ''}>
-            <Col xs={10} md={11}><span id="taskName" onClick={() => this.openModal(task.id)}>{task.name}</span></Col>
-            <Col xs={1} md={1}><span className="icon-plus" id="addButton" onClick={() => this.toggleTask(task.id)} /></Col>
-          </li>
-        </Row>
-      );
+      if (!task.completed) {
+        return (
+          <Row>
+            <li key={task.id} id="task" className={task.completed === true ? 'completed' : ''}>
+              <Col xs={10} md={11}><span id="taskName" onClick={() => this.openModal(task.id)}>{task.name}</span></Col>
+              <Col xs={1} md={1}><span className="icon-plus" id="addButton" onClick={() => this.toggleTask(task.id)} /></Col>
+            </li>
+          </Row>
+        );
+      }
+      return null;
     });
     const sprintTaskNode = this.state.data.map((task) => {
       if (task.completed) {
