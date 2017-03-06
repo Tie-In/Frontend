@@ -15,8 +15,11 @@ class ProjectCard extends Component {
     };
     const { project } = this.props;
     const descriptionStyle = {
-      width: '90%',
+      width: '87%',
       position: 'absolute',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     };
     console.log(project);
     return (
@@ -26,6 +29,7 @@ class ProjectCard extends Component {
             <a key={project.name}><h3>{project.name}</h3></a>
           </LinkContainer>
           <p style={descriptionStyle}>{project.description}</p>
+          <span className={`suggestion-content${project.users}`}></span>
         </div>
       </div>
     );
