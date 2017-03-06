@@ -48,10 +48,13 @@ ul .row:hover {
 }
 
 /*Modal*/
-.modal-container {
-  position: relative;
-  height: 200px;
+.modal-container Modal{
+  position: fixed;
+  height: 100%;
 }
 .modal-container .modal, .modal-container .modal-backdrop {
   position: absolute;
+}
+.modal-content {
+  margin-top: 30%;
 }

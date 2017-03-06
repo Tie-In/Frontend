@@ -74,38 +74,38 @@ class BacklogContainer extends Component {
     });
 
     return (
-      <div className="backlogContainer" style={Style}>
-        <Row>
-          <Col sm={8}>
-            <h4>Backlog</h4>
-            <hr />
-            <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
-          </Col>
-          <Col sm={4}>
-            <h4>This sprint: </h4>
-            <hr />
-            <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
-          </Col>
-        </Row>
-        <div className="modal-container">
-          <Modal
-            show={this.state.show}
-            onHide={this.close}
-            container={this}
-            aria-labelledby="contained-modal-title"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title">{this.state.data[this.state.taskID].name}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              Elit est explicabo .
-              wqfklm;lwEM
-            </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={this.close}>Close</Button>
-            </Modal.Footer>
-          </Modal>
+      <div className="modal-container">
+        <div className="backlogContainer" style={Style}>
+          <Row>
+            <Col sm={8}>
+              <h4>Backlog</h4>
+              <hr />
+              <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
+            </Col>
+            <Col sm={4}>
+              <h4>This sprint: </h4>
+              <hr />
+              <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
+            </Col>
+          </Row>
         </div>
+        <Modal
+          show={this.state.show}
+          onHide={this.close}
+          container={this}
+          aria-labelledby="contained-modal-title"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title">{this.state.data[this.state.taskID].name}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Elit est explicabo .
+            wqfklm;lwEM
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.close}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
