@@ -28,8 +28,8 @@ class ProjectHomeContainer extends Component {
     };
     return (
       <div className="tieinContainer">
-        <h3 className="headerLabel">{project.name}</h3>
-        <hr className="headerLine" />
+        <h3 className="header-label">{project.name}</h3>
+        <hr className="header-line" />
         <div className="container" style={cardStyle}>
           <p>{project.description}</p>
         </div>

@@ -1,4 +1,4 @@
-import { Row, Col, Glyphicon, ButtonToolbar, Button } from 'react-bootstrap';
+import { Row, Col, Glyphicon, Button } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 
 function titleCase(string) {
@@ -6,10 +6,24 @@ function titleCase(string) {
 }
 
 class List extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: this.props.name,
+      complexity: this.props.complexity,
+    };
+  }
+
   render() {
-    const { name, complexity } = this.props;
+    const { name, complexity, index, remove } = this.props;
     const listStyle = {
       marginBottom: '15px',
+    };
+    const buttonStyle = {
+      margin: '0 auto',
+      display: 'block',
     };
     return (
       <div style={listStyle}>
@@ -21,14 +35,12 @@ class List extends Component {
             {titleCase(complexity)}
           </Col>
           <Col sm={2}>
-            <ButtonToolbar>
-              <Button bsStyle="primary">
-                <Glyphicon glyph="pencil" />
-              </Button>
-              <Button bsStyle="primary">
-                <Glyphicon glyph="remove" />
-              </Button>
-            </ButtonToolbar>
+            <Button
+              bsStyle="primary" style={buttonStyle}
+              onClick={() => { remove(index); }}
+            >
+              <Glyphicon glyph="remove" />
+            </Button>
           </Col>
         </Row>
       </div>
@@ -38,6 +50,8 @@ class List extends Component {
 List.propTypes = {
   name: PropTypes.string.isRequired,
   complexity: PropTypes.string.isRequired,
+  index: PropTypes.number,
+  remove: PropTypes.func.isRequired,
 };
 
 export default List;

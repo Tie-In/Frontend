@@ -28,19 +28,19 @@ class Container extends Component {
   render() {
     return (
       <div className="tieinContainer">
-        <h3 className="headerLabel">Planning Result</h3>
-        <hr className="headerLine" />
+        <h3 className="header-label">Planning Result</h3>
+        <hr className="header-line" />
         <div>
           <p>Most used week: {Math.ceil(this.state.effort_estimation.upper_weeks)}</p>
           <p>Low used week: {Math.floor(this.state.effort_estimation.lower_weeks)}</p>
-          <p>Developerd number: {Math.floor(this.state.effort_estimation.developers)}</p>
+          <p>Developer number: {Math.floor(this.state.effort_estimation.developers)}</p>
           <ProgressBar now={60} />
           <hr />
         </div>
         <Row>
           <Col sm={6}>
-            <h4 className="headerLabel">Planning Features</h4>
-            <hr className="headerLine" />
+            <h4 className="header-label">Planning Features</h4>
+            <hr className="header-line" />
             <Table striped bordered condensed hover>
               <thead>
                 <tr>
@@ -61,8 +61,8 @@ class Container extends Component {
           </Col>
           <Col sm={6}>
             <Row>
-              <h4 className="headerLabel">Technical Factors</h4>
-              <hr className="headerLine" />
+              <h4 className="header-label">Technical Factors</h4>
+              <hr className="header-line" />
               <Table striped bordered condensed hover>
                 <thead>
                   <tr>
@@ -85,8 +85,8 @@ class Container extends Component {
               </Table>
             </Row>
             <Row>
-              <h4 className="headerLabel">Environmental Factors</h4>
-              <hr className="headerLine" />
+              <h4 className="header-label">Environmental Factors</h4>
+              <hr className="header-line" />
               <Table striped bordered condensed hover>
                 <thead>
                   <tr>
