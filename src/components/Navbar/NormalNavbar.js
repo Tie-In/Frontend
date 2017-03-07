@@ -1,13 +1,12 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Dropdown, MenuItem } from 'react-bootstrap';
+import DocumentTitle from 'react-document-title';
+import 'simple-line-icons/css/simple-line-icons.css';
 import NavStyle from '../../style/navstyle.css';
 import logo from '../../images/logo.png';
 import avatar from '../../images/logo-login.png';
-import 'simple-line-icons/css/simple-line-icons.css';
-import * as userActions from '../../actions/user-actions';
 
 class NormalNavbar extends Component {
 
@@ -46,57 +45,59 @@ class NormalNavbar extends Component {
     });
 
     return (
-      <div className="App" style={NavStyle}>
-        <header role="banner">
-          <nav id="navbar-primary" className="navbar navbar-default" role="navigation">
-            <div className="container-fluid">
-              <img id="logo-main" src={logo} alt="Logo Thing main logo" />
-              <div className="navbar-header">
-                <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-primary-collapse">
-                  <span className="sr-only">Toggle navigation</span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
-                </button>
+      <DocumentTitle title={this.props.project.name}>
+        <div className="App" style={NavStyle}>
+          <header role="banner">
+            <nav id="navbar-primary" className="navbar navbar-default" role="navigation">
+              <div className="container-fluid">
+                <img id="logo-main" src={logo} alt="Logo Thing main logo" />
+                <div className="navbar-header">
+                  <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-primary-collapse">
+                    <span className="sr-only">Toggle navigation</span>
+                    <span className="icon-bar"></span>
+                    <span className="icon-bar"></span>
+                    <span className="icon-bar"></span>
+                  </button>
+                </div>
+                <div className="collapse navbar-collapse" id="navbar-primary-collapse">
+                  <ul className="nav navbar-nav">
+                    <li className="pull-left" id="slide-sidebar"><a href="#sidebar-nav">{this.props.organization.name}<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a></li>
+                    {menuNode}
+                    <Dropdown className="pull-right" id="profile-dropdown">
+                      <Dropdown.Toggle>
+                        <img id="avatar" src={avatar} alt="avatar"></img>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <MenuItem eventKey="1" href={`/organizations/${this.props.organization.id}/profile`}>Profile</MenuItem>
+                        <MenuItem eventKey="2">Setting</MenuItem>
+                        <MenuItem divider />
+                        <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    <div className="searchBox input-group pull-right">
+                      <input type="text" className="form-control" placeholder="Search"></input>
+                      <span className="input-group-btn">
+                        <button className="btn" type="submit">
+                          <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </button>
+                      </span>
+                    </div>
+                  </ul>
+                </div>
               </div>
-              <div className="collapse navbar-collapse" id="navbar-primary-collapse">
-                <ul className="nav navbar-nav">
-                  <li className="pull-left" id="slide-sidebar"><a href="#sidebar-nav">{this.props.organization.name}<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a></li>
-                  {menuNode}
-                  <Dropdown className="pull-right" id="profile-dropdown">
-                    <Dropdown.Toggle>
-                      <img id="avatar" src={avatar} alt="avatar"></img>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <MenuItem eventKey="1" href={`/organizations/${this.props.organization.id}/profile`}>Profile</MenuItem>
-                      <MenuItem eventKey="2">Setting</MenuItem>
-                      <MenuItem divider />
-                      <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <div className="searchBox input-group pull-right">
-                    <input type="text" className="form-control" placeholder="Search"></input>
-                    <span className="input-group-btn">
-                      <button className="btn" type="submit">
-                        <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
-                      </button>
-                    </span>
-                  </div>
-                </ul>
-              </div>
-            </div>
-          </nav>
-        </header>
-        <div id="sidebar-nav">
-          <ul id="sidebar-nav-list">
-            {organizationNodes}
-            <li className="sidebar-nav-item">
-              <a href="/organizations/new"><span className="icon-plus" /> Create organization</a>
-            </li>
-          </ul>
+            </nav>
+          </header>
+          <div id="sidebar-nav">
+            <ul id="sidebar-nav-list">
+              {organizationNodes}
+              <li className="sidebar-nav-item">
+                <a href="/organizations/new"><span className="icon-plus" /> Create organization</a>
+              </li>
+            </ul>
+          </div>
+          <a id="nav-screen-overlay" href="#"></a>
         </div>
-        <a id="nav-screen-overlay" href="#"></a>
-      </div>
+      </DocumentTitle>
     );
   }
 }
@@ -105,21 +106,14 @@ NormalNavbar.propTypes = {
   user: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     user: state.user,
     organization: state.organization,
-    project: state.project
+    project: state.project,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(userActions, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NormalNavbar);
+export default connect(mapStateToProps)(NormalNavbar);

@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Row, Col, Image } from 'react-bootstrap';
+import DocumentTitle from 'react-document-title';
 import ProjectCard from './ProjectCard';
 import * as organizationActions from '../../actions/organization-actions';
 import AddProject from '../../images/newproject.png';
@@ -58,21 +59,23 @@ class OrganizationContainer extends Component {
     const { organization } = this.props;
 
     return (
-      <div>
-        { organization.projects !== undefined ?
-          <Row>
-            <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-              {
-                organization.projects.map((project) => {
-                  return <ProjectCard key={project.id} project={project} />;
-                })
-              }
-              {this.buttonType(organization.projects)}
-            </Col>
-          </Row>
-          : null
-        }
-      </div>
+      <DocumentTitle title={organization.name}>
+        <div>
+          { organization.projects !== undefined ?
+            <Row>
+              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+                {
+                  organization.projects.map((project) => {
+                    return <ProjectCard key={project.id} project={project} />;
+                  })
+                }
+                {this.buttonType(organization.projects)}
+              </Col>
+            </Row>
+            : null
+          }
+        </div>
+      </DocumentTitle>
     );
   }
 }
