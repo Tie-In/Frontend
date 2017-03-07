@@ -6,7 +6,7 @@ import DocumentTitle from 'react-document-title';
 import 'simple-line-icons/css/simple-line-icons.css';
 import NavStyle from '../../style/navstyle.css';
 import logo from '../../images/logo.png';
-import avatar from '../../images/logo-login.png';
+import user1 from '../../images/user1.png';
 
 class NormalNavbar extends Component {
 
@@ -25,13 +25,12 @@ class NormalNavbar extends Component {
       { id: 5, name: 'Active sprint', path: `${path}/board` },
       { id: 6, name: 'Retrospective', path: '/retrospective' },
       { id: 7, name: 'Dashboard', path: '/dashboard' },
-      { id: 8, name: 'Admin', path: '/admin' },
     ];
 
     const menuNode = data.map((menu) => {
       return (
         <li key={menu.id}>
-          <Link to={menu.path} activeClassName="active"> {menu.name}</Link>
+          <Link to={menu.path} activeClassName="active">{menu.name}</Link>
         </li>
       );
     });
@@ -54,9 +53,9 @@ class NormalNavbar extends Component {
                 <div className="navbar-header">
                   <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-primary-collapse">
                     <span className="sr-only">Toggle navigation</span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
+                    <span className="icon-bar" />
+                    <span className="icon-bar" />
+                    <span className="icon-bar" />
                   </button>
                 </div>
                 <div className="collapse navbar-collapse" id="navbar-primary-collapse">
@@ -65,7 +64,10 @@ class NormalNavbar extends Component {
                     {menuNode}
                     <Dropdown className="pull-right" id="profile-dropdown">
                       <Dropdown.Toggle>
-                        <img id="avatar" src={avatar} alt="avatar"></img>
+                        <img
+                          id="avatar" role="presentation"
+                          src={user1}
+                        />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         <MenuItem eventKey="1" href={`/organizations/${this.props.organization.id}/profile`}>Profile</MenuItem>
@@ -74,14 +76,14 @@ class NormalNavbar extends Component {
                         <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
                       </Dropdown.Menu>
                     </Dropdown>
-                    <div className="searchBox input-group pull-right">
-                      <input type="text" className="form-control" placeholder="Search"></input>
+                    {/* <div className="searchBox input-group pull-right">
+                      <input type="text" className="form-control" placeholder="Search" />
                       <span className="input-group-btn">
                         <button className="btn" type="submit">
-                          <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
+                          <span className="glyphicon glyphicon-search" aria-hidden="true" />
                         </button>
                       </span>
-                    </div>
+                    </div> */}
                   </ul>
                 </div>
               </div>
@@ -95,7 +97,7 @@ class NormalNavbar extends Component {
               </li>
             </ul>
           </div>
-          <a id="nav-screen-overlay" href="#"></a>
+          <a id="nav-screen-overlay" href="#" />
         </div>
       </DocumentTitle>
     );
