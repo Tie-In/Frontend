@@ -33,10 +33,10 @@ ReactDOM.render(
     <Router history={history}>
       <Route path="/" component={OrganizationApp}>
         <IndexRoute component={NoOrgContainer} />
-        <Route path="organization-new" component={NewOrgContainer} />
+        <Route path="organizations/new" component={NewOrgContainer} />
         <Route path="organizations/:organizationId">
           <IndexRoute component={OrganizationContainer} />
-          <Route path="project-new" component={NewProject} />
+          <Route path="projects/new" component={NewProject} />
           <Route path="profile" component={Profile} />
         </Route>
       </Route>
@@ -48,7 +48,7 @@ ReactDOM.render(
           <Route path="effort-estimation" component={EffortEstimationContainer} />
         </Route>
         <Route path="board" component={Board} />
-        <Route path="task-new" component={NewTask} />
+        <Route path="tasks/new" component={NewTask} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="register" component={Register} />

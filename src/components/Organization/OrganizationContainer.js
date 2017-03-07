@@ -22,7 +22,7 @@ class OrganizationContainer extends Component {
   }
 
   buttonType(projects) {
-    const newProjectPath = `./${this.props.params.organizationId}/project-new`;
+    const newProjectPath = `./${this.props.params.organizationId}/projects/new`;
     const articleStyles = {
       margin: '0 auto',
       position: 'fixed',
@@ -45,7 +45,7 @@ class OrganizationContainer extends Component {
     }
     return (
       <div style={articleStyles} href={newProjectPath}>
-        <a href="/organization-new">
+        <a href="/organizations/new">
           <Image src={AddProject} alt="Image" />
         </a>
         <p style={pStyle} />
