@@ -2,9 +2,10 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Row, Col, Image } from 'react-bootstrap';
+import DocumentTitle from 'react-document-title';
 import ProjectCard from './ProjectCard';
 import * as organizationActions from '../../actions/organization-actions';
-import AddProject from '../../images/add-org.png';
+import AddProject from '../../images/newproject.png';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class OrganizationContainer extends Component {
@@ -22,7 +23,7 @@ class OrganizationContainer extends Component {
   }
 
   buttonType(projects) {
-    const newProjectPath = `./${this.props.params.organizationId}/project-new`;
+    const newProjectPath = `./${this.props.params.organizationId}/projects/new`;
     const articleStyles = {
       margin: '0 auto',
       position: 'fixed',
@@ -35,15 +36,20 @@ class OrganizationContainer extends Component {
       left: '50%',
       transform: 'translate(-50%, 0)',
     };
+    const pStyle = {
+      margin: '0 0 0',
+    };
     if (projects.length > 0) {
       return (<Button href={newProjectPath}>
         Create new project
       </Button>);
     }
     return (
-      <div style={articleStyles}>
-        <Image src={AddProject} alt="Images" />
-        <p />
+      <div style={articleStyles} href={newProjectPath}>
+        <a href="/organizations/new">
+          <Image src={AddProject} alt="Image" />
+        </a>
+        <p style={pStyle} />
         <Button href={newProjectPath} style={buttonDefaultStyle}>Create new project</Button>
       </div>
     );
@@ -53,21 +59,23 @@ class OrganizationContainer extends Component {
     const { organization } = this.props;
 
     return (
-      <div>
-        { organization.projects !== undefined ?
-          <Row>
-            <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-              {
-                organization.projects.map((project) => {
-                  return <ProjectCard key={project.id} project={project} />;
-                })
-              }
-              {this.buttonType(organization.projects)}
-            </Col>
-          </Row>
-          : null
-        }
-      </div>
+      <DocumentTitle title={organization.name}>
+        <div>
+          { organization.projects !== undefined ?
+            <Row>
+              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+                {
+                  organization.projects.map((project) => {
+                    return <ProjectCard key={project.id} project={project} />;
+                  })
+                }
+                {this.buttonType(organization.projects)}
+              </Col>
+            </Row>
+            : null
+          }
+        </div>
+      </DocumentTitle>
     );
   }
 }

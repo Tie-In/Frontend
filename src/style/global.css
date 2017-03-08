@@ -10,15 +10,15 @@
 
 .btn.btn-default:hover {
   background-image: none;
-  background-color: #905d5b;
-  border-color: #905d5b;
+  background-color: #8D413F;
+  border-color: #8D413F;
   color: #ffffff;
 }
 
 .btn.btn-default:hover:active {
   background-image: none;
-  background-color: #704a4a;
-  border-color: #704a4a;
+  background-color: #713938;
+  border-color: #713938;
   color: #ffffff;
 }
 
@@ -34,14 +34,14 @@
 
 .btn.btn-primary:hover {
   background-image: none;
-  background-color: #ffffff;
+  background-color: #E5DAD6;
   border-color: #905d5b;
   color: #905d5b;
 }
 
 .btn.btn-primary:active {
   background-image: none;
-  background-color: #ffffff;
+  background-color: #CDB8B7;
   border-color: #704a4a;
   color: #704a4a;
 }
@@ -62,11 +62,11 @@
   position: absolute;
 }
 
-.headerLabel {
+.header-label {
   color: #A25E5D;
 }
 
-.headerLine {
+.header-line {
   border-color: black;
 }
 

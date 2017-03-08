@@ -41,6 +41,7 @@ class FeaturePoint extends Component {
     };
     const iconStyle = {
       marginRight: '10px',
+      marginLeft: '10px',
     };
     const UUCP = product.simple + product.medium + product.complex;
     setValue('uucp', UUCP);
