@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import DocumentTitle from 'react-document-title';
 import * as projectActions from '../../actions/project-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 
@@ -27,18 +28,20 @@ class ProjectHomeContainer extends Component {
       marginBottom: '50px',
     };
     return (
-      <div className="tieinContainer">
-        <h3 className="header-label">{project.name}</h3>
-        <hr className="header-line" />
-        <div className="container" style={cardStyle}>
-          <p>{project.description}</p>
+      <DocumentTitle title={`${project.name}`}>
+        <div className="tieinContainer">
+          <h3 className="header-label">{project.name}</h3>
+          <hr className="header-line" />
+          <div className="container" style={cardStyle}>
+            <p>{project.description}</p>
+          </div>
+          {project.effort_estimation === undefined ?
+            <LinkContainer to={`/organizations/${this.props.project.organization_id}/projects/${this.props.project.id}/planning/features`}>
+              <Button>Start Planning </Button>
+            </LinkContainer> : null
+          }
         </div>
-        {project.effort_estimation === undefined ?
-          <LinkContainer to={`/organizations/${this.props.project.organization_id}/projects/${this.props.project.id}/planning/features`}>
-            <Button>Start Planning </Button>
-          </LinkContainer> : null
-        }
-      </div>
+      </DocumentTitle>
     );
   }
 }

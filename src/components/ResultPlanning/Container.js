@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Row, Col, ProgressBar, Table } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import { technicalFactors, environmentalFactors } from './informations';
 import * as apiHelper from '../../helpers/apiHelper';
@@ -27,15 +28,17 @@ class Container extends Component {
   }
 
   render() {
+    const { project } = this.props;
+    const { effort_estimation, features } = this.state;
     return (
-      <DocumentTitle title={`${document.title}・Planning`}>
+      <DocumentTitle title={`${project.name}・Planning`}>
         <div className="tieinContainer">
           <h3 className="header-label">Planning Result</h3>
           <hr className="header-line" />
           <div>
-            <p>Most used week: {Math.ceil(this.state.effort_estimation.upper_weeks)}</p>
-            <p>Low used week: {Math.floor(this.state.effort_estimation.lower_weeks)}</p>
-            <p>Developer number: {Math.floor(this.state.effort_estimation.developers)}</p>
+            <p>Most used week: {Math.ceil(effort_estimation.upper_weeks)}</p>
+            <p>Low used week: {Math.floor(effort_estimation.lower_weeks)}</p>
+            <p>Developer number: {Math.floor(effort_estimation.developers)}</p>
             <ProgressBar now={60} />
             <hr />
           </div>
@@ -51,7 +54,7 @@ class Container extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  { this.state.features.map((feature) => {
+                  { features.map((feature) => {
                     return (<tr>
                       <td>{feature.name}</td>
                       <td>{feature.complexity}</td>
@@ -121,7 +124,14 @@ class Container extends Component {
 
 Container.propTypes = {
   params: PropTypes.object.isRequired,
+  project: PropTypes.object.isRequired,
 };
 
 
-export default Container;
+function mapStateToProps(state) {
+  return {
+    project: state.project,
+  };
+}
+
+export default connect(mapStateToProps)(Container);
