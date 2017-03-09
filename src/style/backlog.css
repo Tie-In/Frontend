@@ -36,15 +36,36 @@ ul .row:hover {
   background-color: #A25E5D;
   cursor: pointer;
 }
-
+#nextButton {
+  text-align: center;
+}
+#nextButton .disabled {
+  pointer-events: none;
+}
 /*Modal*/
 .modal-container Modal{
   position: fixed;
   height: 100%;
+  width: 500px;
 }
 .modal-container .modal, .modal-container .modal-backdrop {
   position: absolute;
 }
 .modal-content {
-  margin-top: 30%;
+  margin-top: 25%;
+}
+.modal-header, .modal-footer {
+  border: 0px;
+}
+.modal-header {
+  padding-bottom: 0px;
+}
+.modal-footer {
+  text-align: center;
+}
+.modal-body {
+  padding-top: 0px;
+}
+.editTaskContainer {
+  padding: 0px 15px 15px 15px;
 }
