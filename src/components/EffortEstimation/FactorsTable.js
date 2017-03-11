@@ -68,6 +68,7 @@ class FactorsTable extends Component {
     };
     const iconStyle = {
       marginRight: '10px',
+      marginLeft: '10px',
     };
     return (
       <div>

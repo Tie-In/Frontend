@@ -2,14 +2,13 @@ import { Row, FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bo
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { LinkContainer } from 'react-router-bootstrap';
 import linkState from 'react-link-state';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import * as userActions from '../actions/user-actions';
-import * as apiHelper from '../helpers/apiHelper';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../style/customDatepicker.css';
+import * as userActions from '../../actions/user-actions';
+import * as apiHelper from '../../helpers/apiHelper';
+import '../../style/customDatepicker.css';
 
 function validateEmail(email) {
   if (email === '') {
@@ -19,45 +18,42 @@ function validateEmail(email) {
   return re.test(email);
 }
 
-class Register extends Component {
+class Profile extends Component {
 
   constructor(props) {
     super(props);
 
+    const { user } = this.props;
+    const bd = moment(user.birth_date);
     this.state = {
       input: {
-        email: '',
-        password: '',
-        firstname: '',
-        lastname: '',
-        username: '',
-        password_confirmation: '',
-        birth_date: '',
-        phone_number: '',
-        image: 'user'.concat(Math.ceil(Math.random() * 4)),
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        username: user.username,
+        birth_date: bd.format('L'),
+        phone_number: user.phone_number,
       },
       error: {
         email: '',
-        password: '',
         firstname: '',
         lastname: '',
         username: '',
-        password_confirmation: '',
         birth_date: '',
         phone_number: '',
       },
-      selectedDate: '',
+      selectedDate: bd,
       hasError: false,
       createClicked: false,
       user: {},
     };
 
-    this.create = this.create.bind(this);
+    this.update = this.update.bind(this);
     this.validate = this.validate.bind(this);
     this.handleChangeDate = this.handleChangeDate.bind(this);
   }
 
-  async create() {
+  async update() {
     this.setState({ createClicked: true });
     let pass = true;
     // check have error
@@ -67,15 +63,11 @@ class Register extends Component {
         pass = false;
       }
     });
-    if (pass && this.state.input.password === this.state.input.password_confirmation) {
-      const data = {
-        user: this.state.input,
-      };
+    if (pass) {
       try {
-        const response = await apiHelper.post('/api/users', data);
+        const response = await apiHelper.put(`/api/users/${this.props.user.id}`, this.state.input);
         const user = response.data;
         this.props.userActions.setUser(user);
-        document.location.href = '/';
       } catch (err) {
         const errors = err.response.data.errors;
         const errTemp = this.state.error;
@@ -100,8 +92,6 @@ class Register extends Component {
       err[inputType] = 'is required';
     } else if (inputType === 'email' && !validateEmail(value)) {
       err.email = 'is incorrect format';
-    } else if (inputType === 'password_confirmation' && value !== input.password) {
-      err.password_confirmation = 'is not match to password';
     } else {
       pass = true;
     }
@@ -131,6 +121,23 @@ class Register extends Component {
     });
   }
 
+  checkDisable() {
+    let same = true;
+    const propsName = Object.getOwnPropertyNames(this.state.input);
+    propsName.forEach((name) => {
+      if (this.state.input[name] !== this.props.user[name]) {
+        if (name === 'birth_date') {
+          const bd = moment(this.props.user.birth_date).format('L');
+          if (bd !== this.state.input.birth_date) {
+            same = false;
+          }
+        } else {
+          same = false;
+        }
+      }
+    });
+    return same;
+  }
 
   render() {
     const containerStyle = {
@@ -140,10 +147,9 @@ class Register extends Component {
       transform: 'translate(50%)',
       position: 'absolute',
     };
-
     return (
       <div style={containerStyle}>
-        <h3 className="header-label">Register</h3>
+        <h3 className="header-label">Profile</h3>
         <hr className="header-line" />
         <form>
           <Row>
@@ -201,34 +207,6 @@ class Register extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.password === '' ? null : 'error'}
-              >
-                <ControlLabel>Password</ControlLabel>
-                <FormControl
-                  type="password"
-                  placeholder="Password"
-                  valueLink={linkState(this, 'input.password')}
-                />
-                {this.errorLabel('password')}
-              </FormGroup>
-            </Col>
-            <Col sm={6}>
-              <FormGroup
-                validationState={this.state.error.password_confirmation === '' ? null : 'error'}
-              >
-                <ControlLabel>Confirm password</ControlLabel>
-                <FormControl
-                  type="password"
-                  placeholder="Confirm password"
-                  valueLink={linkState(this, 'input.password_confirmation')}
-                />
-                {this.errorLabel('password_confirmation')}
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={6}>
-              <FormGroup
                 validationState={this.state.error.birth_date === '' ? null : 'error'}
               >
                 <ControlLabel>Date of Birth</ControlLabel>
@@ -260,19 +238,13 @@ class Register extends Component {
           <br />
           <Row>
             <FormGroup>
-              <Col smOffset={2} sm={4}>
-                <LinkContainer to={{ pathname: 'login' }}>
-                  <Button bsStyle="primary" block>
-                    Cancel
-                  </Button>
-                </LinkContainer>
-              </Col>
-              <Col sm={4}>
+              <Col sm={4} smOffset={4}>
                 <Button
-                  onClick={this.create}
+                  onClick={this.update}
+                  disabled={this.checkDisable()}
                   block
                 >
-                  Create
+                  Save change
                 </Button>
               </Col>
             </FormGroup>
@@ -283,8 +255,9 @@ class Register extends Component {
   }
 }
 
-Register.propTypes = {
+Profile.propTypes = {
   userActions: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -299,4 +272,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

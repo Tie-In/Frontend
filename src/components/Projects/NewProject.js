@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import linkState from 'react-link-state';
 import Autosuggest from 'react-autosuggest';
+import DocumentTitle from 'react-document-title';
 import * as projectActions from '../../actions/project-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 import '../../style/autosuggestStyle.css';
@@ -43,7 +44,7 @@ class NewProject extends Component {
       input: {
         name: '',
         description: '',
-        sprint_duration: '',
+        sprint_duration: 2,
         users: [],
         organization_id: this.props.params.organizationId,
       },
@@ -113,15 +114,30 @@ class NewProject extends Component {
   }
 
   async create() {
-    try {
-      const response = await apiHelper.post('/api/projects', {
-        project: this.state.input,
-      });
-      const project = response.data;
-      this.props.projectActions.setProject(project);
-      document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
-    } catch (err) {
-      console.log(err);
+    let noError = true;
+    if (this.state.input.name === '') {
+      noError = false;
+      this.setState({ nameError: "Organization's name is required" });
+    }
+    if (this.state.input.sprint_duration === '') {
+      noError = false;
+      this.setState({ sprintError: 'Sprint duration is required' });
+    }
+    if (noError) {
+      try {
+        const response = await apiHelper.post('/api/projects', {
+          project: this.state.input,
+        });
+        const project = response.data;
+        this.props.projectActions.setProject(project);
+        document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
+      } catch (err) {
+        const errData = err.response.data.errors;
+        if (errData.name) {
+          this.setState({ nameError: errData.name });
+        }
+        console.log(errData);
+      }
     }
   }
 
@@ -144,8 +160,8 @@ class NewProject extends Component {
   }
 
   contributor() {
-    const content = this.state.contributors.map((contributor) =>
-      <Row key={contributor.id}>
+    const content = this.state.contributors.map((contributor) => {
+      return (<Row key={contributor.id}>
         <Col smOffset={0} xs={9} md={10}>
           <span className={`suggestion-content ${contributor.image}`}>
             <span className="name">
@@ -154,11 +170,12 @@ class NewProject extends Component {
           </span>
         </Col>
         <Col smOffset={0} xs={2} md={2}>
-          <Button bsStyle="primary" onClick={() => this.removeContributor(contributor.id)}>
+          <Button bsStyle="primary" onClick={() => { this.removeContributor(contributor.id); }}>
             <Glyphicon glyph="remove" />
           </Button>
         </Col>
-      </Row>
+      </Row>);
+    },
     );
     return (
       <div>
@@ -168,12 +185,6 @@ class NewProject extends Component {
   }
 
   render() {
-    const lineColor = {
-      borderColor: '#7E8281',
-    };
-    const titleColor = {
-      color: '#A25E5D',
-    };
     const buttonGroup = {
       marginTop: '20px',
     };
@@ -200,89 +211,97 @@ class NewProject extends Component {
       onChange: this.onChange,
       onClick: this.onSuggestionSelected,
     };
+    const errorStyle = {
+      color: '#d9534f',
+      marginLeft: '25px',
+    };
     const previousURL = `/organizations/${this.state.input.organizationId}`;
 
     return (
-      <div>
-        <Grid>
-          <Form>
-            <Row>
-              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                <h3 style={titleColor}>Create new project</h3>
-                <hr style={lineColor} />
-                <FormGroup controlId="formInlineName">
-                  <ControlLabel>
-                    Project&#39;s name
+      <DocumentTitle title={`${this.props.organization.name}・New project`}>
+        <div>
+          <Grid>
+            <Form>
+              <Row>
+                <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+                  <h3 className="header-label">Create new project</h3>
+                  <hr className="header-line" />
+                  <FormGroup controlId="formInlineName">
+                    <ControlLabel>
+                      Project&#39;s name
+                    </ControlLabel>
+                    <FormControl type="text" placeholder="Name" valueLink={linkState(this, 'input.name')} />
+                    <h6 style={errorStyle}>{this.state.nameError}</h6>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+                  <FormGroup controlId="formInlineDetail">
+                    <ControlLabel>
+                      Description (optional)
+                    </ControlLabel>
+                    <FormControl type="text" placeholder="Description of organization" valueLink={linkState(this, 'input.description')} />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
+                  <FormGroup controlId="formInlineDetail">
+                    <ControlLabel>
+                      Sprint duration (weeks)
+                    </ControlLabel>
+                    <FormControl type="number" min="1" placeholder="Sprint duration (week)" valueLink={linkState(this, 'input.sprint_duration')} />
+                    <h6 style={errorStyle}>{this.state.sprintError}</h6>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={4} mdOffset={2}>
+                  <FormGroup controlId="formInlineContributor">
+                    <ControlLabel>
+                      Contributor
+                    </ControlLabel>
+                    <Autosuggest
+                      suggestions={suggestions}
+                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                      onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                      getSuggestionValue={getSuggestionValue}
+                      renderSuggestion={renderSuggestion}
+                      inputProps={inputProps}
+                      onSuggestionSelected={this.onSuggestionSelected}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col style={contributorList} xs={12} md={4}>
+                  <ControlLabel style={{ color: 'white' }}>
+                    List of contributors
                   </ControlLabel>
-                  <FormControl type="text" placeholder="Name" valueLink={linkState(this, 'input.name')} />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                <FormGroup controlId="formInlineDetail">
-                  <ControlLabel>
-                    Description
-                  </ControlLabel>
-                  <FormControl type="text" placeholder="Description of organization" valueLink={linkState(this, 'input.description')} />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
-                <FormGroup controlId="formInlineDetail">
-                  <ControlLabel>
-                    Sprint duration
-                  </ControlLabel>
-                  <FormControl type="number" min="0" placeholder="Sprint duration (week)" valueLink={linkState(this, 'input.sprint_duration')} />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={4} mdOffset={2}>
-                <FormGroup controlId="formInlineContributor">
-                  <ControlLabel>
-                    Contributor
-                  </ControlLabel>
-                  <Autosuggest
-                    suggestions={suggestions}
-                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                    onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                    getSuggestionValue={getSuggestionValue}
-                    renderSuggestion={renderSuggestion}
-                    inputProps={inputProps}
-                    onSuggestionSelected={this.onSuggestionSelected}
-                  />
-                </FormGroup>
-              </Col>
-              <Col style={contributorList} xs={12} md={4}>
-                <ControlLabel style={{ color: 'white' }}>
-                  List of contributors
-                </ControlLabel>
-                <Row style={scrollableContainer}>
-                  <Col smOffset={0} sm={11}>
-                    {this.contributor()}
+                  <Row style={scrollableContainer}>
+                    <Col smOffset={0} sm={11}>
+                      {this.contributor()}
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+              <Row>
+                <FormGroup style={buttonGroup}>
+                  <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
+                    <Button style={singleButton} bsStyle="primary" href={previousURL} key="cancel" block>
+                      Cancel
+                    </Button>
                   </Col>
-                </Row>
-              </Col>
-            </Row>
-            <Row>
-              <FormGroup style={buttonGroup}>
-                <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                  <Button style={singleButton} bsStyle="primary" href={previousURL} key="cancel" block>
-                    Cancel
-                  </Button>
-                </Col>
-                <Col xs={12} md={3}>
-                  <Button style={singleButton} onClick={this.create} key="submitProject" block>
-                    Create
-                  </Button>
-                </Col>
-              </FormGroup>
-            </Row>
-          </Form>
-        </Grid>
-      </div>
+                  <Col xs={12} md={3}>
+                    <Button style={singleButton} onClick={this.create} key="submitProject" block>
+                      Create
+                    </Button>
+                  </Col>
+                </FormGroup>
+              </Row>
+            </Form>
+          </Grid>
+        </div>
+      </DocumentTitle>
     );
   }
 }
@@ -295,6 +314,7 @@ NewProject.propTypes = {
 function mapStateToProps(state) {
   return {
     user: state.user,
+    organization: state.organization,
   };
 }
 
