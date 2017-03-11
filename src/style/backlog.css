@@ -52,7 +52,7 @@ ul .row:hover {
   position: absolute;
 }
 .modal-content {
-  margin-top: 25%;
+  margin-top: 20%;
 }
 .modal-header, .modal-footer {
   border: 0px;
@@ -68,4 +68,7 @@ ul .row:hover {
 }
 .editTaskContainer {
   padding: 0px 15px 15px 15px;
+}
+#leftColumn, #rightColumn {
+  padding: 0px;
 }

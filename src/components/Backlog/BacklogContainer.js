@@ -134,31 +134,61 @@ class BacklogContainer extends Component {
 
     const editTask = () => {
       let task = {};
-      // let i = -1;
+      let i = -1;
       if (this.findIndex(this.state.backlogTasks, this.state.taskID) !== -1) {
-        task = this.state.backlogTasks[this.findIndex(this.state.backlogTasks, this.state.taskID)];
-      // } else if (i = this.findIndex(this.state.sprintTasks, this.state.taskID) !== -1) {
-      //   task = this.state.sprintTasks[i];
+        i = this.findIndex(this.state.backlogTasks, this.state.taskID);
+        task = this.state.backlogTasks[i];
+      } else if (this.findIndex(this.state.sprintTasks, this.state.taskID) !== -1) {
+        i = this.findIndex(this.state.sprintTasks, this.state.taskID);
+        task = this.state.sprintTasks[i];
       }
       return (
         <div className="editTaskContainer">
           <Form>
             <Row>
               <hr />
-              <FormGroup controlId="formInlineName">
+              <FormGroup controlId="editName">
                 <ControlLabel>
                   Task
                 </ControlLabel>
-                <FormControl type="text" placeholder={task.name} />
+                <FormControl type="text" value={task.name} />
               </FormGroup>
             </Row>
             <Row>
-              <FormGroup controlId="formInlineDetail">
+              <FormGroup controlId="editDescription">
                 <ControlLabel>
                   Description
                 </ControlLabel>
-                <FormControl type="text" placeholder={task.description} />
+                <FormControl type="text" value={task.description} />
               </FormGroup>
+            </Row>
+            <Row>
+              <Col md={5} id="leftColumn">
+                <FormGroup controlId="">
+                  <ControlLabel>
+                    Feature
+                  </ControlLabel>
+                  <FormControl type="text" />
+                </FormGroup>
+              </Col>
+              <Col md={5} mdOffset={2} id="rightColumn">
+                <FormGroup controlId="">
+                  <ControlLabel>
+                    Assignee
+                  </ControlLabel>
+                  <FormControl type="text" />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={5} id="leftColumn">
+                <FormGroup controlId="">
+                  <ControlLabel>
+                    Tag
+                  </ControlLabel>
+                  <FormControl type="text" />
+                </FormGroup>
+              </Col>
             </Row>
           </Form>
         </div>
