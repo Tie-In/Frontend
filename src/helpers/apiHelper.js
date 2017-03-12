@@ -22,11 +22,11 @@ export function get(path, parameter) {
   });
 }
 
-export function put(path, parameter) {
+export function put(path, body) {
   return axios({
     method: 'PUT',
     url: path,
-    params: parameter,
+    data: body,
     headers: {
       Authorization: `${localStorage.getItem('token') || ''}`,
     },
