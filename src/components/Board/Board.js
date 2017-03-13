@@ -39,7 +39,7 @@ class Board extends Component {
 
   async componentWillMount() {
     try {
-      const responseSprint = await apiHelper.get('/api/sprints/7');
+      const responseSprint = await apiHelper.get('/api/sprints/1');
       const data = responseSprint.data;
       this.setState({ sprintNumber: data.sprint.number });
       const statuses = data.statuses;
