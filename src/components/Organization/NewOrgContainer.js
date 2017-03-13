@@ -31,7 +31,7 @@ function renderSuggestion(suggestion) {
   );
 }
 
-Array.prototype.diff = function(a) {
+Array.prototype.diff = (a) => {
   return this.filter((i) => { return a.indexOf(i) < 0; });
 };
 
@@ -56,6 +56,7 @@ class NewOrgContainer extends Component {
   }
 
   async componentWillMount() {
+    this.props.organizationActions.setOrganization([]);
     try {
       const response = await apiHelper.get('/api/users');
       const users = response.data;
@@ -105,8 +106,8 @@ class NewOrgContainer extends Component {
       return [];
     }
     const availableUsers = this.state.allUsers.diff(this.state.contributors);
-    const regex = new RegExp('\\b' + inputValue, 'i');
-    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
+    const regex = new RegExp(`\\b${inputValue}`, 'i');
+    return availableUsers.filter((person) => { return regex.test(getSuggestionValue(person)); });
   }
 
   async create() {
@@ -175,12 +176,6 @@ class NewOrgContainer extends Component {
   }
 
   render() {
-    const buttonGroup = {
-      marginTop: '20px',
-    };
-    const singleButton = {
-      marginTop: '10px',
-    };
     const contributorList = {
       height: '200px',
       position: 'relative',
@@ -260,15 +255,16 @@ class NewOrgContainer extends Component {
                 </Row>
               </Col>
             </Row>
+            <br />
             <Row>
-              <FormGroup style={buttonGroup}>
+              <FormGroup>
                 <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                  <Button style={singleButton} bsStyle="primary" href="/" key="cancel" block>
+                  <Button bsStyle="primary" href="/" key="cancel" block>
                     Cancel
                   </Button>
                 </Col>
                 <Col xs={12} md={3}>
-                  <Button style={singleButton} onClick={this.create} key="submit" block>
+                  <Button onClick={this.create} key="submit" block>
                     Create
                   </Button>
                 </Col>
