@@ -6,6 +6,7 @@ import ResultPlanningContainer from './ResultPlanning/Container';
 import NoOrgContainer from './Organization/NoOrgContainer';
 import NewOrgContainer from './Organization/NewOrgContainer';
 import OrganizationContainer from './Organization/OrganizationContainer';
+import OrganizationSetting from './Organization/OrganizationSetting';
 import NormalNavbar from './Navbar/NormalNavbar';
 import StartNavbar from './Navbar/StartNavbar';
 import OrganizationNavbar from './Navbar/OrganizationNavbar';
@@ -32,4 +33,5 @@ module.exports = {
   Board,
   NewTask,
   Profile,
+  OrganizationSetting,
 };

@@ -22,6 +22,7 @@ import {
   Board,
   NewTask,
   Profile,
+  OrganizationSetting,
 } from './components';
 import configureStore from './store/configure-store';
 
@@ -38,6 +39,7 @@ ReactDOM.render(
           <IndexRoute component={OrganizationContainer} />
           <Route path="projects/new" component={NewProject} />
           <Route path="profile" component={Profile} />
+          <Route path="setting" component={OrganizationSetting} />
         </Route>
       </Route>
       <Route path="/organizations/:organizationId/projects/:projectId" component={App}>

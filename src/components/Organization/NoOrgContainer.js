@@ -28,12 +28,12 @@ class NoOrgContainer extends Component {
       margin: '0 0 0',
     };
     return (
-      <div style={articleStyles} href="/organization-new">
-        <a href="/organization-new">
+      <div style={articleStyles}>
+        <a href="/organizations/new">
           <Image src={'src/images/add-org.png'} alt="Image" />
         </a>
         <p style={pStyle} />
-        <Button href="/organization-new" style={buttonDefaultStyle}>Create new organization</Button>
+        <Button href="/organizations/new" style={buttonDefaultStyle}>Create new organization</Button>
       </div>
     );
   }
