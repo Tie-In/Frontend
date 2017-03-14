@@ -3,7 +3,6 @@ import {
   Button, Col, Row,
   FormGroup, ControlLabel, Glyphicon, Label, Dropdown, FormControl,
 } from 'react-bootstrap';
-import linkState from 'react-link-state';
 import Autosuggest from 'react-autosuggest';
 import WrapperColorpicker from './WrapperColorpicker';
 import * as apiHelper from '../../helpers/apiHelper';
@@ -35,8 +34,8 @@ function renderSuggestion(suggestion) {
   );
 }
 
-Array.prototype.diff = function(a) {
-  return this.filter(function(i) {return a.indexOf(i) < 0;});
+Array.prototype.diff = (a) => {
+  return this.filter((i) => { return a.indexOf(i) < 0; });
 };
 
 class TagRow extends Component {
@@ -58,6 +57,7 @@ class TagRow extends Component {
     this.inputClick = this.inputClick.bind(this);
     this.selectColor = this.selectColor.bind(this);
     this.createTag = this.createTag.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   onChange = (event, { newValue }) => {
@@ -101,13 +101,15 @@ class TagRow extends Component {
   }
 
   getSuggestions(value) {
-    const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
-    if (value === '') {
-      return this.props.data.diff(this.state.selected);
+    if (this.props.data) {
+      const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
+      if (value === '') {
+        return this.props.data.diff(this.state.selected);
+      }
+      const availableUsers = this.props.data.diff(this.state.selected);
+      const regex = new RegExp('\\b' + inputValue, 'i');
+      return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
     }
-    const availableUsers = this.props.data.diff(this.state.selected);
-    const regex = new RegExp('\\b' + inputValue, 'i');
-    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
   }
 
   removeContributor(con) {
@@ -157,7 +159,7 @@ class TagRow extends Component {
     );
   }
 
-  inputClick(e) {
+  inputClick() {
     this.setState({ openDropdown: true });
   }
 
@@ -188,6 +190,15 @@ class TagRow extends Component {
       result: resultTemp,
     });
     this.color = '';
+  }
+
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({
+      [name]: value,
+    });
   }
 
   render() {
@@ -236,7 +247,9 @@ class TagRow extends Component {
               <FormGroup>
                 <FormControl
                   type="text" placeholder="Tag name"
-                  onClick={this.inputClick} valueLink={linkState(this, 'newName')}
+                  onClick={this.inputClick}
+                  name="newName"
+                  onChange={this.handleInputChange}
                 />
               </FormGroup>
               <WrapperColorpicker setColor={this.selectColor} />

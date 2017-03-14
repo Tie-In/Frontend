@@ -24,8 +24,8 @@ function renderSuggestion(suggestion) {
   );
 }
 
-Array.prototype.diff = function(a) {
-  return this.filter(function(i) {return a.indexOf(i) < 0;});
+Array.prototype.diff = (a) => {
+  return this.filter((i) => { return a.indexOf(i) < 0; });
 };
 
 class AutosuggestionBlock extends Component {
@@ -83,6 +83,7 @@ class AutosuggestionBlock extends Component {
   }
 
   getSuggestions(value) {
+    console.log(this.props.data);
     const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
     if (inputValue === '') {
       return [];
@@ -141,13 +142,13 @@ class AutosuggestionBlock extends Component {
           this.result() :
           <Autosuggest
             suggestions={suggestions}
-            alwaysRenderSuggestions="true"
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
             onSuggestionSelected={this.onSuggestionSelected}
+            alwaysRenderSuggestions
           />
         }
       </div>
@@ -158,7 +159,6 @@ class AutosuggestionBlock extends Component {
 AutosuggestionBlock.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   setValue: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
   initSelect: PropTypes.object,
 };
 

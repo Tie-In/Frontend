@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import linkState from 'react-link-state';
+import update from 'react-addons-update';
 import DocumentTitle from 'react-document-title';
 import * as apiHelper from '../../helpers/apiHelper';
 import AutosuggestionBlock from '../shared/AutosuggestionBlock';
@@ -31,6 +31,7 @@ class NewProject extends Component {
     this.setAssignee = this.setAssignee.bind(this);
     this.setFeature = this.setFeature.bind(this);
     this.setTags = this.setTags.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   async componentWillMount() {
@@ -78,6 +79,17 @@ class NewProject extends Component {
     }
   }
 
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
+    });
+  }
+
   render() {
     const { project, params } = this.props;
     const buttonGroup = {
@@ -101,7 +113,11 @@ class NewProject extends Component {
                     <ControlLabel>
                       Task&#39;s name
                     </ControlLabel>
-                    <FormControl type="text" placeholder="Name" valueLink={linkState(this, 'input.name')} />
+                    <FormControl
+                      type="text" placeholder="Name"
+                      name="name"
+                      onChange={this.handleInputChange}
+                    />
                   </FormGroup>
                 </Col>
               </Row>
@@ -111,18 +127,33 @@ class NewProject extends Component {
                     <ControlLabel>
                       Description
                     </ControlLabel>
-                    <FormControl type="text" placeholder="Description of task" valueLink={linkState(this, 'input.description')} />
+                    <FormControl
+                      type="text" placeholder="Description of task"
+                      name="description"
+                      onChange={this.handleInputChange}
+                    />
                   </FormGroup>
                 </Col>
               </Row>
               <Row>
                 <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
-                  <AutosuggestionBlock title="Feature" data={this.props.project.features} setValue={this.setFeature} />
+                  <ControlLabel>
+                    Feature
+                  </ControlLabel>
+                  <AutosuggestionBlock
+                    data={this.props.project.features || []} setValue={this.setFeature}
+                  />
                 </Col>
                 <Col xs={12} md={4}>
-                  <AutosuggestionBlock title="Assignee (Optional)" data={this.state.allUsers} setValue={this.setAssignee} />
+                  <ControlLabel>
+                    Assignee (Optional)
+                  </ControlLabel>
+                  <AutosuggestionBlock
+                    data={this.state.allUsers || []} setValue={this.setAssignee}
+                  />
                 </Col>
               </Row>
+              <br />
               <Row>
                 <TagRow
                   data={this.state.allTags} setValue={this.setTags}
