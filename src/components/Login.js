@@ -1,9 +1,8 @@
 import { FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import linkState from 'react-link-state';
 import { bindActionCreators } from 'redux';
-import { LinkContainer } from 'react-router-bootstrap';
+import update from 'react-addons-update';
 import logo from '../images/logo-login.png';
 import Background from '../images/BG-white.png';
 import * as userActions from '../actions/user-actions';
@@ -15,14 +14,16 @@ class Login extends Component {
     super(props);
 
     this.state = {
-      email: '',
-      password: '',
+      input: {
+        email: '',
+        password: '',
+      },
       user: {},
       error: '',
     };
 
     this.login = this.login.bind(this);
-    this.register = this.register.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   componentWillMount() {
@@ -47,14 +48,10 @@ class Login extends Component {
   }
 
   async login() {
-    const data = {
-      session: {
-        email: this.state.email,
-        password: this.state.password,
-      },
-    };
     try {
-      const response = await apiHelper.post('/api/sessions', data);
+      const response = await apiHelper.post('/api/sessions', {
+        session: this.state.input,
+      });
       const user = response.data;
       this.props.userActions.setUser(user);
       this.findPath(user);
@@ -62,6 +59,17 @@ class Login extends Component {
       const errors = err.response.data.errors;
       this.setState({ error: errors });
     }
+  }
+
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
+    });
   }
 
   doSomething(e) {
@@ -114,14 +122,16 @@ class Login extends Component {
               <ControlLabel>Username or Email</ControlLabel>
               <FormControl
                 style={inputStyle}
-                valueLink={linkState(this, 'email')}
+                name="email"
+                onChange={this.handleInputChange}
               />
             </FormGroup>
             <FormGroup>
               <ControlLabel>Password</ControlLabel>
               <FormControl
                 style={inputStyle}
-                valueLink={linkState(this, 'password')}
+                name="password"
+                onChange={this.handleInputChange}
                 type="password"
               />
             </FormGroup>

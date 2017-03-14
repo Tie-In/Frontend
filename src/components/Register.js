@@ -3,13 +3,13 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import linkState from 'react-link-state';
 import DatePicker from 'react-datepicker';
+import update from 'react-addons-update';
 import moment from 'moment';
-import * as userActions from '../actions/user-actions';
-import * as apiHelper from '../helpers/apiHelper';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../style/customDatepicker.css';
+import * as userActions from '../actions/user-actions';
+import * as apiHelper from '../helpers/apiHelper';
 
 function validateEmail(email) {
   if (email === '') {
@@ -55,6 +55,7 @@ class Register extends Component {
     this.create = this.create.bind(this);
     this.validate = this.validate.bind(this);
     this.handleChangeDate = this.handleChangeDate.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   async create() {
@@ -122,6 +123,17 @@ class Register extends Component {
     return null;
   }
 
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
+    });
+  }
+
   handleChangeDate(date) {
     const temp = this.state.input;
     temp.birth_date = date.format('L');
@@ -154,7 +166,8 @@ class Register extends Component {
                 <ControlLabel>Firstname</ControlLabel>
                 <FormControl
                   placeholder="Firstname"
-                  valueLink={linkState(this, 'input.firstname')}
+                  name="firstname"
+                  onChange={this.handleInputChange}
                 />
                 {this.errorLabel('firstname')}
               </FormGroup>
@@ -166,7 +179,8 @@ class Register extends Component {
                 <ControlLabel>Lastname</ControlLabel>
                 <FormControl
                   placeholder="Lastname"
-                  valueLink={linkState(this, 'input.lastname')}
+                  name="lastname"
+                  onChange={this.handleInputChange}
                 />
                 {this.errorLabel('lastname')}
               </FormGroup>
@@ -180,7 +194,8 @@ class Register extends Component {
                 <ControlLabel>Email address</ControlLabel>
                 <FormControl
                   placeholder="Email"
-                  valueLink={linkState(this, 'input.email')}
+                  name="email"
+                  onChange={this.handleInputChange}
                 />
               </FormGroup>
               {this.errorLabel('email')}
@@ -192,7 +207,8 @@ class Register extends Component {
                 <ControlLabel>Username</ControlLabel>
                 <FormControl
                   placeholder="Username"
-                  valueLink={linkState(this, 'input.username')}
+                  name="username"
+                  onChange={this.handleInputChange}
                 />
                 {this.errorLabel('username')}
               </FormGroup>
@@ -206,8 +222,9 @@ class Register extends Component {
                 <ControlLabel>Password</ControlLabel>
                 <FormControl
                   type="password"
+                  name="password"
                   placeholder="Password"
-                  valueLink={linkState(this, 'input.password')}
+                  onChange={this.handleInputChange}
                 />
                 {this.errorLabel('password')}
               </FormGroup>
@@ -219,8 +236,9 @@ class Register extends Component {
                 <ControlLabel>Confirm password</ControlLabel>
                 <FormControl
                   type="password"
-                  placeholder="Confirm password"
-                  valueLink={linkState(this, 'input.password_confirmation')}
+                  name="password_confirmation"
+                  placeholder="Password confirmation"
+                  onChange={this.handleInputChange}
                 />
                 {this.errorLabel('password_confirmation')}
               </FormGroup>
@@ -251,7 +269,8 @@ class Register extends Component {
                 <ControlLabel>Phone number</ControlLabel>
                 <FormControl
                   placeholder="Phone number"
-                  valueLink={linkState(this, 'input.phone_number')}
+                  name="phone_number"
+                  onChange={this.handleInputChange}
                 />
                 {this.errorLabel('phone_number')}
               </FormGroup>
