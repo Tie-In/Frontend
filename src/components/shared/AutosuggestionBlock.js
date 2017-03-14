@@ -1,6 +1,5 @@
 import {
-  Button, Col, Row,
-  FormGroup, ControlLabel, Glyphicon,
+  Button, Col, Row, Glyphicon,
 } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import Autosuggest from 'react-autosuggest';
@@ -26,7 +25,7 @@ function renderSuggestion(suggestion) {
 }
 
 Array.prototype.diff = function(a) {
-  return this.filter(function(i) {return a.indexOf(i) < 0;});
+  return this.filter((i) => {return a.indexOf(i) < 0;});
 };
 
 class AutosuggestionBlock extends Component {
@@ -36,11 +35,19 @@ class AutosuggestionBlock extends Component {
 
     this.state = {
       selected_id: '',
-      allData: [],
       value: '',
       suggestions: [],
-      contributors: [],
+      result: {},
     };
+  }
+
+  componentWillMount() {
+    if (this.props.initSelect) {
+      this.setState({
+        selected_id: this.props.initSelect.id,
+        result: this.props.initSelect,
+      });
+    }
   }
 
   onChange = (event, { newValue }) => {
@@ -66,51 +73,49 @@ class AutosuggestionBlock extends Component {
       suggestions: this.props.data,
     });
     if (suggestion !== undefined) {
-      const newUsernames = this.state.contributors.slice();
-      newUsernames.push(suggestion);
       this.props.setValue(suggestion.id);
       this.setState({
         selected_id: suggestion.id,
-        contributors: newUsernames,
+        result: suggestion,
         value: '',
       });
     }
   }
 
   getSuggestions(value) {
+    console.log(this.props.data);
     const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
     if (inputValue === '') {
       return [];
     }
-    const availableUsers = this.state.allData.diff(this.state.contributors);
     const regex = new RegExp('\\b' + inputValue, 'i');
-    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
+    return this.props.data.filter(person => regex.test(getSuggestionValue(person)));
   }
 
-  removeContributor() {
+  removeResult() {
     this.setState({
-      contributors: [],
+      result: {},
       selected_id: '',
     });
     this.onSuggestionsClearRequested();
     this.props.setValue('');
   }
 
-  contributor() {
-    const contributor = this.state.contributors[0];
+  result() {
+    const { result } = this.state;
     const content = (
-      <Row key={contributor.id}>
+      <Row key={result.id}>
         <Col smOffset={0} xs={9} md={10}>
-          <span className={`suggestion-content ${contributor.image || ''}`}>
+          <span className={`suggestion-content ${result.image || ''}`}>
             <span className="name">
               <span>
-                {contributor.username || contributor.name} ( {contributor.email || contributor.complexity} )
+                {result.username || result.name} ( {result.email || result.complexity} )
               </span>
             </span>
           </span>
         </Col>
         <Col smOffset={0} xs={2} md={2}>
-          <Button bsStyle="primary" onClick={() => this.removeContributor()}>
+          <Button bsStyle="primary" onClick={() => this.removeResult()}>
             <Glyphicon glyph="remove" />
           </Button>
         </Col>
@@ -133,24 +138,19 @@ class AutosuggestionBlock extends Component {
 
     return (
       <div>
-        <FormGroup controlId="formInlineContributor">
-          <ControlLabel>
-            {this.props.title}
-          </ControlLabel>
-          { this.state.contributors.length > 0 ?
-            this.contributor() :
-            <Autosuggest
-              suggestions={suggestions}
-              alwaysRenderSuggestions="true"
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-              getSuggestionValue={getSuggestionValue}
-              renderSuggestion={renderSuggestion}
-              inputProps={inputProps}
-              onSuggestionSelected={this.onSuggestionSelected}
-            />
-          }
-        </FormGroup>
+        { this.state.result.id !== undefined ?
+          this.result() :
+          <Autosuggest
+            suggestions={suggestions}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            inputProps={inputProps}
+            onSuggestionSelected={this.onSuggestionSelected}
+            alwaysRenderSuggestions
+          />
+        }
       </div>
     );
   }
@@ -159,7 +159,7 @@ class AutosuggestionBlock extends Component {
 AutosuggestionBlock.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   setValue: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
+  initSelect: PropTypes.object,
 };
 
 export default AutosuggestionBlock;

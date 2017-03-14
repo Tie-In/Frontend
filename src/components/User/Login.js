@@ -1,13 +1,29 @@
 import { FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import linkState from 'react-link-state';
 import { bindActionCreators } from 'redux';
-import { LinkContainer } from 'react-router-bootstrap';
-import logo from '../images/logo-login.png';
-import Background from '../images/BG-white.png';
-import * as userActions from '../actions/user-actions';
-import * as apiHelper from '../helpers/apiHelper';
+import update from 'react-addons-update';
+import logo from '../../images/logo-login.png';
+import Background from '../../images/BG-white.png';
+import * as userActions from '../../actions/user-actions';
+import * as apiHelper from '../../helpers/apiHelper';
+
+const findPath = (user) => {
+  const firstOrg = user.organizations[0];
+  if (firstOrg) {
+    document.location.href = '/organizations/' + firstOrg.id;
+  } else {
+    document.location.href = '/';
+  }
+};
+
+const doSomething = (e) => {
+  e.preventDefault();
+};
+
+const register = () => {
+  document.location.href = '/register';
+};
 
 class Login extends Component {
 
@@ -15,19 +31,21 @@ class Login extends Component {
     super(props);
 
     this.state = {
-      email: '',
-      password: '',
+      input: {
+        email: '',
+        password: '',
+      },
       user: {},
       error: '',
     };
 
     this.login = this.login.bind(this);
-    this.register = this.register.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   componentWillMount() {
     if (this.props.user.auth_token !== undefined) {
-      this.findPath(this.props.user);
+      findPath(this.props.user);
     }
     // set background style
     document.body.style.backgroundImage = `url(${Background})`;
@@ -37,39 +55,29 @@ class Login extends Component {
     document.body.style.backgroundAttachment = 'fixed';
   }
 
-  findPath(user) {
-    const firstOrg = user.organizations[0];
-    if (firstOrg) {
-      document.location.href = '/organizations/' + firstOrg.id;
-    } else {
-      document.location.href = '/';
-    }
-  }
-
   async login() {
-    const data = {
-      session: {
-        email: this.state.email,
-        password: this.state.password,
-      },
-    };
     try {
-      const response = await apiHelper.post('/api/sessions', data);
+      const response = await apiHelper.post('/api/sessions', {
+        session: this.state.input,
+      });
       const user = response.data;
       this.props.userActions.setUser(user);
-      this.findPath(user);
+      findPath(user);
     } catch (err) {
       const errors = err.response.data.errors;
       this.setState({ error: errors });
     }
   }
 
-  doSomething(e) {
-    e.preventDefault();
-  }
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
 
-  register() {
-    document.location.href = '/register';
+    this.setState({
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
+    });
   }
 
   render() {
@@ -109,26 +117,28 @@ class Login extends Component {
           <div style={logoMargin}>
             <img style={logoStyle} src={logo} alt="logo" />
           </div>
-          <form onSubmit={this.doSomething}>
+          <form onSubmit={doSomething}>
             <FormGroup>
               <ControlLabel>Username or Email</ControlLabel>
               <FormControl
                 style={inputStyle}
-                valueLink={linkState(this, 'email')}
+                name="email"
+                onChange={this.handleInputChange}
               />
             </FormGroup>
             <FormGroup>
               <ControlLabel>Password</ControlLabel>
               <FormControl
                 style={inputStyle}
-                valueLink={linkState(this, 'password')}
+                name="password"
+                onChange={this.handleInputChange}
                 type="password"
               />
             </FormGroup>
             <p style={{ color: 'red' }}>{this.state.error}</p>
             <FormGroup>
               <Col sm={6}>
-                <Button style={registerButton} onClick={this.register} block>Register</Button>
+                <Button style={registerButton} onClick={register} block>Register</Button>
               </Col>
               <Col sm={6}>
                 <Button onClick={this.login} type="submit" block>

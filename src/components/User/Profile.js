@@ -65,7 +65,9 @@ class Profile extends Component {
     });
     if (pass) {
       try {
-        const response = await apiHelper.put(`/api/users/${this.props.user.id}`, this.state.input);
+        const response = await apiHelper.put(`/api/users/${this.props.user.id}`, {
+          user: this.state.input,
+        });
         const user = response.data;
         this.props.userActions.setUser(user);
       } catch (err) {

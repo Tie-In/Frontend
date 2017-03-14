@@ -9,6 +9,7 @@ import '../../style/board.css';
 import CardsContainer from './Cards/CardsContainer';
 import CustomDragLayer from './CustomDragLayer';
 import NewList from './Cards/NewList';
+import * as apiHelper from '../../helpers/apiHelper';
 
 @DragDropContext(HTML5Backend)
 class Board extends Component {
@@ -28,17 +29,24 @@ class Board extends Component {
     this.stopScrolling = this.stopScrolling.bind(this);
     this.startScrolling = this.startScrolling.bind(this);
     this.createList = this.createList.bind(this);
-    this.state = { isScrolling: false };
+    this.deleteStatus = this.deleteStatus.bind(this);
+    this.editStatus = this.editStatus.bind(this);
+    this.state = {
+      isScrolling: false,
+      sprintNumber: '',
+    };
   }
 
-  componentWillMount() {
-    const mock = [
-      {"id": 0,"name":"Incredible Metal Hat","cards":[{"id":0,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"}]},
-      {"id": 1,"name":"Increasadasds","cards":[{"id":10,"firstName":"Abigail","lastName":"Torp","title":"Lead Interactions Supervisor"}]},
-      {"id": 2,"name":"Incasdasd", "cards": []},
-    ];
-
-    this.props.listsActions.setList(mock);
+  async componentWillMount() {
+    try {
+      const responseSprint = await apiHelper.get('/api/sprints/1');
+      const data = responseSprint.data;
+      this.setState({ sprintNumber: data.sprint.number });
+      const statuses = data.statuses;
+      this.props.listsActions.setList(statuses);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   startScrolling(direction) {
@@ -83,9 +91,16 @@ class Board extends Component {
     this.props.listsActions.moveList(lastX, nextX);
   }
 
-  createList(listName) {
+  async createList(listName) {
     const { lists } = this.props;
-    const temp = { id: lists.length, name: listName, cards: [] };
+    // const temp = { id: lists.length, name: listName, cards: [] };
+    const response = await apiHelper.post('/api/statuses', {
+      name: listName,
+      project_id: this.props.params.projectId,
+      column: lists.length,
+    });
+    const temp = response.data;
+
     lists.push(temp);
     this.setState({ isScrolling: true }, this.scrollRight());
     this.props.listsActions.setList(lists);
@@ -101,31 +116,55 @@ class Board extends Component {
     };
   }
 
+  async deleteStatus(status) {
+    if (status.tasks.length === 0) {
+      const response = await apiHelper.del(`/api/statuses/${status.id}`);
+      this.props.listsActions.setList(response.data);
+    } else {
+      alert('Cannot deleted');
+    }
+  }
+
+  async editStatus(status, n) {
+    const response = await apiHelper.put(`/api/statuses/${status.id}`, {
+      name: n,
+    });
+    this.props.listsActions.setList(response.data);
+  }
+
   render() {
     const { lists } = this.props;
-    const width = 100 + ((lists.length - 2) * 20);
+    const width = 300 * (lists.length + 1);
     const customWidth = {
-      width: `${width}%`,
+      width: `${width}px`,
     };
 
     return (
       <main style={customWidth}>
-        <CustomDragLayer snapToGrid={false} />
-        {lists.map((item, i) =>
-          <CardsContainer
-            key={item.id}
-            id={item.id}
-            name={item.name}
-            item={item}
-            moveCard={this.moveCard}
-            moveList={this.moveList}
-            startScrolling={this.startScrolling}
-            stopScrolling={this.stopScrolling}
-            isScrolling={this.state.isScrolling}
-            x={i}
-          />
-        )}
-        <NewList createList={this.createList} />
+        <div>
+          Sprint {this.state.sprintNumber}
+        </div>
+        <div>
+          <CustomDragLayer snapToGrid={false} />
+          {lists.map((item, i) => {
+            return (<CardsContainer
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              item={item}
+              moveCard={this.moveCard}
+              moveList={this.moveList}
+              startScrolling={this.startScrolling}
+              stopScrolling={this.stopScrolling}
+              isScrolling={this.state.isScrolling}
+              x={i}
+              deleteStatus={this.deleteStatus}
+              editStatus={this.editStatus}
+            />);
+          },
+          )}
+          <NewList createList={this.createList} />
+        </div>
       </main>
     );
   }

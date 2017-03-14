@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import 'simple-line-icons/css/simple-line-icons.css';
 import NavStyle from '../../style/navstyle.css';
 import logo from '../../images/logo.png';
-import 'simple-line-icons/css/simple-line-icons.css';
 
 class StartNavbar extends Component {
   render() {
