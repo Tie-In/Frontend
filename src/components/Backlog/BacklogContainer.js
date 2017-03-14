@@ -147,6 +147,7 @@ class BacklogContainer extends Component {
         <EditTaskModal
           task={this.state.task}
           show={this.state.show}
+          close={this.close}
         />
       </div>
     );

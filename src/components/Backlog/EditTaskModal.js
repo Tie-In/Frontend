@@ -80,7 +80,7 @@ class EditTaskModal extends Component {
       <div className="modal-container">
         <Modal
           show={this.props.show}
-          onHide={this.close}
+          onHide={this.props.close}
           container={this}
           aria-labelledby="contained-modal-title"
         >
@@ -91,7 +91,7 @@ class EditTaskModal extends Component {
             {editTask()}
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.close}>Update</Button>
+            <Button onClick={this.props.close(this.state.input)}>Update</Button>
           </Modal.Footer>
         </Modal>
       </div>
@@ -101,7 +101,8 @@ class EditTaskModal extends Component {
 
 EditTaskModal.propTypes = {
   show: PropTypes.bool.isRequired,
-  // task: PropTypes.object.isReqired,
+  close: PropTypes.func.isRequired,
+  task: PropTypes.object.isRequired,
 };
 
 export default EditTaskModal;
