@@ -117,7 +117,6 @@ export default class Cards extends Component {
         if (i === 0 && placeholderIndex === -1) {
           cardList.push(<div key="placeholder" className="item placeholder" />);
         } else if (placeholderIndex > i) {
-          console.log(`i = ${i}, place=${placeholderIndex}`);
           isPlaceHold = true;
         }
       }

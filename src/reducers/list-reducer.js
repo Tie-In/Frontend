@@ -1,38 +1,41 @@
-import { Record } from 'immutable';
-
 import {
   SET_LIST,
   MOVE_CARD,
   MOVE_LIST,
   TOGGLE_DRAGGING,
 } from '../actions/list-actions';
+import * as apiHelper from '../helpers/apiHelper';
 
-/* eslint-disable new-cap */
 const initialState = {
   lists: [],
   isDragging: false,
 };
-/* eslint-enable new-cap */
-//const initialState = new InitialState;
 
 
 export default function lists(state = initialState, action) {
   switch (action.type) {
     case SET_LIST:
-      console.log(action.lists);
       return Object.assign({}, state, {
         lists: action.lists,
       });
     case MOVE_CARD: {
       const newLists = [...state.lists];
       const { lastX, lastY, nextX, nextY } = action;
+      const movedTask = newLists[lastX].tasks[lastY];
       if (lastX === nextX) {
-        newLists[lastX].cards.splice(nextY, 0, newLists[lastX].cards.splice(lastY, 1)[0]);
+        newLists[lastX].tasks.splice(nextY, 0, newLists[lastX].tasks.splice(lastY, 1)[0]);
+        apiHelper.put(`/api/tasks/${movedTask.id}`, {
+          row_index: nextY,
+        });
       } else {
         // move element to new place
-        newLists[nextX].cards.splice(nextY, 0, newLists[lastX].cards[lastY]);
+        newLists[nextX].tasks.splice(nextY, 0, newLists[lastX].tasks[lastY]);
         // delete element from old place
-        newLists[lastX].cards.splice(lastY, 1);
+        newLists[lastX].tasks.splice(lastY, 1);
+        apiHelper.put(`/api/tasks/${movedTask.id}`, {
+          row_index: nextY,
+          column_id: newLists[nextX].id,
+        });
       }
       return Object.assign({}, state, {
         lists: newLists,
@@ -44,7 +47,9 @@ export default function lists(state = initialState, action) {
       const t = newLists.splice(lastX, 1)[0];
 
       newLists.splice(nextX, 0, t);
-
+      apiHelper.put(`/api/statuses/${t.id}`, {
+        column_index: nextX,
+      });
       return Object.assign({}, state, {
         lists: newLists,
       });
