@@ -3,11 +3,11 @@ import {
   Button, Col, Row,
   FormGroup, ControlLabel, Glyphicon, Label, Dropdown, FormControl,
 } from 'react-bootstrap';
+import linkState from 'react-link-state';
 import Autosuggest from 'react-autosuggest';
-import update from 'react-addons-update';
 import WrapperColorpicker from './WrapperColorpicker';
-import * as apiHelper from '../../helpers/apiHelper';
-import '../../style/autosuggestStyle.css';
+import * as apiHelper from '../../../helpers/apiHelper';
+import '../../../style/autosuggestStyle.css';
 
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -36,7 +36,7 @@ function renderSuggestion(suggestion) {
 }
 
 Array.prototype.diff = function(a) {
-  return this.filter((i) => {return a.indexOf(i) < 0;});
+  return this.filter(function(i) { return a.indexOf(i) < 0; });
 };
 
 class TagRow extends Component {
@@ -51,7 +51,6 @@ class TagRow extends Component {
       isShow: true,
       openDropdown: false,
       newName: '',
-      data: [],
     };
 
     this.color = '';
@@ -59,11 +58,25 @@ class TagRow extends Component {
     this.inputClick = this.inputClick.bind(this);
     this.selectColor = this.selectColor.bind(this);
     this.createTag = this.createTag.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.data });
+  componentWillMount() {
+    if (this.props.initSelect) {
+      const idArr = [];
+      const arr = [];
+      this.props.initSelect.map((tag) => {
+        idArr.push({ id: tag.id });
+        this.props.data.map((data) => {
+          if (tag.id === data.id) {
+            arr.push(data);
+          }
+        });
+      });
+      this.setState({
+        selected: arr,
+        result: idArr,
+      });
+    }
   }
 
   onChange = (event, { newValue }) => {
@@ -107,12 +120,11 @@ class TagRow extends Component {
   }
 
   getSuggestions(value) {
-    console.log(this.state.data);
     const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
     if (value === '') {
-      return this.state.data.diff(this.state.selected);
+      return this.props.data.diff(this.state.selected);
     }
-    const availableUsers = this.state.data.diff(this.state.selected);
+    const availableUsers = this.props.data.diff(this.state.selected);
     const regex = new RegExp('\\b' + inputValue, 'i');
     return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
   }
@@ -164,7 +176,7 @@ class TagRow extends Component {
     );
   }
 
-  inputClick() {
+  inputClick(e) {
     this.setState({ openDropdown: true });
   }
 
@@ -197,15 +209,6 @@ class TagRow extends Component {
     this.color = '';
   }
 
-  handleInputChange(e) {
-    const value = e.target.value;
-    const name = e.target.name;
-
-    this.setState({
-      [name]: value,
-    });
-  }
-
   render() {
     const { value, suggestions, openDropdown } = this.state;
     const inputProps = {
@@ -220,24 +223,22 @@ class TagRow extends Component {
 
     return (
       <div>
-        <Col xs={12} md={2} mdOffset={2}>
-          <FormGroup controlId="formInlineContributor">
-            <ControlLabel>
-              Add Tags
-            </ControlLabel>
-            <Autosuggest
-              suggestions={suggestions}
-              alwaysRenderSuggestions={this.state.isShow}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-              getSuggestionValue={getSuggestionValue}
-              renderSuggestion={renderSuggestion}
-              inputProps={inputProps}
-              onSuggestionSelected={this.onSuggestionSelected}
-            />
-          </FormGroup>
+        <Col xs={3} componentClass={ControlLabel}>
+          Tags
         </Col>
-        <Col xs={4} md={2}>
+        <Col xs={9}>
+          <Autosuggest
+            suggestions={suggestions}
+            alwaysRenderSuggestions={this.state.isShow}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            inputProps={inputProps}
+            onSuggestionSelected={this.onSuggestionSelected}
+          />
+        </Col>
+        <Col xs={2} xsOffset={3}>
           <Dropdown open={openDropdown} dropup>
             <div bsRole="toggle">
               <Button
@@ -252,9 +253,7 @@ class TagRow extends Component {
               <FormGroup>
                 <FormControl
                   type="text" placeholder="Tag name"
-                  onClick={this.inputClick}
-                  name="newName"
-                  onChange={this.handleInputChange}
+                  onClick={this.inputClick} valueLink={linkState(this, 'newName')}
                 />
               </FormGroup>
               <WrapperColorpicker setColor={this.selectColor} />
@@ -263,7 +262,7 @@ class TagRow extends Component {
             </div>
           </Dropdown>
         </Col>
-        <Col xs={12} md={4}>
+        <Col xs={7}>
           <ControlLabel />
           <Row>
             <Col smOffset={0} sm={11}>
@@ -280,6 +279,7 @@ TagRow.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   setValue: PropTypes.func.isRequired,
   projectId: PropTypes.string.isRequired,
+  initSelect: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default TagRow;

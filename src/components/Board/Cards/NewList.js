@@ -35,13 +35,14 @@ export default class NewList extends Component {
       marginRight: '10%',
     };
     return (
-      <div className="desk-new" onClick={this.clickNew} onBlur={this.onBlur}>
+      <div className="desk-new" onClick={this.clickNew}>
         <div className="desk-head">
           { this.state.click ?
             <div>
               <input
                 style={inputStyle} type="text"
                 valueLink={linkState(this, 'name')} autoFocus="true"
+                onBlur={this.onBlur}
               />
               <Glyphicon glyph="remove" />
             </div>

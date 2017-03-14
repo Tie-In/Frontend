@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { DropTarget, DragSource } from 'react-dnd';
 import { Glyphicon, Dropdown, MenuItem } from 'react-bootstrap';
-
+import linkState from 'react-link-state';
 import Cards from './Cards';
 
 const listSource = {
@@ -63,33 +63,79 @@ export default class CardsContainer extends Component {
     stopScrolling: PropTypes.func,
     isScrolling: PropTypes.bool,
     name: PropTypes.string,
-    createList: PropTypes.func.isRequired,
+    deleteStatus: PropTypes.func.isRequired,
+    editStatus: PropTypes.func.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      onEdit: false,
+      name: this.props.item.name,
+    };
+
+    this.edit = this.edit.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+  }
+
+  onBlur() {
+    const { name } = this.state;
+    if (name !== '' && name !== this.props.item.name) {
+      this.props.editStatus(this.props.item, name);
+      this.setState({ onEdit: false });
+    }
+  }
+
+  edit() {
+    this.setState({ onEdit: true });
   }
 
   render() {
     const { connectDropTarget, connectDragSource, item, x, moveCard,
-      isDragging, name } = this.props;
+      isDragging, name, deleteStatus } = this.props;
     const opacity = isDragging ? 0.5 : 1;
+    const inputStyle = {
+      width: '80%',
+      marginRight: '10%',
+    };
 
     return connectDragSource(connectDropTarget(
       <div className="desk" style={{ opacity }}>
         <div className="desk-head">
-          <div className="desk-name">
-            {name} <Dropdown className="pull-right" id="card-container-dropdown">
-              <Dropdown.Toggle noCaret>
-                <Glyphicon glyph="option-vertical" />
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <MenuItem eventKey="1">Edit name</MenuItem>
-                <MenuItem eventKey="2">Delete</MenuItem>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+          { this.state.onEdit ?
+            <div>
+              <input
+                style={inputStyle} type="text"
+                valueLink={linkState(this, 'name')} autoFocus="true"
+                onBlur={this.onBlur}
+              />
+              <Glyphicon glyph="remove" />
+            </div>
+          :
+            <div className="desk-name">
+              {name} <Dropdown className="pull-right" id="card-container-dropdown">
+                <Dropdown.Toggle noCaret>
+                  <Glyphicon glyph="option-vertical" />
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <MenuItem
+                    eventKey="1"
+                    onClick={() => { this.edit(); }}
+                  >Edit name</MenuItem>
+                  <MenuItem
+                    eventKey="2"
+                    onClick={() => { deleteStatus(item); }}
+                  >Delete</MenuItem>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          }
         </div>
         <Cards
           moveCard={moveCard}
           x={x}
-          cards={item.cards}
+          cards={item.tasks}
           startScrolling={this.props.startScrolling}
           stopScrolling={this.props.stopScrolling}
           isScrolling={this.props.isScrolling}
