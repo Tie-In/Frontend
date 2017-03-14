@@ -5,7 +5,7 @@ import {
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import linkState from 'react-link-state';
+import update from 'react-addons-update';
 import Autosuggest from 'react-autosuggest';
 import DocumentTitle from 'react-document-title';
 import * as projectActions from '../../actions/project-actions';
@@ -31,8 +31,8 @@ function renderSuggestion(suggestion) {
   );
 }
 
-Array.prototype.diff = function(a) {
-  return this.filter(function(i) {return a.indexOf(i) < 0;});
+Array.prototype.diff = (a) => {
+  return this.filter((i) => { return a.indexOf(i) < 0; });
 };
 
 class NewProject extends Component {
@@ -55,6 +55,7 @@ class NewProject extends Component {
     };
 
     this.create = this.create.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   async componentWillMount() {
@@ -89,14 +90,11 @@ class NewProject extends Component {
 
   onSuggestionSelected = (event, { suggestion }) => {
     if (suggestion !== undefined) {
-      const newUsernames = this.state.contributors.slice();
-      const newUsers = this.state.input.users.slice();
-      newUsernames.push(suggestion);
-      newUsers.push({ id: suggestion.id });
-      const newInput = this.state.input;
-      newInput.users = newUsers;
+      const newContributors = update(this.state.contributors, { $push: [suggestion] });
+      // input user need only id
+      const newInput = update(this.state.input, { users: { $push: [{ id: suggestion.id }] } });
       this.setState({
-        contributors: newUsernames,
+        contributors: newContributors,
         value: '',
         input: newInput,
       });
@@ -184,6 +182,17 @@ class NewProject extends Component {
     );
   }
 
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
+    });
+  }
+
   render() {
     const buttonGroup = {
       marginTop: '20px',
@@ -230,7 +239,11 @@ class NewProject extends Component {
                     <ControlLabel>
                       Project&#39;s name
                     </ControlLabel>
-                    <FormControl type="text" placeholder="Name" valueLink={linkState(this, 'input.name')} />
+                    <FormControl
+                      type="text" placeholder="Name"
+                      name="name"
+                      onChange={this.handleInputChange}
+                    />
                     <h6 style={errorStyle}>{this.state.nameError}</h6>
                   </FormGroup>
                 </Col>
@@ -241,7 +254,11 @@ class NewProject extends Component {
                     <ControlLabel>
                       Description (optional)
                     </ControlLabel>
-                    <FormControl type="text" placeholder="Description of organization" valueLink={linkState(this, 'input.description')} />
+                    <FormControl
+                      type="text" placeholder="Description of organization"
+                      name="description"
+                      onChange={this.handleInputChange}
+                    />
                   </FormGroup>
                 </Col>
               </Row>
@@ -251,7 +268,13 @@ class NewProject extends Component {
                     <ControlLabel>
                       Sprint duration (weeks)
                     </ControlLabel>
-                    <FormControl type="number" min="1" placeholder="Sprint duration (week)" valueLink={linkState(this, 'input.sprint_duration')} />
+                    <FormControl
+                      type="number" min="1"
+                      placeholder="Sprint duration (week)"
+                      value={this.state.input.sprint_duration}
+                      name="sprint_duration"
+                      onChange={this.handleInputChange}
+                    />
                     <h6 style={errorStyle}>{this.state.sprintError}</h6>
                   </FormGroup>
                 </Col>
@@ -309,6 +332,7 @@ class NewProject extends Component {
 NewProject.propTypes = {
   projectActions: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
+  organization: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

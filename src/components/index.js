@@ -1,5 +1,5 @@
-import Login from './Login';
-import Register from './Register';
+import Login from './User/Login';
+import Register from './User/Register';
 import FeaturePlanningContainer from './FeaturePlanning/FeaturePlanningContainer';
 import EffortEstimationContainer from './EffortEstimation/Container';
 import ResultPlanningContainer from './ResultPlanning/Container';

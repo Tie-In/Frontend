@@ -3,10 +3,27 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import update from 'react-addons-update';
-import logo from '../images/logo-login.png';
-import Background from '../images/BG-white.png';
-import * as userActions from '../actions/user-actions';
-import * as apiHelper from '../helpers/apiHelper';
+import logo from '../../images/logo-login.png';
+import Background from '../../images/BG-white.png';
+import * as userActions from '../../actions/user-actions';
+import * as apiHelper from '../../helpers/apiHelper';
+
+const findPath = (user) => {
+  const firstOrg = user.organizations[0];
+  if (firstOrg) {
+    document.location.href = '/organizations/' + firstOrg.id;
+  } else {
+    document.location.href = '/';
+  }
+};
+
+const doSomething = (e) => {
+  e.preventDefault();
+};
+
+const register = () => {
+  document.location.href = '/register';
+};
 
 class Login extends Component {
 
@@ -28,7 +45,7 @@ class Login extends Component {
 
   componentWillMount() {
     if (this.props.user.auth_token !== undefined) {
-      this.findPath(this.props.user);
+      findPath(this.props.user);
     }
     // set background style
     document.body.style.backgroundImage = `url(${Background})`;
@@ -38,15 +55,6 @@ class Login extends Component {
     document.body.style.backgroundAttachment = 'fixed';
   }
 
-  findPath(user) {
-    const firstOrg = user.organizations[0];
-    if (firstOrg) {
-      document.location.href = '/organizations/' + firstOrg.id;
-    } else {
-      document.location.href = '/';
-    }
-  }
-
   async login() {
     try {
       const response = await apiHelper.post('/api/sessions', {
@@ -54,7 +62,7 @@ class Login extends Component {
       });
       const user = response.data;
       this.props.userActions.setUser(user);
-      this.findPath(user);
+      findPath(user);
     } catch (err) {
       const errors = err.response.data.errors;
       this.setState({ error: errors });
@@ -70,14 +78,6 @@ class Login extends Component {
         [name]: { $set: value },
       }),
     });
-  }
-
-  doSomething(e) {
-    e.preventDefault();
-  }
-
-  register() {
-    document.location.href = '/register';
   }
 
   render() {
@@ -117,7 +117,7 @@ class Login extends Component {
           <div style={logoMargin}>
             <img style={logoStyle} src={logo} alt="logo" />
           </div>
-          <form onSubmit={this.doSomething}>
+          <form onSubmit={doSomething}>
             <FormGroup>
               <ControlLabel>Username or Email</ControlLabel>
               <FormControl
@@ -138,7 +138,7 @@ class Login extends Component {
             <p style={{ color: 'red' }}>{this.state.error}</p>
             <FormGroup>
               <Col sm={6}>
-                <Button style={registerButton} onClick={this.register} block>Register</Button>
+                <Button style={registerButton} onClick={register} block>Register</Button>
               </Col>
               <Col sm={6}>
                 <Button onClick={this.login} type="submit" block>

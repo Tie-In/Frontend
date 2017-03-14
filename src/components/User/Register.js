@@ -7,17 +7,17 @@ import DatePicker from 'react-datepicker';
 import update from 'react-addons-update';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../style/customDatepicker.css';
-import * as userActions from '../actions/user-actions';
-import * as apiHelper from '../helpers/apiHelper';
+import '../../style/customDatepicker.css';
+import * as userActions from '../../actions/user-actions';
+import * as apiHelper from '../../helpers/apiHelper';
 
-function validateEmail(email) {
+const validateEmail = (email) => {
   if (email === '') {
     return true;
   }
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
-}
+};
 
 class Register extends Component {
 
