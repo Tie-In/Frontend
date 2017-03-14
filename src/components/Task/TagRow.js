@@ -4,6 +4,7 @@ import {
   FormGroup, ControlLabel, Glyphicon, Label, Dropdown, FormControl,
 } from 'react-bootstrap';
 import Autosuggest from 'react-autosuggest';
+import update from 'react-addons-update';
 import WrapperColorpicker from './WrapperColorpicker';
 import * as apiHelper from '../../helpers/apiHelper';
 import '../../style/autosuggestStyle.css';
@@ -34,8 +35,8 @@ function renderSuggestion(suggestion) {
   );
 }
 
-Array.prototype.diff = (a) => {
-  return this.filter((i) => { return a.indexOf(i) < 0; });
+Array.prototype.diff = function(a) {
+  return this.filter((i) => {return a.indexOf(i) < 0;});
 };
 
 class TagRow extends Component {
@@ -50,6 +51,7 @@ class TagRow extends Component {
       isShow: true,
       openDropdown: false,
       newName: '',
+      data: [],
     };
 
     this.color = '';
@@ -58,6 +60,10 @@ class TagRow extends Component {
     this.selectColor = this.selectColor.bind(this);
     this.createTag = this.createTag.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ data: nextProps.data });
   }
 
   onChange = (event, { newValue }) => {
@@ -101,15 +107,14 @@ class TagRow extends Component {
   }
 
   getSuggestions(value) {
-    if (this.props.data) {
-      const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
-      if (value === '') {
-        return this.props.data.diff(this.state.selected);
-      }
-      const availableUsers = this.props.data.diff(this.state.selected);
-      const regex = new RegExp('\\b' + inputValue, 'i');
-      return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
+    console.log(this.state.data);
+    const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
+    if (value === '') {
+      return this.state.data.diff(this.state.selected);
     }
+    const availableUsers = this.state.data.diff(this.state.selected);
+    const regex = new RegExp('\\b' + inputValue, 'i');
+    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
   }
 
   removeContributor(con) {

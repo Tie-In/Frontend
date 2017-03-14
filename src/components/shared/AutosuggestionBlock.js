@@ -24,8 +24,8 @@ function renderSuggestion(suggestion) {
   );
 }
 
-Array.prototype.diff = (a) => {
-  return this.filter((i) => { return a.indexOf(i) < 0; });
+Array.prototype.diff = function(a) {
+  return this.filter((i) => {return a.indexOf(i) < 0;});
 };
 
 class AutosuggestionBlock extends Component {

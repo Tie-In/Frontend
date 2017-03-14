@@ -63,7 +63,7 @@ class NewProject extends Component {
     this.setState({ input: temp });
   }
 
-  setTags(idArr) {
+  setTags(idArr, newData) {
     const temp = this.state.input;
     temp.tags = idArr;
     this.setState({ input: temp });
@@ -156,7 +156,7 @@ class NewProject extends Component {
               <br />
               <Row>
                 <TagRow
-                  data={this.state.allTags} setValue={this.setTags}
+                  data={this.state.allTags || []} setValue={this.setTags}
                   projectId={this.props.params.projectId}
                 />
               </Row>
