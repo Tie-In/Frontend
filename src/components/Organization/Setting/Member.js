@@ -1,100 +1,126 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  Col, Row, Button,
-  FormGroup, ControlLabel, FormControl,
+  Col, Row, Table, DropdownButton,
+  MenuItem, Glyphicon, Modal, Button,
 } from 'react-bootstrap';
-import update from 'react-addons-update';
 
 class Member extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      input: {
-        name: props.organization.name,
-        description: props.organization.description,
-      },
+      showModal: false,
+      selectedMember: {},
+      selectedUser: {},
+      selectedRole: '',
     };
 
-    this.handleInputChange = this.handleInputChange.bind(this);
+    this.close = this.close.bind(this);
+    this.openChangeRole = this.openChangeRole.bind(this);
+    this.handleRoleChange = this.handleRoleChange.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
-  handleInputChange(e) {
-    const value = e.target.value;
-    const name = e.target.name;
+  close() {
+    this.setState({ showModal: !this.state.showModal });
+  }
 
+  openChangeRole(member) {
     this.setState({
-      input: update(this.state.input, {
-        [name]: { $set: value },
-      }),
+      showModal: true,
+      selectedMember: member,
+      selectedUser: member.user,
+      selectedRole: member.permission_level,
     });
   }
 
-  checkDisable() {
-    let same = true;
-    const propsName = Object.getOwnPropertyNames(this.state.input);
-    propsName.forEach((name) => {
-      if (this.state.input[name] !== this.props.organization[name]) {
-        same = false;
-      }
+  handleRoleChange(e) {
+    this.setState({
+      selectedRole: e.target.value,
     });
-    return same;
+  }
+
+  submit() {
+    this.props.updateRole(this.state.selectedMember.id, this.state.selectedRole);
+    this.setState({ showModal: !this.state.showModal });
   }
 
   render() {
+    const { members = [] } = this.props;
+    const roles = ['owner', 'admin', 'user'];
+
     return (
       <div>
         <Row>
           <Col xs={12} md={8} mdOffset={2}>
-            <FormGroup>
-              <ControlLabel>
-                Organization&#39;s name
-              </ControlLabel>
-              <FormControl
-                type="text" placeholder="Name"
-                name="name"
-                value={this.state.input.name}
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
+            <Table striped bordered condensed hover>
+              <thead>
+                <tr>
+                  <th>Member</th>
+                </tr>
+              </thead>
+              <tbody>
+                { members.map((member) => {
+                  return (<tr>
+                    <td>
+                      <Col xs={4}>{member.user.username}</Col>
+                      <Col xs={4}>{member.permission_level}</Col>
+                      <Col xs={2}>
+                        <DropdownButton title={<Glyphicon glyph="cog" />}>
+                          <MenuItem eventKey="1" onClick={() => { this.openChangeRole(member); }}>Change role</MenuItem>
+                          <MenuItem eventKey="2">Remove from organization</MenuItem>
+                        </DropdownButton>
+                      </Col>
+                    </td>
+                  </tr>);
+                })
+                }
+              </tbody>
+            </Table>
           </Col>
         </Row>
-        <Row>
-          <Col xs={12} md={8} mdOffset={2}>
-            <FormGroup controlId="formInlineDetail">
-              <ControlLabel>
-                Description (optional)
-              </ControlLabel>
-              <FormControl
-                type="text" placeholder="Description of organization"
-                name="description"
-                value={this.state.input.description}
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
-        <Row>
-          <FormGroup>
-            <Col sm={4} smOffset={4}>
-              <Button
-                onClick={() => { this.props.update(this.state.input); }}
-                disabled={this.checkDisable()}
-                block
-              >
-                Save change
-              </Button>
-            </Col>
-          </FormGroup>
-        </Row>
+        <div>
+          <Modal show={this.state.showModal} onHide={this.close}>
+            <Modal.Header closeButton>
+              <Modal.Title>
+                Change {this.state.selectedUser.username} permission level?
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <form>
+                {
+                  roles.map((role) => {
+                    return (
+                      <div>
+                        <label>
+                          <input
+                            type="radio" value={role}
+                            checked={this.state.selectedRole === role}
+                            onChange={this.handleRoleChange}
+                          />
+                          <span style={{ marginLeft: 5 }}>
+                            {role}
+                          </span>
+                        </label>
+                        <br />
+                      </div>
+                    );
+                  })
+                }
+              </form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={this.submit}>Change role</Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
       </div>
     );
   }
 }
 
 Member.propTypes = {
-  organization: PropTypes.object.isRequired,
-  update: PropTypes.func.isRequired,
+  members: PropTypes.arrayOf(PropTypes.object).isRequired,
+  updateRole: PropTypes.func.isRequired,
 };
 
 export default Member;

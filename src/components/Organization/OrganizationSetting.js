@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
   Grid, Col, Row, Form,
-  FormGroup, ControlLabel, FormControl, Nav, NavItem,
+  Nav, NavItem,
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -9,6 +9,7 @@ import * as organizationActions from '../../actions/organization-actions';
 import * as userActions from '../../actions/user-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 import Information from './Setting/Information';
+import Member from './Setting/Member';
 import '../../style/autosuggestStyle.css';
 
 class OrganizationSetting extends Component {
@@ -20,26 +21,40 @@ class OrganizationSetting extends Component {
     };
     this.handleSelect = this.handleSelect.bind(this);
     this.updateSetting = this.updateSetting.bind(this);
+    this.updateUserRole = this.updateUserRole.bind(this);
+    this.updateOrganization = this.updateOrganization.bind(this);
   }
 
-  async componentWillMount() {
-    // try {
-    //   const response = await apiHelper.get('/api/users');
-    //   const users = response.data;
-    //   this.setState({ allUsers: users });
-    // } catch (err) {
-    //   console.log(err);
-    // }
-  }
-
-  async updateSetting(data) {
+  updateSetting(data) {
     try {
-      const response = await apiHelper.put(`/api/organizations/${this.props.organization.id}`, {
+      apiHelper.put(`/api/organizations/${this.props.organization.id}`, {
         organization: data,
       });
-      const org = response.data;
+
+      this.updateOrganization();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  updateUserRole(id, role) {
+    try {
+      apiHelper.put(`/api/user_organizations/${id}`, {
+        user_organization: {
+          permission_level: role,
+        },
+      });
+      this.updateOrganization();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async updateOrganization() {
+    try {
+      const updateResponse = await apiHelper.get(`/api/organizations/${this.props.organization.id}`);
+      const org = updateResponse.data;
       this.props.organizationActions.setOrganization(org);
-      console.log(org);
     } catch (err) {
       console.log(err);
     }
@@ -55,6 +70,10 @@ class OrganizationSetting extends Component {
     const switchRender = (tab) => {
       if (tab === 1) {
         return (<Information organization={organization} update={this.updateSetting} />);
+      } else if (tab === 2) {
+        return (
+          <Member members={organization.user_organizations} updateRole={this.updateUserRole} />
+        );
       }
       return <div />;
     };
