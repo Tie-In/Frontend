@@ -217,6 +217,10 @@ class NewOrgContainer extends Component {
               <Col xs={12} md={8} mdOffset={2}>
                 <h3 className="header-label">Create new organization</h3>
                 <hr className="header-line" />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={8} mdOffset={2}>
                 <FormGroup validationState={this.state.nameError === '' ? null : 'error'}>
                   <ControlLabel>
                     Organization&#39;s name
