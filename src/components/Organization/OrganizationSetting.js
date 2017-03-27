@@ -85,6 +85,7 @@ class OrganizationSetting extends Component {
             members={organization.user_organizations}
             updateRole={this.updateMemberRole}
             deleteMember={this.deleteMember}
+            organization={organization}
           />
         );
       }

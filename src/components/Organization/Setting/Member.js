@@ -3,6 +3,7 @@ import {
   Col, Row, Table, DropdownButton,
   MenuItem, Glyphicon, Modal, Button,
 } from 'react-bootstrap';
+import AddMemberRow from './AddMemberRow';
 
 class Member extends Component {
   constructor(props) {
@@ -154,6 +155,7 @@ class Member extends Component {
           </Col>
         </Row>
         {modalContent(modalType)}
+        <AddMemberRow organization_id={this.props.organization.id} />
       </div>
     );
   }
@@ -163,6 +165,7 @@ Member.propTypes = {
   members: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateRole: PropTypes.func.isRequired,
   deleteMember: PropTypes.func.isRequired,
+  organization: PropTypes.object.isRequired,
 };
 
 export default Member;
