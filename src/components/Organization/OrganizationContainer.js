@@ -46,7 +46,7 @@ class OrganizationContainer extends Component {
     }
     return (
       <div style={articleStyles} href={newProjectPath}>
-        <a href="/organizations/new">
+        <a href={newProjectPath}>
           <Image src={AddProject} alt="Image" />
         </a>
         <p style={pStyle} />
