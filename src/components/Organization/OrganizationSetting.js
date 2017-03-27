@@ -6,7 +6,6 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as organizationActions from '../../actions/organization-actions';
-import * as userActions from '../../actions/user-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 import Information from './Setting/Information';
 import Member from './Setting/Member';
@@ -21,13 +20,14 @@ class OrganizationSetting extends Component {
     };
     this.handleSelect = this.handleSelect.bind(this);
     this.updateSetting = this.updateSetting.bind(this);
-    this.updateUserRole = this.updateUserRole.bind(this);
+    this.updateMemberRole = this.updateMemberRole.bind(this);
+    this.deleteMember = this.deleteMember.bind(this);
     this.updateOrganization = this.updateOrganization.bind(this);
   }
 
-  updateSetting(data) {
+  async updateSetting(data) {
     try {
-      apiHelper.put(`/api/organizations/${this.props.organization.id}`, {
+      await apiHelper.put(`/api/organizations/${this.props.organization.id}`, {
         organization: data,
       });
 
@@ -37,13 +37,22 @@ class OrganizationSetting extends Component {
     }
   }
 
-  updateUserRole(id, role) {
+  async updateMemberRole(id, role) {
     try {
-      apiHelper.put(`/api/user_organizations/${id}`, {
+      await apiHelper.put(`/api/user_organizations/${id}`, {
         user_organization: {
           permission_level: role,
         },
       });
+      this.updateOrganization();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async deleteMember(id) {
+    try {
+      await apiHelper.del(`/api/user_organizations/${id}`);
       this.updateOrganization();
     } catch (err) {
       console.log(err);
@@ -72,7 +81,11 @@ class OrganizationSetting extends Component {
         return (<Information organization={organization} update={this.updateSetting} />);
       } else if (tab === 2) {
         return (
-          <Member members={organization.user_organizations} updateRole={this.updateUserRole} />
+          <Member
+            members={organization.user_organizations}
+            updateRole={this.updateMemberRole}
+            deleteMember={this.deleteMember}
+          />
         );
       }
       return <div />;
@@ -106,7 +119,6 @@ OrganizationSetting.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    user: state.user,
     organization: state.organization,
   };
 }
@@ -114,7 +126,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     organizationActions: bindActionCreators(organizationActions, dispatch),
-    userActions: bindActionCreators(userActions, dispatch),
   };
 }
 

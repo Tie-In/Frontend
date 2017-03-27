@@ -16,8 +16,10 @@ class Member extends Component {
 
     this.close = this.close.bind(this);
     this.openChangeRole = this.openChangeRole.bind(this);
+    this.openDeleteMember = this.openDeleteMember.bind(this);
     this.handleRoleChange = this.handleRoleChange.bind(this);
     this.submit = this.submit.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   close() {
@@ -27,9 +29,19 @@ class Member extends Component {
   openChangeRole(member) {
     this.setState({
       showModal: true,
+      modalType: 'role',
       selectedMember: member,
       selectedUser: member.user,
       selectedRole: member.permission_level,
+    });
+  }
+
+  openDeleteMember(member) {
+    this.setState({
+      showModal: true,
+      modalType: 'delete',
+      selectedMember: member,
+      selectedUser: member.user,
     });
   }
 
@@ -44,45 +56,22 @@ class Member extends Component {
     this.setState({ showModal: !this.state.showModal });
   }
 
+  delete() {
+    this.props.deleteMember(this.state.selectedMember.id);
+    this.setState({ showModal: !this.state.showModal });
+  }
+
   render() {
     const { members = [] } = this.props;
+    const { showModal, selectedUser, selectedRole, modalType } = this.state;
     const roles = ['owner', 'admin', 'user'];
-
-    return (
-      <div>
-        <Row>
-          <Col xs={12} md={8} mdOffset={2}>
-            <Table striped bordered condensed hover>
-              <thead>
-                <tr>
-                  <th>Member</th>
-                </tr>
-              </thead>
-              <tbody>
-                { members.map((member) => {
-                  return (<tr>
-                    <td>
-                      <Col xs={4}>{member.user.username}</Col>
-                      <Col xs={4}>{member.permission_level}</Col>
-                      <Col xs={2}>
-                        <DropdownButton title={<Glyphicon glyph="cog" />}>
-                          <MenuItem eventKey="1" onClick={() => { this.openChangeRole(member); }}>Change role</MenuItem>
-                          <MenuItem eventKey="2">Remove from organization</MenuItem>
-                        </DropdownButton>
-                      </Col>
-                    </td>
-                  </tr>);
-                })
-                }
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
-        <div>
-          <Modal show={this.state.showModal} onHide={this.close}>
+    const modalContent = (type) => {
+      if (type === 'role') {
+        return (
+          <Modal show={showModal} onHide={this.close}>
             <Modal.Header closeButton>
               <Modal.Title>
-                Change {this.state.selectedUser.username} permission level?
+                Change {selectedUser.username} permission level?
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -94,7 +83,7 @@ class Member extends Component {
                         <label>
                           <input
                             type="radio" value={role}
-                            checked={this.state.selectedRole === role}
+                            checked={selectedRole === role}
                             onChange={this.handleRoleChange}
                           />
                           <span style={{ marginLeft: 5 }}>
@@ -112,7 +101,59 @@ class Member extends Component {
               <Button onClick={this.submit}>Change role</Button>
             </Modal.Footer>
           </Modal>
-        </div>
+        );
+      } else if (type === 'delete') {
+        return (
+          <Modal show={showModal} onHide={this.close}>
+            <Modal.Header closeButton>
+              <Modal.Title>
+                Remove {selectedUser.username} from organization?
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Footer>
+              <Button onClick={this.delete}>Remove</Button>
+            </Modal.Footer>
+          </Modal>
+        );
+      }
+      return <div />;
+    };
+
+    return (
+      <div>
+        <Row>
+          <Col xs={12} md={8} mdOffset={2}>
+            <Table striped bordered condensed hover>
+              <thead>
+                <tr>
+                  <th>Member</th>
+                </tr>
+              </thead>
+              <tbody>
+                { members.map((member) => {
+                  return (<tr>
+                    <td>
+                      <Col xs={4} style={{ paddingTop: 5 }}>{member.user.username}</Col>
+                      <Col xs={4} style={{ paddingTop: 5 }}>{member.permission_level}</Col>
+                      <Col xsOffset={2} xs={2}>
+                        <DropdownButton title={<Glyphicon glyph="cog" />}>
+                          <MenuItem eventKey="1" onClick={() => { this.openChangeRole(member); }}>
+                            Change role
+                          </MenuItem>
+                          <MenuItem eventKey="2" onClick={() => { this.openDeleteMember(member); }}>
+                            Remove from organization
+                          </MenuItem>
+                        </DropdownButton>
+                      </Col>
+                    </td>
+                  </tr>);
+                })
+                }
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+        {modalContent(modalType)}
       </div>
     );
   }
@@ -121,6 +162,7 @@ class Member extends Component {
 Member.propTypes = {
   members: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateRole: PropTypes.func.isRequired,
+  deleteMember: PropTypes.func.isRequired,
 };
 
 export default Member;
