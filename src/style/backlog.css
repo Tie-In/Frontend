@@ -46,7 +46,7 @@ ul .row:hover {
 .modal-container Modal{
   position: fixed;
   height: 100%;
-  width: 500px;
+  /*width: 700px;*/
 }
 .modal-container .modal, .modal-container .modal-backdrop {
   position: absolute;
@@ -66,9 +66,21 @@ ul .row:hover {
 .modal-body {
   padding-top: 0px;
 }
+.modal-dialog {
+  width: 800px;
+}
 .editTaskContainer {
   padding: 0px 15px 15px 15px;
 }
 #leftColumn, #rightColumn {
   padding: 0px;
+}
+input #point {
+   text-align: center;
+}
+#point {
+  width: 50px;
+}
+.row {
+  padding-bottom: 10px;
 }

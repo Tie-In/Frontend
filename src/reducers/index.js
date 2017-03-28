@@ -5,7 +5,6 @@ import organization from './organization-reducer';
 import project from './project-reducer';
 import planning from './planning-reducer';
 import lists from './list-reducer';
-import backlog from './backlog-reducer';
 
 const rootReducer = combineReducers({
   user,
@@ -13,7 +12,6 @@ const rootReducer = combineReducers({
   project,
   planning,
   lists,
-  backlog,
   routing: routerReducer,
 });
 

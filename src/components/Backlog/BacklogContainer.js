@@ -1,29 +1,32 @@
-import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import update from 'immutability-helper';
-import EditTaskModal from './EditTaskModal';
+import React, { Component, PropTypes } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import 'simple-line-icons/css/simple-line-icons.css';
+import update from 'immutability-helper';
+import EditTaskModal from './EditTaskModal';
+import PointEstimationModal from './PointEstimationModal';
 import '../../style/backlog.css';
 import * as apiHelper from '../../helpers/apiHelper';
-import * as backlogActions from '../../actions/backlog-actions';
 
 class BacklogContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false,
+      showEditTask: false,
+      showPointEstimation: false,
       backlogTasks: [],
       sprintTasks: [],
       task: {},
     };
 
-    this.close = this.close.bind(this);
+    this.setUpdatedTask = this.setUpdatedTask.bind(this);
     this.showEditTaskModal = this.showEditTaskModal.bind(this);
-    this.create = this.create.bind(this);
     this.switchTask = this.switchTask.bind(this);
     this.findIndex = this.findIndex.bind(this);
+    this.closeEditTaskModal = this.closeEditTaskModal.bind(this);
+    this.showPointEstimationModal = this.showPointEstimationModal.bind(this);
+    this.closePointEstimationModal = this.closePointEstimationModal.bind(this);
+    this.setSprintTasks = this.setSprintTasks.bind(this);
+    this.sumPoints = this.sumPoints.bind(this);
   }
 
   async componentWillMount() {
@@ -40,35 +43,69 @@ class BacklogContainer extends Component {
     }
   }
 
-  async create() {
+  async setUpdatedTask(updatedTask) {
+    let index = this.findIndex(this.state.backlogTasks, updatedTask.id);
+    if (index !== -1) {
+      this.setState({
+        backlogTasks: update(this.state.backlogTasks, { [index]: { $set: updatedTask } }),
+      });
+    } else {
+      index = this.findIndex(this.state.sprintTasks, updatedTask.id);
+      this.setState({
+        sprintTasks: update(this.state.sprintTasks, { [index]: { $set: updatedTask } }),
+      });
+    }
+
+    try {
+      await apiHelper.put(`/api/tasks/${updatedTask.id}`, updatedTask);
+      this.closeEditTaskModal();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async setSprintTasks(tempTasks) {
     try {
       const response = await apiHelper.post('/api/sprints', {
-        data: {
-          project_id: '',
-          sprint_points: '',
-          tasks: [{
-            id: '',
-            story_point: '',
-          }],
-        },
+        project_id: this.props.params.projectId,
+        sprint_points: this.sumPoints(tempTasks),
+        tasks: tempTasks,
       });
-      const tasks = response.data.data;
-      this.props.backlogActions.setSprintTasks(tasks);
-      // document.location.href = `/organizations/${org.id}`;
+      this.closePointEstimationModal();
+      console.log(response);
     } catch (err) {
       console.log(err.response);
     }
   }
 
-  close() {
-    this.setState({ show: false });
+  sumPoints(tempTasks) {
+    let totalPoints = 0;
+    for (let i = 0; i < tempTasks.length; i += 1) {
+      if (tempTasks[i].story_point !== null) {
+        totalPoints += Number(tempTasks[i].story_point);
+      }
+    }
+    console.log(totalPoints);
+    return totalPoints;
+  }
+
+  closeEditTaskModal() {
+    this.setState({ showEditTask: false });
   }
 
   showEditTaskModal(tempTask) {
     this.setState({
-      show: true,
+      showEditTask: true,
       task: tempTask,
     });
+  }
+
+  showPointEstimationModal() {
+    this.setState({ showPointEstimation: true });
+  }
+
+  closePointEstimationModal() {
+    this.setState({ showPointEstimation: false });
   }
 
   findIndex(array, id) {
@@ -122,7 +159,7 @@ class BacklogContainer extends Component {
 
     const nextButton = () => {
       if (this.state.sprintTasks.length > 0) {
-        return (<Button>Next</Button>);
+        return (<Button onClick={() => this.showPointEstimationModal()}>Next</Button>);
       }
       return (<Button className="disabled">Next</Button>);
     };
@@ -146,8 +183,16 @@ class BacklogContainer extends Component {
         </div>
         <EditTaskModal
           task={this.state.task}
-          show={this.state.show}
-          close={this.close}
+          show={this.state.showEditTask}
+          setUpdatedTask={this.setUpdatedTask}
+          close={this.closeEditTaskModal}
+        />
+        <PointEstimationModal
+          show={this.state.showPointEstimation}
+          close={this.closePointEstimationModal}
+          tasks={this.state.sprintTasks}
+          findIndex={this.findIndex}
+          setSprintTasks={this.setSprintTasks}
         />
       </div>
     );
@@ -155,19 +200,7 @@ class BacklogContainer extends Component {
 }
 
 BacklogContainer.propTypes = {
-  backlogActions: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    backlogActions: bindActionCreators(backlogActions, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BacklogContainer);
+export default BacklogContainer;

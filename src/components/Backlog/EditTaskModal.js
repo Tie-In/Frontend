@@ -27,7 +27,6 @@ class EditTaskModal extends Component {
         <div className="editTaskContainer">
           <Form>
             <Row>
-              <hr />
               <FormGroup>
                 <ControlLabel>
                   Task
@@ -80,18 +79,19 @@ class EditTaskModal extends Component {
       <div className="modal-container">
         <Modal
           show={this.props.show}
-          // onHide={this.props.close}
+          onHide={this.props.close}
           container={this}
           aria-labelledby="contained-modal-title"
         >
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title">Task</Modal.Title>
+            <hr />
           </Modal.Header>
           <Modal.Body>
             {editTask()}
           </Modal.Body>
           <Modal.Footer>
-            {/* <Button onClick={this.props.close(this.state.input)}>Update</Button> */}
+            <Button onClick={() => this.props.setUpdatedTask(this.state.input)}>Update</Button>
           </Modal.Footer>
         </Modal>
       </div>
@@ -101,8 +101,9 @@ class EditTaskModal extends Component {
 
 EditTaskModal.propTypes = {
   show: PropTypes.bool.isRequired,
-  // close: PropTypes.func.isRequired,
+  setUpdatedTask: PropTypes.func.isRequired,
   task: PropTypes.object.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
 export default EditTaskModal;
