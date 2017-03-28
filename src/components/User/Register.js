@@ -47,8 +47,6 @@ class Register extends Component {
         phone_number: '',
       },
       selectedDate: '',
-      hasError: false,
-      createClicked: false,
       user: {},
     };
 
@@ -60,8 +58,6 @@ class Register extends Component {
 
   async register() {
     const { input, error } = this.state;
-
-    this.setState({ createClicked: true });
     let noError = true;
     // check have error
     Object.keys(input).forEach((key) => {
@@ -71,7 +67,6 @@ class Register extends Component {
     });
     
     if (noError) {
-      console.log('send');
       try {
         const response = await apiHelper.post('/api/users', {
           user: input,
@@ -94,22 +89,20 @@ class Register extends Component {
   }
 
   validate(inputType) {
-    const input = this.state.input;
-    const err = this.state.error;
+    const { input, error } = this.state;
     const value = input[inputType];
-
     let pass = false;
-    err[inputType] = '';
+    error[inputType] = '';
     if (value === '') {
-      err[inputType] = 'is required';
+      error[inputType] = 'is required';
     } else if (inputType === 'email' && !validateEmail(value)) {
-      err.email = 'is incorrect format';
+      error.email = 'is incorrect format';
     } else if (inputType === 'password_confirmation' && value !== input.password) {
-      err.password_confirmation = 'is not match to password';
+      error.password_confirmation = 'is not match to password';
     } else {
       pass = true;
     }
-    this.setState({ error: err });
+    this.setState({ error: error });
     return pass;
   }
 

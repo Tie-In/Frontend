@@ -2,8 +2,10 @@ import { Row, FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bo
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { LinkContainer } from 'react-router-bootstrap';
 import linkState from 'react-link-state';
 import DatePicker from 'react-datepicker';
+import update from 'react-addons-update';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import * as userActions from '../../actions/user-actions';
@@ -14,8 +16,8 @@ function validateEmail(email) {
   if (email === '') {
     return true;
   }
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
+  const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return pattern.test(email);
 }
 
 class Profile extends Component {
@@ -43,82 +45,96 @@ class Profile extends Component {
         phone_number: '',
       },
       selectedDate: bd,
-      hasError: false,
-      createClicked: false,
       user: {},
     };
 
     this.update = this.update.bind(this);
     this.validate = this.validate.bind(this);
     this.handleChangeDate = this.handleChangeDate.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   async update() {
-    this.setState({ createClicked: true });
-    let pass = true;
+    const { input } = this.state;
+    let noError = true;
     // check have error
-    Object.keys(this.state.input).forEach((key) => {
-      const noError = this.validate(key);
-      if (!noError) {
-        pass = false;
+    Object.keys(input).forEach((key) => {
+      if (!this.validate(key)) {
+        noError = false;
       }
     });
-    if (pass) {
+
+    if (noError) {
       try {
         const response = await apiHelper.put(`/api/users/${this.props.user.id}`, {
-          user: this.state.input,
+          user: input,
         });
         const user = response.data;
         this.props.userActions.setUser(user);
       } catch (err) {
         const errors = err.response.data.errors;
-        const errTemp = this.state.error;
+        const errorTemp = error;
         if (errors.email && errors.email.length > 0) {
-          errTemp.email = errors.email[0];
+          errorTemp.email = errors.email[0];
         }
         if (errors.username && errors.username.length > 0) {
-          errTemp.username = errors.username[0];
+          errorTemp.username = errors.username[0];
         }
-        this.setState({ error: errTemp });
+        this.setState({ error: errorTemp });
       }
     }
   }
 
   validate(inputType) {
-    const input = this.state.input;
-    const err = this.state.error;
+    const { input, error } = this.state;
     const value = input[inputType];
     let pass = false;
-    err[inputType] = '';
+    error[inputType] = '';
     if (value === '') {
-      err[inputType] = 'is required';
+      error[inputType] = 'is required';
     } else if (inputType === 'email' && !validateEmail(value)) {
-      err.email = 'is incorrect format';
+      error.email = 'is incorrect format';
+    } else if (inputType === 'password_confirmation' && value !== input.password) {
+      error.password_confirmation = 'is not match to password';
     } else {
       pass = true;
     }
-    this.setState({ error: err });
+    this.setState({ error: error });
     return pass;
   }
 
   errorLabel(inputType) {
+    const { error } = this.state;
+    // modified this with global
     const errorStyle = {
       color: '#d9534f',
       marginLeft: '25px',
     };
+    // reformat propert to use in error
     const errorBreak = inputType.replace('_', ' ');
     const errorWord = errorBreak.charAt(0).toUpperCase() + errorBreak.substr(1);
-    if (this.state.error[inputType] !== '') {
-      return (<h6 style={errorStyle}>{errorWord} {this.state.error[inputType]}</h6>);
+    if (error[inputType] !== '') {
+      return (<h6 style={errorStyle}>{errorWord} {error[inputType]}</h6>);
     }
     return null;
   }
 
-  handleChangeDate(date) {
-    const temp = this.state.input;
-    temp.birth_date = date.format('L');
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
     this.setState({
-      input: temp,
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
+    });
+  }
+
+  handleChangeDate(date) {
+    this.setState({
+      input: update(this.state.input, {
+        birth_date: {$set: date.format('L')},
+      }),
       selectedDate: date,
     });
   }
@@ -142,39 +158,37 @@ class Profile extends Component {
   }
 
   render() {
-    const containerStyle = {
-      width: '70%',
-      height: 'auto',
-      right: '50%',
-      transform: 'translate(50%)',
-      position: 'absolute',
-    };
+    const { input, error } = this.state;
     return (
-      <div style={containerStyle}>
+      <div className="tiein-container">
         <h3 className="header-label">Profile</h3>
         <hr className="header-line" />
         <form>
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.firstname === '' ? null : 'error'}
+                validationState={error.firstname === '' ? null : 'error'}
               >
                 <ControlLabel>Firstname</ControlLabel>
                 <FormControl
                   placeholder="Firstname"
-                  valueLink={linkState(this, 'input.firstname')}
+                  name="firstname"
+                  value={input.firstname}
+                  onChange={this.handleInputChange}
                 />
                 {this.errorLabel('firstname')}
               </FormGroup>
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.lastname === '' ? null : 'error'}
+                validationState={error.lastname === '' ? null : 'error'}
               >
                 <ControlLabel>Lastname</ControlLabel>
                 <FormControl
                   placeholder="Lastname"
-                  valueLink={linkState(this, 'input.lastname')}
+                  name="lastname"
+                  value={input.lastname}
+                  onChange={this.handleInputChange}
                 />
                 {this.errorLabel('lastname')}
               </FormGroup>
@@ -183,24 +197,28 @@ class Profile extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.email === '' ? null : 'error'}
+                validationState={error.email === '' ? null : 'error'}
               >
                 <ControlLabel>Email address</ControlLabel>
                 <FormControl
                   placeholder="Email"
-                  valueLink={linkState(this, 'input.email')}
+                  name="email"
+                  value={input.email}
+                  onChange={this.handleInputChange}
                 />
               </FormGroup>
               {this.errorLabel('email')}
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.username === '' ? null : 'error'}
+                validationState={error.username === '' ? null : 'error'}
               >
                 <ControlLabel>Username</ControlLabel>
                 <FormControl
                   placeholder="Username"
-                  valueLink={linkState(this, 'input.username')}
+                  name="username"
+                  value={input.username}
+                  onChange={this.handleInputChange}
                 />
                 {this.errorLabel('username')}
               </FormGroup>
@@ -209,7 +227,7 @@ class Profile extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.birth_date === '' ? null : 'error'}
+                validationState={error.birth_date === '' ? null : 'error'}
               >
                 <ControlLabel>Date of Birth</ControlLabel>
                 <DatePicker
@@ -226,12 +244,14 @@ class Profile extends Component {
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.phone_number === '' ? null : 'error'}
+                validationState={error.phone_number === '' ? null : 'error'}
               >
                 <ControlLabel>Phone number</ControlLabel>
                 <FormControl
                   placeholder="Phone number"
-                  valueLink={linkState(this, 'input.phone_number')}
+                  name="phone_number"
+                  value={input.phone_number}
+                  onChange={this.handleInputChange}
                 />
                 {this.errorLabel('phone_number')}
               </FormGroup>
@@ -240,13 +260,19 @@ class Profile extends Component {
           <br />
           <Row>
             <FormGroup>
-              <Col sm={4} smOffset={4}>
+              <Col smOffset={2} sm={4}>
+                <LinkContainer to={{ pathname: 'login' }}>
+                  <Button bsStyle="primary" block>
+                    Cancel
+                  </Button>
+                </LinkContainer>
+              </Col>
+              <Col sm={4}>
                 <Button
                   onClick={this.update}
-                  disabled={this.checkDisable()}
                   block
                 >
-                  Save change
+                  Update
                 </Button>
               </Col>
             </FormGroup>
