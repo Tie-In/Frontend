@@ -15,8 +15,8 @@ const validateEmail = (email) => {
   if (email === '') {
     return true;
   }
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
+  const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return pattern.test(email);
 };
 
 class Register extends Component {
@@ -52,41 +52,43 @@ class Register extends Component {
       user: {},
     };
 
-    this.create = this.create.bind(this);
+    this.register = this.register.bind(this);
     this.validate = this.validate.bind(this);
     this.handleChangeDate = this.handleChangeDate.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  async create() {
+  async register() {
+    const { input, error } = this.state;
+
     this.setState({ createClicked: true });
-    let pass = true;
+    let noError = true;
     // check have error
-    Object.keys(this.state.input).forEach((key) => {
-      const noError = this.validate(key);
-      if (!noError) {
-        pass = false;
+    Object.keys(input).forEach((key) => {
+      if (!this.validate(key)) {
+        noError = false;
       }
     });
-    if (pass && this.state.input.password === this.state.input.password_confirmation) {
-      const data = {
-        user: this.state.input,
-      };
+    
+    if (noError) {
+      console.log('send');
       try {
-        const response = await apiHelper.post('/api/users', data);
+        const response = await apiHelper.post('/api/users', {
+          user: input,
+        });
         const user = response.data;
         this.props.userActions.setUser(user);
         document.location.href = '/';
       } catch (err) {
         const errors = err.response.data.errors;
-        const errTemp = this.state.error;
+        const errorTemp = error;
         if (errors.email && errors.email.length > 0) {
-          errTemp.email = errors.email[0];
+          errorTemp.email = errors.email[0];
         }
         if (errors.username && errors.username.length > 0) {
-          errTemp.username = errors.username[0];
+          errorTemp.username = errors.username[0];
         }
-        this.setState({ error: errTemp });
+        this.setState({ error: errorTemp });
       }
     }
   }
@@ -95,6 +97,7 @@ class Register extends Component {
     const input = this.state.input;
     const err = this.state.error;
     const value = input[inputType];
+
     let pass = false;
     err[inputType] = '';
     if (value === '') {
@@ -111,14 +114,17 @@ class Register extends Component {
   }
 
   errorLabel(inputType) {
+    const { error } = this.state;
+    // modified this with global
     const errorStyle = {
       color: '#d9534f',
       marginLeft: '25px',
     };
+    // reformat propert to use in error
     const errorBreak = inputType.replace('_', ' ');
     const errorWord = errorBreak.charAt(0).toUpperCase() + errorBreak.substr(1);
-    if (this.state.error[inputType] !== '') {
-      return (<h6 style={errorStyle}>{errorWord} {this.state.error[inputType]}</h6>);
+    if (error[inputType] !== '') {
+      return (<h6 style={errorStyle}>{errorWord} {error[inputType]}</h6>);
     }
     return null;
   }
@@ -145,6 +151,7 @@ class Register extends Component {
 
 
   render() {
+    const { error } = this.state;
     const containerStyle = {
       width: '70%',
       height: 'auto',
@@ -154,14 +161,14 @@ class Register extends Component {
     };
 
     return (
-      <div style={containerStyle}>
+      <div className="tiein-container">
         <h3 className="header-label">Register</h3>
         <hr className="header-line" />
         <form>
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.firstname === '' ? null : 'error'}
+                validationState={error.firstname === '' ? null : 'error'}
               >
                 <ControlLabel>Firstname</ControlLabel>
                 <FormControl
@@ -174,7 +181,7 @@ class Register extends Component {
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.lastname === '' ? null : 'error'}
+                validationState={error.lastname === '' ? null : 'error'}
               >
                 <ControlLabel>Lastname</ControlLabel>
                 <FormControl
@@ -189,7 +196,7 @@ class Register extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.email === '' ? null : 'error'}
+                validationState={error.email === '' ? null : 'error'}
               >
                 <ControlLabel>Email address</ControlLabel>
                 <FormControl
@@ -202,7 +209,7 @@ class Register extends Component {
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.username === '' ? null : 'error'}
+                validationState={error.username === '' ? null : 'error'}
               >
                 <ControlLabel>Username</ControlLabel>
                 <FormControl
@@ -217,7 +224,7 @@ class Register extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.password === '' ? null : 'error'}
+                validationState={error.password === '' ? null : 'error'}
               >
                 <ControlLabel>Password</ControlLabel>
                 <FormControl
@@ -231,7 +238,7 @@ class Register extends Component {
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.password_confirmation === '' ? null : 'error'}
+                validationState={error.password_confirmation === '' ? null : 'error'}
               >
                 <ControlLabel>Confirm password</ControlLabel>
                 <FormControl
@@ -247,7 +254,7 @@ class Register extends Component {
           <Row>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.birth_date === '' ? null : 'error'}
+                validationState={error.birth_date === '' ? null : 'error'}
               >
                 <ControlLabel>Date of Birth</ControlLabel>
                 <DatePicker
@@ -264,7 +271,7 @@ class Register extends Component {
             </Col>
             <Col sm={6}>
               <FormGroup
-                validationState={this.state.error.phone_number === '' ? null : 'error'}
+                validationState={error.phone_number === '' ? null : 'error'}
               >
                 <ControlLabel>Phone number</ControlLabel>
                 <FormControl
@@ -288,7 +295,7 @@ class Register extends Component {
               </Col>
               <Col sm={4}>
                 <Button
-                  onClick={this.create}
+                  onClick={this.register}
                   block
                 >
                   Create

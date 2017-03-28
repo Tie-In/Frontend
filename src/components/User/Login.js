@@ -7,6 +7,7 @@ import logo from '../../images/logo-login.png';
 import Background from '../../images/BG-white.png';
 import * as userActions from '../../actions/user-actions';
 import * as apiHelper from '../../helpers/apiHelper';
+import './login.css';
 
 const findPath = (user) => {
   const firstOrg = user.organizations[0];
@@ -17,7 +18,7 @@ const findPath = (user) => {
   }
 };
 
-const doSomething = (e) => {
+const preventSubmit = (e) => {
   e.preventDefault();
 };
 
@@ -81,73 +82,54 @@ class Login extends Component {
   }
 
   render() {
-    const logoMargin = {
-      marginBottom: 50,
-    };
-    const loginBlogStyle = {
-      width: '25%',
-      height: 'auto',
-      right: '50%',
-      bottom: '60%',
-      transform: 'translate(50%,50%)',
-      position: 'absolute',
-    };
+    const { error } = this.state;
 
-    const logoStyle = {
-      width: '35%',
-      height: 'auto',
-      display: 'block',
-      margin: 'auto',
-    };
-
-    const inputStyle = {
-      background: 'transparent',
-      borderColor: 'black',
-    };
-
+    // first priority css
     const registerButton = {
       background: 'transparent',
       borderColor: 'black',
       color: 'black',
     };
+    
+    const errorLabel = {
+      color: '#d9534f',
+    };
 
     return (
-      <div>
-        <div style={loginBlogStyle}>
-          <div style={logoMargin}>
-            <img style={logoStyle} src={logo} alt="logo" />
-          </div>
-          <form onSubmit={doSomething}>
-            <FormGroup>
-              <ControlLabel>Username or Email</ControlLabel>
-              <FormControl
-                style={inputStyle}
-                name="email"
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
-            <FormGroup>
-              <ControlLabel>Password</ControlLabel>
-              <FormControl
-                style={inputStyle}
-                name="password"
-                onChange={this.handleInputChange}
-                type="password"
-              />
-            </FormGroup>
-            <p style={{ color: 'red' }}>{this.state.error}</p>
-            <FormGroup>
-              <Col sm={6}>
-                <Button style={registerButton} onClick={register} block>Register</Button>
-              </Col>
-              <Col sm={6}>
-                <Button onClick={this.login} type="submit" block>
-                  Sign in
-                </Button>
-              </Col>
-            </FormGroup>
-          </form>
+      <div className="login-container" >
+        <div style={{marginBottom: 50}}>
+          <img className="logo" src={logo} alt="logo" />
         </div>
+        <form onSubmit={preventSubmit}>
+          <FormGroup>
+            <ControlLabel>Username or Email</ControlLabel>
+            <FormControl
+              className="login-input"
+              name="email"
+              onChange={this.handleInputChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Password</ControlLabel>
+            <FormControl
+              className="login-input"
+              name="password"
+              type="password"
+              onChange={this.handleInputChange}
+            />
+          </FormGroup>
+          <p style={errorLabel}>{error}</p>
+          <FormGroup>
+            <Col sm={6}>
+              <Button style={registerButton} onClick={register} block>Register</Button>
+            </Col>
+            <Col sm={6}>
+              <Button onClick={this.login} type="submit" block>
+                Sign in
+              </Button>
+            </Col>
+          </FormGroup>
+        </form>
       </div>
     );
   }

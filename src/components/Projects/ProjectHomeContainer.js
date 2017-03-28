@@ -29,7 +29,7 @@ class ProjectHomeContainer extends Component {
     };
     return (
       <DocumentTitle title={`${project.name}`}>
-        <div className="tieinContainer">
+        <div className="tiein-container">
           <h3 className="header-label">{project.name}</h3>
           <hr className="header-line" />
           <div className="container" style={cardStyle}>

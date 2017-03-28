@@ -32,7 +32,7 @@ class Container extends Component {
     const { effort_estimation, features } = this.state;
     return (
       <DocumentTitle title={`${project.name}・Planning`}>
-        <div className="tieinContainer">
+        <div className="tiein-container">
           <h3 className="header-label">Planning Result</h3>
           <hr className="header-line" />
           <div>
