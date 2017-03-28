@@ -1,7 +1,9 @@
 import React, { PropTypes, Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import '../../style/projectStyle.css';
+import '../../style/projectCardStyle.css';
+import '../../style/autosuggestStyle.css';
+import userimg from '../../images/user1.png';
 
 class ProjectCard extends Component {
   render() {
@@ -11,25 +13,27 @@ class ProjectCard extends Component {
       border: 'solid 1px #E5E5E5',
       borderRadius: '4px',
       marginBottom: '30px',
-      // position: 'absolute',
+      padding: '0 5% 0 5%',
     };
     const { project } = this.props;
     const descriptionStyle = {
-      width: '87%',
-      position: 'absolute',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
     };
-    console.log(project);
+    const imgStyle = {
+      display: 'flex',
+      alignItems: 'center',
+      backgroundRepeat: 'no-repeat',
+    };
     return (
-      <div style={cardStyle}>
-        <div className="container">
-          <LinkContainer to={{ pathname: `/organizations/${project.organization_id}/projects/${project.id}` }}>
-            <a key={project.name}><h3>{project.name}</h3></a>
-          </LinkContainer>
-          <p style={descriptionStyle}>{project.description}</p>
-          <span className={`suggestion-content${project.users}`}></span>
+      <div className="card" style={cardStyle}>
+        <LinkContainer to={{ pathname: `/organizations/${project.organization_id}/projects/${project.id}` }}>
+          <a key={project.name}><h3>{project.name}</h3></a>
+        </LinkContainer>
+        <p style={descriptionStyle}>{project.description}</p>
+        <div>
+          <img src={userimg} style={imgStyle} alt="contributor-thumbnail" />
         </div>
       </div>
     );

@@ -6,3 +6,7 @@ a:hover {
   color: #B78E8C;
   text-decoration : none;
 }
+a:action {
+  color: #a66f6d;
+  text-decoration : none;
+}

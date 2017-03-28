@@ -23,7 +23,7 @@ function getSuggestionValue(suggestion) {
 function renderSuggestion(suggestion) {
   const suggestionText = `${suggestion.username} (${suggestion.email})`;
   return (
-    <span className={`suggestion-content${suggestion.image}`}>
+    <span className={`suggestion-content ${suggestion.image}`}>
       <span className="name">
         <span>{suggestionText}</span>
       </span>
@@ -168,8 +168,7 @@ class NewOrgContainer extends Component {
           </Button>
         </Col>
       </Row>);
-    },
-    );
+    });
     return (
       <div>
         {content}
