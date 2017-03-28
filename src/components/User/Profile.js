@@ -165,7 +165,7 @@ class Profile extends Component {
         <hr className="header-line" />
         <form>
           <Row>
-            <Col sm={6}>
+            <Col xs={12} sm={6}>
               <FormGroup
                 validationState={error.firstname === '' ? null : 'error'}
               >
@@ -179,7 +179,7 @@ class Profile extends Component {
                 {this.errorLabel('firstname')}
               </FormGroup>
             </Col>
-            <Col sm={6}>
+            <Col xs={12} sm={6}>
               <FormGroup
                 validationState={error.lastname === '' ? null : 'error'}
               >
@@ -195,7 +195,7 @@ class Profile extends Component {
             </Col>
           </Row>
           <Row>
-            <Col sm={6}>
+            <Col xs={12} sm={6}>
               <FormGroup
                 validationState={error.email === '' ? null : 'error'}
               >
@@ -209,7 +209,7 @@ class Profile extends Component {
               </FormGroup>
               {this.errorLabel('email')}
             </Col>
-            <Col sm={6}>
+            <Col xs={12} sm={6}>
               <FormGroup
                 validationState={error.username === '' ? null : 'error'}
               >
@@ -225,7 +225,7 @@ class Profile extends Component {
             </Col>
           </Row>
           <Row>
-            <Col sm={6}>
+            <Col xs={12} sm={6}>
               <FormGroup
                 validationState={error.birth_date === '' ? null : 'error'}
               >
@@ -242,7 +242,7 @@ class Profile extends Component {
                 {this.errorLabel('birth_date')}
               </FormGroup>
             </Col>
-            <Col sm={6}>
+            <Col xs={12} sm={6}>
               <FormGroup
                 validationState={error.phone_number === '' ? null : 'error'}
               >
@@ -260,16 +260,10 @@ class Profile extends Component {
           <br />
           <Row>
             <FormGroup>
-              <Col smOffset={2} sm={4}>
-                <LinkContainer to={{ pathname: 'login' }}>
-                  <Button bsStyle="primary" block>
-                    Cancel
-                  </Button>
-                </LinkContainer>
-              </Col>
-              <Col sm={4}>
+              <Col xs={12} sm={4} smOffset={4}>
                 <Button
                   onClick={this.update}
+                  disabled={this.checkDisable()}
                   block
                 >
                   Update

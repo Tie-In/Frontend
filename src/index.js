@@ -34,11 +34,11 @@ ReactDOM.render(
     <Router history={history}>
       <Route path="/" component={OrganizationApp}>
         <IndexRoute component={NoOrgContainer} />
+        <Route path="profile" component={Profile} />
         <Route path="organizations/new" component={NewOrgContainer} />
         <Route path="organizations/:organizationId">
           <IndexRoute component={OrganizationContainer} />
           <Route path="projects/new" component={NewProject} />
-          <Route path="profile" component={Profile} />
           <Route path="setting" component={OrganizationSetting} />
         </Route>
       </Route>

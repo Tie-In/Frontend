@@ -53,7 +53,7 @@ class OrganizationNavbar extends Component {
                         <img id="avatar" src={user1} alt="avatar" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        <MenuItem eventKey="1" href={`/organizations/${this.props.organization.id}/profile`}>Profile</MenuItem>
+                        <MenuItem eventKey="1" href={`/profile`}>Profile</MenuItem>
                         <MenuItem eventKey="2" href={`/organizations/${this.props.organization.id}/setting`}>Setting</MenuItem>
                         <MenuItem divider />
                         <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
