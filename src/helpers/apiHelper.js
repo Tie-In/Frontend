@@ -22,4 +22,23 @@ export function get(path, parameter) {
   });
 }
 
-// export default { apiPost, apiGet };
+export function put(path, body) {
+  return axios({
+    method: 'PUT',
+    url: path,
+    data: body,
+    headers: {
+      Authorization: `${localStorage.getItem('token') || ''}`,
+    },
+  });
+}
+
+export function del(path) {
+  return axios({
+    method: 'DELETE',
+    url: path,
+    headers: {
+      Authorization: `${localStorage.getItem('token') || ''}`,
+    },
+  });
+}

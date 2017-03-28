@@ -1,13 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Dropdown, MenuItem } from 'react-bootstrap';
+import 'simple-line-icons/css/simple-line-icons.css';
 import NavStyle from '../../style/navstyle.css';
 import logo from '../../images/logo.png';
-import avatar from '../../images/logo-login.png';
-import 'simple-line-icons/css/simple-line-icons.css';
-import * as userActions from '../../actions/user-actions';
+import user1 from '../../images/user1.png';
 
 class NormalNavbar extends Component {
 
@@ -21,18 +19,17 @@ class NormalNavbar extends Component {
     const data = [
       { id: 1, name: 'Project', path: `${path}#` },
       { id: 2, name: 'Backlog', path: '/backlog' },
-      { id: 3, name: 'New task', path: `${path}/task-new` },
+      { id: 3, name: 'New task', path: `${path}/tasks/new` },
       { id: 4, name: 'Planning', path: `${path}/planning` },
       { id: 5, name: 'Active sprint', path: `${path}/board` },
       { id: 6, name: 'Retrospective', path: '/retrospective' },
       { id: 7, name: 'Dashboard', path: '/dashboard' },
-      { id: 8, name: 'Admin', path: '/admin' },
     ];
 
     const menuNode = data.map((menu) => {
       return (
         <li key={menu.id}>
-          <Link to={menu.path} activeClassName="active"> {menu.name}</Link>
+          <Link to={menu.path} activeClassName="active">{menu.name}</Link>
         </li>
       );
     });
@@ -54,9 +51,9 @@ class NormalNavbar extends Component {
               <div className="navbar-header">
                 <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-primary-collapse">
                   <span className="sr-only">Toggle navigation</span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
+                  <span className="icon-bar" />
+                  <span className="icon-bar" />
+                  <span className="icon-bar" />
                 </button>
               </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
@@ -65,23 +62,26 @@ class NormalNavbar extends Component {
                   {menuNode}
                   <Dropdown className="pull-right" id="profile-dropdown">
                     <Dropdown.Toggle>
-                      <img id="avatar" src={avatar} alt="avatar"></img>
+                      <img
+                        id="avatar" role="presentation"
+                        src={user1}
+                      />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <MenuItem eventKey="1">Profile</MenuItem>
-                      <MenuItem eventKey="2">Setting</MenuItem>
+                      <MenuItem eventKey="1" href={`/organizations/${this.props.organization.id}/profile`}>Profile</MenuItem>
+                      <MenuItem eventKey="2" href={`/organizations/${this.props.organization.id}/setting`}>Setting</MenuItem>
                       <MenuItem divider />
                       <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
                     </Dropdown.Menu>
                   </Dropdown>
-                  <div className="searchBox input-group pull-right">
-                    <input type="text" className="form-control" placeholder="Search"></input>
+                  {/* <div className="searchBox input-group pull-right">
+                    <input type="text" className="form-control" placeholder="Search" />
                     <span className="input-group-btn">
                       <button className="btn" type="submit">
-                        <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        <span className="glyphicon glyphicon-search" aria-hidden="true" />
                       </button>
                     </span>
-                  </div>
+                  </div> */}
                 </ul>
               </div>
             </div>
@@ -91,11 +91,11 @@ class NormalNavbar extends Component {
           <ul id="sidebar-nav-list">
             {organizationNodes}
             <li className="sidebar-nav-item">
-              <a href="/organization-new"><span className="icon-plus" /> Create organization</a>
+              <a href="/organizations/new"><span className="icon-plus" /> Create organization</a>
             </li>
           </ul>
         </div>
-        <a id="nav-screen-overlay" href="#"></a>
+        <a id="nav-screen-overlay" href="#" />
       </div>
     );
   }
@@ -105,21 +105,14 @@ NormalNavbar.propTypes = {
   user: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     user: state.user,
     organization: state.organization,
-    project: state.project
+    project: state.project,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(userActions, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NormalNavbar);
+export default connect(mapStateToProps)(NormalNavbar);

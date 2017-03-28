@@ -1,10 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, MenuItem } from 'react-bootstrap';
-import avatar from '../../images/logo-login.png';
+import 'simple-line-icons/css/simple-line-icons.css';
 import NavStyle from '../../style/navstyle.css';
 import logo from '../../images/logo.png';
-import 'simple-line-icons/css/simple-line-icons.css';
+import user1 from '../../images/user1.png';
 
 class OrganizationNavbar extends Component {
   constructor(props) {
@@ -50,11 +50,11 @@ class OrganizationNavbar extends Component {
                   <li className="pull-right" style={{ marginTop: 5, width: '30%', paddingLeft: '20%' }}>
                     <Dropdown id="profile-dropdown">
                       <Dropdown.Toggle>
-                        <img id="avatar" src={avatar} alt="avatar" />
+                        <img id="avatar" src={user1} alt="avatar" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        <MenuItem eventKey="1">Profile</MenuItem>
-                        <MenuItem eventKey="2">Setting</MenuItem>
+                        <MenuItem eventKey="1" href={`/organizations/${this.props.organization.id}/profile`}>Profile</MenuItem>
+                        <MenuItem eventKey="2" href={`/organizations/${this.props.organization.id}/setting`}>Setting</MenuItem>
                         <MenuItem divider />
                         <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
                       </Dropdown.Menu>
@@ -70,7 +70,7 @@ class OrganizationNavbar extends Component {
           <ul id="sidebar-nav-list">
             {organizationNodes}
             <li className="sidebar-nav-item">
-              <a href="/organization-new"><span className="icon-plus" /> Create organization</a>
+              <a href="/organizations/new"><span className="icon-plus" /> Create organization</a>
             </li>
           </ul>
         </div>

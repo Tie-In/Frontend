@@ -1,9 +1,9 @@
-var path = require('path');
-var autoprefixer = require('autoprefixer');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-var paths = require('./paths');
+const path = require('path');
+const autoprefixer = require('autoprefixer');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const paths = require('./paths');
 
 module.exports = {
   devtool: 'eval',
@@ -45,16 +45,13 @@ module.exports = {
         test: /\.js$/,
         include: paths.appSrc,
         loader: 'babel',
+        exclude: /node_modules/,
         query: require('./babel.dev'),
       },
       {
         test: /\.css$/,
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'style!css!postcss',
-      },
-      {
-        test: /\.styl$/,
-        loader: 'style!css!stylus-loader',
       },
       {
         test: /\.json$/,

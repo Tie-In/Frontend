@@ -5,7 +5,7 @@ import {
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import linkState from 'react-link-state';
+import update from 'react-addons-update';
 import Autosuggest from 'react-autosuggest';
 import * as organizationActions from '../../actions/organization-actions';
 import * as userActions from '../../actions/user-actions';
@@ -32,7 +32,7 @@ function renderSuggestion(suggestion) {
 }
 
 Array.prototype.diff = function(a) {
-  return this.filter((i) => { return a.indexOf(i) < 0; });
+  return this.filter((i) => {return a.indexOf(i) < 0;});
 };
 
 class NewOrgContainer extends Component {
@@ -53,9 +53,11 @@ class NewOrgContainer extends Component {
     };
 
     this.create = this.create.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   async componentWillMount() {
+    this.props.organizationActions.setOrganization([]);
     try {
       const response = await apiHelper.get('/api/users');
       const users = response.data;
@@ -85,17 +87,11 @@ class NewOrgContainer extends Component {
 
   onSuggestionSelected = (event, { suggestion }) => {
     if (suggestion !== undefined) {
-      const newUsernames = this.state.contributors.slice();
-      newUsernames.push(suggestion);
-
-      const newUsers = this.state.input.users.slice();
-      newUsers.push({ id: suggestion.id });
-
-      const newInput = this.state.input;
-      newInput.users = newUsers;
-
+      const newContributors = update(this.state.contributors, { $push: [suggestion] });
+      // input user need only id
+      const newInput = update(this.state.input, { users: { $push: [{ id: suggestion.id }] } });
       this.setState({
-        contributors: newUsernames,
+        contributors: newContributors,
         value: '',
         input: newInput,
       });
@@ -108,8 +104,8 @@ class NewOrgContainer extends Component {
       return [];
     }
     const availableUsers = this.state.allUsers.diff(this.state.contributors);
-    const regex = new RegExp('\\b' + inputValue, 'i');
-    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
+    const regex = new RegExp(`\\b${inputValue}`, 'i');
+    return availableUsers.filter((person) => { return regex.test(getSuggestionValue(person)); });
   }
 
   async create() {
@@ -125,8 +121,8 @@ class NewOrgContainer extends Component {
         });
         const org = response.data.organization;
         const user = response.data.user;
-        this.props.organizationActions.setOrganization(org);
         this.props.userActions.setUser(user);
+
         document.location.href = `/organizations/${org.id}`;
       } catch (err) {
         console.log(err.response);
@@ -149,6 +145,17 @@ class NewOrgContainer extends Component {
     this.setState({
       contributors: array,
       input: newInput,
+    });
+  }
+
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
     });
   }
 
@@ -177,12 +184,6 @@ class NewOrgContainer extends Component {
   }
 
   render() {
-    const buttonGroup = {
-      marginTop: '20px',
-    };
-    const singleButton = {
-      marginTop: '10px',
-    };
     const contributorList = {
       height: '200px',
       position: 'relative',
@@ -215,11 +216,19 @@ class NewOrgContainer extends Component {
               <Col xs={12} md={8} mdOffset={2}>
                 <h3 className="header-label">Create new organization</h3>
                 <hr className="header-line" />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={8} mdOffset={2}>
                 <FormGroup validationState={this.state.nameError === '' ? null : 'error'}>
                   <ControlLabel>
                     Organization&#39;s name
                   </ControlLabel>
-                  <FormControl type="text" placeholder="Name" valueLink={linkState(this, 'input.name')} />
+                  <FormControl
+                    type="text" placeholder="Name"
+                    name="name"
+                    onChange={this.handleInputChange}
+                  />
                   <h6 style={errorStyle}>{this.state.nameError}</h6>
                 </FormGroup>
               </Col>
@@ -230,7 +239,11 @@ class NewOrgContainer extends Component {
                   <ControlLabel>
                     Description (optional)
                   </ControlLabel>
-                  <FormControl type="text" placeholder="Description of organization" valueLink={linkState(this, 'input.description')} />
+                  <FormControl
+                    type="text" placeholder="Description of organization"
+                    name="description"
+                    onChange={this.handleInputChange}
+                  />
                 </FormGroup>
               </Col>
             </Row>
@@ -262,15 +275,16 @@ class NewOrgContainer extends Component {
                 </Row>
               </Col>
             </Row>
+            <br />
             <Row>
-              <FormGroup style={buttonGroup}>
+              <FormGroup>
                 <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                  <Button style={singleButton} bsStyle="primary" href="/" key="cancel" block>
+                  <Button bsStyle="primary" href="/" key="cancel" block>
                     Cancel
                   </Button>
                 </Col>
                 <Col xs={12} md={3}>
-                  <Button style={singleButton} onClick={this.create} key="submit" block>
+                  <Button onClick={this.create} key="submit" block>
                     Create
                   </Button>
                 </Col>
@@ -284,8 +298,8 @@ class NewOrgContainer extends Component {
 }
 
 NewOrgContainer.propTypes = {
-  organizationActions: PropTypes.object.isRequired,
   userActions: PropTypes.object.isRequired,
+  organizationActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

@@ -18,13 +18,14 @@ module.exports = {
   devtool: 'source-map',
   entry: [
     require.resolve('./polyfills'),
-    path.join(paths.appSrc, 'index')
+    path.join(paths.appSrc, 'index'),
+    path.join(paths.appSrc, 'style/global.css'),
   ],
   output: {
     path: paths.appBuild,
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
-    publicPath: publicPath
+    publicPath: publicPath,
   },
   resolve: {
     extensions: ['', '.js', '.json'],
@@ -45,40 +46,31 @@ module.exports = {
     moduleTemplates: ['*-loader']
   },
   module: {
-    preLoaders: [
-      {
-        test: /\.js$/,
-        loader: 'eslint',
-        include: paths.appSrc
-      }
-    ],
     loaders: [
       {
         test: /\.js$/,
         include: paths.appSrc,
         loader: 'babel',
-        query: require('./babel.prod')
+        exclude: /node_modules/,
+        query: require('./babel.prod'),
       },
       {
         test: /\.css$/,
         include: [paths.appSrc, paths.appNodeModules],
-        // Disable autoprefixer in css-loader itself:
-        // https://github.com/webpack/css-loader/issues/281
-        // We already have it thanks to postcss.
-        loader: ExtractTextPlugin.extract('style', 'css?-autoprefixer!postcss')
+        loader: 'style!css!postcss',
       },
       {
         test: /\.json$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'json'
+        loader: 'json',
       },
       {
         test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'file',
         query: {
-          name: 'static/media/[name].[hash:8].[ext]'
-        }
+          name: 'static/media/[name].[ext]',
+        },
       },
       {
         test: /\.(mp4|webm)(\?.*)?$/,
@@ -86,16 +78,10 @@ module.exports = {
         loader: 'url',
         query: {
           limit: 10000,
-          name: 'static/media/[name].[hash:8].[ext]'
-        }
-      }
-    ]
-  },
-  eslint: {
-    // TODO: consider separate config for production,
-    // e.g. to enable no-console and no-debugger only in prod.
-    configFile: path.join(__dirname, 'eslint.js'),
-    useEslintrc: false
+          name: 'static/media/[name].[ext]',
+        },
+      },
+    ],
   },
   postcss: function() {
     return [autoprefixer];

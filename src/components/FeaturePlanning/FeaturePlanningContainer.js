@@ -64,7 +64,7 @@ class FeaturePlanningContainer extends Component {
   render() {
     const { features } = this.state;
     return (
-      <div className="tieinContainer">
+      <div className="tiein-container">
         <h3 className="header-label">Add Planning Feature</h3>
         <hr className="header-line" />
         <form onSubmit={this.doSomething}>

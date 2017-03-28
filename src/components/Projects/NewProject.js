@@ -5,8 +5,9 @@ import {
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import linkState from 'react-link-state';
+import update from 'react-addons-update';
 import Autosuggest from 'react-autosuggest';
+import DocumentTitle from 'react-document-title';
 import * as projectActions from '../../actions/project-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 import '../../style/autosuggestStyle.css';
@@ -31,7 +32,7 @@ function renderSuggestion(suggestion) {
 }
 
 Array.prototype.diff = function(a) {
-  return this.filter(function(i) {return a.indexOf(i) < 0;});
+  return this.filter((i) => {return a.indexOf(i) < 0;});
 };
 
 class NewProject extends Component {
@@ -54,6 +55,7 @@ class NewProject extends Component {
     };
 
     this.create = this.create.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   async componentWillMount() {
@@ -88,17 +90,11 @@ class NewProject extends Component {
 
   onSuggestionSelected = (event, { suggestion }) => {
     if (suggestion !== undefined) {
-      const newUsernames = this.state.contributors.slice();
-      newUsernames.push(suggestion);
-
-      const newUsers = this.state.input.users.slice();
-      newUsers.push({ id: suggestion.id });
-
-      const newInput = this.state.input;
-      newInput.users = newUsers;
-
+      const newContributors = update(this.state.contributors, { $push: [suggestion] });
+      // input user need only id
+      const newInput = update(this.state.input, { users: { $push: [{ id: suggestion.id }] } });
       this.setState({
-        contributors: newUsernames,
+        contributors: newContributors,
         value: '',
         input: newInput,
       });
@@ -186,6 +182,17 @@ class NewProject extends Component {
     );
   }
 
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
+    });
+  }
+
   render() {
     const buttonGroup = {
       marginTop: '20px',
@@ -220,88 +227,104 @@ class NewProject extends Component {
     const previousURL = `/organizations/${this.state.input.organizationId}`;
 
     return (
-      <div>
-        <Grid>
-          <Form>
-            <Row>
-              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                <h3 className="header-label">Create new project</h3>
-                <hr className="header-line" />
-                <FormGroup controlId="formInlineName">
-                  <ControlLabel>
-                    Project&#39;s name
+      <DocumentTitle title={`${this.props.organization.name}・New project`}>
+        <div>
+          <Grid>
+            <Form>
+              <Row>
+                <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+                  <h3 className="header-label">Create new project</h3>
+                  <hr className="header-line" />
+                  <FormGroup controlId="formInlineName">
+                    <ControlLabel>
+                      Project&#39;s name
+                    </ControlLabel>
+                    <FormControl
+                      type="text" placeholder="Name"
+                      name="name"
+                      onChange={this.handleInputChange}
+                    />
+                    <h6 style={errorStyle}>{this.state.nameError}</h6>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+                  <FormGroup controlId="formInlineDetail">
+                    <ControlLabel>
+                      Description (optional)
+                    </ControlLabel>
+                    <FormControl
+                      type="text" placeholder="Description of organization"
+                      name="description"
+                      onChange={this.handleInputChange}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
+                  <FormGroup controlId="formInlineDetail">
+                    <ControlLabel>
+                      Sprint duration (weeks)
+                    </ControlLabel>
+                    <FormControl
+                      type="number" min="1"
+                      placeholder="Sprint duration (week)"
+                      value={this.state.input.sprint_duration}
+                      name="sprint_duration"
+                      onChange={this.handleInputChange}
+                    />
+                    <h6 style={errorStyle}>{this.state.sprintError}</h6>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={4} mdOffset={2}>
+                  <FormGroup controlId="formInlineContributor">
+                    <ControlLabel>
+                      Contributor
+                    </ControlLabel>
+                    <Autosuggest
+                      suggestions={suggestions}
+                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                      onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                      getSuggestionValue={getSuggestionValue}
+                      renderSuggestion={renderSuggestion}
+                      inputProps={inputProps}
+                      onSuggestionSelected={this.onSuggestionSelected}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col style={contributorList} xs={12} md={4}>
+                  <ControlLabel style={{ color: 'white' }}>
+                    List of contributors
                   </ControlLabel>
-                  <FormControl type="text" placeholder="Name" valueLink={linkState(this, 'input.name')} />
-                  <h6 style={errorStyle}>{this.state.nameError}</h6>
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                <FormGroup controlId="formInlineDetail">
-                  <ControlLabel>
-                    Description (optional)
-                  </ControlLabel>
-                  <FormControl type="text" placeholder="Description of organization" valueLink={linkState(this, 'input.description')} />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
-                <FormGroup controlId="formInlineDetail">
-                  <ControlLabel>
-                    Sprint duration (weeks)
-                  </ControlLabel>
-                  <FormControl type="number" min="1" placeholder="Sprint duration (week)" valueLink={linkState(this, 'input.sprint_duration')} />
-                  <h6 style={errorStyle}>{this.state.sprintError}</h6>
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={4} mdOffset={2}>
-                <FormGroup controlId="formInlineContributor">
-                  <ControlLabel>
-                    Contributor
-                  </ControlLabel>
-                  <Autosuggest
-                    suggestions={suggestions}
-                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                    onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                    getSuggestionValue={getSuggestionValue}
-                    renderSuggestion={renderSuggestion}
-                    inputProps={inputProps}
-                    onSuggestionSelected={this.onSuggestionSelected}
-                  />
-                </FormGroup>
-              </Col>
-              <Col style={contributorList} xs={12} md={4}>
-                <ControlLabel style={{ color: 'white' }}>
-                  List of contributors
-                </ControlLabel>
-                <Row style={scrollableContainer}>
-                  <Col smOffset={0} sm={11}>
-                    {this.contributor()}
+                  <Row style={scrollableContainer}>
+                    <Col smOffset={0} sm={11}>
+                      {this.contributor()}
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+              <Row>
+                <FormGroup style={buttonGroup}>
+                  <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
+                    <Button style={singleButton} bsStyle="primary" href={previousURL} key="cancel" block>
+                      Cancel
+                    </Button>
                   </Col>
-                </Row>
-              </Col>
-            </Row>
-            <Row>
-              <FormGroup style={buttonGroup}>
-                <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                  <Button style={singleButton} bsStyle="primary" href={previousURL} key="cancel" block>
-                    Cancel
-                  </Button>
-                </Col>
-                <Col xs={12} md={3}>
-                  <Button style={singleButton} onClick={this.create} key="submitProject" block>
-                    Create
-                  </Button>
-                </Col>
-              </FormGroup>
-            </Row>
-          </Form>
-        </Grid>
-      </div>
+                  <Col xs={12} md={3}>
+                    <Button style={singleButton} onClick={this.create} key="submitProject" block>
+                      Create
+                    </Button>
+                  </Col>
+                </FormGroup>
+              </Row>
+            </Form>
+          </Grid>
+        </div>
+      </DocumentTitle>
     );
   }
 }
@@ -309,11 +332,13 @@ class NewProject extends Component {
 NewProject.propTypes = {
   projectActions: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
+  organization: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     user: state.user,
+    organization: state.organization,
   };
 }
 

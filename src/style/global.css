@@ -54,14 +54,6 @@
   padding-top: 100px;
 }
 
-.tieinContainer {
-  width: 60%;
-  height: auto;
-  right: 50%;
-  transform: translate(50%);
-  position: absolute;
-}
-
 .header-label {
   color: #A25E5D;
 }
@@ -70,8 +62,13 @@
   border-color: black;
 }
 
+<<<<<<< HEAD
 /*.tieinContainer {
   width: 100%;
+=======
+.tiein-container {
+  width: 60%;
+>>>>>>> ed1b3f0f20e75995276bbac210cdaf6edfc6fcf4
   height: auto;
   right: 50%;
   transform: translate(50%);

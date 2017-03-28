@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Row, Col, Image } from 'react-bootstrap';
+import DocumentTitle from 'react-document-title';
 import ProjectCard from './ProjectCard';
 import * as organizationActions from '../../actions/organization-actions';
 import AddProject from '../../images/newproject.png';
@@ -22,7 +23,7 @@ class OrganizationContainer extends Component {
   }
 
   buttonType(projects) {
-    const newProjectPath = `./${this.props.params.organizationId}/project-new`;
+    const newProjectPath = `./${this.props.params.organizationId}/projects/new`;
     const articleStyles = {
       margin: '0 auto',
       position: 'fixed',
@@ -45,7 +46,7 @@ class OrganizationContainer extends Component {
     }
     return (
       <div style={articleStyles} href={newProjectPath}>
-        <a href="/organization-new">
+        <a href={newProjectPath}>
           <Image src={AddProject} alt="Image" />
         </a>
         <p style={pStyle} />
@@ -58,23 +59,23 @@ class OrganizationContainer extends Component {
     const { organization } = this.props;
 
     return (
-      <div>
-        { organization.projects !== undefined ?
-          <Row>
-            <Col xs={12} md={10} xsOffset={0} mdOffset={1}>
-              <Row>
+      <DocumentTitle title={organization.name}>
+        <div>
+          { organization.projects !== undefined ?
+            <Row>
+              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
                 {
                   organization.projects.map((project) => {
-                    return <Col md={6}><ProjectCard key={project.id} project={project} /></Col>;
+                    return <ProjectCard key={project.id} project={project} />;
                   })
                 }
-              </Row>
-              {this.buttonType(organization.projects)}
-            </Col>
-          </Row>
-          : null
-        }
-      </div>
+                {this.buttonType(organization.projects)}
+              </Col>
+            </Row>
+            : null
+          }
+        </div>
+      </DocumentTitle>
     );
   }
 }
