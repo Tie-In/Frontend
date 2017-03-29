@@ -5,6 +5,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import * as listsActions from '../../actions/list-actions';
+import * as projectActions from '../../actions/project-actions';
 import '../../style/board.css';
 import CardsContainer from './Cards/CardsContainer';
 import CustomDragLayer from './CustomDragLayer';
@@ -15,6 +16,7 @@ import * as apiHelper from '../../helpers/apiHelper';
 class Board extends Component {
   static propTypes = {
     listsActions: PropTypes.object.isRequired,
+    projectActions: PropTypes.object.isRequired,
     lists: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
@@ -38,8 +40,13 @@ class Board extends Component {
   }
 
   async componentWillMount() {
+    console.log(this.props.project);
     try {
-      const responseSprint = await apiHelper.get('/api/sprints/1');
+      const response = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
+      const project = response.data;
+      this.props.projectActions.setProject(project);
+
+      const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
       const data = responseSprint.data;
       this.setState({ sprintNumber: data.sprint.number });
       const statuses = data.statuses;
@@ -179,6 +186,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     listsActions: bindActionCreators(listsActions, dispatch),
+    projectActions: bindActionCreators(projectActions, dispatch),
   };
 }
 

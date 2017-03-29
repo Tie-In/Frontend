@@ -17,7 +17,7 @@ class EditModal extends Component {
       input: {
         name: item.name,
         description: item.description,
-        feature_id: item.feature.id,
+        feature_id: (item.feature ? item.feature.id : ''),
         assignee_id: item.assignee_id,
         start_date: item.start_date,
         end_date: item.end_date,
