@@ -2,20 +2,21 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Dropdown, MenuItem } from 'react-bootstrap';
+import SidebarNav from './SidebarNav';
 import 'simple-line-icons/css/simple-line-icons.css';
-import NavStyle from '../../style/navstyle.css';
+import './navstyle.css';
 import logo from '../../images/logo.png';
 import user1 from '../../images/user1.png';
 
 class NormalNavbar extends Component {
-
   logout() {
     localStorage.clear();
     document.location.href = '/login';
   }
 
   render() {
-    const path = `/organizations/${this.props.organization.id}/projects/${this.props.project.id}`;
+    const { user, organization, project } = this.props;
+    const path = `/organizations/${organization.id}/projects/${project.id}`;
     const data = [
       { id: 1, name: 'Project', path: `${path}#` },
       { id: 2, name: 'Backlog', path: '/backlog' },
@@ -34,20 +35,12 @@ class NormalNavbar extends Component {
       );
     });
 
-    const organizationNodes = this.props.user.organizations.map((org) => {
-      return (
-        <li key={org.id} className="sidebar-nav-item">
-          <a href={`/organizations/${org.id}`}>{org.name}</a>
-        </li>
-      );
-    });
-
     return (
-      <div className="App" style={NavStyle}>
+      <div className="App">
         <header role="banner">
-          <nav id="navbar-primary" className="navbar navbar-default" role="navigation">
+          <nav id="navbar-primary" className="navbar navbar-default" style={{ height: 120 }} role="navigation">
             <div className="container-fluid">
-              <img id="logo-main" src={logo} alt="Logo Thing main logo" />
+              <img id="logo-main" src={logo} alt="Logo" />
               <div className="navbar-header">
                 <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-primary-collapse">
                   <span className="sr-only">Toggle navigation</span>
@@ -58,7 +51,11 @@ class NormalNavbar extends Component {
               </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav">
-                  <li className="pull-left" id="slide-sidebar"><a href="#sidebar-nav">{this.props.organization.name}<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a></li>
+                  <li className="pull-left" id="slide-sidebar" >
+                    <a href="#sidebar-nav">
+                      {organization.name}<span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
+                    </a>
+                  </li>
                   {menuNode}
                   <Dropdown className="pull-right" id="profile-dropdown">
                     <Dropdown.Toggle>
@@ -69,7 +66,7 @@ class NormalNavbar extends Component {
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <MenuItem eventKey="1" href={`/profile`}>Profile</MenuItem>
-                      <MenuItem eventKey="2" href={`/organizations/${this.props.organization.id}/setting`}>Setting</MenuItem>
+                      <MenuItem eventKey="2" href={`/organizations/${organization.id}/setting`}>Setting</MenuItem>
                       <MenuItem divider />
                       <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
                     </Dropdown.Menu>
@@ -87,14 +84,7 @@ class NormalNavbar extends Component {
             </div>
           </nav>
         </header>
-        <div id="sidebar-nav">
-          <ul id="sidebar-nav-list">
-            {organizationNodes}
-            <li className="sidebar-nav-item">
-              <a href="/organizations/new"><span className="icon-plus" /> Create organization</a>
-            </li>
-          </ul>
-        </div>
+        <SidebarNav organizations={user.organizations} />
         <a id="nav-screen-overlay" href="#" />
       </div>
     );

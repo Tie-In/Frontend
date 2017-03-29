@@ -1,79 +1,66 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, MenuItem } from 'react-bootstrap';
+import SidebarNav from './SidebarNav';
 import 'simple-line-icons/css/simple-line-icons.css';
-import NavStyle from '../../style/navstyle.css';
 import logo from '../../images/logo.png';
 import user1 from '../../images/user1.png';
+import './navstyle.css';
 
 class OrganizationNavbar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      menus: [],
-    };
-  }
-
   logout() {
     localStorage.clear();
     document.location.href = '/login';
   }
 
   render() {
-    const customStyle = {
-      height: '70px',
-    };
+    const { user, organization } = this.props;
     const sidebarStyle = {
       top: '70px',
     };
-    const organizationsFromUser = this.props.user.organizations || [];
-    const organizationNodes = organizationsFromUser.map((org) => {
-      return (
-        <li key={org.id} className="sidebar-nav-item">
-          <a href={`/organizations/${org.id}`}>{org.name}</a>
-        </li>
-      );
-    });
 
     return (
-      <div style={NavStyle}>
+      <div>
         <header role="banner">
-          <nav id="navbar-primary" className="navbar navbar-default" style={customStyle} role="navigation">
+          <nav id="navbar-primary" className="navbar navbar-default" role="navigation">
             <div className="container-fluid">
+              <div className="navbar-header" style={{ marginTop: 10 }}>
+                <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-primary-collapse">
+                  <span className="sr-only">Toggle navigation</span>
+                  <span className="icon-bar" />
+                  <span className="icon-bar" />
+                  <span className="icon-bar" />
+                </button>
+              </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
-                <ul className="nav navbar-nav" style={customStyle}>
-                  <li className="pull-left" id="slide-sidebar" style={{ marginTop: 10, width: '30%', textAlign: 'left' }}>
+                <ul className="nav navbar-nav">
+                  <li className="pull-left" id="slide-sidebar" style={{ marginTop: 10, width: '20%', textAlign: 'left' }}>
                     <a href="#sidebar-nav">
-                      {this.props.organization.name} <span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
+                      {organization.name} <span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
                     </a>
                   </li>
-                  <li className="pull-right" style={{ marginTop: 5, width: '30%', paddingLeft: '20%' }}>
-                    <Dropdown id="profile-dropdown">
-                      <Dropdown.Toggle>
-                        <img id="avatar" src={user1} alt="avatar" />
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <MenuItem eventKey="1" href={`/profile`}>Profile</MenuItem>
-                        <MenuItem eventKey="2" href={`/organizations/${this.props.organization.id}/setting`}>Setting</MenuItem>
-                        <MenuItem divider />
-                        <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </li>
-                  <img id="logo-main" src={logo} alt="Logo Thing main logo" />
+                  <Dropdown className="pull-right" id="profile-dropdown" style={{ width: '20%' }}>
+                    <Dropdown.Toggle>
+                      <img
+                        id="avatar" role="presentation"
+                        src={user1}
+                        style={{marginTop: 10, marginLeft: '450%'}}
+                      />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <MenuItem eventKey="1" href={`/profile`}>Profile</MenuItem>
+                      <MenuItem eventKey="2" href={`/organizations/${organization.id}/setting`}>Setting</MenuItem>
+                      <MenuItem divider />
+                      <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <img id="logo-main" src={logo} alt="Logo" />
                 </ul>
               </div>
             </div>
           </nav>
         </header>
-        <div id="sidebar-nav" style={sidebarStyle}>
-          <ul id="sidebar-nav-list">
-            {organizationNodes}
-            <li className="sidebar-nav-item">
-              <a href="/organizations/new"><span className="icon-plus" /> Create organization</a>
-            </li>
-          </ul>
-        </div>
+        <SidebarNav style={sidebarStyle} organizations={user.organizations} />
         <a id="nav-screen-overlay" href="#" />
       </div>
     );
