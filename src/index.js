@@ -19,6 +19,7 @@ import {
   NewProject,
   ProjectHomeContainer,
   ResultPlanningContainer,
+  BacklogContainer,
   Board,
   NewTask,
   Profile,
@@ -50,6 +51,7 @@ ReactDOM.render(
           <Route path="effort-estimation" component={EffortEstimationContainer} />
         </Route>
         <Route path="board" component={Board} />
+        <Route path="backlog" component={BacklogContainer} />
         <Route path="tasks/new" component={NewTask} />
       </Route>
       <Route path="/" component={StartApp}>

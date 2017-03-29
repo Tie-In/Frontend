@@ -1,0 +1,86 @@
+.backlogContainer {
+  width: 70%;
+  height: auto;
+  right: 50%;
+  transform: translate(50%);
+  position: absolute;
+}
+h4 {
+  color: #A25E5D;
+}
+hr {
+  border-color: black;
+}
+span #addButton, span #removeButton {
+  padding: 0px;
+  color: #A25E5D;
+  text-decoration: none;
+  outline:none;
+  border: none;
+  box-shadow: none;
+}
+#taskslist {
+  list-style-type: none;
+  padding: 0px;
+  vertical-align: middle;
+}
+.sprint #taskName {
+  text-decoration: none;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+ul .row:hover {
+  color: white;
+  background-color: #A25E5D;
+  cursor: pointer;
+}
+#nextButton {
+  text-align: center;
+}
+#nextButton .disabled {
+  pointer-events: none;
+}
+/*Modal*/
+.modal-container Modal{
+  position: fixed;
+  height: 100%;
+  /*width: 700px;*/
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
+}
+.modal-content {
+  margin-top: 20%;
+}
+.modal-header, .modal-footer {
+  border: 0px;
+}
+.modal-header {
+  padding-bottom: 0px;
+}
+.modal-footer {
+  text-align: center;
+}
+.modal-body {
+  padding-top: 0px;
+}
+.modal-dialog {
+  width: 800px;
+}
+.editTaskContainer {
+  padding: 0px 15px 15px 15px;
+}
+#leftColumn, #rightColumn {
+  padding: 0px;
+}
+input #point {
+   text-align: center;
+}
+#point {
+  width: 50px;
+}
+.row {
+  padding-bottom: 10px;
+}
