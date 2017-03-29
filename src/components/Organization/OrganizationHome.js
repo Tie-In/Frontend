@@ -8,7 +8,7 @@ import * as organizationActions from '../../actions/organization-actions';
 import AddProject from '../../images/newproject.png';
 import * as apiHelper from '../../helpers/apiHelper';
 
-class OrganizationContainer extends Component {
+class OrganizationHome extends Component {
 
   async componentWillMount() {
     try {
@@ -60,27 +60,23 @@ class OrganizationContainer extends Component {
 
     return (
       <DocumentTitle title={organization.name}>
-        <div>
-          { organization.projects !== undefined ?
-            <Row>
-              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                {
-                  organization.projects.map((project) => {
-                    return <ProjectCard key={project.id} project={project} />;
-                  })
-                }
-                {this.buttonType(organization.projects)}
-              </Col>
-            </Row>
+        { organization.projects !== undefined ?
+          <div className="tiein-container">
+            {
+              organization.projects.map((project) => {
+                return <ProjectCard key={project.id} project={project} />;
+              })
+            }
+            {this.buttonType(organization.projects)}
+          </div>
             : null
           }
-        </div>
       </DocumentTitle>
     );
   }
 }
 
-OrganizationContainer.propTypes = {
+OrganizationHome.propTypes = {
   organization: PropTypes.object.isRequired,
   organizationActions: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
@@ -98,4 +94,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrganizationContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(OrganizationHome);

@@ -5,7 +5,7 @@ import EffortEstimationContainer from './EffortEstimation/Container';
 import ResultPlanningContainer from './ResultPlanning/Container';
 import NoOrgContainer from './Organization/NoOrgContainer';
 import NewOrgContainer from './Organization/NewOrgContainer';
-import OrganizationContainer from './Organization/OrganizationContainer';
+import OrganizationHome from './Organization/OrganizationHome';
 import OrganizationSetting from './Organization/OrganizationSetting';
 import NormalNavbar from './Navbar/NormalNavbar';
 import StartNavbar from './Navbar/StartNavbar';
@@ -22,7 +22,7 @@ module.exports = {
   Register,
   FeaturePlanningContainer,
   EffortEstimationContainer,
-  OrganizationContainer,
+  OrganizationHome,
   NormalNavbar,
   StartNavbar,
   NewOrgContainer,

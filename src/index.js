@@ -13,7 +13,7 @@ import {
   FeaturePlanningContainer,
   Register,
   EffortEstimationContainer,
-  OrganizationContainer,
+  OrganizationHome,
   NewOrgContainer,
   NoOrgContainer,
   NewProject,
@@ -38,7 +38,7 @@ ReactDOM.render(
         <Route path="profile" component={Profile} />
         <Route path="organizations/new" component={NewOrgContainer} />
         <Route path="organizations/:organizationId">
-          <IndexRoute component={OrganizationContainer} />
+          <IndexRoute component={OrganizationHome} />
           <Route path="projects/new" component={NewProject} />
           <Route path="setting" component={OrganizationSetting} />
         </Route>
