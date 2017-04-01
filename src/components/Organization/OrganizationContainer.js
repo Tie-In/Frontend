@@ -64,11 +64,13 @@ class OrganizationContainer extends Component {
           { organization.projects !== undefined ?
             <Row>
               <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                {
-                  organization.projects.map((project) => {
-                    return <ProjectCard key={project.id} project={project} />;
-                  })
-                }
+                <Row>
+                  {
+                    organization.projects.map((project) => {
+                      return <Col md={6}><ProjectCard key={project.id} project={project} /></Col>;
+                    })
+                  }
+                </Row>
                 {this.buttonType(organization.projects)}
               </Col>
             </Row>
