@@ -29,8 +29,7 @@ class ProjectCard extends Component {
       overflowY: 'hidden',
       overflowX: 'auto',
       whiteSpace: 'nowrap',
-    }
-    console.log(project);
+    };
     return (
       <div className="card" style={cardStyle}>
         <LinkContainer to={{ pathname: `/organizations/${project.organization_id}/projects/${project.id}` }}>

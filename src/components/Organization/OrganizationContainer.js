@@ -46,9 +46,6 @@ class OrganizationContainer extends Component {
     }
     return (
       <div style={articleStyles} href={newProjectPath}>
-        <a href={newProjectPath}>
-          <Image src={AddProject} alt="Image" />
-        </a>
         <p style={pStyle} />
         <Button href={newProjectPath} style={buttonDefaultStyle}>Create new project</Button>
       </div>
@@ -57,13 +54,15 @@ class OrganizationContainer extends Component {
 
   render() {
     const { organization } = this.props;
-
+    console.log(organization);
     return (
       <DocumentTitle title={organization.name}>
         <div>
           { organization.projects !== undefined ?
             <Row>
               <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
+                <h3 className="header-label">{organization.name}&#39;s project list</h3>
+                <hr className="header-line" />
                 <Row>
                   {
                     organization.projects.map((project) => {
