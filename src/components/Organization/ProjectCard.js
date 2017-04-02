@@ -1,9 +1,9 @@
 import React, { PropTypes, Component } from 'react';
-import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import ReactTooltip from 'react-tooltip';
 import '../../style/projectCardStyle.css';
 import '../../style/autosuggestStyle.css';
-import userimg from '../../images/user1.png';
+// import userimg from '../../images/user1.png';
 
 class ProjectCard extends Component {
   render() {
@@ -22,19 +22,29 @@ class ProjectCard extends Component {
       textOverflow: 'ellipsis',
     };
     const imgStyle = {
-      display: 'flex',
-      alignItems: 'center',
-      backgroundRepeat: 'no-repeat',
+      marginRight: '7px',
     };
+    const thumbnaildiv = {
+      width: '100%',
+      overflowY: 'hidden',
+      overflowX: 'auto',
+      whiteSpace: 'nowrap',
+    }
+    console.log(project);
     return (
       <div className="card" style={cardStyle}>
         <LinkContainer to={{ pathname: `/organizations/${project.organization_id}/projects/${project.id}` }}>
           <a key={project.name}><h3>{project.name}</h3></a>
         </LinkContainer>
-        <p style={descriptionStyle}>{project.description}</p>
-        <div>
-          <img src={userimg} style={imgStyle} alt="contributor-thumbnail" />
+        <p style={descriptionStyle}>{project.description}<br /></p>
+        <div style={thumbnaildiv}>
+          {
+            project.users.map((user) => {
+              return <img src={`../../src/images/${user.image}.png`} style={imgStyle} alt="contributor-thumbnail" data-tip={`${user.firstname} ${user.lastname}`} />;
+            })
+          }
         </div>
+        <ReactTooltip effect="solid" place="bottom" />
       </div>
     );
   }
