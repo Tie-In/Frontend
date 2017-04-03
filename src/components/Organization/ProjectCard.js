@@ -39,7 +39,7 @@ class ProjectCard extends Component {
         <div style={thumbnaildiv}>
           {
             project.users.map((user) => {
-              return <img src={`../../src/images/${user.image}.png`} style={imgStyle} alt="contributor-thumbnail" data-tip={`${user.firstname} ${user.lastname}`} />;
+              return <img src={`../../src/images/${user.image}.png`} style={imgStyle} alt="contributor-thumbnail" data-tip={`${user.firstname} ${user.lastname}`} key={user.username} />;
             })
           }
         </div>
