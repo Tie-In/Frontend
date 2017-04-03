@@ -1,6 +1,9 @@
 import React, { PropTypes, Component } from 'react';
-import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import ReactTooltip from 'react-tooltip';
+import '../../style/projectCardStyle.css';
+import '../../style/autosuggestStyle.css';
+// import userimg from '../../images/user1.png';
 
 class ProjectCard extends Component {
   render() {
@@ -9,18 +12,38 @@ class ProjectCard extends Component {
       width: '100%',
       border: 'solid 1px #E5E5E5',
       borderRadius: '4px',
-      marginBottom: '50px',
+      marginBottom: '30px',
+      padding: '0 5% 0 5%',
     };
     const { project } = this.props;
+    const descriptionStyle = {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    };
+    const imgStyle = {
+      marginRight: '7px',
+    };
+    const thumbnaildiv = {
+      width: '100%',
+      overflowY: 'hidden',
+      overflowX: 'auto',
+      whiteSpace: 'nowrap',
+    };
     return (
-      <div style={cardStyle}>
-        <div className="container">
-          <h3>{project.name}</h3>
-          <p>{project.description}</p>
-          <LinkContainer to={{ pathname: `/organizations/${project.organization_id}/projects/${project.id}` }}>
-            <Button>To project</Button>
-          </LinkContainer>
+      <div className="card" style={cardStyle}>
+        <LinkContainer to={{ pathname: `/organizations/${project.organization_id}/projects/${project.id}` }}>
+          <a key={project.name}><h3>{project.name}</h3></a>
+        </LinkContainer>
+        <p style={descriptionStyle}>{project.description}<br /></p>
+        <div style={thumbnaildiv}>
+          {
+            project.users.map((user) => {
+              return <img src={`../../src/images/${user.image}.png`} style={imgStyle} alt="contributor-thumbnail" data-tip={`${user.firstname} ${user.lastname}`} key={user.username} />;
+            })
+          }
         </div>
+        <ReactTooltip effect="solid" place="bottom" />
       </div>
     );
   }

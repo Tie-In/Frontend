@@ -175,8 +175,7 @@ class NewOrgContainer extends Component {
           </Button>
         </Col>
       </Row>);
-    },
-    );
+    });
     return (
       <div>
         {content}

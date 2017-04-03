@@ -89,6 +89,10 @@
   background-image: url('../images/user4.png');
 }
 
+.null {
+  background-image: url('../images/user4.png');
+}
+
 .name {
   margin-left: 68px;
   line-height: 45px;
