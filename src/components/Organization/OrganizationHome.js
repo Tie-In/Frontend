@@ -46,31 +46,33 @@ class OrganizationHome extends Component {
     }
     return (
       <div style={articleStyles} href={newProjectPath}>
-        <a href={newProjectPath}>
-          <Image src={AddProject} alt="Image" />
-        </a>
         <p style={pStyle} />
-        <Button href={newProjectPath} style={buttonDefaultStyle}>Create new project</Button>
+        <Button href={newProjectPath} style={buttonDefaultStyle}>
+          Create new project
+        </Button>
       </div>
     );
   }
 
   render() {
     const { organization } = this.props;
-
     return (
       <DocumentTitle title={organization.name}>
         { organization.projects !== undefined ?
           <div className="tiein-container">
-            {
-              organization.projects.map((project) => {
-                return <ProjectCard key={project.id} project={project} />;
-              })
-            }
+            <h3 className="header-label">{organization.name}&#39;s project list</h3>
+            <hr className="header-line" />
+            <Row>
+              {
+                organization.projects.map((project) => {
+                  return <Col md={6} key={`col${project.id}`}><ProjectCard key={project.id} project={project} /></Col>;
+                })
+              }
+            </Row>
             {this.buttonType(organization.projects)}
           </div>
-            : null
-          }
+          : null
+        }
       </DocumentTitle>
     );
   }
