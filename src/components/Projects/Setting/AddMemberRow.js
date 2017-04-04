@@ -21,7 +21,9 @@ class AddMemberRow extends Component {
 
   async componentWillMount() {
     try {
-      const response = await apiHelper.get('/api/users');
+      const response = await apiHelper.get('/api/users', {
+        organization: this.props.organization_id,
+      });
       const users = response.data;
       this.setState({ allUsers: users });
     } catch (err) {
@@ -35,10 +37,10 @@ class AddMemberRow extends Component {
 
   async addMember() {
     try {
-      await apiHelper.post('/api/user_organizations', {
-        user_organization: {
+      await apiHelper.post('/api/project_contributes', {
+        project_contribute: {
           user_id: this.state.selectedUserId,
-          organization_id: this.props.organization_id,
+          project_id: this.props.project_id,
         },
       });
       this.close();
@@ -66,7 +68,7 @@ class AddMemberRow extends Component {
             </Button>
           </Col>
         </Row>
-        <Modal className="static-modal" show={showModal} onHide={this.close}>
+        <Modal show={showModal} onHide={this.close}>
           <Modal.Header closeButton>
             <Modal.Title>
               Select member
@@ -86,7 +88,9 @@ class AddMemberRow extends Component {
 }
 
 AddMemberRow.propTypes = {
+  project_id: PropTypes.number.isRequired,
   organization_id: PropTypes.number.isRequired,
+  update: PropTypes.func.isRequired,
 };
 
 export default AddMemberRow;

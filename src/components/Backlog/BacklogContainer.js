@@ -4,7 +4,7 @@ import 'simple-line-icons/css/simple-line-icons.css';
 import update from 'immutability-helper';
 import EditTaskModal from './EditTaskModal';
 import PointEstimationModal from './PointEstimationModal';
-import '../../style/backlog.css';
+import './backlog.css';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class BacklogContainer extends Component {

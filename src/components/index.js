@@ -16,6 +16,7 @@ import BacklogContainer from './Backlog/BacklogContainer';
 import Board from './Board/Board';
 import NewTask from './Task/NewTask';
 import Profile from './User/Profile';
+import ProjectSetting from './Projects/ProjectSetting';
 
 module.exports = {
   Login,
@@ -36,4 +37,5 @@ module.exports = {
   NewTask,
   Profile,
   OrganizationSetting,
+  ProjectSetting,
 };

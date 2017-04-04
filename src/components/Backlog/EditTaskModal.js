@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import update from 'immutability-helper';
 import { Row, Col, Modal, Button, Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
-import '../../style/backlog.css';
+import './backlog.css';
 
 class EditTaskModal extends Component {
   constructor(props) {
