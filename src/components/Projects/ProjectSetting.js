@@ -5,13 +5,13 @@ import {
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as organizationActions from '../../actions/organization-actions';
+import * as projectActions from '../../actions/project-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 import Information from './Setting/Information';
 import Member from './Setting/Member';
 import '../../style/autosuggestStyle.css';
 
-class OrganizationSetting extends Component {
+class ProjectSetting extends Component {
   constructor(props) {
     super(props);
 
@@ -22,16 +22,16 @@ class OrganizationSetting extends Component {
     this.updateSetting = this.updateSetting.bind(this);
     this.updateMemberRole = this.updateMemberRole.bind(this);
     this.deleteMember = this.deleteMember.bind(this);
-    this.updateOrganization = this.updateOrganization.bind(this);
+    this.updateProject = this.updateProject.bind(this);
   }
 
   async updateSetting(data) {
     try {
-      await apiHelper.put(`/api/organizations/${this.props.organization.id}`, {
-        organization: data,
+      await apiHelper.put(`/api/projects/${this.props.project.id}`, {
+        project: data,
       });
 
-      this.updateOrganization();
+      this.updateProject();
     } catch (err) {
       console.log(err);
     }
@@ -39,12 +39,12 @@ class OrganizationSetting extends Component {
 
   async updateMemberRole(id, role) {
     try {
-      await apiHelper.put(`/api/user_organizations/${id}`, {
-        user_organization: {
+      await apiHelper.put(`/api/project_contributes/${id}`, {
+        project_contribute: {
           permission_level: role,
         },
       });
-      this.updateOrganization();
+      this.updateProject();
     } catch (err) {
       console.log(err);
     }
@@ -52,18 +52,18 @@ class OrganizationSetting extends Component {
 
   async deleteMember(id) {
     try {
-      await apiHelper.del(`/api/user_organizations/${id}`);
-      this.updateOrganization();
+      await apiHelper.del(`/api/project_contributes/${id}`);
+      this.updateProject();
     } catch (err) {
       console.log(err);
     }
   }
 
-  async updateOrganization() {
+  async updateProject() {
     try {
-      const updateResponse = await apiHelper.get(`/api/organizations/${this.props.organization.id}`);
-      const org = updateResponse.data;
-      this.props.organizationActions.setOrganization(org);
+      const updateResponse = await apiHelper.get(`/api/projects/${this.props.project.id}`);
+      const project = updateResponse.data;
+      this.props.projectActions.setProject(project);
     } catch (err) {
       console.log(err);
     }
@@ -75,18 +75,18 @@ class OrganizationSetting extends Component {
 
   render() {
     const { tabIndex } = this.state;
-    const { organization } = this.props;
+    const { project } = this.props;
     const switchRender = (tab) => {
       if (tab === 1) {
-        return (<Information organization={organization} update={this.updateSetting} />);
+        return (<Information project={project} update={this.updateSetting} />);
       } else if (tab === 2) {
         return (
           <Member
-            members={organization.user_organizations}
+            members={project.project_contributes}
             updateRole={this.updateMemberRole}
             deleteMember={this.deleteMember}
-            organization={organization}
-            update={this.updateOrganization}
+            project={project}
+            update={this.updateProject}
           />
         );
       }
@@ -99,7 +99,7 @@ class OrganizationSetting extends Component {
           <Form>
             <Row>
               <Col xs={12} md={8} mdOffset={2}>
-                <h3 className="header-label">Organization setting</h3>
+                <h3 className="header-label">Project setting</h3>
                 <hr className="header-line" />
               </Col>
             </Row>
@@ -120,21 +120,21 @@ class OrganizationSetting extends Component {
   }
 }
 
-OrganizationSetting.propTypes = {
-  organizationActions: PropTypes.object.isRequired,
-  organization: PropTypes.object.isRequired,
+ProjectSetting.propTypes = {
+  projectActions: PropTypes.object.isRequired,
+  project: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    organization: state.organization,
+    project: state.project,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    organizationActions: bindActionCreators(organizationActions, dispatch),
+    projectActions: bindActionCreators(projectActions, dispatch),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrganizationSetting);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectSetting);

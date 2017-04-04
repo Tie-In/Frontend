@@ -65,7 +65,7 @@ class Member extends Component {
   render() {
     const { members = [] } = this.props;
     const { showModal, selectedUser, selectedRole, modalType } = this.state;
-    const roles = ['owner', 'admin', 'user'];
+    const roles = ['admin', 'user'];
     const modalContent = (type) => {
       if (type === 'role') {
         return (
@@ -79,9 +79,9 @@ class Member extends Component {
             <Modal.Body>
               <form>
                 {
-                  roles.map((role, index) => {
+                  roles.map((role) => {
                     return (
-                      <div key={index}>
+                      <div>
                         <label>
                           <input
                             type="radio" value={role}
@@ -106,10 +106,11 @@ class Member extends Component {
         );
       } else if (type === 'delete') {
         return (
-          <Modal show={showModal} onHide={this.close} bsSize="small" aria-labelledby="contained-modal-title-sm">
+          <Modal show={showModal} onHide={this.close}>
             <Modal.Header closeButton>
               <Modal.Title>
-                Remove {selectedUser.username} from organization?
+                Remove {selectedUser.username} from project?
+                <hr />
               </Modal.Title>
             </Modal.Header>
             <Modal.Footer>
@@ -133,17 +134,17 @@ class Member extends Component {
               </thead>
               <tbody>
                 { members.map((member) => {
-                  return (<tr key={member.id}>
+                  return (<tr>
                     <td>
                       <Col xs={4} style={{ paddingTop: 5 }}>{member.user.username}</Col>
                       <Col xs={4} style={{ paddingTop: 5 }}>{member.permission_level}</Col>
                       <Col xsOffset={2} xs={2}>
-                        <DropdownButton id="organizationSettingDropdown" title={<Glyphicon glyph="cog" />}>
+                        <DropdownButton title={<Glyphicon glyph="cog" />}>
                           <MenuItem eventKey="1" onClick={() => { this.openChangeRole(member); }}>
                             Change role
                           </MenuItem>
                           <MenuItem eventKey="2" onClick={() => { this.openDeleteMember(member); }}>
-                            Remove from organization
+                            Remove from project
                           </MenuItem>
                         </DropdownButton>
                       </Col>
@@ -156,7 +157,10 @@ class Member extends Component {
           </Col>
         </Row>
         {modalContent(modalType)}
-        <AddMemberRow organization_id={this.props.organization.id} update={this.props.update} />
+        <AddMemberRow 
+          project_id={this.props.project.id} organization_id={this.props.project.organization_id}
+          update={this.props.update} 
+        />
       </div>
     );
   }
@@ -166,7 +170,7 @@ Member.propTypes = {
   members: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateRole: PropTypes.func.isRequired,
   deleteMember: PropTypes.func.isRequired,
-  organization: PropTypes.object.isRequired,
+  project: PropTypes.object.isRequired,
   update: PropTypes.func.isRequired,
 };
 

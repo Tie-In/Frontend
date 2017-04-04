@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Row, Col, Modal, Button, FormGroup, FormControl } from 'react-bootstrap';
 import update from 'immutability-helper';
-import '../../style/backlog.css';
+import './backlog.css';
 
 class PointEstimationModal extends Component {
   constructor(props) {
