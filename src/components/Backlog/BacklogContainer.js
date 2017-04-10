@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import 'simple-line-icons/css/simple-line-icons.css';
 import update from 'immutability-helper';
 import EditTaskModal from './EditTaskModal';
@@ -86,7 +88,6 @@ class BacklogContainer extends Component {
         totalPoints += Number(tempTasks[i].story_point);
       }
     }
-    console.log(totalPoints);
     return totalPoints;
   }
 
@@ -135,9 +136,13 @@ class BacklogContainer extends Component {
   }
 
   render() {
+    const rowStyle = {
+      paddingTop: 5,
+      paddingBottom: 5,
+    };
     const backlogTaskNode = this.state.backlogTasks.map((task) => {
       return (
-        <Row key={task.id}>
+        <Row key={task.id} style={rowStyle}>
           <li id="task">
             <Col xs={10} md={11}>
               <span id="taskName" onClick={() => this.showEditTaskModal(task)}>{task.name}</span></Col>
@@ -149,7 +154,7 @@ class BacklogContainer extends Component {
 
     const sprintTaskNode = this.state.sprintTasks.map((task) => {
       return (
-        <Row key={task.id}>
+        <Row key={task.id} style={rowStyle}>
           <li id="task">
             <Col xs={10} md={10}><span id="taskName" onClick={() => this.showEditTaskModal(task)}>{task.name}</span></Col>
             <Col xs={1} md={1}><span className="icon-close" role="button" id="removeButton" onClick={() => this.switchTask(task, 'remove')} /></Col>
@@ -187,6 +192,7 @@ class BacklogContainer extends Component {
           show={this.state.showEditTask}
           setUpdatedTask={this.setUpdatedTask}
           close={this.closeEditTaskModal}
+          project={this.props.project}
         />
         <PointEstimationModal
           show={this.state.showPointEstimation}
@@ -202,6 +208,13 @@ class BacklogContainer extends Component {
 
 BacklogContainer.propTypes = {
   params: PropTypes.object.isRequired,
+  project: PropTypes.object.isRequired,
 };
 
-export default BacklogContainer;
+function mapStateToProps(state) {
+  return {
+    project: state.project,
+  };
+}
+
+export default connect(mapStateToProps)(BacklogContainer);

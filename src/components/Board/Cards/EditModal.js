@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Col, Button, FormGroup, ControlLabel, FormControl, Form } from 'react-bootstrap';
-import linkState from 'react-link-state';
+import update from 'react-addons-update';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import AutosuggestionBlock from '../../shared/AutosuggestionBlock';
@@ -35,6 +35,8 @@ class EditModal extends Component {
     this.setAssignee = this.setAssignee.bind(this);
     this.setFeature = this.setFeature.bind(this);
     this.setTags = this.setTags.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.updateTask = this.updateTask.bind(this);
   }
 
   async componentWillMount() {
@@ -42,7 +44,7 @@ class EditModal extends Component {
     try {
       const responseUser = await apiHelper.get('/api/users', {
         project: item.project_id,
-      });
+      }, true);
       const users = responseUser.data;
       this.setState({ allUsers: users });
 
@@ -68,7 +70,7 @@ class EditModal extends Component {
     this.setState({ input: temp });
   }
 
-  async closeModal() {
+  async updateTask() {
     try {
       const response = await apiHelper.put(`/api/tasks/${this.props.item.id}`, this.state.input);
       const task = response.data.task;
@@ -78,6 +80,10 @@ class EditModal extends Component {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  closeModal() {
+    this.props.setShow(false, this.props.item);
   }
 
   setTags(idArr) {
@@ -90,14 +96,29 @@ class EditModal extends Component {
     return item.id === this.props.item.assignee_id;
   }
 
+   handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
+    });
+  }
+
   render() {
     const { item } = this.props;
-
+    console.log(item);
+    const { input } = this.state;
     return (
       <div>
         <Modal show={this.props.show} onHide={this.closeModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit task</Modal.Title>
+            <Modal.Title>
+              Edit task
+              <hr />
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form horizontal>
@@ -106,7 +127,12 @@ class EditModal extends Component {
                   Name
                 </Col>
                 <Col xs={9}>
-                  <FormControl type="text" placeholder="Name" valueLink={linkState(this, 'input.name')} />
+                  <FormControl 
+                    type="text" placeholder="Name" 
+                    name="name"
+                    value={input.name}
+                    onChange={this.handleInputChange}
+                  />
                 </Col>
               </FormGroup>
               <FormGroup>
@@ -114,7 +140,12 @@ class EditModal extends Component {
                   Description
                 </Col>
                 <Col xs={9}>
-                  <FormControl type="text" placeholder="Description" valueLink={linkState(this, 'input.description')} />
+                  <FormControl 
+                    type="text" placeholder="Description"
+                    name="description" 
+                    value={input.description}
+                    onChange={this.handleInputChange} 
+                  />
                 </Col>
               </FormGroup>
               <FormGroup>
@@ -151,38 +182,54 @@ class EditModal extends Component {
                 <Col xs={3} componentClass={ControlLabel}>
                   Start Date
                 </Col>
-                <Col xs={9}>
-                  <FormControl type="text" placeholder="Start date" valueLink={linkState(this, 'input.start_date')} />
+                <Col xs={3}>
+                  <FormControl 
+                    type="text" placeholder="Start date" 
+                    name="start_date"
+                    value={input.start_date}
+                    onChange={this.handleInputChange} 
+                  />
                 </Col>
-              </FormGroup>
-              <FormGroup>
                 <Col xs={3} componentClass={ControlLabel}>
                   End date
                 </Col>
-                <Col xs={9}>
-                  <FormControl type="text" placeholder="End date" valueLink={linkState(this, 'input.end_date')} />
+                <Col xs={3}>
+                  <FormControl 
+                    type="text" placeholder="End date" 
+                    name="end_date"
+                    value={input.end_date}
+                    onChange={this.handleInputChange} 
+                  />
                 </Col>
               </FormGroup>
               <FormGroup>
                 <Col xs={3} componentClass={ControlLabel}>
                   Estimate time
                 </Col>
-                <Col xs={9}>
-                  <FormControl type="text" placeholder="Time (hr)" valueLink={linkState(this, 'input.estimate_time')} />
+                <Col xs={3}>
+                  <FormControl 
+                    type="text" placeholder="Time (hr)" 
+                    name="estimate_time"
+                    value={input.estimate_time}
+                    onChange={this.handleInputChange} 
+                  />
                 </Col>
-              </FormGroup>
-              <FormGroup>
                 <Col xs={3} componentClass={ControlLabel}>
                   Story point
                 </Col>
-                <Col xs={9}>
-                  <FormControl type="text" placeholder="Point" valueLink={linkState(this, 'input.story_point')} />
+                <Col xs={3}>
+                  <FormControl 
+                    type="text" placeholder="Point" 
+                    name="story_point"
+                    value={input.story_point}
+                    onChange={this.handleInputChange} 
+                  />
                 </Col>
               </FormGroup>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.closeModal}>Done</Button>
+            <Button onClick={this.updateTask}>Update</Button>
           </Modal.Footer>
         </Modal>
       </div>
