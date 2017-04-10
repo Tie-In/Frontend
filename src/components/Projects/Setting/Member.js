@@ -125,7 +125,7 @@ class Member extends Component {
     return (
       <div>
         <Row>
-          <Col xs={12} md={8} mdOffset={2}>
+          <Col xs={12}>
             <Table striped bordered condensed hover>
               <thead>
                 <tr>
