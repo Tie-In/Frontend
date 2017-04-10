@@ -2,6 +2,7 @@ import {
   Glyphicon,
   OverlayTrigger,
   Tooltip,
+  FormControl,
 } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 
@@ -22,8 +23,8 @@ class FactorRow extends Component {
   }
 
   render() {
-    const { name, weight } = this.props;
-    const tooltip = (<Tooltip id="tooltip"><strong>Holy guacamole!</strong> Check this info.</Tooltip>);
+    const { name, weight, description } = this.props;
+    const tooltip = <Tooltip id="tooltip">{description}</Tooltip>;
     const factorStyle = {
       marginLeft: '10px',
     };
@@ -42,12 +43,14 @@ class FactorRow extends Component {
         <td className="text-center">{weight}</td>
         <td className="text-center">
           <input
+            id="inputRating"
             type="number" min="0" max="5"
             style={inputStyle}
             onChange={this.updateRating}
           />
         </td>
-        <td className="text-center">{impact}</td>
+        <td 
+          className="text-center">{impact}</td>
       </tr>
     );
   }
@@ -57,6 +60,7 @@ FactorRow.propTypes = {
   index: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   weight: PropTypes.number.isRequired,
+  description: PropTypes.string.isRequired,
   returnImpact: PropTypes.func.isRequired,
 };
 
