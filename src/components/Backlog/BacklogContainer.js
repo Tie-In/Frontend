@@ -166,7 +166,7 @@ class BacklogContainer extends Component {
 
     return (
       <div className="modal-container">
-        <div className="backlogContainer">
+        <div className="tiein-container">
           <Row>
             <Col sm={8}>
               <h4>Backlog</h4>
@@ -174,7 +174,7 @@ class BacklogContainer extends Component {
               <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
             </Col>
             <Col sm={4}>
-              <h4>This Sprint:</h4>
+              <h4>This sprint:</h4>
               <hr />
               <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
               <div id="nextButton">{nextButton()}</div>

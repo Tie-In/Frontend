@@ -209,89 +209,83 @@ class NewOrgContainer extends Component {
     };
 
     return (
-      <div>
-        <Grid>
-          <Form>
-            <Row>
-              <Col xs={12} md={8} mdOffset={2}>
-                <h3 className="header-label">Create new organization</h3>
-                <hr className="header-line" />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={8} mdOffset={2}>
-                <FormGroup validationState={this.state.nameError === '' ? null : 'error'}>
-                  <ControlLabel>
-                    Organization&#39;s name
-                  </ControlLabel>
-                  <FormControl
-                    type="text" placeholder="Name"
-                    name="name"
-                    onChange={this.handleInputChange}
-                  />
-                  <h6 style={errorStyle}>{this.state.nameError}</h6>
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={8} mdOffset={2}>
-                <FormGroup controlId="formInlineDetail">
-                  <ControlLabel>
-                    Description (optional)
-                  </ControlLabel>
-                  <FormControl
-                    type="text" placeholder="Description of organization"
-                    name="description"
-                    onChange={this.handleInputChange}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={4} mdOffset={2}>
-                <FormGroup controlId="formInlineContributor">
-                  <ControlLabel>
-                    Contributor
-                  </ControlLabel>
-                  <Autosuggest
-                    suggestions={suggestions}
-                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                    onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                    getSuggestionValue={getSuggestionValue}
-                    renderSuggestion={renderSuggestion}
-                    inputProps={inputProps}
-                    onSuggestionSelected={this.onSuggestionSelected}
-                  />
-                </FormGroup>
-              </Col>
-              <Col style={contributorList} xs={12} md={4}>
-                <ControlLabel style={{ color: 'white' }}>
-                  List of contributors
+      <div className="tiein-container">
+        <h3 className="header-label">Create new organization</h3>
+        <hr className="header-line" />
+        <form>
+          <Row>
+            <Col xs={12}>
+              <FormGroup validationState={this.state.nameError === '' ? null : 'error'}>
+                <ControlLabel>
+                  Organization&#39;s name
                 </ControlLabel>
-                <Row style={scrollableContainer}>
-                  <Col smOffset={0} sm={11}>
-                    {this.contributor()}
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <FormGroup>
-                <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                  <Button bsStyle="primary" href="/" key="cancel" block>
-                    Cancel
-                  </Button>
-                </Col>
-                <Col xs={12} md={3}>
-                  <Button onClick={this.create} key="submit" block>
-                    Create
-                  </Button>
-                </Col>
+                <FormControl
+                  type="text" placeholder="Name"
+                  name="name"
+                  onChange={this.handleInputChange}
+                />
+                <h6 style={errorStyle}>{this.state.nameError}</h6>
               </FormGroup>
-            </Row>
-          </Form>
-        </Grid>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <FormGroup controlId="formInlineDetail">
+                <ControlLabel>
+                  Description (optional)
+                </ControlLabel>
+                <FormControl
+                  type="text" placeholder="Description of organization"
+                  name="description"
+                  onChange={this.handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={6}>
+              <FormGroup controlId="formInlineContributor">
+                <ControlLabel>
+                  Contributor
+                </ControlLabel>
+                <Autosuggest
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={inputProps}
+                  onSuggestionSelected={this.onSuggestionSelected}
+                />
+              </FormGroup>
+            </Col>
+            <Col style={contributorList} xs={6}>
+              <ControlLabel style={{ color: 'white' }}>
+                List of contributors
+              </ControlLabel>
+              <Row style={scrollableContainer}>
+                <Col smOffset={0} sm={11}>
+                  {this.contributor()}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <br />
+          <Row>
+            <FormGroup>
+              <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
+                <Button bsStyle="primary" href="/" key="cancel" block>
+                  Cancel
+                </Button>
+              </Col>
+              <Col xs={12} md={4}>
+                <Button onClick={this.create} key="submit" block>
+                  Create
+                </Button>
+              </Col>
+            </FormGroup>
+          </Row>
+        </form>
       </div>
     );
   }

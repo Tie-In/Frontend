@@ -103,80 +103,78 @@ class NewProject extends Component {
 
     return (
       <DocumentTitle title={`${project.name}・New Task`}>
-        <div>
-          <Grid>
-            <Form>
-              <Row>
-                <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                  <h3 className="header-label">Create new task</h3>
-                  <hr className="header-line" />
-                  <FormGroup controlId="formInlineName">
-                    <ControlLabel>
-                      Task&#39;s name
-                    </ControlLabel>
-                    <FormControl
-                      type="text" placeholder="Name"
-                      name="name"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                  <FormGroup controlId="formInlineDetail">
-                    <ControlLabel>
-                      Description
-                    </ControlLabel>
-                    <FormControl
-                      type="text" placeholder="Description of task"
-                      name="description"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
+        <div className="tiein-container">
+          <form>
+            <Row>
+              <Col xs={12}>
+                <h3 className="header-label">Create new task</h3>
+                <hr className="header-line" />
+                <FormGroup controlId="formInlineName">
                   <ControlLabel>
-                    Feature
+                    Task&#39;s name
                   </ControlLabel>
-                  <AutosuggestionBlock
-                    data={this.props.project.features || []} setValue={this.setFeature}
+                  <FormControl
+                    type="text" placeholder="Name"
+                    name="name"
+                    onChange={this.handleInputChange}
                   />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <FormGroup controlId="formInlineDetail">
+                  <ControlLabel>
+                    Description
+                  </ControlLabel>
+                  <FormControl
+                    type="text" placeholder="Description of task"
+                    name="description"
+                    onChange={this.handleInputChange}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={6}>
+                <ControlLabel>
+                  Feature
+                </ControlLabel>
+                <AutosuggestionBlock
+                  data={this.props.project.features || []} setValue={this.setFeature}
+                />
+              </Col>
+              <Col xs={12} md={6}>
+                <ControlLabel>
+                  Assignee (Optional)
+                </ControlLabel>
+                <AutosuggestionBlock
+                  data={this.state.allUsers || []} setValue={this.setAssignee}
+                />
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <TagRow
+                data={this.state.allTags || []} setValue={this.setTags}
+                projectId={this.props.params.projectId}
+              />
+            </Row>
+            <Row>
+              <FormGroup style={buttonGroup}>
+                <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
+                  <Button style={singleButton} bsStyle="primary" href={previousURL} key="cancel" block>
+                    Cancel
+                  </Button>
                 </Col>
                 <Col xs={12} md={4}>
-                  <ControlLabel>
-                    Assignee (Optional)
-                  </ControlLabel>
-                  <AutosuggestionBlock
-                    data={this.state.allUsers || []} setValue={this.setAssignee}
-                  />
+                  <Button style={singleButton} onClick={this.create} key="submitProject" block>
+                    Create
+                  </Button>
                 </Col>
-              </Row>
-              <br />
-              <Row>
-                <TagRow
-                  data={this.state.allTags || []} setValue={this.setTags}
-                  projectId={this.props.params.projectId}
-                />
-              </Row>
-              <Row>
-                <FormGroup style={buttonGroup}>
-                  <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                    <Button style={singleButton} bsStyle="primary" href={previousURL} key="cancel" block>
-                      Cancel
-                    </Button>
-                  </Col>
-                  <Col xs={12} md={3}>
-                    <Button style={singleButton} onClick={this.create} key="submitProject" block>
-                      Create
-                    </Button>
-                  </Col>
-                </FormGroup>
-              </Row>
-            </Form>
-          </Grid>
+              </FormGroup>
+            </Row>
+          </form>
         </div>
       </DocumentTitle>
     );

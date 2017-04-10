@@ -27,7 +27,7 @@ class OrganizationHome extends Component {
     const articleStyles = {
       margin: '0 auto',
       position: 'fixed',
-      top: '50%',
+      top: 200,
       left: '50%',
       transform: 'translate(-50%, -50%)',
     };
@@ -36,9 +36,6 @@ class OrganizationHome extends Component {
       left: '50%',
       transform: 'translate(-50%, 0)',
     };
-    const pStyle = {
-      margin: '0 0 0',
-    };
     if (projects.length > 0) {
       return (<Button href={newProjectPath}>
         Create new project
@@ -46,7 +43,10 @@ class OrganizationHome extends Component {
     }
     return (
       <div style={articleStyles} href={newProjectPath}>
-        <p style={pStyle} />
+        <a>
+          <Image src={AddProject} alt="Image" />
+        </a>
+        <br />
         <Button href={newProjectPath} style={buttonDefaultStyle}>
           Create new project
         </Button>
@@ -65,7 +65,11 @@ class OrganizationHome extends Component {
             <Row>
               {
                 organization.projects.map((project) => {
-                  return <Col md={6} key={`col${project.id}`}><ProjectCard key={project.id} project={project} /></Col>;
+                  return (
+                    <Col md={6} key={`col${project.id}`}>
+                      <ProjectCard key={project.id} project={project} />
+                    </Col>
+                  );
                 })
               }
             </Row>
