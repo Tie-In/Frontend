@@ -29,6 +29,9 @@ class NormalNavbar extends Component {
     ];
 
     const menuNode = data.map((menu) => {
+      if(project.current_sprint_id === null && menu.name === 'Active sprint'){
+        return;
+      }
       return (
         <li key={menu.id}>
           <Link to={menu.path} activeClassName="active">{menu.name}</Link>
@@ -72,14 +75,6 @@ class NormalNavbar extends Component {
                       <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
                     </Dropdown.Menu>
                   </Dropdown>
-                  {/* <div className="searchBox input-group pull-right">
-                    <input type="text" className="form-control" placeholder="Search" />
-                    <span className="input-group-btn">
-                      <button className="btn" type="submit">
-                        <span className="glyphicon glyphicon-search" aria-hidden="true" />
-                      </button>
-                    </span>
-                  </div> */}
                 </ul>
               </div>
             </div>

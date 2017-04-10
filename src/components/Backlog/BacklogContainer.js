@@ -72,6 +72,7 @@ class BacklogContainer extends Component {
         tasks: tempTasks,
       });
       this.closePointEstimationModal();
+      document.location.href = `/organizations/${this.props.params.organizationId}/projects/${this.props.params.projectId}/board`;
       console.log(response);
     } catch (err) {
       console.log(err.response);

@@ -101,7 +101,6 @@ class Board extends Component {
 
   async createList(listName) {
     const { lists } = this.props;
-    // const temp = { id: lists.length, name: listName, cards: [] };
     const response = await apiHelper.post('/api/statuses', {
       name: listName,
       project_id: this.props.params.projectId,
