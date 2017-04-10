@@ -25,6 +25,7 @@ import {
   Profile,
   OrganizationSetting,
   ProjectSetting,
+  RetrospectiveContainer,
 } from './components';
 import configureStore from './store/configure-store';
 
@@ -55,6 +56,7 @@ ReactDOM.render(
         <Route path="backlog" component={BacklogContainer} />
         <Route path="tasks/new" component={NewTask} />
         <Route path="setting" component={ProjectSetting} />
+        <Route path="retrospective" component={RetrospectiveContainer} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="register" component={Register} />
