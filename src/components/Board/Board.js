@@ -40,17 +40,18 @@ class Board extends Component {
   }
 
   async componentWillMount() {
-    console.log(this.props.project);
     try {
       const response = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
       const project = response.data;
       this.props.projectActions.setProject(project);
 
-      const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
-      const data = responseSprint.data;
-      this.setState({ sprintNumber: data.sprint.number });
-      const statuses = data.statuses;
-      this.props.listsActions.setList(statuses);
+      if ( project.current_sprint_id ) {
+        const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
+        const data = responseSprint.data;
+        this.setState({ sprintNumber: data.sprint.number });
+        const statuses = data.statuses;
+        this.props.listsActions.setList(statuses);
+      }
     } catch (err) {
       console.log(err);
     }
