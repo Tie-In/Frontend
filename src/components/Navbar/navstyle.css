@@ -142,3 +142,7 @@ header[role="banner"] #logo-main {
   bottom: 0;
   left: 0;
 }
+/*-------------Dropdown menu------------*/
+.dropdown-menu {
+  margin: 9px 18px 0 0;
+}
