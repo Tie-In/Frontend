@@ -75,7 +75,6 @@ class BacklogContainer extends Component {
       });
       this.closePointEstimationModal();
       document.location.href = `/organizations/${this.props.params.organizationId}/projects/${this.props.params.projectId}/board`;
-      console.log(response);
     } catch (err) {
       console.log(err.response);
     }

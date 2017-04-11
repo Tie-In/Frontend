@@ -38,7 +38,7 @@ class NewProject extends Component {
     try {
       const responseUser = await apiHelper.get('/api/users', {
         project: this.props.params.projectId,
-      });
+      }, true);
       const users = responseUser.data;
       this.setState({ allUsers: users });
 

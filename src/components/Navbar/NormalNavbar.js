@@ -6,7 +6,6 @@ import SidebarNav from './SidebarNav';
 import 'simple-line-icons/css/simple-line-icons.css';
 import './navstyle.css';
 import logo from '../../images/logo.png';
-import user1 from '../../images/user1.png';
 
 class NormalNavbar extends Component {
   logout() {
@@ -57,7 +56,7 @@ class NormalNavbar extends Component {
                 <ul className="nav navbar-nav">
                   <li className="pull-left" id="slide-sidebar" >
                     <a href="#sidebar-nav">
-                      {organization.name}<span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
+                      {organization.name} <span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
                     </a>
                   </li>
                   {menuNode}
@@ -65,7 +64,7 @@ class NormalNavbar extends Component {
                     <Dropdown.Toggle>
                       <img
                         id="avatar" role="presentation"
-                        src={user1}
+                        src={`../../../src/images/${user.image}.png`}
                       />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>

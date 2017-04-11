@@ -13,7 +13,6 @@ export function post(path, body) {
 
 export function get(path, parameter, noAuth) {
   if (noAuth) {
-    console.log(noAuth);
     return axios({
       method: 'GET',
       url: path,

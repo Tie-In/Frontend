@@ -46,13 +46,14 @@ class EditModal extends Component {
         project: item.project_id,
       }, true);
       const users = responseUser.data;
-      this.setState({ allUsers: users });
-
       const responseTag = await apiHelper.get('/api/tags', {
         project: item.project_id,
       });
-      this.setState({ allTags: responseTag.data });
-      this.setState({ allFeatures: project.features });
+      this.setState({ 
+        allUsers: users,
+        allTags: responseTag.data,
+        allFeatures: project.features, 
+      });
     } catch (err) {
       console.log(err);
     }
@@ -109,7 +110,6 @@ class EditModal extends Component {
 
   render() {
     const { item } = this.props;
-    console.log(item);
     const { input } = this.state;
     return (
       <div>
@@ -130,7 +130,7 @@ class EditModal extends Component {
                   <FormControl 
                     type="text" placeholder="Name" 
                     name="name"
-                    value={input.name}
+                    value={input.name || ''}
                     onChange={this.handleInputChange}
                   />
                 </Col>
@@ -143,7 +143,7 @@ class EditModal extends Component {
                   <FormControl 
                     type="text" placeholder="Description"
                     name="description" 
-                    value={input.description}
+                    value={input.description || ''}
                     onChange={this.handleInputChange} 
                   />
                 </Col>
@@ -186,7 +186,7 @@ class EditModal extends Component {
                   <FormControl 
                     type="text" placeholder="Start date" 
                     name="start_date"
-                    value={input.start_date}
+                    value={input.start_date || ''}
                     onChange={this.handleInputChange} 
                   />
                 </Col>
@@ -197,7 +197,7 @@ class EditModal extends Component {
                   <FormControl 
                     type="text" placeholder="End date" 
                     name="end_date"
-                    value={input.end_date}
+                    value={input.end_date || ''}
                     onChange={this.handleInputChange} 
                   />
                 </Col>
@@ -210,7 +210,7 @@ class EditModal extends Component {
                   <FormControl 
                     type="text" placeholder="Time (hr)" 
                     name="estimate_time"
-                    value={input.estimate_time}
+                    value={input.estimate_time || ''}
                     onChange={this.handleInputChange} 
                   />
                 </Col>
@@ -221,7 +221,7 @@ class EditModal extends Component {
                   <FormControl 
                     type="text" placeholder="Point" 
                     name="story_point"
-                    value={input.story_point}
+                    value={input.story_point || ''}
                     onChange={this.handleInputChange} 
                   />
                 </Col>
@@ -241,7 +241,7 @@ EditModal.propTypes = {
   item: PropTypes.object.isRequired,
   setShow: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
-  project: PropTypes.arrayOf(PropTypes.object).isRequired,
+  project: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

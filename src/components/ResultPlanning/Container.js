@@ -36,10 +36,9 @@ class Container extends Component {
           <h3 className="header-label">Planning Result</h3>
           <hr className="header-line" />
           <div>
-            <p>Most used week: {Math.ceil(effort_estimation.upper_weeks) || '?'}</p>
-            <p>Low used week: {Math.floor(effort_estimation.lower_weeks) || '?'}</p>
-            <p>Developer number: {Math.floor(effort_estimation.developers) || '?'}</p>
-            <hr />
+            <p>Most used week: {Math.ceil(effort_estimation.upper_weeks) || '?'} weeks</p>
+            <p>Low used week: {Math.floor(effort_estimation.lower_weeks) || '?'} weeks</p>
+            <p>Developer number: {Math.floor(effort_estimation.developers) || '?'} people</p>
           </div>
           <Row>
             <Col sm={6}>
@@ -58,7 +57,9 @@ class Container extends Component {
                   { features.map((feature) => {
                     return (<tr>
                       <td>{feature.name}</td>
-                      <td>{feature.complexity}</td>
+                      <td>
+                        <center>{feature.complexity}</center>
+                      </td>
                     </tr>);
                   })
                   }

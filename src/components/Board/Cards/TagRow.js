@@ -3,7 +3,7 @@ import {
   Button, Col, Row,
   FormGroup, ControlLabel, Glyphicon, Label, Dropdown, FormControl,
 } from 'react-bootstrap';
-import linkState from 'react-link-state';
+import update from 'react-addons-update';
 import Autosuggest from 'react-autosuggest';
 import WrapperColorpicker from './WrapperColorpicker';
 import * as apiHelper from '../../../helpers/apiHelper';
@@ -58,6 +58,7 @@ class TagRow extends Component {
     this.inputClick = this.inputClick.bind(this);
     this.selectColor = this.selectColor.bind(this);
     this.createTag = this.createTag.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   componentWillMount() {
@@ -209,6 +210,11 @@ class TagRow extends Component {
     this.color = '';
   }
 
+  handleInputChange(e) {
+    const name = e.target.name;
+    this.setState({ input: update(this.state.input, { [name]: { $set: e.target.value } }) });
+  }
+
   render() {
     const { value, suggestions, openDropdown } = this.state;
     const inputProps = {
@@ -239,7 +245,7 @@ class TagRow extends Component {
           />
         </Col>
         <Col xs={2} xsOffset={3}>
-          <Dropdown open={openDropdown} dropup>
+          <Dropdown id="tagsDropdown" open={openDropdown} dropup>
             <div bsRole="toggle">
               <Button
                 onClick={this.toggleDropdown}
@@ -253,7 +259,10 @@ class TagRow extends Component {
               <FormGroup>
                 <FormControl
                   type="text" placeholder="Tag name"
-                  onClick={this.inputClick} valueLink={linkState(this, 'newName')}
+                  name="newName"
+                  value={this.state.newName}
+                  onClick={this.inputClick}
+                  onChange={this.handleInputChange}
                 />
               </FormGroup>
               <WrapperColorpicker setColor={this.selectColor} />
@@ -278,7 +287,7 @@ class TagRow extends Component {
 TagRow.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   setValue: PropTypes.func.isRequired,
-  projectId: PropTypes.string.isRequired,
+  projectId: PropTypes.number.isRequired,
   initSelect: PropTypes.arrayOf(PropTypes.object),
 };
 

@@ -149,9 +149,6 @@ class Board extends Component {
     return (
       <main style={customWidth}>
         <div>
-          Sprint {this.state.sprintNumber}
-        </div>
-        <div>
           <CustomDragLayer snapToGrid={false} />
           {lists.map((item, i) => {
             return (<CardsContainer

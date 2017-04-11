@@ -28,7 +28,6 @@ class Card extends Component {
   render() {
     const { style } = this.props;
     const { item } = this.state;
-
     return (
       <div
         style={style} className="item"
@@ -47,17 +46,20 @@ class Card extends Component {
                 backgroundColor: tag.color,
                 marginRight: '10px',
               };
-              return <Label style={labelStyle}>{tag.name}</Label>;
+              return <Label key={tag.id} style={labelStyle}>{tag.name}</Label>;
             })}
             <div className="perfomer">
               <img
-                src={image1}
+                src={`../../../../src/images/user${item.assignee_id}.png`}
                 alt="Perfomer"
               />
             </div>
           </div>
         </div>
-        <EditModal show={this.state.openModal} item={item} setShow={this.setModal} />
+        { this.state.openModal ?
+          <EditModal show={this.state.openModal} item={item} setShow={this.setModal} /> : 
+          <div />
+        }
       </div>
     );
   }
