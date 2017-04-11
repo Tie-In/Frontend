@@ -27,14 +27,14 @@ const specs = {
     const lastY = monitor.getItem().y;
     const nextX = props.x;
     let nextY = placeholderIndex;
-
+    
     if (lastY > nextY) { // move top
       nextY += 1;
     } else if (lastX !== nextX) { // insert into another list
       nextY += 1;
     }
 
-    if (lastX === nextX && lastY === nextY) { // if position equel
+    if (lastX === nextX && lastY === nextY) { // if position equal
       return;
     }
 
@@ -108,7 +108,7 @@ export default class Cards extends Component {
   render() {
     const { connectDropTarget, x, cards, isOver, canDrop } = this.props;
     const { placeholderIndex } = this.state;
-
+    
     let isPlaceHold = false;
     let cardList = [];
     cards.forEach((item, i) => {
