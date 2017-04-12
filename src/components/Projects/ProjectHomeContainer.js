@@ -18,22 +18,27 @@ class ProjectHomeContainer extends Component {
       console.log(err);
     }
   }
-
+  description(text) {
+    return text;
+  }
   render() {
     const { project } = this.props;
-    const cardStyle = {
-      height: '150px',
-      width: '100%',
-      border: 'solid 1px #E5E5E5',
-      marginBottom: '50px',
+    const imgStyle = {
+      marginRight: '7px',
     };
+    console.log(project);
     return (
       <DocumentTitle title={`${project.name}`}>
         <div className="tiein-container">
           <h3 className="header-label">{project.name}</h3>
           <hr className="header-line" />
-          <div className="container" style={cardStyle}>
-            <p>{project.description}</p>
+          <p>{this.description(project.description)}</p>
+          <div>
+            {
+              project.users.map((user) => {
+                return <img src={`../../../src/images/${user.image}.png`} style={imgStyle} alt="contributor-thumbnail" data-tip={`${user.firstname} ${user.lastname}`} key={user.username} />;
+              })
+            }
           </div>
           {project.effort_estimation === undefined ?
             <LinkContainer to={`/organizations/${this.props.project.organization_id}/projects/${this.props.project.id}/planning/features`}>

@@ -2,8 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import ReactTooltip from 'react-tooltip';
 import '../../style/projectCardStyle.css';
-import '../../style/autosuggestStyle.css';
-// import userimg from '../../images/user1.png';
 
 class ProjectCard extends Component {
   render() {

@@ -157,9 +157,9 @@ class Member extends Component {
           </Col>
         </Row>
         {modalContent(modalType)}
-        <AddMemberRow 
+        <AddMemberRow
           project_id={this.props.project.id} organization_id={this.props.project.organization_id}
-          update={this.props.update} 
+          update={this.props.update}
         />
       </div>
     );

@@ -24,7 +24,7 @@ class NormalNavbar extends Component {
       { id: 4, name: 'Planning', path: `${path}/planning` },
       { id: 5, name: 'Active sprint', path: `${path}/board` },
       { id: 6, name: 'Retrospective', path: '/retrospective' },
-      { id: 7, name: 'Dashboard', path: '/dashboard' },
+      { id: 7, name: 'Dashboard', path: `${path}/dashboard` },
       { id: 8, name: 'Setting', path: `${path}/setting` },
     ];
 

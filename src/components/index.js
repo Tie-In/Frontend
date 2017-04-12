@@ -17,6 +17,7 @@ import Board from './Board/Board';
 import NewTask from './Task/NewTask';
 import Profile from './User/Profile';
 import ProjectSetting from './Projects/ProjectSetting';
+import DashboardContainer from './Dashboard/DashboardContainer';
 
 module.exports = {
   Login,
@@ -38,4 +39,5 @@ module.exports = {
   Profile,
   OrganizationSetting,
   ProjectSetting,
+  DashboardContainer,
 };
