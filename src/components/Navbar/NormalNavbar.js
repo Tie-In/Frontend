@@ -64,7 +64,7 @@ class NormalNavbar extends Component {
                     <Dropdown.Toggle>
                       <img
                         id="avatar" role="presentation"
-                        src={`../../../src/images/${user.image}.png`}
+                        src={user.image}
                       />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>

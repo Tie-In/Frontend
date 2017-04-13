@@ -42,7 +42,7 @@ class OrganizationNavbar extends Component {
                     <Dropdown.Toggle>
                       <img
                         id="avatar" role="presentation"
-                        src={`../../src/images/${user.image}.png`}
+                        src={user.image}
                         style={{marginTop: 10, marginLeft: '450%'}}
                       />
                     </Dropdown.Toggle>

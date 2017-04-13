@@ -34,7 +34,7 @@ class Register extends Component {
         password_confirmation: '',
         birth_date: '',
         phone_number: '',
-        image: 'user'.concat(Math.ceil(Math.random() * 4)),
+        image: `http://res.cloudinary.com/dyx2tyza6/image/upload/v1492066687/user${Math.ceil(Math.random() * 4)}.png`,
       },
       error: {
         email: '',
