@@ -10,9 +10,6 @@ class Card extends Component {
     this.state = {
       item: this.props.item,
       openModal: false,
-      allFeatures: [],
-      allUsers: [],
-      allTags: [],
     };
 
     this.setModal = this.setModal.bind(this);

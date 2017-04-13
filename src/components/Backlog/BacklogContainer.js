@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import 'simple-line-icons/css/simple-line-icons.css';
 import update from 'immutability-helper';
+import CurrentSprint from './CurrentSprint';
 import EditTaskModal from './EditTaskModal';
 import PointEstimationModal from './PointEstimationModal';
 import './backlog.css';
@@ -38,7 +39,6 @@ class BacklogContainer extends Component {
         sprint: 'backlog',
       });
       const tasks = response.data;
-      console.log(tasks);
       this.setState({ backlogTasks: tasks });
     } catch (err) {
       console.log(err);
@@ -144,8 +144,13 @@ class BacklogContainer extends Component {
         <Row key={task.id} style={rowStyle}>
           <li id="task">
             <Col xs={10} md={11}>
-              <span id="taskName" onClick={() => this.showEditTaskModal(task)}>{task.name}</span></Col>
-            <Col xs={1} md={1}><span className="icon-plus" id="addButton" onClick={() => this.switchTask(task, 'add')} /></Col>
+              <span id="taskName" onClick={() => this.showEditTaskModal(task)}>{task.name}</span>
+            </Col>
+            { this.props.project.current_sprint_id === null ? 
+              <Col xs={1} md={1}>
+                <span className="icon-plus" id="addButton" onClick={() => this.switchTask(task, 'add')} />
+              </Col> : <div />
+            }
           </li>
         </Row>
       );
@@ -170,8 +175,10 @@ class BacklogContainer extends Component {
     };
 
     return (
-      <div className="modal-container">
+      <div>
         <div className="tiein-container">
+          <CurrentSprint />
+          <br />
           <Row>
             <Col sm={8}>
               <h4>Backlog</h4>
@@ -179,7 +186,7 @@ class BacklogContainer extends Component {
               <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
             </Col>
             <Col sm={4}>
-              <h4>This sprint:</h4>
+              <h4>New sprint:</h4>
               <hr />
               <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
               <div id="nextButton">{nextButton()}</div>

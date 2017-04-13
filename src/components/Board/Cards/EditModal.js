@@ -223,6 +223,7 @@ class EditModal extends Component {
                     name="story_point"
                     value={input.story_point || ''}
                     onChange={this.handleInputChange} 
+                    disabled
                   />
                 </Col>
               </FormGroup>
