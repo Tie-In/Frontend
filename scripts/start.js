@@ -157,7 +157,7 @@ function runDevServer(port) {
     },
     watchOptions: {
       ignored: /node_modules/
-    }
+    },
   }).listen(port, (err, result) => {
     if (err) {
       return console.log(err);

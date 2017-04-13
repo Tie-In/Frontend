@@ -49,6 +49,7 @@
   "dependencies": {
     "axios": "^0.15.3",
     "bootstrap": "^3.3.7",
+    "cloudinary": "^1.8.0",
     "eslint-plugin-react": "^6.9.0",
     "faker": "^3.1.0",
     "immutability-helper": "^2.1.2",
@@ -66,6 +67,7 @@
     "react-dnd-html5-backend": "^2.2.0",
     "react-document-title": "^2.0.2",
     "react-dom": "^15.2.1",
+    "react-dropzone": "^3.12.3",
     "react-link-state": "^0.1.2",
     "react-radio-buttons": "^1.0.10",
     "react-redux": "^4.4.5",
