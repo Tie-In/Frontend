@@ -177,7 +177,7 @@ class BacklogContainer extends Component {
     return (
       <div>
         <div className="tiein-container">
-          <CurrentSprint />
+          <CurrentSprint /> 
           <br />
           <Row>
             <Col sm={8}>

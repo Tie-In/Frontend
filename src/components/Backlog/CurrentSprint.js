@@ -20,9 +20,7 @@ class CurrentSprint extends Component {
       task: {},
     };
 
-    this.setUpdatedTask = this.setUpdatedTask.bind(this);
-    this.showEditTaskModal = this.showEditTaskModal.bind(this);
-    this.closeEditTaskModal = this.closeEditTaskModal.bind(this);
+    this.stopSprint = this.stopSprint.bind(this);
   }
 
   async componentWillMount() {
@@ -44,33 +42,18 @@ class CurrentSprint extends Component {
     }
   }
 
-  showEditTaskModal(tempTask) {
-    this.setState({
-      showEditTask: true,
-      task: tempTask,
-    });
-  }
-
-  closeEditTaskModal() {
-    this.setState({ showEditTask: false });
-  }
-
-  async setUpdatedTask(updatedTask) {
-    let index = this.findIndex(this.state.backlogTasks, updatedTask.id);
-    if (index !== -1) {
-      this.setState({
-        backlogTasks: update(this.state.backlogTasks, { [index]: { $set: updatedTask } }),
-      });
-    } else {
-      index = this.findIndex(this.state.sprintTasks, updatedTask.id);
-      this.setState({
-        sprintTasks: update(this.state.sprintTasks, { [index]: { $set: updatedTask } }),
-      });
-    }
-
+  async stopSprint() {
     try {
-      await apiHelper.put(`/api/tasks/${updatedTask.id}`, updatedTask);
-      this.closeEditTaskModal();
+      const responseSprint = await apiHelper.put(`/api/sprints/${this.state.sprint.id}`, {
+        sprint: {
+          is_ended: true,
+        },
+      });
+      const data = responseSprint.data;
+      this.setState({ 
+        sprint: {},
+        currentTasks: [], 
+      });
     } catch (err) {
       console.log(err);
     }
@@ -96,35 +79,29 @@ class CurrentSprint extends Component {
       );
     });
     return (
-      <div>
-        <Row style={{ borderBottom: 'solid 1px' }}>
-          <Col sm={4}>
-            <h4>Sprint {sprint.number} (Current)</h4>
-          </Col>
-          <Col sm={3}>
-            <p style={{ paddingTop: 10 }}>Sprint points: {sprint.sprint_points}</p>
-          </Col>
-          <Col sm={3}>
-            <p style={{ paddingTop: 10 }}>Start date: {moment(sprint.start_date).format('L')}</p>
-          </Col>
-          <Col sm={2}>
-            <Button>Stop sprint</Button>
-          </Col>
-        </Row>
-        <br />
-        <Row>
-          <Col sm={12}>
-            <ul className="backlog" id="taskslist">{currentTaskNode}</ul>
-          </Col>
-        </Row>
-        <EditTaskModal
-          task={this.state.task}
-          show={this.state.showEditTask}
-          setUpdatedTask={this.setUpdatedTask}
-          close={this.closeEditTaskModal}
-          project={this.props.project}
-        />
-      </div>
+      this.state.sprint.id ? 
+        <div>
+            <Row style={{ borderBottom: 'solid 1px' }}>
+              <Col sm={4}>
+                <h4>Sprint {sprint.number} (Current)</h4>
+              </Col>
+              <Col sm={3}>
+                <p style={{ paddingTop: 10 }}>Sprint points: {sprint.sprint_points}</p>
+              </Col>
+              <Col sm={3}>
+                <p style={{ paddingTop: 10 }}>Start date: {moment(sprint.start_date).format('L')}</p>
+              </Col>
+              <Col sm={2}>
+                <Button onClick={this.stopSprint}>Stop sprint</Button>
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col sm={12}>
+                <ul className="backlog" id="taskslist">{currentTaskNode}</ul>
+              </Col>
+            </Row>
+        </div> : <div />
     );
   }
 }
