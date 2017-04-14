@@ -12,7 +12,7 @@ class TagManage extends Component {
       onEdit: -1,
       onCreate: false,
       newTagName: '',
-			newTagColor: '',
+			newTagColor: '#f44336',
       editTagName: '',
 			editTagColor: '',
       deleteTag: -1,
@@ -20,6 +20,7 @@ class TagManage extends Component {
 			openDropdownEdit: false,
     };
 
+		this.defaultColor = '#f44336';
     this.handleInputChange = this.handleInputChange.bind(this);
     this.create = this.create.bind(this);
     this.edit = this.edit.bind(this);
@@ -41,7 +42,7 @@ class TagManage extends Component {
     this.props.create(this.state.newTagName, this.state.newTagColor)
     this.setState({
       onCreate: false,
-      newTag: '',
+      newTagName: this.defaultColor,
     })
   }
 
@@ -148,8 +149,10 @@ class TagManage extends Component {
     const normalRow = (tag, index) => { 
       return (
         <td style={{ verticalAlign: 'middle' }}>
-          <Col xs={8}>
-						<Label style={{ backgroundColor: tag.color }}>{tag.name}</Label>
+          <Col xs={9}>
+						<h4 style={{ margin: 0 }}>
+							<Label style={{ backgroundColor: tag.color }}>{tag.name}</Label>
+						</h4>
 					</Col>
           <Col xs={3} style={{ textAlign: 'center' }}>
             <a 
@@ -231,7 +234,7 @@ class TagManage extends Component {
             <Col xs={3}>
               <Button 
                 bsStyle="primary" style={{ marginRight: 5 }}
-                onClick={() => { this.setState({ onCreate: false }); }}
+                onClick={() => { this.setState({ onCreate: false, newTagColor: this.defaultColor }); }}
               >
                 Cancel
               </Button>
