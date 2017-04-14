@@ -13,6 +13,7 @@ class TaskStatus extends Component {
       newStatus: '',
       editStatus: '',
       editStatusIndex: '',
+      deleteStatus: -1,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -46,6 +47,102 @@ class TaskStatus extends Component {
 
   render() {
     const { statuses = [] } = this.props;
+    const deleteRow = (id) => {
+      return (
+        <td>
+          <Col xs={8} style={{ paddingTop: 7 }}>
+            <span style={{ color: 'red' }}>Are you sure?</span> All tasks in this status will be move to the first status.
+          </Col>
+          <Col sm={4}>
+            <div className="pull-right">
+              <Button 
+                bsStyle="primary" style={{ marginRight: 5}}
+                onClick={() => { this.setState({ onDelete: -1 }); }}
+              >
+                Cancel
+              </Button>
+              <Button 
+                bsStyle="primary"
+                style={{ color: 'red' }}
+                onClick={() => this.props.del(status.id)}
+              >
+                Delete status
+              </Button>
+            </div>
+          </Col>
+        </td>
+      );
+    };
+
+    const editRow = (status, index) => {
+      return (
+        <td>
+          <Col xs={1}>
+            <FormControl 
+              componentClass="select" name="editStatusIndex" 
+              defaultValue={index + 1} 
+              onChange={this.handleInputChange}
+            >
+              { statuses.map((_, i) => {
+                return <option key={i} value={i + 1}>{i + 1}</option>
+              })}
+            </FormControl>
+          </Col>
+          <Col xs={5}>
+            <FormControl
+              type="text" placeholder="Status name"
+              name="editStatus"
+              value={this.state.editStatus}
+              onChange={this.handleInputChange}
+            />
+          </Col>
+          <Col sm={4} smOffset={2}>
+            <div className="pull-right">
+              <Button 
+                bsStyle="primary" style={{ marginRight: 5}}
+                onClick={() => { this.setState({ onEdit: -1 }); }}
+              >
+                Cancel
+              </Button>
+              <Button onClick={() => this.edit(status)}>
+                Save change
+              </Button>
+            </div>
+          </Col>
+        </td>
+      );
+    };
+
+    const normalRow = (status, index) => { 
+      return (
+        <td style={{ verticalAlign: 'middle' }}>
+          <Col xs={1}>{index + 1}</Col>
+          { index + 1 !== statuses.length ? 
+            <Col xs={8}>{status.name}</Col>
+            :
+            <div>
+              <Col xs={3}>{status.name}</Col>
+              <Col xs={5} style={{ color: 'grey' }}>
+                  * Task in this status will marked as done
+              </Col>
+            </div>
+          }
+          <Col xs={3} style={{ textAlign: 'center' }}>
+            <a 
+              style={{ cursor: 'pointer', marginRight: 20 }} 
+              onClick={() => this.setState({ onEdit: index, editStatus: status.name })}
+            >
+              <Glyphicon glyph="pencil" /> Edit
+            </a>
+            <a 
+              style={{ cursor: 'pointer' }} onClick={() => this.setState({ onDelete: index})}
+            >
+              <Glyphicon glyph="remove" /> Delete
+            </a>
+          </Col> 
+        </td>
+      );
+    };
 
     return (
       <div>
@@ -61,67 +158,12 @@ class TaskStatus extends Component {
                 { statuses.map((status, index) => {
                   return (<tr key={status.id} style={{ height: 45 }}>
                       { this.state.onEdit === index ? 
-                        <td>
-                          <Col xs={1}>
-                            <FormControl 
-                              componentClass="select" name="editStatusIndex" 
-                              defaultValue={index + 1} 
-                              onChange={this.handleInputChange}
-                            >
-                              { statuses.map((_, i) => {
-                                return <option key={i} value={i + 1}>{i + 1}</option>
-                              })}
-                            </FormControl>
-                          </Col>
-                          <Col xs={5}>
-                            <FormControl
-                              type="text" placeholder="Status name"
-                              name="editStatus"
-                              value={this.state.editStatus}
-                              onChange={this.handleInputChange}
-                            />
-                          </Col>
-                          <Col sm={4} smOffset={2}>
-                            <div className="pull-right">
-                              <Button 
-                                bsStyle="primary" style={{ marginRight: 5}}
-                                onClick={() => { this.setState({ onEdit: -1 }); }}
-                              >
-                                Cancel
-                              </Button>
-                              <Button onClick={() => this.edit(status)}>
-                                Save change
-                              </Button>
-                            </div>
-                          </Col>
-                        </td>
+                        editRow(status, index)
                         :
-                        <td style={{ verticalAlign: 'middle' }}>
-                          <Col xs={1}>{index + 1}</Col>
-                          { index + 1 !== statuses.length ? 
-                            <Col xs={8}>{status.name}</Col>
-                            :
-                            <div>
-                              <Col xs={3}>{status.name}</Col>
-                              <Col xs={5} style={{ color: 'grey' }}>
-                                  * Task in this status will marked as done
-                              </Col>
-                            </div>
-                          }
-                          <Col xs={3} style={{ textAlign: 'center' }}>
-                            <a 
-                              style={{ cursor: 'pointer', marginRight: 20 }} 
-                              onClick={() => this.setState({ onEdit: index, editStatus: status.name })}
-                            >
-                              <Glyphicon glyph="pencil" /> Edit
-                            </a>
-                            <a 
-                              style={{ cursor: 'pointer' }} onClick={() => this.props.del(status.id)}
-                            >
-                              <Glyphicon glyph="remove" /> Delete
-                            </a>
-                          </Col> 
-                        </td>
+                        this.state.onDelete === index ?
+                          deleteRow(status.id)
+                          :
+                          normalRow(status, index)
                       }
                   </tr>);
                 })
