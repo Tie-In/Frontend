@@ -19,6 +19,7 @@ class TaskStatus extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.create = this.create.bind(this);
     this.edit = this.edit.bind(this);
+    this.del = this.del.bind(this);
   }
 
   handleInputChange(e) {
@@ -45,6 +46,11 @@ class TaskStatus extends Component {
     }
   }
 
+  del(id) {
+    this.props.del(id); 
+    this.setState({ onDelete: -1 });
+  }
+
   render() {
     const { statuses = [] } = this.props;
     const deleteRow = (id) => {
@@ -64,7 +70,7 @@ class TaskStatus extends Component {
               <Button 
                 bsStyle="primary"
                 style={{ color: 'red' }}
-                onClick={() => this.props.del(status.id)}
+                onClick={() => this.del(id)}
               >
                 Delete status
               </Button>

@@ -96,6 +96,7 @@ class ProjectSetting extends Component {
   }
 
   async deleteStatus(id) {
+    console.log(id);
     try {
       await apiHelper.del(`/api/statuses/${id}`);
       this.updateProject();
