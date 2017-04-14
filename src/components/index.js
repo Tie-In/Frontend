@@ -18,6 +18,7 @@ import NewTask from './Task/NewTask';
 import Profile from './User/Profile';
 import ProjectSetting from './Projects/ProjectSetting';
 import RetrospectiveContainer from './Retrospective/RetrospectiveContainer';
+import NewRetrospective from './Retrospective/NewRetrospective';
 
 module.exports = {
   Login,
@@ -40,4 +41,5 @@ module.exports = {
   OrganizationSetting,
   ProjectSetting,
   RetrospectiveContainer,
+  NewRetrospective,
 };

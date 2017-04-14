@@ -169,13 +169,13 @@ class BacklogContainer extends Component {
         <div className="backlogContainer">
           <Row>
             <Col sm={8}>
-              <h4>Backlog</h4>
-              <hr />
+              <h3 className="header-label">Backlog</h3>
+              <hr className="header-line" />
               <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
             </Col>
             <Col sm={4}>
-              <h4>This Sprint:</h4>
-              <hr />
+              <h3 className="header-label">This Sprint:</h3>
+              <hr className="header-line" />
               <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
               <div id="nextButton">{nextButton()}</div>
             </Col>

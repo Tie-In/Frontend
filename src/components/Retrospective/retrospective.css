@@ -1,0 +1,18 @@
+.panel-heading {
+  background: #D0CBC7 !important;
+  color: #A25E5D !important;
+  text-align: center;
+  font-weight: bold;
+}
+#startBtn {
+ text-align: center;
+}
+#selectSprint {
+  width: 150px;
+}
+p {
+  margin-bottom: 0px;
+}
+option {
+
+}
