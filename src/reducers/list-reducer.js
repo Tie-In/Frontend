@@ -1,7 +1,6 @@
 import {
   SET_LIST,
   MOVE_CARD,
-  MOVE_LIST,
   TOGGLE_DRAGGING,
 } from '../actions/list-actions';
 import * as apiHelper from '../helpers/apiHelper';
@@ -46,19 +45,6 @@ export default function lists(state = initialState, action) {
           column_id: newLists[nextX].id,
         });
       }
-      return Object.assign({}, state, {
-        lists: newLists,
-      });
-    }
-    case MOVE_LIST: {
-      const newLists = [...state.lists];
-      const { lastX, nextX } = action;
-      const t = newLists.splice(lastX, 1)[0];
-
-      newLists.splice(nextX, 0, t);
-      apiHelper.put(`/api/statuses/${t.id}`, {
-        column_index: nextX,
-      });
       return Object.assign({}, state, {
         lists: newLists,
       });

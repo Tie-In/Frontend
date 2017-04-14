@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
   Grid, Col, Row, Form,
-  Nav, NavItem,
+  Nav, NavItem, Glyphicon,
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -9,6 +9,7 @@ import * as projectActions from '../../actions/project-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 import Information from './Setting/Information';
 import Member from './Setting/Member';
+import TaskStatus from './Setting/TaskStatus';
 import '../../style/autosuggestStyle.css';
 
 class ProjectSetting extends Component {
@@ -16,13 +17,16 @@ class ProjectSetting extends Component {
     super(props);
 
     this.state = {
-      tabIndex: 1,
+      tabIndex: 3,
     };
     this.handleSelect = this.handleSelect.bind(this);
     this.updateSetting = this.updateSetting.bind(this);
     this.updateMemberRole = this.updateMemberRole.bind(this);
     this.deleteMember = this.deleteMember.bind(this);
     this.updateProject = this.updateProject.bind(this);
+    this.createStatus = this.createStatus.bind(this);
+    this.editStatus = this.editStatus.bind(this);
+    this.deleteStatus = this.deleteStatus.bind(this);
   }
 
   async updateSetting(data) {
@@ -59,6 +63,47 @@ class ProjectSetting extends Component {
     }
   }
 
+  async createStatus(statusName) {
+    const { project } = this.props;
+    try {
+      await apiHelper.post('/api/statuses', {
+        status: {
+          project_id: project.id,
+          name: statusName,
+          column_index: project.statuses.length,
+        }
+      });
+      this.updateProject();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async editStatus(id, statusName, index) {
+    try {
+      await apiHelper.put(`/api/statuses/${id}`, {
+        status: {
+          name: statusName,
+          column_index: index,
+        }
+      });
+      this.updateProject();
+      return true;
+    } catch (err) {
+      return false;
+      console.log(err);
+    }
+  }
+
+  async deleteStatus(id) {
+    try {
+      await apiHelper.del(`/api/statuses/${id}`);
+      this.updateProject();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async updateProject() {
     try {
       const updateResponse = await apiHelper.get(`/api/projects/${this.props.project.id}`);
@@ -89,6 +134,13 @@ class ProjectSetting extends Component {
             update={this.updateProject}
           />
         );
+      } else if (tab === 3) {
+        return (
+          <TaskStatus 
+            statuses={project.statuses} create={this.createStatus} 
+            edit={this.editStatus} del={this.deleteStatus}
+          />
+        );
       }
       return <div />;
     };
@@ -101,8 +153,10 @@ class ProjectSetting extends Component {
           <Row>
             <Col xs={12}>
               <Nav bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
-                <NavItem eventKey={1}>Information</NavItem>
-                <NavItem eventKey={2}>Contributors</NavItem>
+                <NavItem eventKey={1}><Glyphicon glyph="info-sign"/> Information</NavItem>
+                <NavItem eventKey={2}><Glyphicon glyph="user"/> Contributors</NavItem>
+                <NavItem eventKey={3}><Glyphicon glyph="th-list"/> Task status</NavItem>
+                <NavItem eventKey={4}><Glyphicon glyph="tags"/> Tags</NavItem>
               </Nav>
             </Col>
           </Row>

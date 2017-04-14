@@ -138,7 +138,7 @@ class Member extends Component {
                     <td>
                       <Col xs={4} style={{ paddingTop: 5 }}>{member.user.username}</Col>
                       <Col xs={4} style={{ paddingTop: 5 }}>{member.permission_level}</Col>
-                      <Col xsOffset={2} xs={2}>
+                      <Col xsOffset={3} xs={1}>
                         <DropdownButton title={<Glyphicon glyph="cog" />}>
                           <MenuItem eventKey="1" onClick={() => { this.openChangeRole(member); }}>
                             Change role
