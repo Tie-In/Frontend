@@ -75,7 +75,8 @@ class OrganizationSetting extends Component {
 
   render() {
     const { tabIndex } = this.state;
-    const { organization } = this.props;
+    const { organization, permission } = this.props;
+    console.log(permission);
     const switchRender = (tab) => {
       if (tab === 1) {
         return (<Information organization={organization} update={this.updateSetting} />);
@@ -87,6 +88,7 @@ class OrganizationSetting extends Component {
             deleteMember={this.deleteMember}
             organization={organization}
             update={this.updateOrganization}
+            permission={permission.organization}
           />
         );
       }
@@ -117,11 +119,13 @@ class OrganizationSetting extends Component {
 OrganizationSetting.propTypes = {
   organizationActions: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
+  permission: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     organization: state.organization,
+    permission: state.permission,
   };
 }
 
