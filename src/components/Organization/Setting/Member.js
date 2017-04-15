@@ -63,7 +63,7 @@ class Member extends Component {
   }
 
   render() {
-    const { members = [] } = this.props;
+    const { members = [], permission } = this.props;
     const { showModal, selectedUser, selectedRole, modalType } = this.state;
     const roles = ['owner', 'admin', 'user'];
     const modalContent = (type) => {
@@ -135,18 +135,26 @@ class Member extends Component {
                 { members.map((member) => {
                   return (<tr key={member.id}>
                     <td>
-                      <Col xs={4} style={{ paddingTop: 5 }}>{member.user.username}</Col>
-                      <Col xs={4} style={{ paddingTop: 5 }}>{member.permission_level}</Col>
-                      <Col xsOffset={2} xs={2}>
-                        <DropdownButton id="organizationSettingDropdown" title={<Glyphicon glyph="cog" />}>
-                          <MenuItem eventKey="1" onClick={() => { this.openChangeRole(member); }}>
-                            Change role
-                          </MenuItem>
-                          <MenuItem eventKey="2" onClick={() => { this.openDeleteMember(member); }}>
-                            Remove from organization
-                          </MenuItem>
-                        </DropdownButton>
+                      <Col xs={2}>
+                         <img
+                            id="avatar" role="presentation"
+                            src={member.user.image}
+                          />
                       </Col>
+                      <Col xs={3} style={{ paddingTop: 5 }}>{member.user.username}</Col>
+                      <Col xs={3} style={{ paddingTop: 5 }}>{member.permission_level}</Col>
+                      { permission !== 'user' ?
+                        <Col xsOffset={3} xs={1}>
+                          <DropdownButton id="organizationSettingDropdown" title={<Glyphicon glyph="cog" />}>
+                            <MenuItem eventKey="1" onClick={() => { this.openChangeRole(member); }}>
+                              Change role
+                            </MenuItem>
+                            <MenuItem eventKey="2" onClick={() => { this.openDeleteMember(member); }}>
+                              Remove from organization
+                            </MenuItem>
+                          </DropdownButton>
+                        </Col> : <div />
+                      }
                     </td>
                   </tr>);
                 })
@@ -156,7 +164,9 @@ class Member extends Component {
           </Col>
         </Row>
         {modalContent(modalType)}
-        <AddMemberRow organization_id={this.props.organization.id} update={this.props.update} />
+        { permission !== 'user' ?
+          <AddMemberRow organization_id={this.props.organization.id} update={this.props.update} /> : <div />
+        }
       </div>
     );
   }
@@ -168,6 +178,7 @@ Member.propTypes = {
   deleteMember: PropTypes.func.isRequired,
   organization: PropTypes.object.isRequired,
   update: PropTypes.func.isRequired,
+  permission: PropTypes.string.isRequired,
 };
 
 export default Member;

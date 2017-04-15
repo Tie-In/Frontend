@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Label } from 'react-bootstrap';
+import { Label, Badge } from 'react-bootstrap';
 import image1 from '../../../images/user1.png';
 import EditModal from './EditModal';
 
@@ -31,7 +31,7 @@ class Card extends Component {
         id={style ? item.id : null} onClick={() => this.setModal(true)}
       >
         <div className="item-name">
-          {item.name}
+          {item.name} <Badge pullRight>{item.story_point}</Badge>
         </div>
         <div className="item-container">
           <div className="item-content">
