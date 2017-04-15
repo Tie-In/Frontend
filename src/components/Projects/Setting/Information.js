@@ -48,7 +48,7 @@ class Information extends Component {
           <Col xs={12}>
             <FormGroup>
               <ControlLabel>
-                Project&#39;s name
+                Project's name
               </ControlLabel>
               <FormControl
                 type="text" placeholder="Name"

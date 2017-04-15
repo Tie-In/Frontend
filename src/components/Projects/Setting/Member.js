@@ -63,7 +63,7 @@ class Member extends Component {
   }
 
   render() {
-    const { members = [] } = this.props;
+    const { members = [], permission } = this.props;
     const { showModal, selectedUser, selectedRole, modalType } = this.state;
     const roles = ['admin', 'user'];
     const modalContent = (type) => {
@@ -134,20 +134,28 @@ class Member extends Component {
               </thead>
               <tbody>
                 { members.map((member) => {
-                  return (<tr>
+                  return (<tr key={member.id}>
                     <td>
-                      <Col xs={4} style={{ paddingTop: 5 }}>{member.user.username}</Col>
-                      <Col xs={4} style={{ paddingTop: 5 }}>{member.permission_level}</Col>
-                      <Col xsOffset={3} xs={1}>
-                        <DropdownButton title={<Glyphicon glyph="cog" />}>
-                          <MenuItem eventKey="1" onClick={() => { this.openChangeRole(member); }}>
-                            Change role
-                          </MenuItem>
-                          <MenuItem eventKey="2" onClick={() => { this.openDeleteMember(member); }}>
-                            Remove from project
-                          </MenuItem>
-                        </DropdownButton>
+                      <Col xs={2}>
+                         <img
+                            id="avatar" role="presentation"
+                            src={member.user.image}
+                          />
                       </Col>
+                      <Col xs={3} style={{ paddingTop: 5 }}>{member.user.username}</Col>
+                      <Col xs={3} style={{ paddingTop: 5 }}>{member.permission_level}</Col>
+                      { permission !== 'user' ?
+                        <Col xsOffset={3} xs={1}>
+                          <DropdownButton id="projectSettingDropdown" title={<Glyphicon glyph="cog" />}>
+                            <MenuItem eventKey="1" onClick={() => { this.openChangeRole(member); }}>
+                              Change role
+                            </MenuItem>
+                            <MenuItem eventKey="2" onClick={() => { this.openDeleteMember(member); }}>
+                              Remove from project
+                            </MenuItem>
+                          </DropdownButton>
+                        </Col> : <div />
+                      }
                     </td>
                   </tr>);
                 })
@@ -157,10 +165,12 @@ class Member extends Component {
           </Col>
         </Row>
         {modalContent(modalType)}
-        <AddMemberRow 
-          project_id={this.props.project.id} organization_id={this.props.project.organization_id}
-          update={this.props.update} 
-        />
+        { permission !== 'user' ?
+          <AddMemberRow 
+            project_id={this.props.project.id} organization_id={this.props.project.organization_id}
+            update={this.props.update} 
+          /> : <div />
+        }
       </div>
     );
   }
@@ -172,6 +182,7 @@ Member.propTypes = {
   deleteMember: PropTypes.func.isRequired,
   project: PropTypes.object.isRequired,
   update: PropTypes.func.isRequired,
+  permission: PropTypes.string.isRequired,
 };
 
 export default Member;

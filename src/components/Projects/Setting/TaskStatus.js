@@ -52,7 +52,7 @@ class TaskStatus extends Component {
   }
 
   render() {
-    const { statuses = [] } = this.props;
+    const { statuses = [], permission } = this.props;
     const deleteRow = (id) => {
       return (
         <td>
@@ -133,19 +133,21 @@ class TaskStatus extends Component {
               </Col>
             </div>
           }
-          <Col xs={3} style={{ textAlign: 'center' }}>
-            <a 
-              style={{ cursor: 'pointer', marginRight: 20 }} 
-              onClick={() => this.setState({ onEdit: index, editStatus: status.name })}
-            >
-              <Glyphicon glyph="pencil" /> Edit
-            </a>
-            <a 
-              style={{ cursor: 'pointer' }} onClick={() => this.setState({ onDelete: index})}
-            >
-              <Glyphicon glyph="remove" /> Delete
-            </a>
-          </Col> 
+          { permission !== 'user' ? 
+            <Col xs={3} style={{ textAlign: 'center' }}>
+              <a 
+                style={{ cursor: 'pointer', marginRight: 20 }} 
+                onClick={() => this.setState({ onEdit: index, editStatus: status.name })}
+              >
+                <Glyphicon glyph="pencil" /> Edit
+              </a>
+              <a 
+                style={{ cursor: 'pointer' }} onClick={() => this.setState({ onDelete: index})}
+              >
+                <Glyphicon glyph="remove" /> Delete
+              </a>
+            </Col> : <div />
+          }
         </td>
       );
     };
@@ -204,13 +206,15 @@ class TaskStatus extends Component {
           </Row>
           :
           <Row>
-            <Col xs={12} md={8} mdOffset={4}>
-              <Button
-                className="pull-right" onClick={() => { this.setState({ onCreate: true }); }}
-              >
-                New status
-              </Button>
-            </Col>
+            { permission !== 'user' ? 
+              <Col xs={12} md={8} mdOffset={4}>
+                <Button
+                  className="pull-right" onClick={() => { this.setState({ onCreate: true }); }}
+                >
+                  New status
+                </Button>
+              </Col> : <div />
+            }
           </Row>
         }
       </div>
@@ -223,6 +227,7 @@ TaskStatus.propTypes = {
   create: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   del: PropTypes.func.isRequired,
+  permission: PropTypes.string.isRequired,
 };
 
 export default TaskStatus;
