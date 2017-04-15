@@ -167,7 +167,7 @@ class ProjectSetting extends Component {
 
   render() {
     const { tabIndex } = this.state;
-    const { project } = this.props;
+    const { project, permission } = this.props;
     const switchRender = (tab) => {
       if (tab === 1) {
         return (<Information project={project} update={this.updateSetting} />);
@@ -179,6 +179,7 @@ class ProjectSetting extends Component {
             deleteMember={this.deleteMember}
             project={project}
             update={this.updateProject}
+            permission={permission.project}
           />
         );
       } else if (tab === 3) {
@@ -186,6 +187,7 @@ class ProjectSetting extends Component {
           <TaskStatus 
             statuses={project.statuses} create={this.createStatus} 
             edit={this.editStatus} del={this.deleteStatus}
+            permission={permission.project}
           />
         );
       } else if (tab === 4) {
@@ -225,11 +227,13 @@ class ProjectSetting extends Component {
 ProjectSetting.propTypes = {
   projectActions: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
+  permission: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     project: state.project,
+    permission: state.permission,
   };
 }
 

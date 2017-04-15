@@ -5,15 +5,21 @@ import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import DocumentTitle from 'react-document-title';
 import * as projectActions from '../../actions/project-actions';
+import * as permissionActions from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class ProjectHomeContainer extends Component {
 
   async componentWillMount() {
+    const { params, user, permissionActions, projectActions } = this.props;
     try {
-      const response = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
+      const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
-      this.props.projectActions.setProject(project);
+      projectActions.setProject(project);
+      const perLevel = project.project_contributes.find((x) => {
+        return x.user_id === user.id;
+      }).permission_level;
+      permissionActions.setProject(perLevel);
     } catch (err) {
       console.log(err);
     }
@@ -49,17 +55,22 @@ class ProjectHomeContainer extends Component {
 ProjectHomeContainer.propTypes = {
   project: PropTypes.object.isRequired,
   projectActions: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  permissionActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     project: state.project,
+    user: state.user,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     projectActions: bindActionCreators(projectActions, dispatch),
+    permissionActions: bindActionCreators(permissionActions, dispatch),
   };
 }
 

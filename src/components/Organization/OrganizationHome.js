@@ -5,16 +5,22 @@ import { Button, Row, Col, Image } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
 import ProjectCard from './ProjectCard';
 import * as organizationActions from '../../actions/organization-actions';
+import * as permissionActions from '../../actions/permission-actions';
 import AddProject from '../../images/newproject.png';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class OrganizationHome extends Component {
 
   async componentWillMount() {
+    const { params, organizationActions, permissionActions, user } = this.props;
     try {
-      const response = await apiHelper.get(`/api/organizations/${this.props.params.organizationId}`);
+      const response = await apiHelper.get(`/api/organizations/${params.organizationId}`);
       const org = response.data;
-      this.props.organizationActions.setOrganization(org);
+      organizationActions.setOrganization(org);
+      const perLevel = org.user_organizations.find((x) => {
+        return x.user_id === user.id;
+      }).permission_level;
+      permissionActions.setOrganization(perLevel);
     } catch (err) {
       console.log(err);
       localStorage.clear();
@@ -23,7 +29,7 @@ class OrganizationHome extends Component {
   }
 
   buttonType(projects) {
-    const newProjectPath = `./${this.props.params.organizationId}/projects/new`;
+    const newProjectPath = `./${this.props.organization.id}/projects/new`;
     const articleStyles = {
       margin: '0 auto',
       position: 'fixed',
@@ -85,18 +91,21 @@ class OrganizationHome extends Component {
 OrganizationHome.propTypes = {
   organization: PropTypes.object.isRequired,
   organizationActions: PropTypes.object.isRequired,
+  permissionActions: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     organization: state.organization,
+    user: state.user,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     organizationActions: bindActionCreators(organizationActions, dispatch),
+    permissionActions: bindActionCreators(permissionActions, dispatch),
   };
 }
 
