@@ -1,12 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Row, Col, Button, Badge } from 'react-bootstrap';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import moment from 'moment';
 import 'simple-line-icons/css/simple-line-icons.css';
-import update from 'immutability-helper';
-import EditTaskModal from './EditTaskModal';
-import PointEstimationModal from './PointEstimationModal';
 import './backlog.css';
 import * as apiHelper from '../../helpers/apiHelper';
 
@@ -44,15 +39,14 @@ class CurrentSprint extends Component {
 
   async stopSprint() {
     try {
-      const responseSprint = await apiHelper.put(`/api/sprints/${this.state.sprint.id}`, {
+      await apiHelper.put(`/api/sprints/${this.state.sprint.id}`, {
         sprint: {
           is_ended: true,
         },
       });
-      const data = responseSprint.data;
-      this.setState({ 
+      this.setState({
         sprint: {},
-        currentTasks: [], 
+        currentTasks: [],
       });
     } catch (err) {
       console.log(err);
@@ -79,41 +73,34 @@ class CurrentSprint extends Component {
       );
     });
     return (
-      this.state.sprint.id ? 
-        <div>
-            <Row style={{ borderBottom: 'solid 1px' }}>
-              <Col sm={4}>
-                <h4>Sprint {sprint.number} (Current)</h4>
-              </Col>
-              <Col sm={3}>
-                <p style={{ paddingTop: 10 }}>Sprint points: {sprint.sprint_points}</p>
-              </Col>
-              <Col sm={3}>
-                <p style={{ paddingTop: 10 }}>Start date: {moment(sprint.start_date).format('L')}</p>
-              </Col>
-              <Col sm={2}>
-                <Button onClick={this.stopSprint}>Stop sprint</Button>
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col sm={12}>
-                <ul className="backlog" id="taskslist">{currentTaskNode}</ul>
-              </Col>
-            </Row>
-        </div> : <div />
+      <div>
+        <Row style={{ borderBottom: 'solid 1px' }}>
+          <Col sm={4}>
+            <h4>Sprint {sprint.number} (Current)</h4>
+          </Col>
+          <Col sm={3}>
+            <p style={{ paddingTop: 10 }}>Sprint points: {sprint.sprint_points}</p>
+          </Col>
+          <Col sm={3}>
+            <p style={{ paddingTop: 10 }}>Start date: {moment(sprint.start_date).format('L')}</p>
+          </Col>
+          <Col sm={2}>
+            <Button onClick={this.stopSprint}>Stop sprint</Button>
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col sm={12}>
+            <ul className="backlog" id="taskslist">{currentTaskNode}</ul>
+          </Col>
+        </Row>
+      </div>
     );
   }
 }
 
-CurrentSprint.propTypes = {
+CurrentSprint.PropTypes = {
   project: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    project: state.project,
-  };
-}
-
-export default connect(mapStateToProps)(CurrentSprint);
+export default CurrentSprint;

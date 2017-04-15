@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux';
 import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import DocumentTitle from 'react-document-title';
-import * as projectActions from '../../actions/project-actions';
-import * as permissionActions from '../../actions/permission-actions';
+import * as projectActionsCreator from '../../actions/project-actions';
+import * as permissionActionsCreator from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class ProjectHomeContainer extends Component {
@@ -69,8 +69,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    projectActions: bindActionCreators(projectActions, dispatch),
-    permissionActions: bindActionCreators(permissionActions, dispatch),
+    projectActions: bindActionCreators(projectActionsCreator, dispatch),
+    permissionActions: bindActionCreators(permissionActionsCreator, dispatch),
   };
 }
 

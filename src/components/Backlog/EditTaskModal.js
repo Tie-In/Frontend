@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import update from 'react-addons-update';
-import { Row, Col, Modal, Button, Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { Col, Modal, Button, Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import AutosuggestionBlock from '../shared/AutosuggestionBlock';
 import * as apiHelper from '../../helpers/apiHelper';
 import TagRow from './TagRow';
@@ -29,12 +29,7 @@ class EditTaskModal extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.setFeature = this.setFeature.bind(this);
     this.setAssignee = this.setAssignee.bind(this);
-    this.findItem = this.findItem.bind(this);
     this.setTags = this.setTags.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ input: nextProps.task });
   }
 
   async componentWillMount() {
@@ -56,13 +51,8 @@ class EditTaskModal extends Component {
     }
   }
 
-  handleInputChange(e) {
-    const name = e.target.name;
-    this.setState({ input: update(this.state.input, { [name]: { $set: e.target.value } }) });
-  }
-
-  findItem(item) {
-    return item.id === this.props.task.assignee_id;
+  componentWillReceiveProps(nextProps) {
+    this.setState({ input: nextProps.task });
   }
 
   setFeature(id) {
@@ -83,69 +73,76 @@ class EditTaskModal extends Component {
     this.setState({ input: temp });
   }
 
+  handleInputChange(e) {
+    const name = e.target.name;
+    this.setState({ input: update(this.state.input, { [name]: { $set: e.target.value } }) });
+  }
+
   render() {
     const { input } = this.state;
     const editTask = () => {
       return (
         <div className="editTaskContainer">
           <Form horizontal>
-              <FormGroup>
-                <Col xs={3} componentClass={ControlLabel}>
-                  Name
-                </Col>
-                <Col xs={9}>
-                  <FormControl 
-                    type="text" placeholder="Name" 
-                    name="name"
-                    value={input.name || ''}
-                    onChange={this.handleInputChange}
-                  />
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col xs={3} componentClass={ControlLabel}>
-                  Description
-                </Col>
-                <Col xs={9}>
-                  <FormControl 
-                    type="text" placeholder="Description"
-                    name="description" 
-                    value={input.description || ''}
-                    onChange={this.handleInputChange} 
-                  />
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col xs={3} componentClass={ControlLabel}>
-                  Feature
-                </Col>
-                <Col xs={9}>
-                  <AutosuggestionBlock
-                    data={this.state.allFeatures}
-                    setValue={this.setFeature} initSelect={input.feature}
-                  />
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col xs={3} componentClass={ControlLabel}>
-                  Assignee
-                </Col>
-                <Col xs={9}>
-                  <AutosuggestionBlock
-                    data={this.state.allUsers}
-                    setValue={this.setAssignee}
-                    initSelect={this.state.allUsers.find(this.findItem)}
-                  />
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <TagRow
-                  data={this.state.allTags} setValue={this.setTags}
-                  projectId={this.props.project.id}
-                  initSelect={input.tags}
+            <FormGroup>
+              <Col xs={3} componentClass={ControlLabel}>
+                Name
+              </Col>
+              <Col xs={9}>
+                <FormControl
+                  type="text" placeholder="Name"
+                  name="name"
+                  value={input.name || ''}
+                  onChange={this.handleInputChange}
                 />
-              </FormGroup>
-            </Form>
+              </Col>
+            </FormGroup>
+            <FormGroup>
+              <Col xs={3} componentClass={ControlLabel}>
+                Description
+              </Col>
+              <Col xs={9}>
+                <FormControl
+                  type="text" placeholder="Description"
+                  name="description"
+                  value={input.description || ''}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup>
+              <Col xs={3} componentClass={ControlLabel}>
+                Feature
+              </Col>
+              <Col xs={9}>
+                <AutosuggestionBlock
+                  data={this.state.allFeatures}
+                  setValue={this.setFeature} initSelect={input.feature}
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup>
+              <Col xs={3} componentClass={ControlLabel}>
+                Assignee
+              </Col>
+              <Col xs={9}>
+                <AutosuggestionBlock
+                  data={this.state.allUsers}
+                  setValue={this.setAssignee}
+                  initSelect={this.state.allUsers.find((x) => {
+                    return x.id === this.props.task.assignee_id;
+                  })}
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup>
+              <TagRow
+                data={this.state.allTags} setValue={this.setTags}
+                projectId={this.props.project.id}
+                initSelect={input.tags}
+              />
+            </FormGroup>
+          </Form>
         </div>
       );
     };
@@ -166,7 +163,7 @@ class EditTaskModal extends Component {
             {editTask()}
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={() => this.props.setUpdatedTask(this.state.input)}>Update</Button>
+            <Button onClick={() => { this.props.setUpdatedTask(this.state.input); }}>Update</Button>
           </Modal.Footer>
         </Modal>
       </div>
@@ -179,6 +176,7 @@ EditTaskModal.propTypes = {
   setUpdatedTask: PropTypes.func.isRequired,
   task: PropTypes.object.isRequired,
   close: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
 };
 
 export default EditTaskModal;
