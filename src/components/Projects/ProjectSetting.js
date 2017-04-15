@@ -10,6 +10,7 @@ import * as apiHelper from '../../helpers/apiHelper';
 import Information from './Setting/Information';
 import Member from './Setting/Member';
 import TaskStatus from './Setting/TaskStatus';
+import TagManage from './Setting/TagManage';
 import '../../style/autosuggestStyle.css';
 
 class ProjectSetting extends Component {
@@ -17,7 +18,7 @@ class ProjectSetting extends Component {
     super(props);
 
     this.state = {
-      tabIndex: 3,
+      tabIndex: 1,
     };
     this.handleSelect = this.handleSelect.bind(this);
     this.updateSetting = this.updateSetting.bind(this);
@@ -27,6 +28,9 @@ class ProjectSetting extends Component {
     this.createStatus = this.createStatus.bind(this);
     this.editStatus = this.editStatus.bind(this);
     this.deleteStatus = this.deleteStatus.bind(this);
+    this.createTag = this.createTag.bind(this);
+    this.editTag = this.editTag.bind(this);
+    this.deleteTag = this.deleteTag.bind(this);
   }
 
   async updateSetting(data) {
@@ -105,6 +109,48 @@ class ProjectSetting extends Component {
     }
   }
 
+  async createTag(tagName, tagColor) {
+    const { project } = this.props;
+    try {
+      await apiHelper.post('/api/tags', {
+        tag: {
+          project_id: project.id,
+          name: tagName,
+          color: tagColor,
+        }
+      });
+      this.updateProject();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async editTag(id, tagName, tagColor) {
+    try {
+      await apiHelper.put(`/api/tags/${id}`, {
+        tag: {
+          name: tagName,
+          color: tagColor,
+        }
+      });
+      this.updateProject();
+      return true;
+    } catch (err) {
+      return false;
+      console.log(err);
+    }
+  }
+
+  async deleteTag(id) {
+    console.log(id);
+    try {
+      await apiHelper.del(`/api/tags/${id}`);
+      this.updateProject();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async updateProject() {
     try {
       const updateResponse = await apiHelper.get(`/api/projects/${this.props.project.id}`);
@@ -140,6 +186,13 @@ class ProjectSetting extends Component {
           <TaskStatus 
             statuses={project.statuses} create={this.createStatus} 
             edit={this.editStatus} del={this.deleteStatus}
+          />
+        );
+      } else if (tab === 4) {
+        return (
+          <TagManage 
+            tags={project.tags} create={this.createTag} 
+            edit={this.editTag} del={this.deleteTag}
           />
         );
       }

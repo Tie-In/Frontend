@@ -197,7 +197,9 @@ class TagRow extends Component {
     };
     const temp = this.state.selected;
     const resultTemp = this.state.result;
-    const response = await apiHelper.post('/api/tags', newTag);
+    const response = await apiHelper.post('/api/tags', {
+      tag: newTag
+    });
     temp.push(response.data);
     resultTemp.push({ id: response.data.id });
     this.props.setValue(resultTemp);
