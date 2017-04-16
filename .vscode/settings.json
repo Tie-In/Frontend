@@ -1,5 +1,6 @@
 // Place your settings in this file to overwrite default and user settings.
 {
     "eslint.enable": true,
-    "eslint.options": { "configFile": "./.eslintrc" }
+    "eslint.options": { "configFile": "./.eslintrc" },
+    "editor.tabSize": 2,
 }
