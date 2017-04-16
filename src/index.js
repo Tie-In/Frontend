@@ -17,7 +17,7 @@ import {
   NewOrgContainer,
   NoOrgContainer,
   NewProject,
-  ProjectHomeContainer,
+  ProjectHome,
   ResultPlanningContainer,
   BacklogContainer,
   Board,
@@ -45,7 +45,7 @@ ReactDOM.render(
         </Route>
       </Route>
       <Route path="/organizations/:organizationId/projects/:projectId" component={App}>
-        <IndexRoute component={ProjectHomeContainer} />
+        <IndexRoute component={ProjectHome} />
         <Route path="planning">
           <IndexRoute component={ResultPlanningContainer} />
           <Route path="features" component={FeaturePlanningContainer} />

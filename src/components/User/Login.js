@@ -90,14 +90,14 @@ class Login extends Component {
       borderColor: 'black',
       color: 'black',
     };
-    
+
     const errorLabel = {
       color: '#d9534f',
     };
 
     return (
       <div className="login-container" >
-        <div style={{marginBottom: 50}}>
+        <div style={{ marginBottom: 50 }}>
           <img className="logo" src={logo} alt="logo" />
         </div>
         <form onSubmit={preventSubmit}>

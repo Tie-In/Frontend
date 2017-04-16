@@ -126,7 +126,7 @@ class TagRow extends Component {
     }
     const availableUsers = this.props.data.diff(this.state.selected);
     const regex = new RegExp('\\b' + inputValue, 'i');
-    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
+    return availableUsers.filter((person) => { return regex.test(getSuggestionValue(person)); });
   }
 
   removeContributor(con) {
@@ -146,7 +146,7 @@ class TagRow extends Component {
 
   result() {
     const contentArr = [];
-    this.state.selected.map((tag) => {
+    this.state.selected.forEach((tag) => {
       const labelStyle = {
         backgroundColor: tag.color,
         color: 'white',

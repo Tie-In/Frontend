@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  Grid, Col, Row, Form,
+  Col, Row, Form,
   Nav, NavItem, Glyphicon,
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -75,7 +75,7 @@ class ProjectSetting extends Component {
           project_id: project.id,
           name: statusName,
           column_index: project.statuses.length,
-        }
+        },
       });
       this.updateProject();
     } catch (err) {
@@ -89,13 +89,13 @@ class ProjectSetting extends Component {
         status: {
           name: statusName,
           column_index: index,
-        }
+        },
       });
       this.updateProject();
       return true;
     } catch (err) {
-      return false;
       console.log(err);
+      return false;
     }
   }
 
@@ -117,7 +117,7 @@ class ProjectSetting extends Component {
           project_id: project.id,
           name: tagName,
           color: tagColor,
-        }
+        },
       });
       this.updateProject();
     } catch (err) {
@@ -131,13 +131,13 @@ class ProjectSetting extends Component {
         tag: {
           name: tagName,
           color: tagColor,
-        }
+        },
       });
       this.updateProject();
       return true;
     } catch (err) {
-      return false;
       console.log(err);
+      return false;
     }
   }
 
@@ -184,16 +184,16 @@ class ProjectSetting extends Component {
         );
       } else if (tab === 3) {
         return (
-          <TaskStatus 
-            statuses={project.statuses} create={this.createStatus} 
+          <TaskStatus
+            statuses={project.statuses} create={this.createStatus}
             edit={this.editStatus} del={this.deleteStatus}
             permission={permission.project}
           />
         );
       } else if (tab === 4) {
         return (
-          <TagManage 
-            tags={project.tags} create={this.createTag} 
+          <TagManage
+            tags={project.tags} create={this.createTag}
             edit={this.editTag} del={this.deleteTag}
           />
         );
@@ -209,10 +209,10 @@ class ProjectSetting extends Component {
           <Row>
             <Col xs={12}>
               <Nav bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
-                <NavItem eventKey={1}><Glyphicon glyph="info-sign"/> Information</NavItem>
-                <NavItem eventKey={2}><Glyphicon glyph="user"/> Contributors</NavItem>
-                <NavItem eventKey={3}><Glyphicon glyph="th-list"/> Task status</NavItem>
-                <NavItem eventKey={4}><Glyphicon glyph="tags"/> Tags</NavItem>
+                <NavItem eventKey={1}><Glyphicon glyph="info-sign" /> Information</NavItem>
+                <NavItem eventKey={2}><Glyphicon glyph="user" /> Contributors</NavItem>
+                <NavItem eventKey={3}><Glyphicon glyph="th-list" /> Task status</NavItem>
+                <NavItem eventKey={4}><Glyphicon glyph="tags" /> Tags</NavItem>
               </Nav>
             </Col>
           </Row>

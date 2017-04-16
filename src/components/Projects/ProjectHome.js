@@ -8,7 +8,7 @@ import * as projectActionsCreator from '../../actions/project-actions';
 import * as permissionActionsCreator from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 
-class ProjectHomeContainer extends Component {
+class ProjectHome extends Component {
 
   async componentWillMount() {
     const { params, user, permissionActions, projectActions } = this.props;
@@ -52,7 +52,7 @@ class ProjectHomeContainer extends Component {
   }
 }
 
-ProjectHomeContainer.propTypes = {
+ProjectHome.propTypes = {
   project: PropTypes.object.isRequired,
   projectActions: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
@@ -74,4 +74,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectHomeContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectHome);
