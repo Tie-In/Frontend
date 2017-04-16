@@ -7,6 +7,7 @@ import {
 } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
 import UserProfile from './Profile/UserProfile';
+import Password from './Profile/Password';
 import * as userActions from '../../actions/user-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 
@@ -19,6 +20,8 @@ class Profile extends Component {
     };
 
     this.updateProfile = this.updateProfile.bind(this);
+    this.updatePassword = this.updatePassword.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
   async updateProfile(input) {
@@ -34,6 +37,19 @@ class Profile extends Component {
     }
   }
 
+  async updatePassword(input) {
+    try {
+      await apiHelper.put(`/api/users/${this.props.user.id}`, input);
+      return 'done';
+    } catch (err) {
+      return err.response.data.errors;
+    }
+  }
+
+  handleSelect(eventKey) {
+    this.setState({ tabIndex: eventKey });
+  }
+
   render() {
     const { tabIndex } = this.state;
     const { user } = this.props;
@@ -42,7 +58,7 @@ class Profile extends Component {
         return (<UserProfile user={user} update={this.updateProfile} />);
       } else if (tab === 2) {
         return (
-          <div />
+          <Password update={this.updatePassword} />
         );
       }
       return <div />;
