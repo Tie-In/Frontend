@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, Button, Badge } from 'react-bootstrap';
+import { Row, Col, Button, Badge, Label } from 'react-bootstrap';
 import moment from 'moment';
 import 'simple-line-icons/css/simple-line-icons.css';
 import './backlog.css';
@@ -48,6 +48,7 @@ class CurrentSprint extends Component {
         sprint: {},
         currentTasks: [],
       });
+      await this.props.reloadPage();
     } catch (err) {
       console.log(err);
     }
@@ -58,6 +59,7 @@ class CurrentSprint extends Component {
     const rowStyle = {
       paddingTop: 5,
       paddingBottom: 5,
+      cursor: 'default',
     };
     const currentTaskNode = this.state.currentTasks.map((task) => {
       return (
@@ -65,7 +67,11 @@ class CurrentSprint extends Component {
           <li id="task">
             <Col xs={12}>
               <span id="taskName">
-                {task.name}<Badge pullRight>{task.story_point}</Badge>
+                {task.name}
+                <div className="pull-right">
+                  <Label style={{ marginTop: 2, marginRight: 5 }}>{task.feature.name}</Label>
+                  <Badge>{task.story_point}</Badge>
+                </div>
               </span>
             </Col>
           </li>
@@ -99,7 +105,8 @@ class CurrentSprint extends Component {
   }
 }
 
-CurrentSprint.PropTypes = {
+CurrentSprint.propTypes = {
+  reloadPage: PropTypes.func.isRequired,
   project: PropTypes.object.isRequired,
 };
 

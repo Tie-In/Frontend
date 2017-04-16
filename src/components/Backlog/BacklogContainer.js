@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Label } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import 'simple-line-icons/css/simple-line-icons.css';
@@ -29,23 +29,11 @@ class BacklogContainer extends Component {
     this.showPointEstimationModal = this.showPointEstimationModal.bind(this);
     this.closePointEstimationModal = this.closePointEstimationModal.bind(this);
     this.setSprintTasks = this.setSprintTasks.bind(this);
+    this.reloadPage = this.reloadPage.bind(this);
   }
 
   async componentWillMount() {
-    try {
-      const responseProject = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
-      const project = responseProject.data;
-      projectActions.setProject(project);
-
-      const response = await apiHelper.get('/api/tasks', {
-        project: this.props.params.projectId,
-        sprint: 'backlog',
-      });
-      const tasks = response.data;
-      this.setState({ backlogTasks: tasks });
-    } catch (err) {
-      console.log(err);
-    }
+    this.reloadPage();
   }
 
   async setUpdatedTask(updatedTask) {
@@ -77,14 +65,33 @@ class BacklogContainer extends Component {
     }).reduce((acc, val) => { return acc + val; }, 0);
     try {
       await apiHelper.post('/api/sprints', {
-        project_id: project.id,
-        sprint_points: totalPoints,
+        sprint: {
+          project_id: project.id,
+          sprint_points: totalPoints,
+        },
         tasks: tempTasks,
       });
       this.closePointEstimationModal();
       document.location.href = `/organizations/${project.organization_id}/projects/${project.id}/board`;
     } catch (err) {
       console.log(err.response);
+    }
+  }
+
+  async reloadPage() {
+    try {
+      const responseProject = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
+      const project = responseProject.data;
+      this.props.projectActions.setProject(project);
+
+      const response = await apiHelper.get('/api/tasks', {
+        project: this.props.params.projectId,
+        sprint: 'backlog',
+      });
+      const tasks = response.data;
+      this.setState({ backlogTasks: tasks });
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -141,7 +148,14 @@ class BacklogContainer extends Component {
         <Row key={task.id} style={rowStyle}>
           <li id="task">
             <Col xs={10} md={11} onClick={() => { this.showEditTaskModal(task); }}>
-              <span id="taskName">{task.name}</span>
+              <span id="taskName">
+                {task.name}
+                { task.feature ?
+                  <Label className="pull-right" style={{ marginTop: 3 }}>
+                    {task.feature.name}
+                  </Label> : <div />
+                }
+              </span>
             </Col>
             { this.props.project.current_sprint_id === null ?
               <Col xs={1} md={1}>
@@ -158,7 +172,13 @@ class BacklogContainer extends Component {
         <Row key={task.id} style={rowStyle}>
           <li id="task">
             <Col xs={10} md={10} onClick={() => { this.showEditTaskModal(task); }}>
-              <span id="taskName">{task.name}</span>
+              <span id="taskName">{task.name}
+                { task.feature ?
+                  <Label className="pull-right" style={{ marginTop: 3 }}>
+                    {task.feature.name}
+                  </Label> : <div />
+                }
+              </span>
             </Col>
             <Col xs={1} md={1}>
               <span 
@@ -183,7 +203,7 @@ class BacklogContainer extends Component {
         <div className="tiein-container">
           { project.current_sprint_id !== null ?
             <div>
-              <CurrentSprint project={project} />
+              <CurrentSprint reloadPage={this.reloadPage} project={project} />
               <br />
             </div> : <div />
           }

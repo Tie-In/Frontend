@@ -151,13 +151,13 @@ function runDevServer(port) {
     quiet: true,
     proxy: {
       '/api/**': {
-        target: 'https://tieinservice.herokuapp.com/',
+        target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },
     watchOptions: {
-      ignored: /node_modules/
-    }
+      ignored: /node_modules/,
+    },
   }).listen(port, (err, result) => {
     if (err) {
       return console.log(err);
@@ -175,18 +175,18 @@ function run(port) {
   runDevServer(port);
 }
 
-detect(DEFAULT_PORT).then(port => {
+detect(DEFAULT_PORT).then((port) => {
   if (port === DEFAULT_PORT) {
     run(port);
     return;
   }
 
   clearConsole();
-  var question =
-    chalk.yellow('Something is already running at port ' + DEFAULT_PORT + '.') +
-    '\n\nWould you like to run the app at another port instead?';
+  const question =
+    `${chalk.yellow(`Something is already running at port ${DEFAULT_PORT}.`)}
+    '\n\nWould you like to run the app at another port instead?`;
 
-  prompt(question, true).then(shouldChangePort => {
+  prompt(question, true).then((shouldChangePort) => {
     if (shouldChangePort) {
       run(port);
     }
