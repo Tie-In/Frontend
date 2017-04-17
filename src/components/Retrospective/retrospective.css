@@ -1,10 +1,11 @@
+/*--------Main retrospective--------*/
 .panel-heading {
   background: #D0CBC7 !important;
   color: #A25E5D !important;
   text-align: center;
   font-weight: bold;
 }
-#startBtn {
+#startBtn, #submitBtn {
  text-align: center;
 }
 #selectSprint {
@@ -13,6 +14,13 @@
 p {
   margin-bottom: 0px;
 }
-option {
-
+/*--------Add comments--------*/
+#addBtn {
+  width: 60px;
+}
+#selectType {
+  width: 100px;
+}
+.col-sm-2 {
+  text-align: center;
 }

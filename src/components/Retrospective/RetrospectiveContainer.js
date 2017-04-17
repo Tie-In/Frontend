@@ -59,7 +59,6 @@ class RetrospectiveContainer extends Component {
               </Panel>
             </Col>
           </Row>
-
           <div id="startBtn"><Button href={`${path}/retrospective/new`} >Start Retrospective</Button></div>
         </Row>
       </div>
