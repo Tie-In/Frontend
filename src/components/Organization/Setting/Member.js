@@ -82,16 +82,14 @@ class Member extends Component {
                   roles.map((role, index) => {
                     return (
                       <div key={index}>
-                        <label>
-                          <input
-                            type="radio" value={role}
-                            checked={selectedRole === role}
-                            onChange={this.handleRoleChange}
-                          />
-                          <span style={{ marginLeft: 5 }}>
-                            {role}
-                          </span>
-                        </label>
+                        <input
+                          type="radio" value={role}
+                          checked={selectedRole === role}
+                          onChange={this.handleRoleChange}
+                        />
+                        <span style={{ marginLeft: 5 }}>
+                          {role}
+                        </span>
                         <br />
                       </div>
                     );

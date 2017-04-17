@@ -24,6 +24,7 @@ class OrganizationNavbar extends Component {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+      textAlign: 'left',
     };
     const menuNode = data.map((menu) => {
       return (
@@ -49,10 +50,8 @@ class OrganizationNavbar extends Component {
               </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav">
-                  <li
-                    className="pull-left" id="slide-sidebar"
-                  >
-                    <a href="#sidebar-nav" style={wrappedText}>
+                  <li className="pull-left" id="slide-sidebar">
+                    <a href="#sidebar-nav" className="pull-left" style={wrappedText}>
                       {organization.name} <Glyphicon glyph="menu-down" />
                     </a>
                   </li>

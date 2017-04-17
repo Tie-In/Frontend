@@ -31,6 +31,7 @@ class NormalNavbar extends Component {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+      textAlign: 'left',
     };
     const menuNode = data.map((menu) => {
       if (project.current_sprint_id === null && menu.name === 'Active sprint') {
