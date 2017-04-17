@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { Label, Badge } from 'react-bootstrap';
-import image1 from '../../../images/user1.png';
 import EditModal from './EditModal';
 
 class Card extends Component {
@@ -25,10 +24,11 @@ class Card extends Component {
   render() {
     const { style } = this.props;
     const { item } = this.state;
+
     return (
       <div
         style={style} className="item"
-        id={style ? item.id : null} onClick={() => this.setModal(true)}
+        id={style ? item.id : null} onClick={() => { this.setModal(true); }}
       >
         <div className="item-name">
           {item.name} <Badge pullRight>{item.story_point}</Badge>
@@ -46,15 +46,17 @@ class Card extends Component {
               return <Label key={tag.id} style={labelStyle}>{tag.name}</Label>;
             })}
             <div className="perfomer">
-              <img
-                src={`../../../../src/images/user${item.assignee_id}.png`}
-                alt="Perfomer"
-              />
+              { item.user ?
+                <img
+                  src={item.user.image}
+                  alt="Perfomer"
+                /> : <div />
+              }
             </div>
           </div>
         </div>
         { this.state.openModal ?
-          <EditModal show={this.state.openModal} item={item} setShow={this.setModal} /> : 
+          <EditModal show={this.state.openModal} item={item} setShow={this.setModal} /> :
           <div />
         }
       </div>
