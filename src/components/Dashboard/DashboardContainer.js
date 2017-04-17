@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Line, Pie, Bar } from 'react-chartjs-2';
-import { Col } from 'react-bootstrap';
+import { Row, Col, FormGroup, FormControl } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
 import FaBarChart from 'react-icons/lib/fa/bar-chart';
 import * as apiHelper from '../../helpers/apiHelper';
@@ -14,6 +14,7 @@ class DashboardContainer extends Component {
     this.state = {
       project: this.props.project,
       sprints: this.props.project.sprints,
+      currentSprint: this.props.project.sprints.slice(-1)[0],
       tasks: '',
     };
     this.getDates = this.getDates.bind(this);
@@ -26,19 +27,22 @@ class DashboardContainer extends Component {
         project: this.props.project.id,
         sprint: sprint[0].id,
       });
-      this.setState({ tasks: sprintResponse.data });
+      this.setState({
+        tasks: sprintResponse.data,
+      });
     } catch (err) {
       console.log(err);
     }
   }
 
   getDates() {
+    console.log(this.state.currentSprint);
     return ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
   }
 
   render() {
     const data1 = {
-      labels: this.getDates,
+      labels: this.getDates(),
       datasets: [{
         label: 'Sales',
         type: 'line',
@@ -154,28 +158,49 @@ class DashboardContainer extends Component {
     const columnStyle = {
       marginBottom: '20px',
     };
-    const thisPage = {
-      color: 'black',
+    const selectSprint = {
+      marginBottom: 0,
+      marginTop: '12px',
+      // display: 'inline',
+    };
+    const row = {
+      paddingBottom: 0,
+    };
+    const h3 = {
+      marginBottom: 0,
     };
     return (
       <DocumentTitle title={`${project.name}・Dashboard`}>
         <div>
-          <h3 className="header-label" >Create new task</h3>
+          <Row style={row}>
+            <Col md={10}><h3 className="header-label" style={h3}>Dashboard : Sprint {this.state.currentSprint.number}</h3></Col>
+            <Col md={2}>
+              <FormGroup style={selectSprint}>
+                <FormControl componentClass="select">
+                  <option value="">Select sprint</option>
+                  <option value="1">1</option>
+                </FormControl>
+              </FormGroup>
+            </Col>
+          </Row>
           <hr className="header-line" />
+          <p>Total estimated points: {this.state.currentSprint.sprint_points}</p>
+          <p>Start date: {this.state.currentSprint.start_date}</p>
+          <p>End date: {this.state.currentSprint.end_date}</p>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4 style={thisPage}><FaBarChart /> Burndown Chart</h4>
+            <h4><FaBarChart /> Burndown Chart</h4>
             <Line data={data} options={options1} />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4 style={thisPage}><FaBarChart /> Burndown Chart</h4>
+            <h4><FaBarChart /> Burndown Chart</h4>
             <Line data={data1} options={options1} />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4 style={thisPage}><FaBarChart /> Burndown Chart</h4>
+            <h4><FaBarChart /> Burndown Chart</h4>
             <Pie data={pieData} />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4 style={thisPage}><FaBarChart /> Burndown Chart</h4>
+            <h4><FaBarChart /> Burndown Chart</h4>
             <Bar data={barData} />
           </Col>
         </div>
