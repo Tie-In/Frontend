@@ -27,7 +27,7 @@ class Password extends Component {
   async update() {
     const { input } = this.state;
     if (input.confirm_new_password !== input.new_password) {
-      this.setState({ error: 'Confirm new password is not match' });
+      this.setState({ error: 'New password is not match' });
     } else {
       const msg = await this.props.update(input);
       if (msg !== 'done') {
