@@ -45,7 +45,7 @@ class Information extends Component {
     return (
       <div>
         <Row>
-          <Col xs={12} md={8} mdOffset={2}>
+          <Col xs={12}>
             <FormGroup>
               <ControlLabel>
                 Organization&#39;s name
@@ -60,7 +60,7 @@ class Information extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={12} md={8} mdOffset={2}>
+          <Col xs={12}>
             <FormGroup controlId="formInlineDetail">
               <ControlLabel>
                 Description (optional)

@@ -9,7 +9,6 @@ import * as projectActions from '../../actions/project-actions';
 import '../../style/board.css';
 import CardsContainer from './Cards/CardsContainer';
 import CustomDragLayer from './CustomDragLayer';
-import NewList from './Cards/NewList';
 import * as apiHelper from '../../helpers/apiHelper';
 
 @DragDropContext(HTML5Backend)
@@ -24,15 +23,12 @@ class Board extends Component {
     super(props);
 
     this.moveCard = this.moveCard.bind(this);
-    this.moveList = this.moveList.bind(this);
     this.findList = this.findList.bind(this);
     this.scrollRight = this.scrollRight.bind(this);
     this.scrollLeft = this.scrollLeft.bind(this);
     this.stopScrolling = this.stopScrolling.bind(this);
     this.startScrolling = this.startScrolling.bind(this);
     this.createList = this.createList.bind(this);
-    this.deleteStatus = this.deleteStatus.bind(this);
-    this.editStatus = this.editStatus.bind(this);
     this.state = {
       isScrolling: false,
       sprintNumber: '',
@@ -40,17 +36,18 @@ class Board extends Component {
   }
 
   async componentWillMount() {
-    console.log(this.props.project);
     try {
       const response = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
       const project = response.data;
       this.props.projectActions.setProject(project);
 
-      const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
-      const data = responseSprint.data;
-      this.setState({ sprintNumber: data.sprint.number });
-      const statuses = data.statuses;
-      this.props.listsActions.setList(statuses);
+      if ( project.current_sprint_id ) {
+        const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
+        const data = responseSprint.data;
+        this.setState({ sprintNumber: data.sprint.number });
+        const statuses = data.statuses;
+        this.props.listsActions.setList(statuses);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -93,14 +90,8 @@ class Board extends Component {
     this.props.listsActions.moveCard(lastX, lastY, nextX, nextY);
   }
 
-  moveList(listId, nextX) {
-    const { lastX } = this.findList(listId);
-    this.props.listsActions.moveList(lastX, nextX);
-  }
-
   async createList(listName) {
     const { lists } = this.props;
-    // const temp = { id: lists.length, name: listName, cards: [] };
     const response = await apiHelper.post('/api/statuses', {
       name: listName,
       project_id: this.props.params.projectId,
@@ -123,22 +114,6 @@ class Board extends Component {
     };
   }
 
-  async deleteStatus(status) {
-    if (status.tasks.length === 0) {
-      const response = await apiHelper.del(`/api/statuses/${status.id}`);
-      this.props.listsActions.setList(response.data);
-    } else {
-      alert('Cannot deleted');
-    }
-  }
-
-  async editStatus(status, n) {
-    const response = await apiHelper.put(`/api/statuses/${status.id}`, {
-      name: n,
-    });
-    this.props.listsActions.setList(response.data);
-  }
-
   render() {
     const { lists } = this.props;
     const width = 300 * (lists.length + 1);
@@ -149,9 +124,6 @@ class Board extends Component {
     return (
       <main style={customWidth}>
         <div>
-          Sprint {this.state.sprintNumber}
-        </div>
-        <div>
           <CustomDragLayer snapToGrid={false} />
           {lists.map((item, i) => {
             return (<CardsContainer
@@ -160,17 +132,13 @@ class Board extends Component {
               name={item.name}
               item={item}
               moveCard={this.moveCard}
-              moveList={this.moveList}
               startScrolling={this.startScrolling}
               stopScrolling={this.stopScrolling}
               isScrolling={this.state.isScrolling}
               x={i}
-              deleteStatus={this.deleteStatus}
-              editStatus={this.editStatus}
             />);
           },
           )}
-          <NewList createList={this.createList} />
         </div>
       </main>
     );

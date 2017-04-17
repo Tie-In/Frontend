@@ -4,7 +4,6 @@ import { Dropdown, MenuItem } from 'react-bootstrap';
 import SidebarNav from './SidebarNav';
 import 'simple-line-icons/css/simple-line-icons.css';
 import logo from '../../images/logo.png';
-import user1 from '../../images/user1.png';
 import './navstyle.css';
 
 class OrganizationNavbar extends Component {
@@ -43,7 +42,7 @@ class OrganizationNavbar extends Component {
                     <Dropdown.Toggle>
                       <img
                         id="avatar" role="presentation"
-                        src={user1}
+                        src={user.image}
                         style={{marginTop: 10, marginLeft: '450%'}}
                       />
                     </Dropdown.Toggle>

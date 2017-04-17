@@ -34,7 +34,7 @@ class Register extends Component {
         password_confirmation: '',
         birth_date: '',
         phone_number: '',
-        image: 'user'.concat(Math.ceil(Math.random() * 4)),
+        image: `http://res.cloudinary.com/dyx2tyza6/image/upload/v1492066687/user${Math.ceil(Math.random() * 4)}.png`,
       },
       error: {
         email: '',
@@ -65,7 +65,7 @@ class Register extends Component {
         noError = false;
       }
     });
-    
+
     if (noError) {
       try {
         const response = await apiHelper.post('/api/users', {
@@ -102,7 +102,7 @@ class Register extends Component {
     } else {
       pass = true;
     }
-    this.setState({ error: error });
+    this.setState({ error });
     return pass;
   }
 
@@ -145,14 +145,6 @@ class Register extends Component {
 
   render() {
     const { error } = this.state;
-    const containerStyle = {
-      width: '70%',
-      height: 'auto',
-      right: '50%',
-      transform: 'translate(50%)',
-      position: 'absolute',
-    };
-
     return (
       <div className="tiein-container">
         <h3 className="header-label">Register</h3>

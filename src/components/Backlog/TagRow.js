@@ -6,8 +6,8 @@ import {
 import update from 'react-addons-update';
 import Autosuggest from 'react-autosuggest';
 import WrapperColorpicker from './WrapperColorpicker';
-import * as apiHelper from '../../../helpers/apiHelper';
-import '../../../style/autosuggestStyle.css';
+import * as apiHelper from '../../helpers/apiHelper';
+import '../../style/autosuggestStyle.css';
 
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -58,7 +58,6 @@ class TagRow extends Component {
     this.inputClick = this.inputClick.bind(this);
     this.selectColor = this.selectColor.bind(this);
     this.createTag = this.createTag.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   componentWillMount() {
@@ -127,7 +126,7 @@ class TagRow extends Component {
     }
     const availableUsers = this.props.data.diff(this.state.selected);
     const regex = new RegExp('\\b' + inputValue, 'i');
-    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
+    return availableUsers.filter((person) => { return regex.test(getSuggestionValue(person)); });
   }
 
   removeContributor(con) {
@@ -147,7 +146,7 @@ class TagRow extends Component {
 
   result() {
     const contentArr = [];
-    this.state.selected.map((tag) => {
+    this.state.selected.forEach((tag) => {
       const labelStyle = {
         backgroundColor: tag.color,
         color: 'white',
@@ -198,7 +197,7 @@ class TagRow extends Component {
     const temp = this.state.selected;
     const resultTemp = this.state.result;
     const response = await apiHelper.post('/api/tags', {
-      tag: newTag
+      tag: newTag,
     });
     temp.push(response.data);
     resultTemp.push({ id: response.data.id });
@@ -247,7 +246,7 @@ class TagRow extends Component {
           />
         </Col>
         <Col xs={2} xsOffset={3}>
-          <Dropdown id="tagsDropdown" open={openDropdown} dropup>
+          <Dropdown open={openDropdown} dropup>
             <div bsRole="toggle">
               <Button
                 onClick={this.toggleDropdown}
@@ -262,7 +261,6 @@ class TagRow extends Component {
                 <FormControl
                   type="text" placeholder="Tag name"
                   name="newName"
-                  value={this.state.newName}
                   onClick={this.inputClick}
                   onChange={this.handleInputChange}
                 />

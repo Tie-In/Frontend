@@ -11,7 +11,7 @@ import NormalNavbar from './Navbar/NormalNavbar';
 import StartNavbar from './Navbar/StartNavbar';
 import OrganizationNavbar from './Navbar/OrganizationNavbar';
 import NewProject from './Projects/NewProject';
-import ProjectHomeContainer from './Projects/ProjectHomeContainer';
+import ProjectHome from './Projects/ProjectHome';
 import BacklogContainer from './Backlog/BacklogContainer';
 import Board from './Board/Board';
 import NewTask from './Task/NewTask';
@@ -30,7 +30,7 @@ module.exports = {
   NewOrgContainer,
   NoOrgContainer,
   NewProject,
-  ProjectHomeContainer,
+  ProjectHome,
   OrganizationNavbar,
   ResultPlanningContainer,
   BacklogContainer,

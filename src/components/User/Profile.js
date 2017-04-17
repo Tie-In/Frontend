@@ -2,8 +2,6 @@ import { Row, FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bo
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { LinkContainer } from 'react-router-bootstrap';
-import linkState from 'react-link-state';
 import DatePicker from 'react-datepicker';
 import update from 'react-addons-update';
 import moment from 'moment';
@@ -55,7 +53,7 @@ class Profile extends Component {
   }
 
   async update() {
-    const { input } = this.state;
+    const { input, error } = this.state;
     let noError = true;
     // check have error
     Object.keys(input).forEach((key) => {
@@ -99,7 +97,7 @@ class Profile extends Component {
     } else {
       pass = true;
     }
-    this.setState({ error: error });
+    this.setState({ error });
     return pass;
   }
 
@@ -133,7 +131,7 @@ class Profile extends Component {
   handleChangeDate(date) {
     this.setState({
       input: update(this.state.input, {
-        birth_date: {$set: date.format('L')},
+        birth_date: { $set: date.format('L') },
       }),
       selectedDate: date,
     });

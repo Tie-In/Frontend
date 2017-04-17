@@ -57,7 +57,7 @@ class AddMemberRow extends Component {
     return (
       <div>
         <Row>
-          <Col xs={12} md={8} mdOffset={2}>
+          <Col xs={12} md={8} mdOffset={4}>
             <Button
               className="pull-right"
               onClick={() => { this.setState({ showModal: !showModal }); }}

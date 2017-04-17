@@ -18,7 +18,10 @@ class PointEstimationModal extends Component {
   }
 
   handleSetPoint(e, id) {
-    const index = this.props.findIndex(this.state.tasks, id);
+    const changedTask = this.state.tasks.find((x) => {
+      return x.id === id;
+    });
+    const index = this.state.tasks.indexOf(changedTask);
     this.setState({
       tasks: update(this.state.tasks, { [index]: { story_point: { $set: e.target.value } } }),
     });
@@ -38,7 +41,7 @@ class PointEstimationModal extends Component {
                   <FormControl
                     placeholder="Point"
                     type="number"
-                    onChange={(e) => this.handleSetPoint(e, task.id)}
+                    onChange={(e) => { this.handleSetPoint(e, task.id); }}
                   />
                 </FormGroup>
               </Col>
@@ -66,7 +69,7 @@ class PointEstimationModal extends Component {
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={() => this.props.setSprintTasks(this.state.tasks)}>
+            <Button onClick={() => { this.props.setSprintTasks(this.state.tasks); }}>
               Start Sprint
             </Button>
           </Modal.Footer>
@@ -80,7 +83,6 @@ PointEstimationModal.propTypes = {
   show: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
-  findIndex: PropTypes.func.isRequired,
   setSprintTasks: PropTypes.func.isRequired,
 };
 
