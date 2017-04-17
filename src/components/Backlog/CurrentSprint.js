@@ -31,7 +31,6 @@ class CurrentSprint extends Component {
       const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
       const data = responseSprint.data;
       this.setState({ sprint: data.sprint });
-      console.log(data.sprint);
     } catch (err) {
       console.log(err);
     }
@@ -69,7 +68,7 @@ class CurrentSprint extends Component {
               <span id="taskName">
                 {task.name}
                 <div className="pull-right">
-                  <Label style={{ marginTop: 2, marginRight: 5 }}>{task.feature.name}</Label>
+                  <Label style={{ marginTop: 2, marginRight: 5 }}>{task.feature ? task.feature.name : ''}</Label>
                   <Badge>{task.story_point}</Badge>
                 </div>
               </span>
