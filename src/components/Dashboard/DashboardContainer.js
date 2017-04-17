@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Line, Bar } from 'react-chartjs-2';
+import { Line, Bar, Pie } from 'react-chartjs-2';
 import { Col } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
 import FaBarChart from 'react-icons/lib/fa/bar-chart';
@@ -126,18 +126,55 @@ class DashboardContainer extends Component {
         data: [28, 48, 40, 19, 86, 27, 90],
       }],
     };
+    const pieData = {
+      labels: ['Red', 'Green', 'Yellow'],
+      datasets: [{
+        data: [300, 50, 100],
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+      }],
+    };
+    const barData = {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [
+        {
+          label: 'My First dataset',
+          backgroundColor: 'rgba(255,99,132,0.2)',
+          borderColor: 'rgba(255,99,132,1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+          hoverBorderColor: 'rgba(255,99,132,1)',
+          data: [65, 59, 80, 81, 56, 55, 40],
+        },
+      ],
+    };
+    const columnStyle = {
+      marginBottom: '20px',
+    };
+    const thisPage = {
+      color: 'black',
+    };
+    console.log(project);
     return (
       <DocumentTitle title={`${project.name}・Dashboard`}>
         <div>
-          <h3 className="header-label">Create new task</h3>
+          <h3 className="header-label" >Create new task</h3>
           <hr className="header-line" />
-          <Col xs={12} md={6}>
-            <h4><FaBarChart /> Burndown Chart</h4>
+          <Col xs={12} md={6} style={columnStyle}>
+            <h4 style={thisPage}><FaBarChart /> Burndown Chart</h4>
             <Line data={data} options={options1} />
           </Col>
-          <Col xs={12} md={6}>
-            <h4><FaBarChart /> Burndown Chart</h4>
+          <Col xs={12} md={6} style={columnStyle}>
+            <h4 style={thisPage}><FaBarChart /> Burndown Chart</h4>
             <Bar data={data1} options={options1} />
+          </Col>
+          <Col xs={12} md={6} style={columnStyle}>
+            <h4 style={thisPage}><FaBarChart /> Burndown Chart</h4>
+            <Pie data={pieData} />
+          </Col>
+          <Col xs={12} md={6} style={columnStyle}>
+            <h4 style={thisPage}><FaBarChart /> Burndown Chart</h4>
+            <Bar data={barData} />
           </Col>
         </div>
       </DocumentTitle>
