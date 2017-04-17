@@ -91,7 +91,6 @@ class NewProject extends Component {
   }
 
   render() {
-    console.log(this.props.project);
     const { project, params } = this.props;
     const buttonGroup = {
       marginTop: '20px',

@@ -11,15 +11,11 @@ import * as apiHelper from '../../helpers/apiHelper';
 class ProjectHome extends Component {
 
   async componentWillMount() {
-    const { params, user, permissionActions, projectActions } = this.props;
+    const { params, projectActions } = this.props;
     try {
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
       projectActions.setProject(project);
-      const perLevel = project.project_contributes.find((x) => {
-        return x.user_id === user.id;
-      }).permission_level;
-      permissionActions.setProject(perLevel);
     } catch (err) {
       console.log(err);
     }
@@ -32,7 +28,6 @@ class ProjectHome extends Component {
     const imgStyle = {
       marginRight: '7px',
     };
-    console.log(project);
     return (
       <DocumentTitle title={`${project.name}`}>
         <div className="tiein-container">
@@ -61,8 +56,6 @@ ProjectHome.propTypes = {
   project: PropTypes.object.isRequired,
   projectActions: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  permissionActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -75,7 +68,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     projectActions: bindActionCreators(projectActionsCreator, dispatch),
-    permissionActions: bindActionCreators(permissionActionsCreator, dispatch),
   };
 }
 
