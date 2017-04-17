@@ -14,7 +14,6 @@ class RetrospectiveContainer extends Component {
     this.state = {
       sprints: this.props.project.sprints,
       viewpoints: [],
-      select: 0,
     };
 
     this.startRetro = this.startRetro.bind(this);
@@ -23,10 +22,15 @@ class RetrospectiveContainer extends Component {
 
   async componentWillMount() {
     const { params, user, permissionActions, projectActions } = this.props;
+    const sprintSelected = this.state.sprints[this.state.sprints.length - 1];
     try {
+      const res = await apiHelper.get(`/api/retrospectives/${sprintSelected.retrospective.id}`);
+      this.setState({ viewpoints: res.data.viewpoints });
+
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
       projectActions.setProject(project);
+      
       const perLevel = project.project_contributes.find((x) => {
         return x.user_id === user.id;
       }).permission_level;
@@ -68,7 +72,12 @@ class RetrospectiveContainer extends Component {
 
   render() {
     const latestSprint = this.state.sprints[this.state.sprints.length - 1];
-    const selectSprint = this.state.sprints.map((sprint) => {
+    const selectSprint = this.state.sprints.map((sprint, index) => {
+      if(sprint.number === this.state.sprints.length) {
+        return (
+          <option value={sprint.number} selected>{sprint.number}</option>
+        );
+      }
       return (
         <option value={sprint.number}>{sprint.number}</option>
       );

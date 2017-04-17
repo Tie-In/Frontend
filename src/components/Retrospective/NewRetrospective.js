@@ -88,7 +88,7 @@ class NewRetrospective extends Component {
     } catch (err) {
       console.log(err.response);
     }
-    // document.location.href = `${path}/retrospective`;
+    document.location.href = `${path}/retrospective`;
   }
 
   render() {
