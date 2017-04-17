@@ -82,16 +82,14 @@ class Member extends Component {
                   roles.map((role) => {
                     return (
                       <div>
-                        <label>
-                          <input
-                            type="radio" value={role}
-                            checked={selectedRole === role}
-                            onChange={this.handleRoleChange}
-                          />
-                          <span style={{ marginLeft: 5 }}>
-                            {role}
-                          </span>
-                        </label>
+                        <input
+                          type="radio" value={role}
+                          checked={selectedRole === role}
+                          onChange={this.handleRoleChange}
+                        />
+                        <span style={{ marginLeft: 5 }}>
+                          {role}
+                        </span>
                         <br />
                       </div>
                     );
@@ -138,8 +136,7 @@ class Member extends Component {
                     <td>
                       <Col xs={2}>
                         <img
-                          id="avatar" role="presentation"
-                          src={member.user.image}
+                          id="avatar" role="presentation" src={member.user.image}
                         />
                       </Col>
                       <Col xs={3} style={{ paddingTop: 5 }}>{member.user.username}</Col>

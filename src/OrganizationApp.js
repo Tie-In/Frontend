@@ -16,7 +16,7 @@ class OrganizationApp extends Component {
     return (
       <div className="App">
         <OrganizationNavbar />
-        <div className="container registerContainer">
+        <div className="container mainContainer">
           {this.props.children}
         </div>
       </div>

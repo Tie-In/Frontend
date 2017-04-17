@@ -28,7 +28,6 @@ class Board extends Component {
     this.scrollLeft = this.scrollLeft.bind(this);
     this.stopScrolling = this.stopScrolling.bind(this);
     this.startScrolling = this.startScrolling.bind(this);
-    this.createList = this.createList.bind(this);
     this.state = {
       isScrolling: false,
       sprintNumber: '',
@@ -40,8 +39,7 @@ class Board extends Component {
       const response = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
       const project = response.data;
       this.props.projectActions.setProject(project);
-
-      if ( project.current_sprint_id ) {
+      if (project.current_sprint_id) {
         const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
         const data = responseSprint.data;
         this.setState({ sprintNumber: data.sprint.number });
@@ -90,20 +88,6 @@ class Board extends Component {
     this.props.listsActions.moveCard(lastX, lastY, nextX, nextY);
   }
 
-  async createList(listName) {
-    const { lists } = this.props;
-    const response = await apiHelper.post('/api/statuses', {
-      name: listName,
-      project_id: this.props.params.projectId,
-      column: lists.length,
-    });
-    const temp = response.data;
-
-    lists.push(temp);
-    this.setState({ isScrolling: true }, this.scrollRight());
-    this.props.listsActions.setList(lists);
-  }
-
   findList(id) {
     const { lists } = this.props;
     const list = lists.filter(l => l.id === id)[0];
@@ -115,7 +99,7 @@ class Board extends Component {
   }
 
   render() {
-    const { lists } = this.props;
+    const { lists = [] } = this.props;
     const width = 300 * (lists.length + 1);
     const customWidth = {
       width: `${width}px`,
