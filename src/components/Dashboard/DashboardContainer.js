@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Line } from 'react-chartjs-2';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Line, Bar } from 'react-chartjs-2';
+import { Col } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
+import FaBarChart from 'react-icons/lib/fa/bar-chart';
 import * as apiHelper from '../../helpers/apiHelper';
 import * as projectActionsCreator from '../../actions/project-actions';
 
@@ -21,70 +22,41 @@ class DashboardContainer extends Component {
   }
 
   render() {
-    // const data = {
-    //   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    //   datasets: [{
-    //     label: 'Sales',
-    //     type: 'line',
-    //     data: [51, 65, 40, 49, 60, 37, 40],
-    //     fill: false,
-    //     borderColor: '#EC932F',
-    //     backgroundColor: '#EC932F',
-    //     pointBorderColor: '#EC932F',
-    //     pointBackgroundColor: '#EC932F',
-    //     pointHoverBackgroundColor: '#EC932F',
-    //     pointHoverBorderColor: '#EC932F',
-    //     yAxisID: 'y-axis-2',
-    //   },
-    //   {
-    //     type: 'bar',
-    //     label: 'Visitor',
-    //     data: [200, 185, 590, 621, 250, 400, 95],
-    //     fill: false,
-    //     backgroundColor: '#71B37C',
-    //     borderColor: '#71B37C',
-    //     hoverBackgroundColor: '#71B37C',
-    //     hoverBorderColor: '#71B37C',
-    //     yAxisID: 'y-axis-1',
-    //   }],
-    // };
-    const { project } = this.props;
-    console.log(project);
-    const data = {
+    const data1 = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [{
+        label: 'Sales',
         type: 'line',
-        label: 'My First dataset',
-        fillColor: 'rgba(220,220,220,0.2)',
-        strokeColor: 'rgba(220,220,220,1)',
-        pointColor: 'rgba(220,220,220,1)',
-        pointStrokeColor: '#fff',
-        pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(220,220,220,1)',
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: [51, 65, 40, 49, 60, 37, 40],
+        fill: false,
+        borderColor: '#EC932F',
+        backgroundColor: '#EC932F',
+        pointBorderColor: '#EC932F',
+        pointBackgroundColor: '#EC932F',
+        pointHoverBackgroundColor: '#EC932F',
+        pointHoverBorderColor: '#EC932F',
+        yAxisID: 'y-axis-2',
       },
       {
-        type: 'line',
-        label: 'My Second dataset',
-        fillColor: 'rgba(151,187,205,0.2)',
-        strokeColor: 'rgba(151,187,205,1)',
-        pointColor: 'rgba(151,187,205,1)',
-        pointStrokeColor: '#fff',
-        pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(151,187,205,1)',
-        data: [28, 48, 40, 19, 86, 27, 90],
+        type: 'bar',
+        label: 'Visitor',
+        data: [200, 185, 590, 621, 250, 400, 95],
+        fill: false,
+        backgroundColor: '#71B37C',
+        borderColor: '#71B37C',
+        hoverBackgroundColor: '#71B37C',
+        hoverBorderColor: '#71B37C',
+        yAxisID: 'y-axis-1',
       }],
     };
-
-    const options = {
-      responsive: true,
-      // bezierCurve: false,
+    const options1 = {
+      // responsive: true,
       tooltips: {
         mode: 'label',
       },
       elements: {
         line: {
-          // fill: false,
+          fill: false,
           tension: 0,
         },
       },
@@ -113,35 +85,60 @@ class DashboardContainer extends Component {
               show: true,
             },
           },
-          // {
-          //   type: 'linear',
-          //   display: true,
-          //   position: 'right',
-          //   id: 'y-axis-2',
-          //   gridLines: {
-          //     display: false,
-          //   },
-          //   labels: {
-          //     show: true,
-          //   },
-          // },
+          {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            id: 'y-axis-2',
+            gridLines: {
+              display: false,
+            },
+            labels: {
+              show: true,
+            },
+          },
         ],
       },
     };
+    const { project } = this.props;
+    const data = {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [{
+        type: 'line',
+        label: 'My First dataset',
+        fillColor: 'rgba(220,220,220,0.2)',
+        strokeColor: 'rgba(220,220,220,1)',
+        pointColor: 'rgba(220,220,220,1)',
+        pointStrokeColor: '#fff',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(220,220,220,1)',
+        data: [65, 59, 80, 81, 56, 55, 40],
+      },
+      {
+        type: 'line',
+        label: 'My Second dataset',
+        fillColor: 'rgba(151,187,205,0.2)',
+        strokeColor: 'rgba(151,187,205,1)',
+        pointColor: 'rgba(151,187,205,1)',
+        pointStrokeColor: '#fff',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(151,187,205,1)',
+        data: [28, 48, 40, 19, 86, 27, 90],
+      }],
+    };
     return (
       <DocumentTitle title={`${project.name}・Dashboard`}>
-        <div className="tiein-container">
-          <Grid>
-            <h2>Mixed data Example</h2>
-            <Row className="show-grid">
-              <Col xs={12} md={8}>
-                <Line
-                  data={data}
-                  options={options}
-                />
-              </Col>
-            </Row>
-          </Grid>
+        <div>
+          <h3 className="header-label">Create new task</h3>
+          <hr className="header-line" />
+          <Col xs={12} md={6}>
+            <h4><FaBarChart /> Burndown Chart</h4>
+            <Line data={data} options={options1} />
+          </Col>
+          <Col xs={12} md={6}>
+            <h4><FaBarChart /> Burndown Chart</h4>
+            <Bar data={data1} options={options1} />
+          </Col>
         </div>
       </DocumentTitle>
     );
