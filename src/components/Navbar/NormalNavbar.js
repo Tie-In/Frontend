@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { Dropdown, MenuItem } from 'react-bootstrap';
+import { Dropdown, MenuItem, Glyphicon } from 'react-bootstrap';
 import SidebarNav from './SidebarNav';
 import 'simple-line-icons/css/simple-line-icons.css';
 import './navstyle.css';
@@ -26,9 +26,14 @@ class NormalNavbar extends Component {
       { id: 7, name: 'Dashboard', path: '/dashboard' },
       { id: 8, name: 'Setting', path: `${path}/setting` },
     ];
-
+    const wrappedText = {
+      width: 150,
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    };
     const menuNode = data.map((menu) => {
-      if(project.current_sprint_id === null && menu.name === 'Active sprint'){
+      if (project.current_sprint_id === null && menu.name === 'Active sprint') {
         return;
       }
       return (
@@ -54,13 +59,13 @@ class NormalNavbar extends Component {
               </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav">
-                  <li className="pull-left" id="slide-sidebar" >
-                    <a href="#sidebar-nav">
-                      {organization.name} <span className="glyphicon glyphicon-menu-down" aria-hidden="true" />
+                  <li className="pull-left" id="slide-sidebar" style={{ width: 150 }}>
+                    <a href="#sidebar-nav" style={wrappedText}>
+                      {organization.name} <Glyphicon glyph="menu-down" />
                     </a>
                   </li>
                   {menuNode}
-                  <Dropdown className="pull-right" id="profile-dropdown">
+                  <Dropdown className="pull-right" id="profile-dropdown" style={{ width: 75 }}>
                     <Dropdown.Toggle>
                       <img
                         id="avatar" role="presentation"
@@ -68,10 +73,9 @@ class NormalNavbar extends Component {
                       />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <MenuItem eventKey="1" href={`/profile`}>Profile</MenuItem>
-                      <MenuItem eventKey="2" href={`/organizations/${organization.id}/setting`}>Setting</MenuItem>
+                      <MenuItem eventKey="1" href={'/profile'}>Profile</MenuItem>
                       <MenuItem divider />
-                      <MenuItem eventKey="3" onClick={this.logout}>Sign Out</MenuItem>
+                      <MenuItem eventKey="2" onClick={this.logout}>Sign Out</MenuItem>
                     </Dropdown.Menu>
                   </Dropdown>
                 </ul>
