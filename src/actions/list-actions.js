@@ -1,21 +1,11 @@
-export const GET_LISTS_START = 'GET_LISTS_START';
 export const SET_LIST = 'SET_LIST';
 export const MOVE_CARD = 'MOVE_CARD';
-export const MOVE_LIST = 'MOVE_LIST';
 export const TOGGLE_DRAGGING = 'TOGGLE_DRAGGING';
 
 export const setList = (lists) => {
   return {
     type: SET_LIST,
     lists,
-  };
-};
-
-export const moveList = (lastX, nextX) => {
-  return {
-    type: MOVE_LIST,
-    lastX,
-    nextX,
   };
 };
 

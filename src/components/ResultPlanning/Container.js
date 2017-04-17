@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Row, Col, ProgressBar, Table } from 'react-bootstrap';
+import { Row, Col, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import { technicalFactors, environmentalFactors } from './informations';
@@ -36,11 +36,9 @@ class Container extends Component {
           <h3 className="header-label">Planning Result</h3>
           <hr className="header-line" />
           <div>
-            <p>Most used week: {Math.ceil(effort_estimation.upper_weeks)}</p>
-            <p>Low used week: {Math.floor(effort_estimation.lower_weeks)}</p>
-            <p>Developer number: {Math.floor(effort_estimation.developers)}</p>
-            <ProgressBar now={60} />
-            <hr />
+            <p>Most used week: {Math.ceil(effort_estimation.upper_weeks) || '?'} weeks</p>
+            <p>Low used week: {Math.floor(effort_estimation.lower_weeks) || '?'} weeks</p>
+            <p>Developer number: {Math.floor(effort_estimation.developers) || '?'} people</p>
           </div>
           <Row>
             <Col sm={6}>
@@ -50,14 +48,18 @@ class Container extends Component {
                 <thead>
                   <tr>
                     <th>Feature names</th>
-                    <th>Last Name</th>
+                    <th>
+                      <center>Complexity</center>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   { features.map((feature) => {
                     return (<tr>
                       <td>{feature.name}</td>
-                      <td>{feature.complexity}</td>
+                      <td>
+                        <center>{feature.complexity}</center>
+                      </td>
                     </tr>);
                   })
                   }
@@ -72,7 +74,9 @@ class Container extends Component {
                   <thead>
                     <tr>
                       <th>Name</th>
-                      <th>Rating</th>
+                      <th>
+                        <center>Rating</center>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -81,7 +85,9 @@ class Container extends Component {
                         <tr>
                           <td>{factor.name}</td>
                           <td>
-                            {this.state.technical_factor[`rating_factor${factor.id}`]}
+                            <center>
+                              {this.state.technical_factor[`rating_factor${factor.id}`] || '?' }
+                            </center>
                           </td>
                         </tr>);
                     })
@@ -96,7 +102,9 @@ class Container extends Component {
                   <thead>
                     <tr>
                       <th>Name</th>
-                      <th>Rating</th>
+                      <th>
+                        <center>Rating</center>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -105,7 +113,9 @@ class Container extends Component {
                         <tr>
                           <td>{factor.name}</td>
                           <td>
-                            {this.state.environmental_factor[`rating_factor${factor.id}`]}
+                            <center>
+                              {this.state.environmental_factor[`rating_factor${factor.id}`] || '?'}
+                            </center>
                           </td>
                         </tr>);
                     })

@@ -11,7 +11,14 @@ export function post(path, body) {
   });
 }
 
-export function get(path, parameter) {
+export function get(path, parameter, noAuth) {
+  if (noAuth) {
+    return axios({
+      method: 'GET',
+      url: path,
+      params: parameter,
+    });
+  }
   return axios({
     method: 'GET',
     url: path,

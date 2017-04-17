@@ -75,7 +75,8 @@ class OrganizationSetting extends Component {
 
   render() {
     const { tabIndex } = this.state;
-    const { organization } = this.props;
+    const { organization, permission } = this.props;
+    console.log(permission);
     const switchRender = (tab) => {
       if (tab === 1) {
         return (<Information organization={organization} update={this.updateSetting} />);
@@ -87,6 +88,7 @@ class OrganizationSetting extends Component {
             deleteMember={this.deleteMember}
             organization={organization}
             update={this.updateOrganization}
+            permission={permission.organization}
           />
         );
       }
@@ -94,27 +96,21 @@ class OrganizationSetting extends Component {
     };
 
     return (
-      <div>
-        <Grid>
-          <Form>
-            <Row>
-              <Col xs={12} md={8} mdOffset={2}>
-                <h3 className="header-label">Organization setting</h3>
-                <hr className="header-line" />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                <Nav bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
-                  <NavItem eventKey={1}>Information</NavItem>
-                  <NavItem eventKey={2}>Contributors</NavItem>
-                </Nav>
-              </Col>
-            </Row>
-            <br />
-            {switchRender(tabIndex)}
-          </Form>
-        </Grid>
+      <div className="tiein-container">
+        <h3 className="header-label">Organization setting</h3>
+        <hr className="header-line" />
+        <form>
+          <Row>
+            <Col xs={12}>
+              <Nav bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
+                <NavItem eventKey={1}>Information</NavItem>
+                <NavItem eventKey={2}>Contributors</NavItem>
+              </Nav>
+            </Col>
+          </Row>
+          <br />
+          {switchRender(tabIndex)}
+        </form>
       </div>
     );
   }
@@ -123,11 +119,13 @@ class OrganizationSetting extends Component {
 OrganizationSetting.propTypes = {
   organizationActions: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
+  permission: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     organization: state.organization,
+    permission: state.permission,
   };
 }
 

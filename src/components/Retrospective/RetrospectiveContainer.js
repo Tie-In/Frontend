@@ -18,7 +18,7 @@ class RetrospectiveContainer extends Component {
     const { organization, project } = this.props;
     const path = `/organizations/${organization.id}/projects/${project.id}`;
     return (
-      <div className="retroContainer">
+      <div className="tiein-container">
         <Row>
           <h3 className="header-label">Retrospective</h3>
           <hr className="header-line" />
@@ -35,7 +35,7 @@ class RetrospectiveContainer extends Component {
                 </FormControl>
               </FormGroup>
             </Col>
-            <Col md={2}>
+            <Col md={4}>
               <p>Latest retrospective:</p>
               <p>Current sprint:</p>
             </Col>

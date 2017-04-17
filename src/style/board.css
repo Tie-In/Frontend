@@ -83,8 +83,7 @@
 		word-wrap: break-world;
 }
 .item-container{
-		padding: 10px;
-		border-bottom: 1px solid #dbdbdb;
+	padding: 10px;
 }
 .item-avatar-wrap{
 	width: 70px;

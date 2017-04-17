@@ -220,7 +220,7 @@ class TagRow extends Component {
 
     return (
       <div>
-        <Col xs={12} md={2} mdOffset={2}>
+        <Col xs={12} md={4}>
           <FormGroup controlId="formInlineContributor">
             <ControlLabel>
               Add Tags

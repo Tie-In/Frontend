@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Label } from 'react-bootstrap';
+import { Label, Badge } from 'react-bootstrap';
 import image1 from '../../../images/user1.png';
 import EditModal from './EditModal';
 
@@ -10,9 +10,6 @@ class Card extends Component {
     this.state = {
       item: this.props.item,
       openModal: false,
-      allFeatures: [],
-      allUsers: [],
-      allTags: [],
     };
 
     this.setModal = this.setModal.bind(this);
@@ -28,14 +25,13 @@ class Card extends Component {
   render() {
     const { style } = this.props;
     const { item } = this.state;
-
     return (
       <div
         style={style} className="item"
         id={style ? item.id : null} onClick={() => this.setModal(true)}
       >
         <div className="item-name">
-          {item.name}
+          {item.name} <Badge pullRight>{item.story_point}</Badge>
         </div>
         <div className="item-container">
           <div className="item-content">
@@ -47,17 +43,20 @@ class Card extends Component {
                 backgroundColor: tag.color,
                 marginRight: '10px',
               };
-              return <Label style={labelStyle}>{tag.name}</Label>;
+              return <Label key={tag.id} style={labelStyle}>{tag.name}</Label>;
             })}
             <div className="perfomer">
               <img
-                src={image1}
+                src={`../../../../src/images/user${item.assignee_id}.png`}
                 alt="Perfomer"
               />
             </div>
           </div>
         </div>
-        <EditModal show={this.state.openModal} item={item} setShow={this.setModal} />
+        { this.state.openModal ?
+          <EditModal show={this.state.openModal} item={item} setShow={this.setModal} /> : 
+          <div />
+        }
       </div>
     );
   }

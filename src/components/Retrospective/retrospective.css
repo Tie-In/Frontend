@@ -8,19 +8,17 @@
 #startBtn, #submitBtn {
  text-align: center;
 }
-#selectSprint {
-  width: 150px;
-}
 p {
   margin-bottom: 0px;
 }
 /*--------Add comments--------*/
-#addBtn {
-  width: 60px;
+button {
+  margin: 0 auto;
+  display: block;
 }
-#selectType {
+/*#selectType {
   width: 100px;
-}
-.col-sm-2 {
+}*/
+/*.col-sm-2 {
   text-align: center;
-}
+}*/

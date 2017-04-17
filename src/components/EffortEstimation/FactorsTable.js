@@ -12,6 +12,7 @@ class FactorsTable extends Component {
     this.state = {
       ratings: [],
       impacts: [],
+      result: 0,
     };
 
     this.setRatings = this.setRatings.bind(this);
@@ -25,6 +26,7 @@ class FactorsTable extends Component {
     this.setState({
       ratings: tempRating,
       impacts: tempImpact,
+      result: this.computeResult(),
     });
   }
 
@@ -45,6 +47,7 @@ class FactorsTable extends Component {
         <FactorRow
           key={data.id} index={data.id - 1}
           name={data.name}
+          description={data.description}
           weight={data.weight} returnImpact={this.setRatings}
         />,
       );
@@ -54,7 +57,7 @@ class FactorsTable extends Component {
 
   render() {
     const { title, resultLabel } = this.props;
-    const result = this.computeResult();
+    const { result } = this.state;
     const headerStyle = {
       backgroundColor: '#D0CBC7',
       color: 'white',

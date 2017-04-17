@@ -228,101 +228,99 @@ class NewProject extends Component {
 
     return (
       <DocumentTitle title={`${this.props.organization.name}・New project`}>
-        <div>
-          <Grid>
-            <Form>
-              <Row>
-                <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                  <h3 className="header-label">Create new project</h3>
-                  <hr className="header-line" />
-                  <FormGroup controlId="formInlineName">
-                    <ControlLabel>
-                      Project&#39;s name
-                    </ControlLabel>
-                    <FormControl
-                      type="text" placeholder="Name"
-                      name="name"
-                      onChange={this.handleInputChange}
-                    />
-                    <h6 style={errorStyle}>{this.state.nameError}</h6>
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} md={8} xsOffset={0} mdOffset={2}>
-                  <FormGroup controlId="formInlineDetail">
-                    <ControlLabel>
-                      Description (optional)
-                    </ControlLabel>
-                    <FormControl
-                      type="text" placeholder="Description of organization"
-                      name="description"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} md={4} xsOffset={0} mdOffset={2}>
-                  <FormGroup controlId="formInlineDetail">
-                    <ControlLabel>
-                      Sprint duration (weeks)
-                    </ControlLabel>
-                    <FormControl
-                      type="number" min="1"
-                      placeholder="Sprint duration (week)"
-                      value={this.state.input.sprint_duration}
-                      name="sprint_duration"
-                      onChange={this.handleInputChange}
-                    />
-                    <h6 style={errorStyle}>{this.state.sprintError}</h6>
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} md={4} mdOffset={2}>
-                  <FormGroup controlId="formInlineContributor">
-                    <ControlLabel>
-                      Contributor
-                    </ControlLabel>
-                    <Autosuggest
-                      suggestions={suggestions}
-                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                      onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                      getSuggestionValue={getSuggestionValue}
-                      renderSuggestion={renderSuggestion}
-                      inputProps={inputProps}
-                      onSuggestionSelected={this.onSuggestionSelected}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col style={contributorList} xs={12} md={4}>
-                  <ControlLabel style={{ color: 'white' }}>
-                    List of contributors
+        <div className="tiein-container">
+          <h3 className="header-label">Create new project</h3>
+          <hr className="header-line" />
+          <form>
+            <Row>
+              <Col xs={12}>
+                <FormGroup controlId="formInlineName">
+                  <ControlLabel>
+                    Project&#39;s name
                   </ControlLabel>
-                  <Row style={scrollableContainer}>
-                    <Col smOffset={0} sm={11}>
-                      {this.contributor()}
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-              <Row>
-                <FormGroup style={buttonGroup}>
-                  <Col xs={12} md={3} xsOffset={0} mdOffset={3}>
-                    <Button style={singleButton} bsStyle="primary" href={previousURL} key="cancel" block>
-                      Cancel
-                    </Button>
-                  </Col>
-                  <Col xs={12} md={3}>
-                    <Button style={singleButton} onClick={this.create} key="submitProject" block>
-                      Create
-                    </Button>
-                  </Col>
+                  <FormControl
+                    type="text" placeholder="Name"
+                    name="name"
+                    onChange={this.handleInputChange}
+                  />
+                  <h6 style={errorStyle}>{this.state.nameError}</h6>
                 </FormGroup>
-              </Row>
-            </Form>
-          </Grid>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <FormGroup controlId="formInlineDetail">
+                  <ControlLabel>
+                    Description (optional)
+                  </ControlLabel>
+                  <FormControl
+                    type="text" placeholder="Description of organization"
+                    name="description"
+                    onChange={this.handleInputChange}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} sm={6}>
+                <FormGroup controlId="formInlineDetail">
+                  <ControlLabel>
+                    Sprint duration (weeks)
+                  </ControlLabel>
+                  <FormControl
+                    type="number" min="1"
+                    placeholder="Sprint duration (week)"
+                    value={this.state.input.sprint_duration}
+                    name="sprint_duration"
+                    onChange={this.handleInputChange}
+                  />
+                  <h6 style={errorStyle}>{this.state.sprintError}</h6>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} sm={6}>
+                <FormGroup controlId="formInlineContributor">
+                  <ControlLabel>
+                    Contributor
+                  </ControlLabel>
+                  <Autosuggest
+                    suggestions={suggestions}
+                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                    onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                    getSuggestionValue={getSuggestionValue}
+                    renderSuggestion={renderSuggestion}
+                    inputProps={inputProps}
+                    onSuggestionSelected={this.onSuggestionSelected}
+                  />
+                </FormGroup>
+              </Col>
+              <Col style={contributorList} xs={12} md={6}>
+                <ControlLabel style={{ color: 'white' }}>
+                  List of contributors
+                </ControlLabel>
+                <Row style={scrollableContainer}>
+                  <Col smOffset={0} sm={11}>
+                    {this.contributor()}
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+            <Row>
+              <FormGroup style={buttonGroup}>
+                <Col xs={12} md={4} mdOffset={2}>
+                  <Button style={singleButton} bsStyle="primary" href={previousURL} key="cancel" block>
+                    Cancel
+                  </Button>
+                </Col>
+                <Col xs={12} md={4}>
+                  <Button style={singleButton} onClick={this.create} key="submitProject" block>
+                    Create
+                  </Button>
+                </Col>
+              </FormGroup>
+            </Row>
+          </form>
         </div>
       </DocumentTitle>
     );

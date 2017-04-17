@@ -62,7 +62,7 @@ class NewRetrospective extends Component {
 
   render() {
     return (
-      <div className="newRetro">
+      <div className="tiein-container">
         <h3 className="header-label">Add new comment</h3>
         <hr className="header-line" />
         <form onSubmit={this.doSomething}>

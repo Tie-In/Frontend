@@ -16,7 +16,7 @@ class SidebarNav extends Component {
         <ul id="sidebar-nav-list">
           {organizationNodes}
           <li className="sidebar-nav-item">
-            <a href="/organizations/new"><span className="icon-plus" />Create organization</a>
+            <a href="/organizations/new"><span className="icon-plus" /> Create organization</a>
           </li>
         </ul>
       </div>

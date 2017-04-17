@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import linkState from 'react-link-state';
+import update from 'react-addons-update';
 import { Button, Row, Col, FormGroup, FormControl } from 'react-bootstrap';
 import FeaturePoint from './FeaturePoint';
 import FactorsTable from './FactorsTable';
@@ -21,12 +21,13 @@ class Container extends Component {
       t_factor: null,
       e_factor: null,
       uucp: null,
-      developer: 0,
+      developers: 0,
     };
 
     this.setValue = this.setValue.bind(this);
     this.setElements = this.setElements.bind(this);
     this.submit = this.submit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   setValue(name, value) {
@@ -41,6 +42,14 @@ class Container extends Component {
     }
     const state = this.state;
     state[name] = temp;
+  }
+
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+    this.setState({
+      [name]: value,
+    });
   }
 
   async submit() {
@@ -108,7 +117,8 @@ class Container extends Component {
               <FormControl
                 placeholder=""
                 type="number"
-                valueLink={linkState(this, 'developers')}
+                name="developers"
+                onChange={this.handleInputChange}
               />
             </FormGroup>
           </Col>

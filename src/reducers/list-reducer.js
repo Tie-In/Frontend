@@ -1,7 +1,6 @@
 import {
   SET_LIST,
   MOVE_CARD,
-  MOVE_LIST,
   TOGGLE_DRAGGING,
 } from '../actions/list-actions';
 import * as apiHelper from '../helpers/apiHelper';
@@ -20,8 +19,17 @@ export default function lists(state = initialState, action) {
       });
     case MOVE_CARD: {
       const newLists = [...state.lists];
-      const { lastX, lastY, nextX, nextY } = action;
+      const { lastX, lastY, nextX } = action;
+      let { nextY } = action;
       const movedTask = newLists[lastX].tasks[lastY];
+      // re-confirm index before send to API
+      if (newLists[nextX].tasks.length === 0 && nextY > 0) {
+        nextY = 0;
+      } else if (nextY === newLists[nextX].tasks.length) {
+        nextY = newLists[nextX].tasks.length - 1;
+      } else if (nextY > newLists[nextX].tasks.length) {
+        nextY = newLists[nextX].tasks.length;
+      }
       if (lastX === nextX) {
         newLists[lastX].tasks.splice(nextY, 0, newLists[lastX].tasks.splice(lastY, 1)[0]);
         apiHelper.put(`/api/tasks/${movedTask.id}`, {
@@ -37,19 +45,6 @@ export default function lists(state = initialState, action) {
           column_id: newLists[nextX].id,
         });
       }
-      return Object.assign({}, state, {
-        lists: newLists,
-      });
-    }
-    case MOVE_LIST: {
-      const newLists = [...state.lists];
-      const { lastX, nextX } = action;
-      const t = newLists.splice(lastX, 1)[0];
-
-      newLists.splice(nextX, 0, t);
-      apiHelper.put(`/api/statuses/${t.id}`, {
-        column_index: nextX,
-      });
       return Object.assign({}, state, {
         lists: newLists,
       });

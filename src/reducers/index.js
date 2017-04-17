@@ -6,6 +6,7 @@ import project from './project-reducer';
 import planning from './planning-reducer';
 import lists from './list-reducer';
 import retrospective from './retrospective-reducer';
+import permission from './permission-reducer';
 
 const rootReducer = combineReducers({
   user,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   planning,
   lists,
   retrospective,
+  permission,
   routing: routerReducer,
 });
 
