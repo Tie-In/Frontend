@@ -10,8 +10,19 @@ class Management extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      comments: [],
     };
   }
+
+  // async componentWillMount() {
+  //   try {
+  //     const response = await apiHelper.get(`/api/retrospectives/${}`);
+  //     const data = response.data;
+  //     this.setState({ comments: data });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
   render() {
     return (
@@ -22,5 +33,8 @@ class Management extends Component {
     );
   }
 }
+
+Management.propTypes = {
+};
 
 export default Management;

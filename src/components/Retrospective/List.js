@@ -11,12 +11,12 @@ class List extends Component {
     super(props);
     this.state = {
       comment: this.props.comment,
-      type: this.props.type,
+      kind: this.props.kind,
     };
   }
 
   render() {
-    const { comment, type, index, remove } = this.props;
+    const { comment, kind, index, remove } = this.props;
     return (
       <div>
         <Row>
@@ -24,7 +24,7 @@ class List extends Component {
             {comment}
           </Col>
           <Col sm={2}>
-            {titleCase(type)}
+            {titleCase(kind)}
           </Col>
           <Col sm={2}>
             <Button
@@ -41,7 +41,7 @@ class List extends Component {
 }
 List.propTypes = {
   comment: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  kind: PropTypes.string.isRequired,
   index: PropTypes.number,
   remove: PropTypes.func.isRequired,
 };

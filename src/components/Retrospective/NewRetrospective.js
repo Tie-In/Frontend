@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, Button, FormGroup,
-  ControlLabel, FormControl, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Row, Col, Button, FormGroup, FormControl, Form } from 'react-bootstrap';
 import linkState from 'react-link-state';
-import update from 'immutability-helper';
 import List from './List';
+import * as projectActionsCreator from '../../actions/project-actions';
+import * as permissionActionsCreator from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 import './retrospective.css'
 
@@ -14,18 +15,34 @@ class NewRetrospective extends Component {
     this.state = {
       comments: [],
       input: {
-        name: '',
-        type: 'good',
+        comment: '',
+        kind: 'good',
       },
       error: false,
     };
 
     this.addComment = this.addComment.bind(this);
     this.removeComment = this.removeComment.bind(this);
+    this.setComments = this.setComments.bind(this);
+  }
+
+  async componentWillMount() {
+    const { params, user, permissionActions, projectActions } = this.props;
+    try {
+      const response = await apiHelper.get(`/api/projects/${params.projectId}`);
+      const project = response.data;
+      projectActions.setProject(project);
+      const perLevel = project.project_contributes.find((x) => {
+        return x.user_id === user.id;
+      }).permission_level;
+      permissionActions.setProject(perLevel);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   addComment() {
-    if (this.state.input.name === '') {
+    if (this.state.input.comment === '') {
       this.setState({ error: true });
     } else {
       this.setState({ error: false });
@@ -34,8 +51,8 @@ class NewRetrospective extends Component {
       commentsTemp.push(temp);
       this.setState({
         input: {
-          name: '',
-          type: 'good',
+          comment: '',
+          kind: 'good',
         },
         comments: commentsTemp,
       });
@@ -52,15 +69,34 @@ class NewRetrospective extends Component {
     this.setState({ comments: temp });
   }
 
-  render() {
+  async setComments() {
     const { organization, project } = this.props;
+    console.log(project);
     const path = `/organizations/${organization.id}/projects/${project.id}`;
+    const latestSprint = this.props.project.sprints[this.props.project.sprints.length - 1];
+    console.log(this.props.project);
+    console.log(latestSprint);
+    console.log(latestSprint.retrospective.id);
 
+    try {
+      console.log(this.state.comments)
+      const res = await apiHelper.post('/api/viewpoints', {
+        viewpoints: this.state.comments,
+        retrospective_id: latestSprint.retrospective.id,
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err.response);
+    }
+    // document.location.href = `${path}/retrospective`;
+  }
+
+  render() {
     const manageButton = () => {
       if (this.state.comments.length > 0) {
-        return (<Button href={`${path}/retrospective/management`}>Manage</Button>);
+        return (<Button onClick={this.setComments}>Submit</Button>);
       }
-      return (<Button className="disabled">Manage</Button>);
+      return (<Button className="disabled">Submit</Button>);
     };
 
     return (
@@ -74,7 +110,7 @@ class NewRetrospective extends Component {
                 <FormControl
                   id="nameField"
                   placeholder="Add comment"
-                  valueLink={linkState(this, 'input.name')}
+                  valueLink={linkState(this, 'input.comment')}
                 />
               </FormGroup>
             </Col>
@@ -82,7 +118,7 @@ class NewRetrospective extends Component {
               <FormGroup>
                 <FormControl
                   componentClass="select"
-                  valueLink={linkState(this, 'input.type')}
+                  valueLink={linkState(this, 'input.kind')}
                 >
                   <option value="">Select Type</option>
                   <option value="good">Good</option>
@@ -102,8 +138,8 @@ class NewRetrospective extends Component {
           const index = this.state.comments.indexOf(data);
           return (<List
             key={index}
-            comment={data.name} index={index}
-            type={data.type}
+            comment={data.comment} index={index}
+            kind={data.kind}
             remove={this.removeComment}
           />);
         })}
@@ -126,4 +162,11 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(NewRetrospective);
+function mapDispatchToProps(dispatch) {
+  return {
+    projectActions: bindActionCreators(projectActionsCreator, dispatch),
+    permissionActions: bindActionCreators(permissionActionsCreator, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewRetrospective);
