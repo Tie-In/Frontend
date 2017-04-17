@@ -37,6 +37,7 @@ class ProjectCard extends Component {
         <div style={thumbnaildiv}>
           {
             project.users.map((user) => {
+              // console.log(user.image);
               return <img src={user.image} style={imgStyle} alt="contributor-thumbnail" data-tip={`${user.firstname} ${user.lastname}`} key={user.username} />;
             })
           }
