@@ -16,9 +16,6 @@ button {
   margin: 0 auto;
   display: block;
 }
-/*#selectType {
-  width: 100px;
-}*/
-/*.col-sm-2 {
-  text-align: center;
-}*/
+.disabled {
+  pointer-events: none;
+}

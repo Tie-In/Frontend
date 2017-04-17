@@ -17,13 +17,6 @@ class List extends Component {
 
   render() {
     const { comment, type, index, remove } = this.props;
-    const listStyle = {
-      marginBottom: '15px',
-    };
-    const buttonStyle = {
-      margin: '0 auto',
-      display: 'block',
-    };
     return (
       <div>
         <Row>

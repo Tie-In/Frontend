@@ -19,6 +19,7 @@ import Profile from './User/Profile';
 import ProjectSetting from './Projects/ProjectSetting';
 import RetrospectiveContainer from './Retrospective/RetrospectiveContainer';
 import NewRetrospective from './Retrospective/NewRetrospective';
+import Management from './Retrospective/Management';
 
 module.exports = {
   Login,
@@ -42,4 +43,5 @@ module.exports = {
   ProjectSetting,
   RetrospectiveContainer,
   NewRetrospective,
+  Management,
 };
