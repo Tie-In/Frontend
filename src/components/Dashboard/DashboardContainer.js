@@ -36,7 +36,14 @@ class DashboardContainer extends Component {
   }
 
   getDates() {
-    console.log(this.state.currentSprint);
+    const date = new Date(this.state.currentSprint.start_date);
+    for (var i = 0; i < 7; i++) {
+      console.log(i);
+    }
+    date.setDate(date.getDate() + 7);
+    console.log(date.getDate());
+    const dateMg = `${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()}`;
+    console.log(dateMg);
     return ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
   }
 
