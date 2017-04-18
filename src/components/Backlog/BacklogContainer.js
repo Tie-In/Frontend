@@ -37,12 +37,35 @@ class BacklogContainer extends Component {
   }
 
   async setUpdatedTask(updatedTask) {
+    const { backlogTasks, sprintTasks } = this.state;
+    if (updatedTask.feature_id !== null) {
+      updatedTask.feature = this.props.project.features.find((f) => {
+        return f.id === updatedTask.feature_id;
+      });
+    }
     try {
       await apiHelper.put(`/api/tasks/${updatedTask.id}`, updatedTask);
       this.closeEditTaskModal();
-      await this.reloadPage();
     } catch (err) {
       console.log(err);
+    }
+
+    let tempTask = backlogTasks.find((task) => {
+      return task.id === updatedTask.id;
+    });
+    let index = backlogTasks.indexOf(tempTask);
+    if (index !== -1) {
+      this.setState({
+        backlogTasks: update(backlogTasks, { [index]: { $set: updatedTask } }),
+      });
+    } else {
+      tempTask = sprintTasks.find((task) => {
+        return task.id === updatedTask.id;
+      });
+      index = sprintTasks.indexOf(tempTask);
+      this.setState({
+        sprintTasks: update(sprintTasks, { [index]: { $set: updatedTask } }),
+      });
     }
   }
 

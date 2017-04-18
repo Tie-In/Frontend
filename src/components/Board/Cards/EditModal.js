@@ -31,7 +31,6 @@ class EditModal extends Component {
     };
 
     this.closeModal = this.closeModal.bind(this);
-    this.findItem = this.findItem.bind(this);
     this.setAssignee = this.setAssignee.bind(this);
     this.setFeature = this.setFeature.bind(this);
     this.setTags = this.setTags.bind(this);
@@ -49,10 +48,10 @@ class EditModal extends Component {
       const responseTag = await apiHelper.get('/api/tags', {
         project: item.project_id,
       });
-      this.setState({ 
+      this.setState({
         allUsers: users,
         allTags: responseTag.data,
-        allFeatures: project.features, 
+        allFeatures: project.features,
       });
     } catch (err) {
       console.log(err);
@@ -93,11 +92,7 @@ class EditModal extends Component {
     this.setState({ input: temp });
   }
 
-  findItem(item) {
-    return item.id === this.props.item.assignee_id;
-  }
-
-   handleInputChange(e) {
+  handleInputChange(e) {
     const value = e.target.value;
     const name = e.target.name;
 
@@ -111,6 +106,7 @@ class EditModal extends Component {
   render() {
     const { item } = this.props;
     const { input } = this.state;
+
     return (
       <div>
         <Modal show={this.props.show} onHide={this.closeModal}>
@@ -127,8 +123,8 @@ class EditModal extends Component {
                   Name
                 </Col>
                 <Col xs={9}>
-                  <FormControl 
-                    type="text" placeholder="Name" 
+                  <FormControl
+                    type="text" placeholder="Name"
                     name="name"
                     value={input.name || ''}
                     onChange={this.handleInputChange}
@@ -140,11 +136,11 @@ class EditModal extends Component {
                   Description
                 </Col>
                 <Col xs={9}>
-                  <FormControl 
+                  <FormControl
                     type="text" placeholder="Description"
-                    name="description" 
+                    name="description"
                     value={input.description || ''}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleInputChange}
                   />
                 </Col>
               </FormGroup>
@@ -167,7 +163,7 @@ class EditModal extends Component {
                   <AutosuggestionBlock
                     data={this.state.allUsers}
                     setValue={this.setAssignee}
-                    initSelect={this.state.allUsers.find(this.findItem)}
+                    initSelect={item.user}
                   />
                 </Col>
               </FormGroup>
@@ -183,22 +179,22 @@ class EditModal extends Component {
                   Start Date
                 </Col>
                 <Col xs={3}>
-                  <FormControl 
-                    type="text" placeholder="Start date" 
+                  <FormControl
+                    type="text" placeholder="Start date"
                     name="start_date"
                     value={input.start_date || ''}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleInputChange}
                   />
                 </Col>
                 <Col xs={3} componentClass={ControlLabel}>
                   End date
                 </Col>
                 <Col xs={3}>
-                  <FormControl 
-                    type="text" placeholder="End date" 
+                  <FormControl
+                    type="text" placeholder="End date"
                     name="end_date"
                     value={input.end_date || ''}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleInputChange}
                   />
                 </Col>
               </FormGroup>
@@ -207,22 +203,22 @@ class EditModal extends Component {
                   Estimate time
                 </Col>
                 <Col xs={3}>
-                  <FormControl 
-                    type="text" placeholder="Time (hr)" 
+                  <FormControl
+                    type="text" placeholder="Time (hr)"
                     name="estimate_time"
                     value={input.estimate_time || ''}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleInputChange}
                   />
                 </Col>
                 <Col xs={3} componentClass={ControlLabel}>
                   Story point
                 </Col>
                 <Col xs={3}>
-                  <FormControl 
-                    type="text" placeholder="Point" 
+                  <FormControl
+                    type="text" placeholder="Point"
                     name="story_point"
                     value={input.story_point || ''}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleInputChange}
                     disabled
                   />
                 </Col>
@@ -243,6 +239,7 @@ EditModal.propTypes = {
   setShow: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
   project: PropTypes.object.isRequired,
+  listsActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
