@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import update from 'immutability-helper';
+import Category from './Category';
+import * as projectActionsCreator from '../../actions/project-actions';
+import * as permissionActionsCreator from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 import './retrospective.css'
 
@@ -10,46 +12,78 @@ class Management extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      sprints: this.props.project.sprints,
       viewpoints: [],
     };
   }
 
-  // async componentWillMount() {
-  //   try {
-  //     const response = await apiHelper.get(`/api/retrospectives/${}`);
-  //     const data = response.data;
-  //     this.setState({ comments: data });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+  async componentWillMount() {
+    const { params, user, permissionActions, projectActions } = this.props;
+    const sprintSelected = this.state.sprints[this.state.sprints.length - 1];
+    try {
+      const res = await apiHelper.get(`/api/retrospectives/${sprintSelected.retrospective.id}`);
+      this.setState({ viewpoints: res.data.viewpoints });
 
-  // async componentWillMount() {
-  //   const { params, user, permissionActions, projectActions, project } = this.props;
-  //   const sprintSelected = this.state.sprints[this.state.sprints.length - 1];
-  //   try {
-  //     const res = await apiHelper.get(`/api/retrospectives/${sprintSelected.retrospective.id}`);
-  //     this.setState({ viewpoints: res.data.viewpoints });
-  //
-  //     const response = await apiHelper.get(`/api/projects/${params.projectId}`);
-  //     const project = response.data;
-  //     projectActions.setProject(project);
-  //
-  //     const perLevel = project.project_contributes.find((x) => {
-  //       return x.user_id === user.id;
-  //     }).permission_level;
-  //     permissionActions.setProject(perLevel);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  //   console.log(this.props.project);
-  // }
+      const response = await apiHelper.get(`/api/projects/${params.projectId}`);
+      const project = response.data;
+      projectActions.setProject(project);
+
+      console.log(this.state.viewpoints);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   render() {
     return (
       <div className="tiein-container">
         <h3 className="header-label">Retrospective management</h3>
         <hr className="header-line" />
+
+        <Row>
+          <Col sm={12}>
+            <h4>Good</h4>
+            {this.state.viewpoints.map((data) => {
+              const index = this.state.viewpoints.indexOf(data);
+              if(data.kind === 'good') {
+                return (<Category
+                  key={index}
+                  comment={data.comment}
+                />);
+              }
+            })}
+          </Col>
+        </Row>
+
+        <Row>
+          <Col sm={12}>
+            <h4>Bad</h4>
+            {this.state.viewpoints.map((data) => {
+              const index = this.state.viewpoints.indexOf(data);
+              if(data.kind === 'bad') {
+                return (<Category
+                  key={index}
+                  comment={data.comment}
+                />);
+              }
+            })}
+          </Col>
+        </Row>
+
+        <Row>
+          <Col sm={12}>
+            <h4>Try</h4>
+            {this.state.viewpoints.map((data) => {
+              const index = this.state.viewpoints.indexOf(data);
+              if(data.kind === 'try') {
+                return (<Category
+                  key={index}
+                  comment={data.comment}
+                />);
+              }
+            })}
+          </Col>
+        </Row>
       </div>
     );
   }

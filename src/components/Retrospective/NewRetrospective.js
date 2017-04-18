@@ -32,10 +32,6 @@ class NewRetrospective extends Component {
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
       projectActions.setProject(project);
-      const perLevel = project.project_contributes.find((x) => {
-        return x.user_id === user.id;
-      }).permission_level;
-      permissionActions.setProject(perLevel);
     } catch (err) {
       console.log(err);
     }
@@ -92,7 +88,7 @@ class NewRetrospective extends Component {
   }
 
   render() {
-    const manageButton = () => {
+    const submitButton = () => {
       if (this.state.comments.length > 0) {
         return (<Button onClick={this.setComments}>Submit</Button>);
       }
@@ -144,7 +140,7 @@ class NewRetrospective extends Component {
           />);
         })}
 
-        <div id="submitBtn">{manageButton()}</div>
+        <div id="submitBtn">{submitButton()}</div>
       </div>
     );
   }

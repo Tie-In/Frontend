@@ -17,6 +17,8 @@ class RetrospectiveContainer extends Component {
       organization: this.props.organization,
       viewpoints: [],
       hasRetro: false,
+      selectedIndex: -1,
+      selectedSprint: {},
     };
 
     this.startRetro = this.startRetro.bind(this);
@@ -26,19 +28,18 @@ class RetrospectiveContainer extends Component {
 
   async componentWillMount() {
     const { params, user, permissionActions, projectActions } = this.props;
-    const sprintSelected = this.state.sprints[this.state.sprints.length - 1];
+    this.setState({
+      selectedIndex:  this.state.sprints.length - 1,
+      selectSprint: this.state.sprints[this.state.selectedIndex],
+    });
+    console.log(this.state.sprints);
     try {
-      const res = await apiHelper.get(`/api/retrospectives/${sprintSelected.retrospective.id}`);
+      const res = await apiHelper.get(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`);
       this.setState({ viewpoints: res.data.viewpoints });
 
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
       projectActions.setProject(project);
-
-      const perLevel = project.project_contributes.find((x) => {
-        return x.user_id === user.id;
-      }).permission_level;
-      permissionActions.setProject(perLevel);
 
       console.log(this.state.viewpoints);
     } catch (err) {
@@ -49,11 +50,10 @@ class RetrospectiveContainer extends Component {
 
   async startRetro() {
     const path = `/organizations/${this.state.organization.id}/projects/${this.state.project.id}`;
-    const latestSprint = this.state.sprints[this.state.sprints.length - 1];
     try {
       const res = await apiHelper.post('/api/retrospectives', {
         retrospective: {
-          sprint_id: latestSprint.id,
+          sprint_id: this.state.selectedSprint.id,
         }
       });
       console.log(res);
@@ -64,10 +64,13 @@ class RetrospectiveContainer extends Component {
   }
 
   async handleSelectSprint(e) {
-    const sprintSelected = this.state.sprints[Number(e.target.value) - 1];
+    this.setState({
+      selectedIndex: Number(e.target.value) - 1,
+      selectSprint: this.state.sprints[this.state.selectedIndex],
+    });
     this.hasRetro();
     try {
-      const res = await apiHelper.get(`/api/retrospectives/${sprintSelected.retrospective.id}`);
+      const res = await apiHelper.get(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`);
       this.setState({ viewpoints: res.data.viewpoints });
       console.log(this.state.viewpoints);
     } catch (err) {
@@ -99,8 +102,11 @@ class RetrospectiveContainer extends Component {
     const startBtn = () => {
       const path = `/organizations/${this.state.organization.id}/projects/${this.state.project.id}`;
       if(this.state.permission === 'admin') {
-        if(this.state.hasRetro) {
-          return (<Button className="disabled">Start Retrospective</Button>);
+        if(!this.state.selectedSprint.is_ended) {
+            return (<Button className="disabled">Start Retrospective</Button>);
+        }
+        else if(this.state.hasRetro) {
+          return (<Button href={`${path}/retrospective/management`}>Manage</Button>);
         }
         return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
       }
