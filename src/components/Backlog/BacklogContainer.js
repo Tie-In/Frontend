@@ -38,7 +38,6 @@ class BacklogContainer extends Component {
   }
 
   async setUpdatedTask(updatedTask) {
-    console.log(updatedTask);
     const { backlogTasks, sprintTasks } = this.state;
     if (updatedTask.feature_id !== null) {
       updatedTask.feature = this.props.project.features.find((f) => {

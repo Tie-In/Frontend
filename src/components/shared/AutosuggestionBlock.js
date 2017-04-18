@@ -16,8 +16,9 @@ function getSuggestionValue(suggestion) {
 function renderSuggestion(suggestion) {
   const suggestionText = `${suggestion.username || suggestion.name} (${suggestion.email || suggestion.complexity})`;
   return (
-    <span className={`suggestion-content ${suggestion.image}`}>
-      <span className="name">
+    <span className="suggestion-content">
+      { suggestion.username ? <span> <img src={suggestion.image} alt="profile-pic" /></span> : <span /> }
+      <span className={suggestion.username ? 'suggestion-user' : 'suggestion-feature'}>
         <span>{suggestionText}</span>
       </span>
     </span>
@@ -83,7 +84,6 @@ class AutosuggestionBlock extends Component {
   }
 
   getSuggestions(value) {
-    console.log(this.props.data);
     const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
     if (inputValue === '') {
       return [];
@@ -103,14 +103,14 @@ class AutosuggestionBlock extends Component {
 
   result() {
     const { result } = this.state;
+    const resultText = `${result.username || result.name} (${result.email || result.complexity})`;
     const content = (
       <Row key={result.id}>
         <Col smOffset={0} xs={9} md={10}>
-          <span className={`suggestion-content ${result.image || ''}`}>
-            <span className="name">
-              <span>
-                {result.username || result.name} ( {result.email || result.complexity} )
-              </span>
+          <span className="suggestion-content">
+            { result.username ? <span> <img src={result.image} alt="profile-pic" /></span> : <span /> }
+            <span className={result.username ? 'suggestion-user' : 'suggestion-feature'}>
+              <span>{resultText}</span>
             </span>
           </span>
         </Col>

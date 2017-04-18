@@ -63,7 +63,7 @@ class NewProject extends Component {
     this.setState({ input: temp });
   }
 
-  setTags(idArr, newData) {
+  setTags(idArr) {
     const temp = this.state.input;
     temp.tags = idArr;
     this.setState({ input: temp });
