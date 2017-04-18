@@ -71,6 +71,7 @@
 	box-shadow: 1px 1px 1px rgba(0,0,0,.3);
 	transition: 0.15s;
 	cursor: pointer;
+	position: relative;
 }
 .item:hover{
 		background: #f7f7f7;
@@ -100,6 +101,7 @@
 }
 .item-content{
 	white-space: normal;
+	min-height: 20px;
 }
 .item-content > p{
 	margin: 5px 0;
@@ -107,29 +109,4 @@
 .item-content > .item-author{
 	font-size: 16px;
 	font-weight: bolder;
-}
-.item-perfomers{
-	padding: 5px 10px;
-}
-.perfomer{
-	float: right;
-}
-.perfomer > img{
-	display: block;
-	width: 20px;
-	height: 20px;
-	border-radius: 50%;
-}
-
-#card-container-dropdown {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-	color: black;
-	padding: 1px 2px 1px 2px;
-	margin-bottom: 1px;
-}
-
-#card-container-dropdown:hover {
-	background-color: #FAFBF5;
 }

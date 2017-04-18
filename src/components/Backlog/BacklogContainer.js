@@ -20,6 +20,7 @@ class BacklogContainer extends Component {
       backlogTasks: [],
       sprintTasks: [],
       task: {},
+      loading: true,
     };
 
     this.setUpdatedTask = this.setUpdatedTask.bind(this);
@@ -33,10 +34,11 @@ class BacklogContainer extends Component {
   }
 
   async componentWillMount() {
-    this.reloadPage();
+    await this.reloadPage();
   }
 
   async setUpdatedTask(updatedTask) {
+    console.log(updatedTask);
     const { backlogTasks, sprintTasks } = this.state;
     if (updatedTask.feature_id !== null) {
       updatedTask.feature = this.props.project.features.find((f) => {
@@ -101,6 +103,7 @@ class BacklogContainer extends Component {
       });
       const tasks = response.data;
       this.setState({ backlogTasks: tasks });
+      this.setState({ loading: false });
     } catch (err) {
       console.log(err);
     }
@@ -158,15 +161,31 @@ class BacklogContainer extends Component {
       return (
         <Row key={task.id} style={rowStyle}>
           <li id="task">
-            <Col xs={10} md={11} onClick={() => { this.showEditTaskModal(task); }}>
+            <Col xs={8} md={8} onClick={() => { this.showEditTaskModal(task); }}>
               <span id="taskName">
                 {task.name}
                 { task.feature ?
-                  <Label className="pull-right" style={{ marginTop: 3 }}>
+                  <Label bsStyle="primary" style={{ marginTop: 3, marginLeft: 10 }}>
                     {task.feature.name}
                   </Label> : <div />
                 }
               </span>
+            </Col>
+            <Col xs={3}>
+              { task.tags.map((tag) => {
+                const labelStyle = {
+                  backgroundColor: tag.color,
+                  color: 'white',
+                  marginTop: 3,
+                  marginRight: 10,
+                };
+                return (
+                  <Label key={tag.id} style={labelStyle}>
+                    {tag.name}
+                  </Label>
+                );
+              })
+              }
             </Col>
             { this.props.project.current_sprint_id === null ?
               <Col xs={1} md={1}>
@@ -210,6 +229,7 @@ class BacklogContainer extends Component {
     };
 
     return (
+      this.state.loading ? <div /> :
       <div>
         <div className="tiein-container">
           { project.current_sprint_id !== null ?

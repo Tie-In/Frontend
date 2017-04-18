@@ -24,7 +24,7 @@ class EditTaskModal extends Component {
       },
       allFeatures: [],
       allUsers: [],
-      allTags: [],
+      allTags: null,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.setFeature = this.setFeature.bind(this);
@@ -69,7 +69,8 @@ class EditTaskModal extends Component {
 
   setTags(idArr) {
     const temp = this.state.input;
-    temp.tags = idArr;
+    const renew = idArr.map((t) => { return this.state.allTags.find((tag) => { return tag.id === t.id; }); });
+    temp.tags = renew;
     this.setState({ input: temp });
   }
 
@@ -135,13 +136,15 @@ class EditTaskModal extends Component {
                 />
               </Col>
             </FormGroup>
-            <FormGroup>
-              <TagRow
-                data={this.state.allTags} setValue={this.setTags}
-                projectId={this.props.project.id}
-                initSelect={input.tags}
-              />
-            </FormGroup>
+            { this.state.allTags ?
+              <FormGroup>
+                <TagRow
+                  data={this.state.allTags} setValue={this.setTags}
+                  projectId={this.props.project.id}
+                  initSelect={input.tags}
+                />
+              </FormGroup> : <div />
+            }
           </Form>
         </div>
       );

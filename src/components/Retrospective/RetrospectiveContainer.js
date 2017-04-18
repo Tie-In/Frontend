@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Row, Col, Button, Panel, FormGroup, FormControl } from 'react-bootstrap';
 import update from 'immutability-helper';
+import moment from 'moment';
 import * as projectActionsCreator from '../../actions/project-actions';
 import * as permissionActionsCreator from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
-import './retrospective.css'
+import './retrospective.css';
 
 class RetrospectiveContainer extends Component {
   constructor(props) {
@@ -64,7 +65,6 @@ class RetrospectiveContainer extends Component {
     try {
       const res = await apiHelper.get(`/api/retrospectives/${sprintSelected.retrospective.id}`);
       this.setState({ viewpoints: res.data.viewpoints });
-      console.log(this.state.viewpoints);
     } catch (err) {
       console.log(err.response);
     }
