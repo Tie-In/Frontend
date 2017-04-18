@@ -69,7 +69,8 @@ class EditTaskModal extends Component {
 
   setTags(idArr) {
     const temp = this.state.input;
-    temp.tags = idArr;
+    const renew = idArr.map((t) => { return this.state.allTags.find((tag) => { return tag.id === t.id; }); });
+    temp.tags = renew;
     this.setState({ input: temp });
   }
 

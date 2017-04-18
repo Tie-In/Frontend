@@ -64,14 +64,31 @@ class CurrentSprint extends Component {
       return (
         <Row key={task.id} style={rowStyle}>
           <li id="task">
-            <Col xs={12}>
+            <Col xs={8}>
               <span id="taskName">
                 {task.name}
-                <div className="pull-right">
-                  <Label style={{ marginTop: 2, marginRight: 5 }}>{task.feature ? task.feature.name : ''}</Label>
-                  <Badge>{task.story_point}</Badge>
-                </div>
+                { task.feature ?
+                  <Label bsStyle="primary" style={{ marginTop: 3, marginLeft: 10 }}>
+                    {task.feature.name}
+                  </Label> : <div />
+                }
               </span>
+            </Col>
+            <Col xs={3}>
+              { task.tags.map((tag) => {
+                const labelStyle = {
+                  backgroundColor: tag.color,
+                  color: 'white',
+                  marginTop: 3,
+                  marginRight: 10,
+                };
+                return (
+                  <Label key={tag.id} style={labelStyle}>
+                    {tag.name}
+                  </Label>
+                );
+              })
+              }
             </Col>
           </li>
         </Row>

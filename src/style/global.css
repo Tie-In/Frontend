@@ -69,3 +69,13 @@
   transform: translate(50%);
   position: absolute;
 }
+
+.label.label-primary {
+  background-image: none;
+  background-color: #ffffff;
+  color: #a7a7a7;
+  text-shadow: none;
+  border-color: #a7a7a7;
+  border: solid 1px;
+  box-shadow: none;
+}

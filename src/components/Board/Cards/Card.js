@@ -46,7 +46,6 @@ class Card extends Component {
         const response = await apiHelper.put(`/api/tasks/${this.props.item.id}`, task);
         const tempTask = response.data.task;
         const statuses = response.data.statuses;
-        this.props.setShow(false, tempTask);
         this.props.listsActions.setList(statuses);
         this.setState({
           item: tempTask,

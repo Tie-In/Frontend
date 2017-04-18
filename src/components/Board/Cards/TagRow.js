@@ -34,10 +34,6 @@ function renderSuggestion(suggestion) {
   );
 }
 
-Array.prototype.diff = function(a) {
-  return this.filter(function(i) { return a.indexOf(i) < 0; });
-};
-
 class TagRow extends Component {
   constructor(props) {
     super(props);
@@ -52,11 +48,7 @@ class TagRow extends Component {
       newName: '',
     };
 
-    this.color = '';
-    this.toggleDropdown = this.toggleDropdown.bind(this);
     this.inputClick = this.inputClick.bind(this);
-    this.selectColor = this.selectColor.bind(this);
-    this.createTag = this.createTag.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
@@ -175,37 +167,6 @@ class TagRow extends Component {
 
   inputClick(e) {
     this.setState({ openDropdown: true });
-  }
-
-  toggleDropdown() {
-    this.setState({ openDropdown: !this.state.openDropdown });
-  }
-
-  selectColor(colorHex) {
-    this.color = colorHex;
-  }
-
-  async createTag() {
-    const newTag = {
-      name: this.state.newName,
-      color: this.color,
-      project_id: this.props.projectId,
-    };
-    const temp = this.state.selected;
-    const resultTemp = this.state.result;
-    const response = await apiHelper.post('/api/tags', {
-      tag: newTag,
-    });
-    temp.push(response.data);
-    resultTemp.push({ id: response.data.id });
-    this.props.setValue(resultTemp);
-    this.setState({
-      openDropdown: false,
-      selected: temp,
-      newName: '',
-      result: resultTemp,
-    });
-    this.color = '';
   }
 
   handleInputChange(e) {
