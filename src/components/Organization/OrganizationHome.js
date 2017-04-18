@@ -31,7 +31,6 @@ class OrganizationHome extends Component {
       this.setState({ loading: false });
     } catch (err) {
       console.log(err);
-   
       localStorage.clear();
       document.location.href = '/login';
     }

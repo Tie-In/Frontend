@@ -2,9 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import { Row, Col, FormGroup, FormControl } from 'react-bootstrap';
+import moment from 'moment';
 import DocumentTitle from 'react-document-title';
 import FaBarChart from 'react-icons/lib/fa/bar-chart';
-import moment from 'moment';
+import StoryPoint from './StoryPoint';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class DashboardContainer extends Component {
@@ -14,13 +15,10 @@ class DashboardContainer extends Component {
       project: this.props.project,
       sprints: this.props.project.sprints,
       currentSprint: this.props.project.sprints.slice(-1)[0],
-      tasks: '',
-      startDate: this.getLocalDate(this.props.project.sprints.slice(-1)[0].start_date),
-      endDate: this.getLocalDate(this.props.project.sprints.slice(-1)[0].end_date),
+      tasks: [],
+      // startDate: this.getLocalDate(this.props.project.sprints.slice(-1)[0].start_date),
+      // endDate: this.getLocalDate(this.props.project.sprints.slice(-1)[0].end_date),
     };
-    this.getDateSet = this.getDateSet.bind(this);
-    // console.log(this.state.project);
-    // console.log(this.state.currentSprint);
   }
 
   async componentWillMount() {
@@ -38,22 +36,6 @@ class DashboardContainer extends Component {
     }
   }
 
-  getDateSet() {
-    // const start = moment(this.state.startDate).dayOfYear();
-    // const end = moment(this.state.endDate).dayOfYear();
-    // let day = end - start;
-    const labels = [];
-    if (!moment(this.state.endDate).isValid()) {
-      // const today = moment().dayOfYear();
-      // day = today - start;
-    }
-    for (let i = 0; i < 5; i += 1) {
-      const newDate = moment(this.state.startDate).add(i, 'days');
-      labels.push(this.getLocalDate(newDate));
-    }
-    return labels;
-  }
-
   getLocalDate(serverDate) {
     if (serverDate === null) {
       return '-';
@@ -63,33 +45,6 @@ class DashboardContainer extends Component {
   }
 
   render() {
-    const data1 = {
-      labels: this.getDateSet(),
-      datasets: [{
-        label: 'Sales',
-        type: 'line',
-        data: [51, 65, 40, 49, 60, 37, 40],
-        fill: false,
-        borderColor: '#EC932F',
-        backgroundColor: '#EC932F',
-        pointBorderColor: '#EC932F',
-        pointBackgroundColor: '#EC932F',
-        pointHoverBackgroundColor: '#EC932F',
-        pointHoverBorderColor: '#EC932F',
-        yAxisID: 'y-axis-1',
-      },
-      {
-        type: 'line',
-        label: 'Visitor',
-        data: [200, 185, 590, 621, 250, 400, 95],
-        fill: false,
-        backgroundColor: '#71B37C',
-        borderColor: '#71B37C',
-        hoverBackgroundColor: '#71B37C',
-        hoverBorderColor: '#71B37C',
-        yAxisID: 'y-axis-1',
-      }],
-    };
     const options1 = {
       // responsive: true,
       tooltips: {
@@ -191,6 +146,8 @@ class DashboardContainer extends Component {
     const h3 = {
       marginBottom: 0,
     };
+    const start = this.getLocalDate(this.props.project.sprints.slice(-1)[0].start_date);
+    const end = this.getLocalDate(this.props.project.sprints.slice(-1)[0].end_date);
 
     return (
       <DocumentTitle title={`${project.name}・Dashboard`}>
@@ -208,15 +165,19 @@ class DashboardContainer extends Component {
           </Row>
           <hr className="header-line" />
           <p>Total estimated points: {this.state.currentSprint.sprint_points}</p>
-          <p>Start date: {this.state.startDate}</p>
-          <p>End date: {this.state.endDate}</p>
+          <p>Start date: {start}</p>
+          <p>End date: {end}</p>
           <Col xs={12} md={6} style={columnStyle}>
             <h4><FaBarChart /> Burndown Chart</h4>
             <Line data={data} options={options1} />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4><FaBarChart /> Burndown Chart</h4>
-            <Line data={data1} options={options1} />
+            <StoryPoint
+              key={project.id}
+              project={project}
+              tasks={this.state.tasks}
+              sprint={this.state.currentSprint}
+            />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
             <h4><FaBarChart /> Burndown Chart</h4>
