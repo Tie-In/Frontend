@@ -24,6 +24,7 @@ class UserProfile extends Component {
 
     const { user } = this.props;
     const bd = moment(user.birth_date);
+
     this.state = {
       input: {
         email: user.email,

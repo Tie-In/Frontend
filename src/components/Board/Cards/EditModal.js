@@ -1,11 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Col, Button, FormGroup, ControlLabel, FormControl, Form } from 'react-bootstrap';
 import update from 'react-addons-update';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import AutosuggestionBlock from '../../shared/AutosuggestionBlock';
-import * as listsActions from '../../../actions/list-actions';
-import * as apiHelper from '../../../helpers/apiHelper';
 import TagRow from './TagRow';
 
 class EditModal extends Component {
@@ -13,50 +9,27 @@ class EditModal extends Component {
     super(props);
 
     const { item } = this.props;
+    const tempItem = item;
     this.state = {
       input: {
-        name: item.name,
-        description: item.description,
-        feature_id: (item.feature ? item.feature.id : ''),
-        assignee_id: item.assignee_id,
-        start_date: item.start_date,
-        end_date: item.end_date,
-        estimate_time: item.estimate_time,
-        story_point: item.story_point,
-        tags: item.tags,
+        name: tempItem.name,
+        description: tempItem.description,
+        feature_id: (tempItem.feature ? tempItem.feature.id : ''),
+        assignee_id: tempItem.assignee_id,
+        start_date: tempItem.start_date,
+        end_date: tempItem.end_date,
+        estimate_time: tempItem.estimate_time,
+        story_point: tempItem.story_point,
+        tags: tempItem.tags,
       },
-      allUsers: [],
-      allTags: [],
-      allFeatures: [],
     };
 
     this.closeModal = this.closeModal.bind(this);
-    this.findItem = this.findItem.bind(this);
     this.setAssignee = this.setAssignee.bind(this);
     this.setFeature = this.setFeature.bind(this);
     this.setTags = this.setTags.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.updateTask = this.updateTask.bind(this);
-  }
-
-  async componentWillMount() {
-    const { item, project } = this.props;
-    try {
-      const responseUser = await apiHelper.get('/api/users', {
-        project: item.project_id,
-      }, true);
-      const users = responseUser.data;
-      const responseTag = await apiHelper.get('/api/tags', {
-        project: item.project_id,
-      });
-      this.setState({ 
-        allUsers: users,
-        allTags: responseTag.data,
-        allFeatures: project.features, 
-      });
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   setAssignee(id) {
@@ -71,33 +44,21 @@ class EditModal extends Component {
     this.setState({ input: temp });
   }
 
-  async updateTask() {
-    try {
-      const response = await apiHelper.put(`/api/tasks/${this.props.item.id}`, this.state.input);
-      const task = response.data.task;
-      const statuses = response.data.statuses;
-      this.props.setShow(false, task);
-      this.props.listsActions.setList(statuses);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  closeModal() {
-    this.props.setShow(false, this.props.item);
-  }
-
   setTags(idArr) {
     const temp = this.state.input;
     temp.tags = idArr;
     this.setState({ input: temp });
   }
 
-  findItem(item) {
-    return item.id === this.props.item.assignee_id;
+  updateTask() {
+    this.props.setShow(false, this.state.input);
   }
 
-   handleInputChange(e) {
+  closeModal() {
+    this.props.setShow(false, undefined);
+  }
+
+  handleInputChange(e) {
     const value = e.target.value;
     const name = e.target.name;
 
@@ -111,9 +72,10 @@ class EditModal extends Component {
   render() {
     const { item } = this.props;
     const { input } = this.state;
+
     return (
       <div>
-        <Modal show={this.props.show} onHide={this.closeModal}>
+        <Modal show={this.props.show} onHide={() => { this.closeModal(); }}>
           <Modal.Header closeButton>
             <Modal.Title>
               Edit task
@@ -127,8 +89,8 @@ class EditModal extends Component {
                   Name
                 </Col>
                 <Col xs={9}>
-                  <FormControl 
-                    type="text" placeholder="Name" 
+                  <FormControl
+                    type="text" placeholder="Name"
                     name="name"
                     value={input.name || ''}
                     onChange={this.handleInputChange}
@@ -140,11 +102,11 @@ class EditModal extends Component {
                   Description
                 </Col>
                 <Col xs={9}>
-                  <FormControl 
+                  <FormControl
                     type="text" placeholder="Description"
-                    name="description" 
+                    name="description"
                     value={input.description || ''}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleInputChange}
                   />
                 </Col>
               </FormGroup>
@@ -154,7 +116,7 @@ class EditModal extends Component {
                 </Col>
                 <Col xs={9}>
                   <AutosuggestionBlock
-                    data={this.state.allFeatures}
+                    data={this.props.featureSelection}
                     setValue={this.setFeature} initSelect={item.feature}
                   />
                 </Col>
@@ -165,16 +127,16 @@ class EditModal extends Component {
                 </Col>
                 <Col xs={9}>
                   <AutosuggestionBlock
-                    data={this.state.allUsers}
+                    data={this.props.userSelection}
                     setValue={this.setAssignee}
-                    initSelect={this.state.allUsers.find(this.findItem)}
+                    initSelect={item.user}
                   />
                 </Col>
               </FormGroup>
               <FormGroup>
                 <TagRow
-                  data={this.state.allTags} setValue={this.setTags}
-                  projectId={this.props.project.id}
+                  data={this.props.tagSelection} setValue={this.setTags}
+                  projectId={item.project_id}
                   initSelect={item.tags}
                 />
               </FormGroup>
@@ -183,22 +145,22 @@ class EditModal extends Component {
                   Start Date
                 </Col>
                 <Col xs={3}>
-                  <FormControl 
-                    type="text" placeholder="Start date" 
+                  <FormControl
+                    type="text" placeholder="Start date"
                     name="start_date"
                     value={input.start_date || ''}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleInputChange}
                   />
                 </Col>
                 <Col xs={3} componentClass={ControlLabel}>
                   End date
                 </Col>
                 <Col xs={3}>
-                  <FormControl 
-                    type="text" placeholder="End date" 
+                  <FormControl
+                    type="text" placeholder="End date"
                     name="end_date"
                     value={input.end_date || ''}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleInputChange}
                   />
                 </Col>
               </FormGroup>
@@ -207,22 +169,22 @@ class EditModal extends Component {
                   Estimate time
                 </Col>
                 <Col xs={3}>
-                  <FormControl 
-                    type="text" placeholder="Time (hr)" 
+                  <FormControl
+                    type="text" placeholder="Time (hr)"
                     name="estimate_time"
                     value={input.estimate_time || ''}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleInputChange}
                   />
                 </Col>
                 <Col xs={3} componentClass={ControlLabel}>
                   Story point
                 </Col>
                 <Col xs={3}>
-                  <FormControl 
-                    type="text" placeholder="Point" 
+                  <FormControl
+                    type="text" placeholder="Point"
                     name="story_point"
                     value={input.story_point || ''}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleInputChange}
                     disabled
                   />
                 </Col>
@@ -230,7 +192,7 @@ class EditModal extends Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.updateTask}>Update</Button>
+            <Button onClick={() => { this.updateTask(); }}>Update</Button>
           </Modal.Footer>
         </Modal>
       </div>
@@ -242,19 +204,9 @@ EditModal.propTypes = {
   item: PropTypes.object.isRequired,
   setShow: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
-  project: PropTypes.object.isRequired,
+  userSelection: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tagSelection: PropTypes.arrayOf(PropTypes.object).isRequired,
+  featureSelection: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    project: state.project,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    listsActions: bindActionCreators(listsActions, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EditModal);
+export default (EditModal);

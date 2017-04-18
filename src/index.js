@@ -25,6 +25,7 @@ import {
   Profile,
   OrganizationSetting,
   ProjectSetting,
+  DashboardContainer,
   RetrospectiveContainer,
   NewRetrospective,
   Management,
@@ -58,6 +59,7 @@ ReactDOM.render(
         <Route path="backlog" component={BacklogContainer} />
         <Route path="tasks/new" component={NewTask} />
         <Route path="setting" component={ProjectSetting} />
+        <Route path="dashboard" component={DashboardContainer} />
         <Route path="retrospective" component={RetrospectiveContainer} />
         <Route path="retrospective/new" component={NewRetrospective} />
         <Route path="retrospective/management" component={Management} />

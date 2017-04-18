@@ -8,11 +8,6 @@ import logo from '../../images/logo.png';
 import './navstyle.css';
 
 class OrganizationNavbar extends Component {
-  logout() {
-    localStorage.clear();
-    document.location.href = '/login';
-  }
-
   render() {
     const { user, organization } = this.props;
     const path = `/organizations/${organization.id}`;
@@ -24,6 +19,7 @@ class OrganizationNavbar extends Component {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+      textAlign: 'left',
     };
     const menuNode = data.map((menu) => {
       return (
@@ -49,10 +45,8 @@ class OrganizationNavbar extends Component {
               </div>
               <div className="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul className="nav navbar-nav">
-                  <li
-                    className="pull-left" id="slide-sidebar"
-                  >
-                    <a href="#sidebar-nav" style={wrappedText}>
+                  <li className="pull-left" id="slide-sidebar">
+                    <a href="#sidebar-nav" className="pull-left" style={wrappedText}>
                       {organization.name} <Glyphicon glyph="menu-down" />
                     </a>
                   </li>
@@ -65,6 +59,7 @@ class OrganizationNavbar extends Component {
                       />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
+                      <MenuItem disabled>{user.username} ({user.email})</MenuItem>
                       <MenuItem eventKey="1" href={'/profile'}>Profile</MenuItem>
                       <MenuItem divider />
                       <MenuItem eventKey="2" onClick={this.logout}>Sign Out</MenuItem>

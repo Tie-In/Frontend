@@ -2,8 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import ReactTooltip from 'react-tooltip';
 import '../../style/projectCardStyle.css';
-import '../../style/autosuggestStyle.css';
-// import userimg from '../../images/user1.png';
 
 class ProjectCard extends Component {
   render() {
@@ -35,7 +33,8 @@ class ProjectCard extends Component {
         <LinkContainer to={{ pathname: `/organizations/${project.organization_id}/projects/${project.id}` }}>
           <a key={project.name}><h3>{project.name}</h3></a>
         </LinkContainer>
-        <p style={descriptionStyle}>{project.description}<br /></p>
+        <p style={descriptionStyle}>{project.description}</p>
+        <br />
         <div style={thumbnaildiv}>
           {
             project.users.map((user) => {

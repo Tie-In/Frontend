@@ -25,7 +25,7 @@ export default function lists(state = initialState, action) {
       // re-confirm index before send to API
       if (newLists[nextX].tasks.length === 0 && nextY > 0) {
         nextY = 0;
-      } else if (nextY === newLists[nextX].tasks.length) {
+      } else if (nextY === newLists[nextX].tasks.length - 1) {
         nextY = newLists[nextX].tasks.length - 1;
       } else if (nextY > newLists[nextX].tasks.length) {
         nextY = newLists[nextX].tasks.length;
@@ -40,6 +40,7 @@ export default function lists(state = initialState, action) {
         newLists[nextX].tasks.splice(nextY, 0, newLists[lastX].tasks[lastY]);
         // delete element from old place
         newLists[lastX].tasks.splice(lastY, 1);
+        console.log(nextY, newLists[nextX]);
         apiHelper.put(`/api/tasks/${movedTask.id}`, {
           row_index: nextY,
           column_id: newLists[nextX].id,

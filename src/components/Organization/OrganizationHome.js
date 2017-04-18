@@ -10,19 +10,28 @@ import AddProject from '../../images/newproject.png';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class OrganizationHome extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true,
+    };
+  }
 
   async componentWillMount() {
-    const { params, organizationActions, permissionActions, user } = this.props;
+    const { params, user } = this.props;
     try {
       const response = await apiHelper.get(`/api/organizations/${params.organizationId}`);
       const org = response.data;
-      organizationActions.setOrganization(org);
+      this.props.organizationActions.setOrganization(org);
       const perLevel = org.user_organizations.find((x) => {
         return x.user_id === user.id;
       }).permission_level;
-      permissionActions.setOrganization(perLevel);
+      this.props.permissionActions.setOrganization(perLevel);
+      this.setState({ loading: false });
     } catch (err) {
       console.log(err);
+   
       localStorage.clear();
       document.location.href = '/login';
     }
@@ -61,28 +70,32 @@ class OrganizationHome extends Component {
   }
 
   render() {
-    const { organization } = this.props;
+    const { organization, user } = this.props;
+    const filterProject = () => {
+      return organization.projects.filter((project) => {
+        return project.users.find((u) => { return u.id === user.id; });
+      });
+    };
+
     return (
+      this.state.loading ? <div /> :
       <DocumentTitle title={organization.name}>
-        { organization.projects !== undefined ?
-          <div className="tiein-container">
-            <h3 className="header-label">{organization.name}&#39;s project list</h3>
-            <hr className="header-line" />
-            <Row>
-              {
-                organization.projects.map((project) => {
-                  return (
-                    <Col md={6} key={`col${project.id}`}>
-                      <ProjectCard key={project.id} project={project} />
-                    </Col>
-                  );
-                })
-              }
-            </Row>
-            {this.buttonType(organization.projects)}
-          </div>
-          : null
-        }
+        <div className="tiein-container">
+          <h3 className="header-label">{organization.name}&#39;s project list</h3>
+          <hr className="header-line" />
+          <Row>
+            {
+              filterProject().map((project) => {
+                return (
+                  <Col md={6} key={`col${project.id}`}>
+                    <ProjectCard key={project.id} project={project} />
+                  </Col>
+                );
+              })
+            }
+          </Row>
+          {this.buttonType(organization.projects)}
+        </div>
       </DocumentTitle>
     );
   }
@@ -90,9 +103,8 @@ class OrganizationHome extends Component {
 
 OrganizationHome.propTypes = {
   organization: PropTypes.object.isRequired,
-  organizationActions: PropTypes.object.isRequired,
   permissionActions: PropTypes.object.isRequired,
-  params: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

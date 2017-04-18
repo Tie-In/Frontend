@@ -11,6 +11,9 @@ export default class CardsContainer extends Component {
     stopScrolling: PropTypes.func,
     isScrolling: PropTypes.bool,
     name: PropTypes.string,
+    userSelection: PropTypes.arrayOf(PropTypes.object),
+    featureSelection: PropTypes.arrayOf(PropTypes.object),
+    tagSelection: PropTypes.arrayOf(PropTypes.object),
   }
 
   render() {
@@ -37,6 +40,9 @@ export default class CardsContainer extends Component {
           startScrolling={this.props.startScrolling}
           stopScrolling={this.props.stopScrolling}
           isScrolling={this.props.isScrolling}
+          userSelection={this.props.userSelection}
+          featureSelection={this.props.featureSelection}
+          tagSelection={this.props.tagSelection}
         />
       </div>
     );

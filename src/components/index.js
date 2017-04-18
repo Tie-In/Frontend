@@ -17,6 +17,7 @@ import Board from './Board/Board';
 import NewTask from './Task/NewTask';
 import Profile from './User/Profile';
 import ProjectSetting from './Projects/ProjectSetting';
+import DashboardContainer from './Dashboard/DashboardContainer';
 import RetrospectiveContainer from './Retrospective/RetrospectiveContainer';
 import NewRetrospective from './Retrospective/NewRetrospective';
 import Management from './Retrospective/Management';
@@ -41,6 +42,7 @@ module.exports = {
   Profile,
   OrganizationSetting,
   ProjectSetting,
+  DashboardContainer,
   RetrospectiveContainer,
   NewRetrospective,
   Management,

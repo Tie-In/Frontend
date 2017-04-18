@@ -16,23 +16,18 @@ class RetrospectiveContainer extends Component {
       project: this.props.project,
       organization: this.props.organization,
       viewpoints: [],
-      hasRetro: false,
-      selectedIndex: -1,
-      selectedSprint: {},
+      hasGBT: false,
+      selectedIndex: this.props.project.sprints.length - 1,
+      selectedSprint: this.props.project.sprints[this.props.project.sprints.length - 1],
     };
 
     this.startRetro = this.startRetro.bind(this);
     this.handleSelectSprint = this.handleSelectSprint.bind(this);
-    this.hasRetro = this.hasRetro.bind(this);
+    this.hasGBT = this.hasGBT.bind(this);
   }
 
   async componentWillMount() {
     const { params, user, permissionActions, projectActions } = this.props;
-    this.setState({
-      selectedIndex:  this.state.sprints.length - 1,
-      selectSprint: this.state.sprints[this.state.selectedIndex],
-    });
-    console.log(this.state.sprints);
     try {
       const res = await apiHelper.get(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`);
       this.setState({ viewpoints: res.data.viewpoints });
@@ -45,7 +40,7 @@ class RetrospectiveContainer extends Component {
     } catch (err) {
       console.log(err);
     }
-    this.hasRetro();
+    this.hasGBT();
   }
 
   async startRetro() {
@@ -64,25 +59,28 @@ class RetrospectiveContainer extends Component {
   }
 
   async handleSelectSprint(e) {
-    this.setState({
-      selectedIndex: Number(e.target.value) - 1,
-      selectSprint: this.state.sprints[this.state.selectedIndex],
-    });
-    this.hasRetro();
+    const tempIndex = e.target.value - 1;
+    const tempSprint = this.state.sprints[tempIndex];
+
     try {
-      const res = await apiHelper.get(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`);
-      this.setState({ viewpoints: res.data.viewpoints });
+      const res = await apiHelper.get(`/api/retrospectives/${tempSprint.retrospective.id}`);
+      this.setState({
+        viewpoints: res.data.viewpoints,
+        selectedIndex: tempIndex,
+        selectedSprint: tempSprint,
+      });
+      this.hasGBT();
       console.log(this.state.viewpoints);
     } catch (err) {
       console.log(err.response);
     }
   }
 
-  hasRetro() {
+  hasGBT() {
     if(this.state.viewpoints.length > 0) {
-      this.setState({ hasRetro: true });
+      this.setState({ hasGBT: true });
     } else {
-      this.setState({ hasRetro: false });
+      this.setState({ hasGBT: false });
     }
   }
 
@@ -105,15 +103,24 @@ class RetrospectiveContainer extends Component {
         if(!this.state.selectedSprint.is_ended) {
             return (<Button className="disabled">Start Retrospective</Button>);
         }
-        else if(this.state.hasRetro) {
+        else if(this.state.hasGBT) {
           return (<Button href={`${path}/retrospective/management`}>Manage</Button>);
         }
         return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
       }
-      if(this.state.hasRetro) {
+      if(!this.state.hasGBT && this.state.selectedSprint.is_ended) {
         return (<Button href={`${path}/retrospective/new`}>Join</Button>);
       }
       return (<Button className="disabled">Join</Button>);
+    };
+
+    const comments = (kind) => {
+      return this.state.viewpoints.map((data) => {
+        if(this.state.viewpoints && data.kind === kind) {
+          return (<li>{data.comment}</li>);
+        }
+        return (<div />);
+      });
     };
 
     return (
@@ -141,35 +148,17 @@ class RetrospectiveContainer extends Component {
           <Row>
             <Col md={4}>
               <Panel header="Good">
-                {this.state.viewpoints.map((data) => {
-                  if(data.kind === 'good') {
-                    return (
-                      <li>{data.comment}</li>
-                    );
-                  }
-                })}
+                {comments('good')}
               </Panel>
             </Col>
             <Col md={4}>
               <Panel header="Bad">
-                {this.state.viewpoints.map((data) => {
-                  if(data.kind === 'bad') {
-                    return (
-                      <li>{data.comment}</li>
-                    );
-                  }
-                })}
+                {comments('bad')}
               </Panel>
             </Col>
             <Col md={4}>
               <Panel header="Try">
-                {this.state.viewpoints.map((data) => {
-                  if(data.kind === 'try') {
-                    return (
-                      <li>{data.comment}</li>
-                    );
-                  }
-                })}
+                {comments('try')}
               </Panel>
             </Col>
           </Row>

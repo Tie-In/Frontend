@@ -1,18 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { Dropdown, MenuItem, Glyphicon } from 'react-bootstrap';
+import { Glyphicon } from 'react-bootstrap';
 import SidebarNav from './SidebarNav';
+import DropdownUser from './DropdownUser';
 import 'simple-line-icons/css/simple-line-icons.css';
 import './navstyle.css';
 import logo from '../../images/logo.png';
 
 class NormalNavbar extends Component {
-  logout() {
-    localStorage.clear();
-    document.location.href = '/login';
-  }
-
   render() {
     const { user, organization, project } = this.props;
     const path = `/organizations/${organization.id}/projects/${project.id}`;
@@ -23,7 +19,7 @@ class NormalNavbar extends Component {
       { id: 4, name: 'Planning', path: `${path}/planning` },
       { id: 5, name: 'Active sprint', path: `${path}/board` },
       { id: 6, name: 'Retrospective', path: `${path}/retrospective` },
-      { id: 7, name: 'Dashboard', path: '/dashboard' },
+      { id: 7, name: 'Dashboard', path: `${path}/dashboard` },
       { id: 8, name: 'Setting', path: `${path}/setting` },
     ];
     const wrappedText = {
@@ -31,10 +27,11 @@ class NormalNavbar extends Component {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+      textAlign: 'left',
     };
     const menuNode = data.map((menu) => {
       if (project.current_sprint_id === null && menu.name === 'Active sprint') {
-        return;
+        return null;
       }
       return (
         <li key={menu.id}>
@@ -65,19 +62,7 @@ class NormalNavbar extends Component {
                     </a>
                   </li>
                   {menuNode}
-                  <Dropdown className="pull-right" id="profile-dropdown" style={{ width: 75 }}>
-                    <Dropdown.Toggle>
-                      <img
-                        id="avatar" role="presentation"
-                        src={user.image}
-                      />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <MenuItem eventKey="1" href={'/profile'}>Profile</MenuItem>
-                      <MenuItem divider />
-                      <MenuItem eventKey="2" onClick={this.logout}>Sign Out</MenuItem>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  <DropdownUser user={user} />
                 </ul>
               </div>
             </div>
