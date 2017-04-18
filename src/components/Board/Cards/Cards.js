@@ -27,7 +27,7 @@ const specs = {
     const lastY = monitor.getItem().y;
     const nextX = props.x;
     let nextY = placeholderIndex;
-    
+
     if (lastY > nextY) { // move top
       nextY += 1;
     } else if (lastX !== nextX) { // insert into another list
@@ -94,7 +94,10 @@ export default class Cards extends Component {
     canDrop: PropTypes.bool,
     startScrolling: PropTypes.func,
     stopScrolling: PropTypes.func,
-    isScrolling: PropTypes.bool
+    isScrolling: PropTypes.bool,
+    userSelection: PropTypes.arrayOf(PropTypes.object),
+    featureSelection: PropTypes.arrayOf(PropTypes.object),
+    tagSelection: PropTypes.arrayOf(PropTypes.object),
   }
 
   constructor(props) {
@@ -108,7 +111,7 @@ export default class Cards extends Component {
   render() {
     const { connectDropTarget, x, cards, isOver, canDrop } = this.props;
     const { placeholderIndex } = this.state;
-    
+
     let isPlaceHold = false;
     let cardList = [];
     cards.forEach((item, i) => {
@@ -122,11 +125,15 @@ export default class Cards extends Component {
       }
       if (item !== undefined) {
         cardList.push(
-          <Card x={x} y={i}
+          <Card
+            x={x} y={i}
             item={item}
             key={item.id}
             stopScrolling={this.props.stopScrolling}
-          />
+            userSelection={this.props.userSelection}
+            featureSelection={this.props.featureSelection}
+            tagSelection={this.props.tagSelection}
+          />,
         );
       }
       if (isOver && canDrop && placeholderIndex === i) {
@@ -147,7 +154,7 @@ export default class Cards extends Component {
     return connectDropTarget(
       <div className="desk-items">
         {cardList}
-      </div>
+      </div>,
     );
   }
 }

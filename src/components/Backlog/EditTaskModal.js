@@ -24,7 +24,7 @@ class EditTaskModal extends Component {
       },
       allFeatures: [],
       allUsers: [],
-      allTags: [],
+      allTags: null,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.setFeature = this.setFeature.bind(this);
@@ -135,13 +135,15 @@ class EditTaskModal extends Component {
                 />
               </Col>
             </FormGroup>
-            <FormGroup>
-              <TagRow
-                data={this.state.allTags} setValue={this.setTags}
-                projectId={this.props.project.id}
-                initSelect={input.tags}
-              />
-            </FormGroup>
+            { this.state.allTags ?
+              <FormGroup>
+                <TagRow
+                  data={this.state.allTags} setValue={this.setTags}
+                  projectId={this.props.project.id}
+                  initSelect={input.tags}
+                />
+              </FormGroup> : <div />
+            }
           </Form>
         </div>
       );

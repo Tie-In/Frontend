@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  Button, Col, Row,
-  FormGroup, ControlLabel, Glyphicon, Label, Dropdown, FormControl,
+  Col, Row,
+  ControlLabel, Glyphicon, Label,
 } from 'react-bootstrap';
 import update from 'react-addons-update';
 import Autosuggest from 'react-autosuggest';
-import WrapperColorpicker from './WrapperColorpicker';
 import * as apiHelper from '../../../helpers/apiHelper';
 import '../../../style/autosuggestStyle.css';
 
@@ -64,17 +63,11 @@ class TagRow extends Component {
   componentWillMount() {
     if (this.props.initSelect) {
       const idArr = [];
-      const arr = [];
-      this.props.initSelect.map((tag) => {
+      this.props.initSelect.forEach((tag) => {
         idArr.push({ id: tag.id });
-        this.props.data.map((data) => {
-          if (tag.id === data.id) {
-            arr.push(data);
-          }
-        });
       });
       this.setState({
-        selected: arr,
+        selected: this.props.initSelect,
         result: idArr,
       });
     }
@@ -122,10 +115,13 @@ class TagRow extends Component {
 
   getSuggestions(value) {
     const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
+    const onlyId = this.state.selected.map((s) => { return s.id; });
+    const availableUsers = this.props.data.filter((data) => {
+      return onlyId.indexOf(data.id) < 0;
+    });
     if (value === '') {
-      return this.props.data.diff(this.state.selected);
+      return availableUsers;
     }
-    const availableUsers = this.props.data.diff(this.state.selected);
     const regex = new RegExp('\\b' + inputValue, 'i');
     return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
   }
@@ -135,7 +131,7 @@ class TagRow extends Component {
     tempSelected.splice(tempSelected.indexOf(con), 1);
 
     const tempResult = this.state.result;
-    tempResult.splice(tempResult.indexOf({ id: con.id }), 1);
+    tempResult.splice(tempResult.indexOf(tempResult.find((a) => { return a.id === con.id; })), 1);
 
     this.setState({
       selected: tempSelected,
@@ -198,7 +194,7 @@ class TagRow extends Component {
     const temp = this.state.selected;
     const resultTemp = this.state.result;
     const response = await apiHelper.post('/api/tags', {
-      tag: newTag
+      tag: newTag,
     });
     temp.push(response.data);
     resultTemp.push({ id: response.data.id });
@@ -218,15 +214,12 @@ class TagRow extends Component {
   }
 
   render() {
-    const { value, suggestions, openDropdown } = this.state;
+    const { value, suggestions } = this.state;
     const inputProps = {
       placeholder: 'Select tag',
       value,
       onChange: this.onChange,
       onClick: this.onSuggestionSelected,
-    };
-    const menuStyle = {
-      padding: '5px 5px 5px 5px',
     };
 
     return (
@@ -246,34 +239,7 @@ class TagRow extends Component {
             onSuggestionSelected={this.onSuggestionSelected}
           />
         </Col>
-        <Col xs={2} xsOffset={3}>
-          <Dropdown id="tagsDropdown" open={openDropdown} dropup>
-            <div bsRole="toggle">
-              <Button
-                onClick={this.toggleDropdown}
-                bsStyle="primary"
-                style={{ marginTop: 25 }}
-              >
-                New tag
-              </Button>
-            </div>
-            <div className="dropdown-menu" style={menuStyle} bsRole="menu">
-              <FormGroup>
-                <FormControl
-                  type="text" placeholder="Tag name"
-                  name="newName"
-                  value={this.state.newName}
-                  onClick={this.inputClick}
-                  onChange={this.handleInputChange}
-                />
-              </FormGroup>
-              <WrapperColorpicker setColor={this.selectColor} />
-              <br />
-              <Button onClick={this.createTag}>Create</Button>
-            </div>
-          </Dropdown>
-        </Col>
-        <Col xs={7}>
+        <Col xs={7} xsOffset={3}>
           <ControlLabel />
           <Row>
             <Col smOffset={0} sm={11}>

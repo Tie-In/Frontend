@@ -36,7 +36,7 @@ class ProjectHome extends Component {
           <p>{this.description(project.description)}</p>
           <div>
             {
-              project ? (project.users.map((user) => {
+              project.users ? (project.users.map((user) => {
                 return <img src={user.image} style={imgStyle} alt="contributor-thumbnail" data-tip={`${user.firstname} ${user.lastname}`} key={user.username} />;
               })) : <div />
             }

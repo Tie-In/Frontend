@@ -6,7 +6,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import * as listsActions from '../../actions/list-actions';
 import * as projectActions from '../../actions/project-actions';
-import '../../style/board.css';
+import './board.css';
 import CardsContainer from './Cards/CardsContainer';
 import CustomDragLayer from './CustomDragLayer';
 import * as apiHelper from '../../helpers/apiHelper';
@@ -31,6 +31,9 @@ class Board extends Component {
     this.state = {
       isScrolling: false,
       sprintNumber: '',
+      allUsers: [],
+      allTags: [],
+      allFeatures: [],
     };
   }
 
@@ -46,6 +49,15 @@ class Board extends Component {
         const statuses = data.statuses;
         this.props.listsActions.setList(statuses);
       }
+      const responseUser = await apiHelper.get('/api/users', {
+        project: project.id,
+      }, true);
+      const users = responseUser.data;
+      this.setState({
+        allUsers: users,
+        allTags: project.tags,
+        allFeatures: project.features,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -104,7 +116,6 @@ class Board extends Component {
     const customWidth = {
       width: `${width}px`,
     };
-
     return (
       <main style={customWidth}>
         <div>
