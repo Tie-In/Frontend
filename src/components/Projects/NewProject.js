@@ -1,5 +1,5 @@
 import {
-  Button, Grid, Col, Row, Form,
+  Button, Col, Row,
   FormGroup, ControlLabel, FormControl, Glyphicon,
 } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
@@ -23,7 +23,8 @@ function getSuggestionValue(suggestion) {
 function renderSuggestion(suggestion) {
   const suggestionText = `${suggestion.username} (${suggestion.email})`;
   return (
-    <span className={`suggestion-content ${suggestion.image}`}>
+    <span className="suggestion-content">
+      <span> <img src={suggestion.image} alt="profile-pic" /></span>
       <span className="name">
         <span>{suggestionText}</span>
       </span>
@@ -141,16 +142,15 @@ class NewProject extends Component {
 
   removeContributor(id) {
     const array = this.state.contributors;
-    const index = array.indexOf(id);
+    const index = array.indexOf(array.find((a) => { return a.id === id; }));
     array.splice(index, 1);
 
     const users = this.state.input.users;
-    const uindex = users.indexOf(id);
+    const uindex = users.indexOf(users.find((a) => { return a.id === id; }));
 
     const newInput = this.state.input;
     users.splice(uindex, 1);
     newInput.users = users;
-
     this.setState({
       contributors: array,
       input: newInput,
@@ -159,20 +159,22 @@ class NewProject extends Component {
 
   contributor() {
     const content = this.state.contributors.map((contributor) => {
-      return (<Row key={contributor.id}>
-        <Col smOffset={0} xs={9} md={10}>
-          <span className={`suggestion-content ${contributor.image}`}>
-            <span className="name">
-              <span>{contributor.username}</span>
+      return (
+        <Row key={contributor.id}>
+          <Col smOffset={0} xs={9} md={10}>
+            <span className="suggestion-content">
+              <span> <img src={contributor.image} alt="profile-pic" /></span>
+              <span className="name">
+                <span>{contributor.username}</span>
+              </span>
             </span>
-          </span>
-        </Col>
-        <Col smOffset={0} xs={2} md={2}>
-          <Button bsStyle="primary" onClick={() => { this.removeContributor(contributor.id); }}>
-            <Glyphicon glyph="remove" />
-          </Button>
-        </Col>
-      </Row>);
+          </Col>
+          <Col smOffset={0} xs={2} md={2}>
+            <Button bsStyle="primary" onClick={() => { this.removeContributor(contributor.id); }}>
+              <Glyphicon glyph="remove" />
+            </Button>
+          </Col>
+        </Row>);
     },
     );
     return (

@@ -192,7 +192,7 @@ class BacklogContainer extends Component {
               </span>
             </Col>
             <Col xs={1} md={1}>
-              <span 
+              <span
                 className="icon-close" role="button"
                 id="removeButton" onClick={() => { this.switchTask(task, 'remove'); }}
               />
@@ -220,13 +220,13 @@ class BacklogContainer extends Component {
           }
           <Row>
             <Col sm={8}>
-              <h4>Backlog</h4>
-              <hr />
+              <h3 className="header-label">Backlog</h3>
+              <hr className="header-line" />
               <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
             </Col>
             <Col sm={4}>
-              <h4>New sprint:</h4>
-              <hr />
+              <h3 className="header-label">New sprint:</h3>
+              <hr className="header-line" />
               <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
               <div id="nextButton">{nextButton()}</div>
             </Col>

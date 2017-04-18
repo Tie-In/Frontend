@@ -1,0 +1,21 @@
+/*--------Main retrospective--------*/
+.panel-heading {
+  background: #D0CBC7 !important;
+  color: #A25E5D !important;
+  text-align: center;
+  font-weight: bold;
+}
+#startBtn, #submitBtn {
+ text-align: center;
+}
+p {
+  margin-bottom: 0px;
+}
+/*--------Add comments--------*/
+button {
+  margin: 0 auto;
+  display: block;
+}
+.disabled {
+  pointer-events: none;
+}
