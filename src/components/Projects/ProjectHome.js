@@ -36,9 +36,9 @@ class ProjectHome extends Component {
           <p>{this.description(project.description)}</p>
           <div>
             {
-              project.users.map((user) => {
+              project ? (project.users.map((user) => {
                 return <img src={user.image} style={imgStyle} alt="contributor-thumbnail" data-tip={`${user.firstname} ${user.lastname}`} key={user.username} />;
-              })
+              })) : <div />
             }
           </div>
           {project.effort_estimation === undefined ?
