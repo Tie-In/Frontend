@@ -1,12 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import { Row, Col, FormGroup, FormControl } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
 import FaBarChart from 'react-icons/lib/fa/bar-chart';
+import moment from 'moment';
 import * as apiHelper from '../../helpers/apiHelper';
-import * as projectActionsCreator from '../../actions/project-actions';
 
 class DashboardContainer extends Component {
   constructor(props) {
@@ -16,8 +15,12 @@ class DashboardContainer extends Component {
       sprints: this.props.project.sprints,
       currentSprint: this.props.project.sprints.slice(-1)[0],
       tasks: '',
+      startDate: this.getLocalDate(this.props.project.sprints.slice(-1)[0].start_date),
+      endDate: this.getLocalDate(this.props.project.sprints.slice(-1)[0].end_date),
     };
-    this.getDates = this.getDates.bind(this);
+    this.getDateSet = this.getDateSet.bind(this);
+    // console.log(this.state.project);
+    // console.log(this.state.currentSprint);
   }
 
   async componentWillMount() {
@@ -35,21 +38,33 @@ class DashboardContainer extends Component {
     }
   }
 
-  getDates() {
-    const date = new Date(this.state.currentSprint.start_date);
-    for (var i = 0; i < 7; i++) {
-      console.log(i);
+  getDateSet() {
+    // const start = moment(this.state.startDate).dayOfYear();
+    // const end = moment(this.state.endDate).dayOfYear();
+    // let day = end - start;
+    const labels = [];
+    if (!moment(this.state.endDate).isValid()) {
+      // const today = moment().dayOfYear();
+      // day = today - start;
     }
-    date.setDate(date.getDate() + 7);
-    console.log(date.getDate());
-    const dateMg = `${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()}`;
-    console.log(dateMg);
-    return ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    for (let i = 0; i < 5; i += 1) {
+      const newDate = moment(this.state.startDate).add(i, 'days');
+      labels.push(this.getLocalDate(newDate));
+    }
+    return labels;
+  }
+
+  getLocalDate(serverDate) {
+    if (serverDate === null) {
+      return '-';
+    }
+    const date = moment.utc(serverDate).local();
+    return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
   }
 
   render() {
     const data1 = {
-      labels: this.getDates(),
+      labels: this.getDateSet(),
       datasets: [{
         label: 'Sales',
         type: 'line',
@@ -176,6 +191,7 @@ class DashboardContainer extends Component {
     const h3 = {
       marginBottom: 0,
     };
+
     return (
       <DocumentTitle title={`${project.name}・Dashboard`}>
         <div>
@@ -192,8 +208,8 @@ class DashboardContainer extends Component {
           </Row>
           <hr className="header-line" />
           <p>Total estimated points: {this.state.currentSprint.sprint_points}</p>
-          <p>Start date: {this.state.currentSprint.start_date}</p>
-          <p>End date: {this.state.currentSprint.end_date}</p>
+          <p>Start date: {this.state.startDate}</p>
+          <p>End date: {this.state.endDate}</p>
           <Col xs={12} md={6} style={columnStyle}>
             <h4><FaBarChart /> Burndown Chart</h4>
             <Line data={data} options={options1} />
@@ -227,10 +243,4 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    projectActions: bindActionCreators(projectActionsCreator, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardContainer);
+export default connect(mapStateToProps)(DashboardContainer);
