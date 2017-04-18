@@ -9,20 +9,34 @@ import * as permissionActionsCreator from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class ProjectHome extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true,
+    };
+  }
 
   async componentWillMount() {
-    const { params, projectActions } = this.props;
+    const { params, projectActions, permissionActions, user } = this.props;
     try {
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
       projectActions.setProject(project);
+      const perLevel = project.project_contributes.find((x) => {
+        return x.user_id === user.id;
+      }).permission_level;
+      permissionActions.setProject(perLevel);
+      this.setState({ loading: false });
     } catch (err) {
       console.log(err);
     }
   }
+
   description(text) {
     return text;
   }
+
   render() {
     const { project } = this.props;
     const imgStyle = {
@@ -30,10 +44,12 @@ class ProjectHome extends Component {
     };
     return (
       <DocumentTitle title={`${project.name}`}>
+        { this.state.loading ? <div /> :
         <div className="tiein-container">
           <h3 className="header-label">{project.name}</h3>
           <hr className="header-line" />
           <p>{this.description(project.description)}</p>
+          <br />
           <div>
             {
               project.users ? (project.users.map((user) => {
@@ -47,6 +63,7 @@ class ProjectHome extends Component {
             </LinkContainer> : null
           }
         </div>
+        }
       </DocumentTitle>
     );
   }
@@ -68,6 +85,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     projectActions: bindActionCreators(projectActionsCreator, dispatch),
+    permissionActions: bindActionCreators(permissionActionsCreator, dispatch),
   };
 }
 

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
-import './navstyle.css';
 
 class SidebarNav extends Component {
+
   render() {
     const organizationNodes = this.props.organizations.map((org) => {
       return (

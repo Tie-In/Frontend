@@ -8,11 +8,6 @@ import logo from '../../images/logo.png';
 import './navstyle.css';
 
 class OrganizationNavbar extends Component {
-  logout() {
-    localStorage.clear();
-    document.location.href = '/login';
-  }
-
   render() {
     const { user, organization } = this.props;
     const path = `/organizations/${organization.id}`;
@@ -64,6 +59,7 @@ class OrganizationNavbar extends Component {
                       />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
+                      <MenuItem disabled>{user.username} ({user.email})</MenuItem>
                       <MenuItem eventKey="1" href={'/profile'}>Profile</MenuItem>
                       <MenuItem divider />
                       <MenuItem eventKey="2" onClick={this.logout}>Sign Out</MenuItem>
