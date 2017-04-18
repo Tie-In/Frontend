@@ -26,6 +26,9 @@ import {
   OrganizationSetting,
   ProjectSetting,
   DashboardContainer,
+  RetrospectiveContainer,
+  NewRetrospective,
+  Management,
 } from './components';
 import configureStore from './store/configure-store';
 
@@ -57,6 +60,9 @@ ReactDOM.render(
         <Route path="tasks/new" component={NewTask} />
         <Route path="setting" component={ProjectSetting} />
         <Route path="dashboard" component={DashboardContainer} />
+        <Route path="retrospective" component={RetrospectiveContainer} />
+        <Route path="retrospective/new" component={NewRetrospective} />
+        <Route path="retrospective/management" component={Management} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="register" component={Register} />
