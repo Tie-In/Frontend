@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Row, Col, Button, Panel, FormGroup, FormControl } from 'react-bootstrap';
-import update from 'immutability-helper';
 import * as projectActionsCreator from '../../actions/project-actions';
 import * as permissionActionsCreator from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
@@ -13,11 +12,16 @@ class RetrospectiveContainer extends Component {
     super(props);
     this.state = {
       sprints: this.props.project.sprints,
+      permission: this.props.permission.project,
+      project: this.props.project,
+      organization: this.props.organization,
       viewpoints: [],
+      hasRetro: false,
     };
 
     this.startRetro = this.startRetro.bind(this);
     this.handleSelectSprint = this.handleSelectSprint.bind(this);
+    this.hasRetro = this.hasRetro.bind(this);
   }
 
   async componentWillMount() {
@@ -30,22 +34,22 @@ class RetrospectiveContainer extends Component {
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
       projectActions.setProject(project);
-      
+
       const perLevel = project.project_contributes.find((x) => {
         return x.user_id === user.id;
       }).permission_level;
       permissionActions.setProject(perLevel);
+
+      console.log(this.state.viewpoints);
     } catch (err) {
       console.log(err);
     }
-    console.log(this.props.project);
+    this.hasRetro();
   }
 
   async startRetro() {
-    const { organization, project } = this.props;
-    const path = `/organizations/${organization.id}/projects/${project.id}`;
+    const path = `/organizations/${this.state.organization.id}/projects/${this.state.project.id}`;
     const latestSprint = this.state.sprints[this.state.sprints.length - 1];
-    console.log(latestSprint);
     try {
       const res = await apiHelper.post('/api/retrospectives', {
         retrospective: {
@@ -61,6 +65,7 @@ class RetrospectiveContainer extends Component {
 
   async handleSelectSprint(e) {
     const sprintSelected = this.state.sprints[Number(e.target.value) - 1];
+    this.hasRetro();
     try {
       const res = await apiHelper.get(`/api/retrospectives/${sprintSelected.retrospective.id}`);
       this.setState({ viewpoints: res.data.viewpoints });
@@ -70,9 +75,17 @@ class RetrospectiveContainer extends Component {
     }
   }
 
+  hasRetro() {
+    if(this.state.viewpoints.length > 0) {
+      this.setState({ hasRetro: true });
+    } else {
+      this.setState({ hasRetro: false });
+    }
+  }
+
   render() {
     const latestSprint = this.state.sprints[this.state.sprints.length - 1];
-    const selectSprint = this.state.sprints.map((sprint, index) => {
+    const selectSprint = this.state.sprints.map((sprint) => {
       if(sprint.number === this.state.sprints.length) {
         return (
           <option value={sprint.number} selected>{sprint.number}</option>
@@ -82,6 +95,20 @@ class RetrospectiveContainer extends Component {
         <option value={sprint.number}>{sprint.number}</option>
       );
     });
+
+    const startBtn = () => {
+      const path = `/organizations/${this.state.organization.id}/projects/${this.state.project.id}`;
+      if(this.state.permission === 'admin') {
+        if(this.state.hasRetro) {
+          return (<Button className="disabled">Start Retrospective</Button>);
+        }
+        return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
+      }
+      if(this.state.hasRetro) {
+        return (<Button href={`${path}/retrospective/new`}>Join</Button>);
+      }
+      return (<Button className="disabled">Join</Button>);
+    };
 
     return (
       <div className="tiein-container">
@@ -140,7 +167,7 @@ class RetrospectiveContainer extends Component {
               </Panel>
             </Col>
           </Row>
-          <div id="startBtn"><Button onClick={this.startRetro}>Start Retrospective</Button></div>
+          <div id="startBtn">{startBtn()}</div>
         </Row>
       </div>
     );
@@ -150,12 +177,14 @@ class RetrospectiveContainer extends Component {
 RetrospectiveContainer.propTypes = {
   organization: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
+  permission: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     organization: state.organization,
     project: state.project,
+    permission: state.permission,
   };
 }
 
