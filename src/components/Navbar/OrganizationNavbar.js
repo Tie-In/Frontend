@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Dropdown, MenuItem, Glyphicon } from 'react-bootstrap';
 import SidebarNav from './SidebarNav';
+import DropdownUser from './DropdownUser';
 import 'simple-line-icons/css/simple-line-icons.css';
 import logo from '../../images/logo.png';
 import './navstyle.css';
@@ -51,20 +52,7 @@ class OrganizationNavbar extends Component {
                     </a>
                   </li>
                   {menuNode}
-                  <Dropdown className="pull-right" id="profile-dropdown" style={{ width: 75 }}>
-                    <Dropdown.Toggle>
-                      <img
-                        id="avatar" role="presentation"
-                        src={user.image}
-                      />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <MenuItem disabled>{user.username} ({user.email})</MenuItem>
-                      <MenuItem eventKey="1" href={'/profile'}>Profile</MenuItem>
-                      <MenuItem divider />
-                      <MenuItem eventKey="2" onClick={this.logout}>Sign Out</MenuItem>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  <DropdownUser user={user} />
                 </ul>
               </div>
             </div>
