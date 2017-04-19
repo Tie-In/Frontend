@@ -16,8 +16,6 @@ class DashboardContainer extends Component {
       sprints: this.props.project.sprints,
       currentSprint: this.props.project.sprints.slice(-1)[0],
       tasks: [],
-      // startDate: this.getLocalDate(this.props.project.sprints.slice(-1)[0].start_date),
-      // endDate: this.getLocalDate(this.props.project.sprints.slice(-1)[0].end_date),
     };
   }
 
