@@ -208,7 +208,7 @@ class ProjectSetting extends Component {
         <Form>
           <Row>
             <Col xs={12}>
-              <Nav bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
+              <Nav className="setting-tabs" bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
                 <NavItem eventKey={1}><Glyphicon glyph="info-sign" /> Information</NavItem>
                 <NavItem eventKey={2}><Glyphicon glyph="user" /> Contributors</NavItem>
                 <NavItem eventKey={3}><Glyphicon glyph="th-list" /> Task status</NavItem>

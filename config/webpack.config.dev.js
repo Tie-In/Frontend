@@ -12,14 +12,14 @@ module.exports = {
     require.resolve('webpack/hot/dev-server'),
     require.resolve('./polyfills'),
     path.join(paths.appSrc, 'index'),
-    path.join(paths.appSrc, 'style/global.css')
+    path.join(paths.appSrc, 'style/global.css'),
   ],
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:
     path: paths.appBuild,
     pathinfo: true,
     filename: 'static/js/bundle.js',
-    publicPath: '/'
+    publicPath: '/',
   },
   resolve: {
     extensions: ['', '.js', '.json'],
@@ -35,33 +35,33 @@ module.exports = {
       'babel-runtime/regenerator': require.resolve('babel-runtime/regenerator')
     }
   },
-  resolveLoader: {
-    root: paths.ownNodeModules,
-    moduleTemplates: ['*-loader']
-  },
   module: {
     loaders: [
       {
         test: /\.js$/,
         include: paths.appSrc,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: /node_modules/,
         query: require('./babel.dev'),
       },
       {
         test: /\.css$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'style!css!postcss',
+        loaders: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+        ]
       },
       {
         test: /\.json$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'json',
+        loader: 'json-loader',
       },
       {
         test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'file',
+        loader: 'file-loader',
         query: {
           name: 'static/media/[name].[ext]',
         },
