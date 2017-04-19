@@ -83,7 +83,6 @@ class Login extends Component {
 
   render() {
     const { error } = this.state;
-
     // first priority css
     const registerButton = {
       background: 'transparent',
@@ -96,7 +95,7 @@ class Login extends Component {
     };
 
     return (
-      <div className="login-container" >
+      <div className="loginBox" >
         <div style={{ marginBottom: 50 }}>
           <img className="logo" src={logo} alt="logo" />
         </div>

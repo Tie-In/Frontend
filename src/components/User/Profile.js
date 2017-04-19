@@ -71,7 +71,7 @@ class Profile extends Component {
           <hr className="header-line" />
           <Row>
             <Col xs={12}>
-              <Nav bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
+              <Nav className="setting-tabs" bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
                 <NavItem eventKey={1}><Glyphicon glyph="user" /> Profile</NavItem>
                 <NavItem eventKey={2}><Glyphicon glyph="lock" /> Password</NavItem>
               </Nav>

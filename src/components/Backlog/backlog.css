@@ -5,12 +5,10 @@
   transform: translate(50%);
   position: absolute;
 }
-h4 {
+.backlog-title {
   color: #A25E5D;
 }
-hr {
-  border-color: black;
-}
+
 span #addButton, span #removeButton {
   padding: 0px;
   color: #A25E5D;

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  Grid, Col, Row, Form,
-  Nav, NavItem,
+  Col, Row,
+  Nav, NavItem, Glyphicon,
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -102,9 +102,9 @@ class OrganizationSetting extends Component {
         <form>
           <Row>
             <Col xs={12}>
-              <Nav bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
-                <NavItem eventKey={1}>Information</NavItem>
-                <NavItem eventKey={2}>Contributors</NavItem>
+              <Nav className="setting-tabs" bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
+                <NavItem eventKey={1}><Glyphicon glyph="info-sign" /> Information</NavItem>
+                <NavItem eventKey={2}><Glyphicon glyph="user" /> Contributors</NavItem>
               </Nav>
             </Col>
           </Row>

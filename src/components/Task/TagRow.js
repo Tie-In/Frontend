@@ -4,7 +4,6 @@ import {
   FormGroup, ControlLabel, Glyphicon, Label, Dropdown, FormControl,
 } from 'react-bootstrap';
 import Autosuggest from 'react-autosuggest';
-import update from 'react-addons-update';
 import WrapperColorpicker from './WrapperColorpicker';
 import * as apiHelper from '../../helpers/apiHelper';
 import '../../style/autosuggestStyle.css';
@@ -34,10 +33,6 @@ function renderSuggestion(suggestion) {
     </span>
   );
 }
-
-Array.prototype.diff = function(a) {
-  return this.filter((i) => {return a.indexOf(i) < 0;});
-};
 
 class TagRow extends Component {
   constructor(props) {
@@ -107,14 +102,16 @@ class TagRow extends Component {
   }
 
   getSuggestions(value) {
-    console.log(this.state.data);
     const inputValue = escapeRegexCharacters(value.trim().toLowerCase());
+    const onlyId = this.state.selected.map((s) => { return s.id; });
+    const availableUsers = this.props.data.filter((data) => {
+      return onlyId.indexOf(data.id) < 0;
+    });
     if (value === '') {
-      return this.state.data.diff(this.state.selected);
+      return availableUsers;
     }
-    const availableUsers = this.state.data.diff(this.state.selected);
-    const regex = new RegExp('\\b' + inputValue, 'i');
-    return availableUsers.filter(person => regex.test(getSuggestionValue(person)));
+    const regex = new RegExp(`\\b${inputValue}`, 'i');
+    return availableUsers.filter((person) => { return regex.test(getSuggestionValue(person)); });
   }
 
   removeContributor(con) {
@@ -122,7 +119,7 @@ class TagRow extends Component {
     tempSelected.splice(tempSelected.indexOf(con), 1);
 
     const tempResult = this.state.result;
-    tempResult.splice(tempResult.indexOf({ id: con.id }), 1);
+    tempResult.splice(tempResult.indexOf(tempResult.find((a) => { return a.id === con.id; })), 1);
 
     this.setState({
       selected: tempSelected,
@@ -238,7 +235,7 @@ class TagRow extends Component {
           </FormGroup>
         </Col>
         <Col xs={4} md={2}>
-          <Dropdown open={openDropdown} dropup>
+          <Dropdown id="NewTagInNewTasl" defaultOpen={openDropdown} dropup>
             <div bsRole="toggle">
               <Button
                 onClick={this.toggleDropdown}
