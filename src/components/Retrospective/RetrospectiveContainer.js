@@ -16,14 +16,12 @@ class RetrospectiveContainer extends Component {
       project: this.props.project,
       organization: this.props.organization,
       viewpoints: [],
-      hasGBT: false,
       selectedIndex: this.props.project.sprints.length - 1,
       selectedSprint: this.props.project.sprints[this.props.project.sprints.length - 1],
     };
 
     this.startRetro = this.startRetro.bind(this);
     this.handleSelectSprint = this.handleSelectSprint.bind(this);
-    this.hasGBT = this.hasGBT.bind(this);
   }
 
   async componentWillMount() {
@@ -40,7 +38,6 @@ class RetrospectiveContainer extends Component {
     } catch (err) {
       console.log(err);
     }
-    this.hasGBT();
   }
 
   async startRetro() {
@@ -64,24 +61,16 @@ class RetrospectiveContainer extends Component {
 
     try {
       const res = await apiHelper.get(`/api/retrospectives/${tempSprint.retrospective.id}`);
-      this.setState({
-        viewpoints: res.data.viewpoints,
-        selectedIndex: tempIndex,
-        selectedSprint: tempSprint,
-      });
-      this.hasGBT();
+      this.setState({ viewpoints: res.data.viewpoints });
       console.log(this.state.viewpoints);
     } catch (err) {
+      this.setState({ viewpoints: err.response });
       console.log(err.response);
     }
-  }
-
-  hasGBT() {
-    if(this.state.viewpoints.length > 0) {
-      this.setState({ hasGBT: true });
-    } else {
-      this.setState({ hasGBT: false });
-    }
+    this.setState({
+      selectedIndex: tempIndex,
+      selectedSprint: tempSprint,
+    });
   }
 
   render() {
@@ -103,25 +92,26 @@ class RetrospectiveContainer extends Component {
         if(!this.state.selectedSprint.is_ended) {
             return (<Button className="disabled">Start Retrospective</Button>);
         }
-        else if(this.state.hasGBT) {
+        else if(this.state.viewpoints) {
           return (<Button href={`${path}/retrospective/management`}>Manage</Button>);
         }
         return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
       }
-      if(!this.state.hasGBT && this.state.selectedSprint.is_ended) {
+      if(!this.state.viewpoints && this.state.selectedSprint.is_ended) {
         return (<Button href={`${path}/retrospective/new`}>Join</Button>);
       }
       return (<Button className="disabled">Join</Button>);
     };
 
     const comments = (kind) => {
-      return this.state.viewpoints.map((data) => {
-        if(this.state.viewpoints && data.kind === kind) {
-          return (<li>{data.comment}</li>);
-        }
-        return (<div />);
-      });
-    };
+      if(this.state.viewpoints) {
+        return this.state.viewpoints.map((data) => {
+          if(this.state.viewpoints && data.kind === kind) {
+            return (<li>{data.comment}</li>);
+          }
+        });
+      }
+    }
 
     return (
       <div className="tiein-container">
