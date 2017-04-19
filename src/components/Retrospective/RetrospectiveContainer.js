@@ -92,15 +92,16 @@ class RetrospectiveContainer extends Component {
         if(!this.state.selectedSprint.is_ended) {
             return (<Button className="disabled">Start Retrospective</Button>);
         }
-        else if(this.state.viewpoints) {
+        else if(!this.state.viewpoints) {
+          return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
+        }
+        else if (this.state.selectedSprint === latestSprint) {
           return (<Button href={`${path}/retrospective/management`}>Manage</Button>);
         }
-        return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
       }
       if(!this.state.viewpoints && this.state.selectedSprint.is_ended) {
         return (<Button href={`${path}/retrospective/new`}>Join</Button>);
       }
-      return (<Button className="disabled">Join</Button>);
     };
 
     const comments = (kind) => {
