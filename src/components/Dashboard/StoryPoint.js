@@ -13,17 +13,20 @@ class StoryPoint extends Component {
 
   getXLable() {
     const labels = [];
+    // const td = this.getLocalDate(moment());
     const startDate = this.getLocalDate(this.props.sprint.start_date);
-    // const endDate = this.getLocalDate(this.props.sprint.end_date);
-    // const start = moment(startDate).dayOfYear();
-    // const end = moment(endDate).dayOfYear();
-    // let day = end - start;
-    // if (!moment(this.endDate).isValid()) {
-    //   const today = moment().dayOfYear();
-    //   day = today - start;
-    // }
-    // for (let i = 0; i < day; i += 1) {
-    for (let i = 0; i < 5; i += 1) {
+    const endDate = this.getLocalDate(this.props.sprint.end_date);
+    const start = moment(startDate).dayOfYear();
+    let day = 0;
+    if (!moment(endDate).isValid()) {
+      const today = moment().dayOfYear();
+      day = today - start;
+    } else {
+      const end = moment(endDate).dayOfYear();
+      day = end - start;
+    }
+    for (let i = 0; i < day; i += 1) {
+    // for (let i = 0; i < 5; i += 1) {
       const newDate = moment(startDate).add(i, 'days');
       labels.push(this.getLocalDate(newDate));
     }
@@ -39,6 +42,8 @@ class StoryPoint extends Component {
   }
 
   render() {
+    console.log(this.props.tasks);
+    console.log(this.props.sprint);
     const data1 = {
       labels: this.getXLable(),
       datasets: [{
