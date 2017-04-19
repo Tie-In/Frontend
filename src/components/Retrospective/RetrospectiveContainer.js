@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Row, Col, Button, Panel, FormGroup, FormControl } from 'react-bootstrap';
+import DocumentTitle from 'react-document-title';
 import * as projectActionsCreator from '../../actions/project-actions';
 import * as permissionActionsCreator from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
@@ -91,13 +92,13 @@ class RetrospectiveContainer extends Component {
       if (this.state.permission === 'admin') {
         if (!this.state.selectedSprint.is_ended) {
           return (<Button className="disabled">Start Retrospective</Button>);
-        } else if (this.state.viewpoints.length === 0) {
+        } else if (this.state.viewpoints === undefined) {
           return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
         } else if (this.state.selectedSprint === latestSprint) {
           return (<Button href={`${path}/retrospective/management`}>Manage</Button>);
         }
       }
-      if (this.state.viewpoints.length === 0 && this.state.selectedSprint.is_ended) {
+      if (this.state.viewpoints === undefined && this.state.selectedSprint.is_ended) {
         return (<Button href={`${path}/retrospective/new`}>Join</Button>);
       }
     };
@@ -113,47 +114,49 @@ class RetrospectiveContainer extends Component {
     };
 
     return (
-      <div className="tiein-container">
-        <Row>
-          <h3 className="header-label">Retrospective</h3>
-          <hr className="header-line" />
+      <DocumentTitle title={`${this.props.project.name}・Retrospective`}>
+        <div className="tiein-container">
           <Row>
-            <Col md={2}>
-              <FormGroup id="selectSprint">
-                <FormControl
-                  componentClass="select"
-                  onChange={this.handleSelectSprint}
-                >
-                  <option value="">Select sprint</option>
-                  {selectSprint}
-                </FormControl>
-              </FormGroup>
-            </Col>
-            <Col md={4}>
-              <p>Latest retrospective: {latestSprint.number - 1}</p>
-              <p>Current sprint: {latestSprint.number}</p>
-            </Col>
+            <h3 className="header-label">Retrospective</h3>
+            <hr className="header-line" />
+            <Row>
+              <Col md={2}>
+                <FormGroup id="selectSprint">
+                  <FormControl
+                    componentClass="select"
+                    onChange={this.handleSelectSprint}
+                  >
+                    <option value="">Select sprint</option>
+                    {selectSprint}
+                  </FormControl>
+                </FormGroup>
+              </Col>
+              <Col md={4}>
+                <p>Latest retrospective: {latestSprint.number - 1}</p>
+                <p>Current sprint: {latestSprint.number}</p>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={4}>
+                <Panel header="Good">
+                  {comments('good')}
+                </Panel>
+              </Col>
+              <Col md={4}>
+                <Panel header="Bad">
+                  {comments('bad')}
+                </Panel>
+              </Col>
+              <Col md={4}>
+                <Panel header="Try">
+                  {comments('try')}
+                </Panel>
+              </Col>
+            </Row>
+            <div id="startBtn">{startBtn()}</div>
           </Row>
-          <Row>
-            <Col md={4}>
-              <Panel header="Good">
-                {comments('good')}
-              </Panel>
-            </Col>
-            <Col md={4}>
-              <Panel header="Bad">
-                {comments('bad')}
-              </Panel>
-            </Col>
-            <Col md={4}>
-              <Panel header="Try">
-                {comments('try')}
-              </Panel>
-            </Col>
-          </Row>
-          <div id="startBtn">{startBtn()}</div>
-        </Row>
-      </div>
+        </div>
+      </DocumentTitle>
     );
   }
 }

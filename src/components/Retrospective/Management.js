@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import DocumentTitle from 'react-document-title';
 import Category from './Category';
 import * as projectActionsCreator from '../../actions/project-actions';
 import * as permissionActionsCreator from '../../actions/permission-actions';
@@ -50,31 +51,33 @@ class Management extends Component {
     };
 
     return (
-      <div className="tiein-container">
-        <h3 className="header-label">Retrospective management</h3>
-        <hr className="header-line" />
+      <DocumentTitle title={`${this.props.project.name}・Retrospective`}>
+        <div className="tiein-container">
+          <h3 className="header-label">Retrospective management</h3>
+          <hr className="header-line" />
 
-        <Row>
-          <Col sm={12}>
-            <h4>Good</h4>
-            {comments('good')}
-          </Col>
-        </Row>
+          <Row>
+            <Col sm={12}>
+              <h4 className="header-label">Good</h4>
+              {comments('good')}
+            </Col>
+          </Row>
 
-        <Row>
-          <Col sm={12}>
-            <h4>Bad</h4>
-            {comments('bad')}
-          </Col>
-        </Row>
+          <Row>
+            <Col sm={12}>
+              <h4 className="header-label">Bad</h4>
+              {comments('bad')}
+            </Col>
+          </Row>
 
-        <Row>
-          <Col sm={12}>
-            <h4>Try</h4>
-            {comments('try')}
-          </Col>
-        </Row>
-      </div>
+          <Row>
+            <Col sm={12}>
+              <h4 className="header-label">Try</h4>
+              {comments('try')}
+            </Col>
+          </Row>
+        </div>
+      </DocumentTitle>
     );
   }
 }

@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Row, Col, Button, FormGroup, FormControl, Form } from 'react-bootstrap';
+import { Row, Col, Button, FormGroup, FormControl } from 'react-bootstrap';
 import linkState from 'react-link-state';
+import DocumentTitle from 'react-document-title';
 import List from './List';
 import * as projectActionsCreator from '../../actions/project-actions';
 import * as permissionActionsCreator from '../../actions/permission-actions';
@@ -96,52 +97,54 @@ class NewRetrospective extends Component {
     };
 
     return (
-      <div className="tiein-container">
-        <h3 className="header-label">Add new comment</h3>
-        <hr className="header-line" />
-        <form onSubmit={this.doSomething}>
-          <Row>
-            <Col sm={8}>
-              <FormGroup validationState={this.state.error ? 'error' : null}>
-                <FormControl
-                  id="nameField"
-                  placeholder="Add comment"
-                  valueLink={linkState(this, 'input.comment')}
-                />
-              </FormGroup>
-            </Col>
-            <Col sm={2}>
-              <FormGroup>
-                <FormControl
-                  componentClass="select"
-                  valueLink={linkState(this, 'input.kind')}
-                >
-                  <option value="">Select Type</option>
-                  <option value="good">Good</option>
-                  <option value="bad">Bad</option>
-                  <option value="try">Try</option>
-                </FormControl>
-              </FormGroup>
-            </Col>
-            <Col sm={2}>
-              <FormGroup>
-                <Button id="addBtn" onClick={this.addComment} type="submit" block>Add</Button>
-              </FormGroup>
-            </Col>
-          </Row>
-        </form>
-        {this.state.comments.map((data) => {
-          const index = this.state.comments.indexOf(data);
-          return (<List
-            key={index}
-            comment={data.comment} index={index}
-            kind={data.kind}
-            remove={this.removeComment}
-          />);
-        })}
+      <DocumentTitle title={`${this.props.project.name}・Retrospective`}>
+        <div className="tiein-container">
+          <h3 className="header-label">Add new comment</h3>
+          <hr className="header-line" />
+          <form onSubmit={this.doSomething}>
+            <Row>
+              <Col sm={8}>
+                <FormGroup validationState={this.state.error ? 'error' : null}>
+                  <FormControl
+                    id="nameField"
+                    placeholder="Add comment"
+                    valueLink={linkState(this, 'input.comment')}
+                  />
+                </FormGroup>
+              </Col>
+              <Col sm={2}>
+                <FormGroup>
+                  <FormControl
+                    componentClass="select"
+                    valueLink={linkState(this, 'input.kind')}
+                  >
+                    <option value="">Select Type</option>
+                    <option value="good">Good</option>
+                    <option value="bad">Bad</option>
+                    <option value="try">Try</option>
+                  </FormControl>
+                </FormGroup>
+              </Col>
+              <Col sm={2}>
+                <FormGroup>
+                  <Button id="addBtn" onClick={this.addComment} type="submit" block>Add</Button>
+                </FormGroup>
+              </Col>
+            </Row>
+          </form>
+          {this.state.comments.map((data) => {
+            const index = this.state.comments.indexOf(data);
+            return (<List
+              key={index}
+              comment={data.comment} index={index}
+              kind={data.kind}
+              remove={this.removeComment}
+            />);
+          })}
 
-        <div id="submitBtn">{submitButton()}</div>
-      </div>
+          <div id="submitBtn">{submitButton()}</div>
+        </div>
+      </DocumentTitle>
     );
   }
 }

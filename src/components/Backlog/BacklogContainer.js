@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import 'simple-line-icons/css/simple-line-icons.css';
 import update from 'immutability-helper';
+import DocumentTitle from 'react-document-title';
 import CurrentSprint from './CurrentSprint';
 import EditTaskModal from './EditTaskModal';
 import PointEstimationModal from './PointEstimationModal';
@@ -229,42 +230,44 @@ class BacklogContainer extends Component {
 
     return (
       this.state.loading ? <div /> :
-      <div>
-        <div className="tiein-container">
-          { project.current_sprint_id !== null ?
-            <div>
-              <CurrentSprint reloadPage={this.reloadPage} project={project} />
-              <br />
-            </div> : <div />
-          }
-          <Row>
-            <Col sm={8}>
-              <h3 className="header-label">Backlog</h3>
-              <hr className="header-line" />
-              <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
-            </Col>
-            <Col sm={4}>
-              <h3 className="header-label">New sprint:</h3>
-              <hr className="header-line" />
-              <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
-              <div id="nextButton">{nextButton()}</div>
-            </Col>
-          </Row>
+      <DocumentTitle title={`${this.props.project.name}・Backlog`}>
+        <div>
+          <div className="tiein-container">
+            { project.current_sprint_id !== null ?
+              <div>
+                <CurrentSprint reloadPage={this.reloadPage} project={project} />
+                <br />
+              </div> : <div />
+            }
+            <Row>
+              <Col sm={8}>
+                <h3 className="header-label">Backlog</h3>
+                <hr className="header-line" />
+                <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
+              </Col>
+              <Col sm={4}>
+                <h3 className="header-label">New sprint:</h3>
+                <hr className="header-line" />
+                <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
+                <div id="nextButton">{nextButton()}</div>
+              </Col>
+            </Row>
+          </div>
+          <EditTaskModal
+            task={this.state.task}
+            show={this.state.showEditTask}
+            setUpdatedTask={this.setUpdatedTask}
+            close={this.closeEditTaskModal}
+            project={this.props.project}
+          />
+          <PointEstimationModal
+            show={this.state.showPointEstimation}
+            close={this.closePointEstimationModal}
+            tasks={this.state.sprintTasks}
+            setSprintTasks={this.setSprintTasks}
+          />
         </div>
-        <EditTaskModal
-          task={this.state.task}
-          show={this.state.showEditTask}
-          setUpdatedTask={this.setUpdatedTask}
-          close={this.closeEditTaskModal}
-          project={this.props.project}
-        />
-        <PointEstimationModal
-          show={this.state.showPointEstimation}
-          close={this.closePointEstimationModal}
-          tasks={this.state.sprintTasks}
-          setSprintTasks={this.setSprintTasks}
-        />
-      </div>
+      </DocumentTitle>
     );
   }
 }
