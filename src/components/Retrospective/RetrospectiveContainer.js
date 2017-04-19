@@ -87,12 +87,15 @@ class RetrospectiveContainer extends Component {
     });
 
     const startBtn = () => {
+      console.log(latestSprint);
+      console.log(this.state.selectedSprint);
+      console.log(this.state.viewpoints);
       const path = `/organizations/${this.state.organization.id}/projects/${this.state.project.id}`;
       if(this.state.permission === 'admin') {
         if(!this.state.selectedSprint.is_ended) {
             return (<Button className="disabled">Start Retrospective</Button>);
         }
-        else if(!this.state.viewpoints) {
+        else if(this.state.viewpoints.length === 0) {
           return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
         }
         else if (this.state.selectedSprint === latestSprint) {
