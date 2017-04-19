@@ -39,7 +39,7 @@ class DashboardContainer extends Component {
       return '-';
     }
     const date = moment.utc(serverDate).local();
-    return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
+    return `${moment(date).get('year')}-${moment(date).get('month') + 1}-${moment(date).get('date')}`;
   }
 
   render() {

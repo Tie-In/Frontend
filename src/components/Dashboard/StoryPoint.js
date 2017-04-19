@@ -6,34 +6,34 @@ import moment from 'moment';
 class StoryPoint extends Component {
   constructor(props) {
     super(props);
-    this.getXLable = this.getXLable.bind(this);
+    this.day = this.calAmountOfDay();
+    // this.genXLable = this.genXLable.bind(this);
+    // this.calAmountOfDay = this.calAmountOfDay.bind(this);
+    // this.calTotalPoint = this.calTotalPoint.bind(this);
   }
-  // tasks = this.props.tasks;
-  // sprint = this.props.sprint;
 
-  getXLable() {
-    const labels = [];
-    // const td = this.getLocalDate(moment());
-    const startDate = this.getLocalDate(this.props.sprint.start_date);
-    const endDate = this.getLocalDate(this.props.sprint.end_date);
-    const start = moment(startDate).dayOfYear();
+  startSprint() {
+    return this.convertToLocalDate(this.props.sprint.start_date);
+  }
+
+  endSprint() {
+    return this.convertToLocalDate(this.props.sprint.end_date);
+  }
+
+  calAmountOfDay() {
+    const start = moment(this.startSprint()).dayOfYear();
     let day = 0;
-    if (!moment(endDate).isValid()) {
+    if (!moment(this.endSprint()).isValid()) {
       const today = moment().dayOfYear();
       day = today - start;
     } else {
-      const end = moment(endDate).dayOfYear();
+      const end = moment(this.endSprint()).dayOfYear();
       day = end - start;
     }
-    for (let i = 0; i < day; i += 1) {
-    // for (let i = 0; i < 5; i += 1) {
-      const newDate = moment(startDate).add(i, 'days');
-      labels.push(this.getLocalDate(newDate));
-    }
-    return labels;
+    return day;
   }
 
-  getLocalDate(serverDate) {
+  convertToLocalDate(serverDate) {
     if (serverDate === null) {
       return '-';
     }
@@ -41,15 +41,41 @@ class StoryPoint extends Component {
     return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
   }
 
+  genXLable() {
+    const labels = [];
+    console.log(this.day);
+    for (let i = 0; i < this.day; i += 1) {
+    // for (let i = 0; i < 5; i += 1) {
+      const newDate = moment(this.startSprint()).add(i, 'days');
+      labels.push(this.convertToLocalDate(newDate));
+    }
+    return labels;
+  }
+
+  calTotalPoint() {
+    let point = 0;
+    if (this.props.tasks[0]) {
+      for (let i = 0; i < this.props.tasks.length; i += 1) {
+        point += this.props.tasks[i].story_point;
+      }
+    }
+    return point;
+  }
+
+  genExpectedData() {
+    // console.log(this.state.numberOfDay);
+    return [this.calTotalPoint(), 65, 40, 49, 60, 37, 0];
+  }
+
   render() {
-    console.log(this.props.tasks);
-    console.log(this.props.sprint);
+    // console.log(this.props.tasks);
+    // console.log(this.props.sprint);
     const data1 = {
-      labels: this.getXLable(),
+      labels: this.genXLable(),
       datasets: [{
         label: 'Sales',
         type: 'line',
-        data: [51, 65, 40, 49, 60, 37, 40],
+        data: this.genExpectedData(),
         fill: false,
         borderColor: '#EC932F',
         backgroundColor: '#EC932F',
