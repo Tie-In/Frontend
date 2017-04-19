@@ -45,6 +45,7 @@ class DashboardContainer extends Component {
   }
 
   render() {
+    // console.log(this.state.tasks);
     const options1 = {
       // responsive: true,
       tooltips: {

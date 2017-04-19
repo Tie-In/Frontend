@@ -6,26 +6,25 @@ import moment from 'moment';
 class StoryPoint extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      tasks: this.props.tasks,
-      sprint: this.props.sprint,
-    };
-    this.getDateSet = this.getDateSet.bind(this);
-    this.startDate = this.getLocalDate(this.state.sprint.start_date);
-    this.endDate = this.getLocalDate(this.state.sprint.end_date);
+    this.getXLable = this.getXLable.bind(this);
   }
+  // tasks = this.props.tasks;
+  // sprint = this.props.sprint;
 
-  getDateSet() {
-    // const start = moment(this.state.startDate).dayOfYear();
-    // const end = moment(this.state.endDate).dayOfYear();
-    // let day = end - start;
+  getXLable() {
     const labels = [];
-    if (!moment(this.endDate).isValid()) {
-      // const today = moment().dayOfYear();
-      // day = today - start;
-    }
+    const startDate = this.getLocalDate(this.props.sprint.start_date);
+    // const endDate = this.getLocalDate(this.props.sprint.end_date);
+    // const start = moment(startDate).dayOfYear();
+    // const end = moment(endDate).dayOfYear();
+    // let day = end - start;
+    // if (!moment(this.endDate).isValid()) {
+    //   const today = moment().dayOfYear();
+    //   day = today - start;
+    // }
+    // for (let i = 0; i < day; i += 1) {
     for (let i = 0; i < 5; i += 1) {
-      const newDate = moment(this.startDate).add(i, 'days');
+      const newDate = moment(startDate).add(i, 'days');
       labels.push(this.getLocalDate(newDate));
     }
     return labels;
@@ -41,7 +40,7 @@ class StoryPoint extends Component {
 
   render() {
     const data1 = {
-      labels: this.getDateSet(),
+      labels: this.getXLable(),
       datasets: [{
         label: 'Sales',
         type: 'line',
