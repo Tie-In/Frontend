@@ -7,7 +7,7 @@ import List from './List';
 import * as projectActionsCreator from '../../actions/project-actions';
 import * as permissionActionsCreator from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
-import './retrospective.css'
+import './retrospective.css';
 
 class NewRetrospective extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ class NewRetrospective extends Component {
   }
 
   async componentWillMount() {
-    const { params, user, permissionActions, projectActions } = this.props;
+    const { params, projectActions } = this.props;
     try {
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;

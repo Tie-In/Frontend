@@ -5,7 +5,7 @@ import { Row, Col, Button, Panel, FormGroup, FormControl } from 'react-bootstrap
 import * as projectActionsCreator from '../../actions/project-actions';
 import * as permissionActionsCreator from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
-import './retrospective.css'
+import './retrospective.css';
 
 class RetrospectiveContainer extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class RetrospectiveContainer extends Component {
   }
 
   async componentWillMount() {
-    const { params, user, permissionActions, projectActions } = this.props;
+    const { params, projectActions } = this.props;
     try {
       const res = await apiHelper.get(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`);
       this.setState({ viewpoints: res.data.viewpoints });
@@ -46,7 +46,7 @@ class RetrospectiveContainer extends Component {
       const res = await apiHelper.post('/api/retrospectives', {
         retrospective: {
           sprint_id: this.state.selectedSprint.id,
-        }
+        },
       });
       console.log(res);
     } catch (err) {
@@ -76,7 +76,7 @@ class RetrospectiveContainer extends Component {
   render() {
     const latestSprint = this.state.sprints[this.state.sprints.length - 1];
     const selectSprint = this.state.sprints.map((sprint) => {
-      if(sprint.number === this.state.sprints.length) {
+      if (sprint.number === this.state.sprints.length) {
         return (
           <option value={sprint.number} selected>{sprint.number}</option>
         );
@@ -87,35 +87,30 @@ class RetrospectiveContainer extends Component {
     });
 
     const startBtn = () => {
-      console.log(latestSprint);
-      console.log(this.state.selectedSprint);
-      console.log(this.state.viewpoints);
       const path = `/organizations/${this.state.organization.id}/projects/${this.state.project.id}`;
-      if(this.state.permission === 'admin') {
-        if(!this.state.selectedSprint.is_ended) {
-            return (<Button className="disabled">Start Retrospective</Button>);
-        }
-        else if(this.state.viewpoints.length === 0) {
+      if (this.state.permission === 'admin') {
+        if (!this.state.selectedSprint.is_ended) {
+          return (<Button className="disabled">Start Retrospective</Button>);
+        } else if (this.state.viewpoints.length === 0) {
           return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
-        }
-        else if (this.state.selectedSprint === latestSprint) {
+        } else if (this.state.selectedSprint === latestSprint) {
           return (<Button href={`${path}/retrospective/management`}>Manage</Button>);
         }
       }
-      if(!this.state.viewpoints && this.state.selectedSprint.is_ended) {
+      if (this.state.viewpoints.length === 0 && this.state.selectedSprint.is_ended) {
         return (<Button href={`${path}/retrospective/new`}>Join</Button>);
       }
     };
 
     const comments = (kind) => {
-      if(this.state.viewpoints) {
+      if (this.state.viewpoints) {
         return this.state.viewpoints.map((data) => {
-          if(this.state.viewpoints && data.kind === kind) {
+          if (this.state.viewpoints && data.kind === kind) {
             return (<li>{data.comment}</li>);
           }
         });
       }
-    }
+    };
 
     return (
       <div className="tiein-container">
