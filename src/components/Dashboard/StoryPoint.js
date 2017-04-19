@@ -6,7 +6,7 @@ import moment from 'moment';
 class StoryPoint extends Component {
   constructor(props) {
     super(props);
-    this.day = this.calAmountOfDay();
+    // this.day = this.calAmountOfDay();
     // this.genXLable = this.genXLable.bind(this);
     // this.calAmountOfDay = this.calAmountOfDay.bind(this);
     // this.calTotalPoint = this.calTotalPoint.bind(this);
@@ -43,8 +43,7 @@ class StoryPoint extends Component {
 
   genXLable() {
     const labels = [];
-    console.log(this.day);
-    for (let i = 0; i < this.day; i += 1) {
+    for (let i = 0; i < this.calAmountOfDay(); i += 1) {
     // for (let i = 0; i < 5; i += 1) {
       const newDate = moment(this.startSprint()).add(i, 'days');
       labels.push(this.convertToLocalDate(newDate));
@@ -63,13 +62,18 @@ class StoryPoint extends Component {
   }
 
   genExpectedData() {
-    // console.log(this.state.numberOfDay);
-    return [this.calTotalPoint(), 65, 40, 49, 60, 37, 0];
+    const expectecData = [];
+    const sprintDuration = this.props.project.sprint_duration * 7;
+    const totalPoint = this.calTotalPoint();
+    const gradient = totalPoint / sprintDuration;
+    for (let i = 0; i < this.calAmountOfDay(); i += 1) {
+      expectecData.push(totalPoint - (gradient * i));
+    }
+    // return [this.calTotalPoint(), 65, 40, 49, 60, 37, 0];
+    return expectecData;
   }
 
   render() {
-    // console.log(this.props.tasks);
-    // console.log(this.props.sprint);
     const data1 = {
       labels: this.genXLable(),
       datasets: [{
@@ -88,7 +92,7 @@ class StoryPoint extends Component {
       {
         type: 'line',
         label: 'Visitor',
-        data: [200, 185, 590, 621, 250, 400, 95],
+        data: [20, 18, 5, 6, 5, 4, 9],
         fill: false,
         backgroundColor: '#71B37C',
         borderColor: '#71B37C',
@@ -148,6 +152,7 @@ class StoryPoint extends Component {
 StoryPoint.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   sprint: PropTypes.object.isRequired,
+  project: PropTypes.object.isRequired,
 };
 
 export default StoryPoint;
