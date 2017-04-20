@@ -97,7 +97,7 @@ class StoryPoint extends Component {
     const data1 = {
       labels: this.genXLable(),
       datasets: [{
-        label: 'Sales',
+        label: 'Expected',
         type: 'line',
         data: this.genExpectedData(),
         fill: false,
@@ -111,7 +111,7 @@ class StoryPoint extends Component {
       },
       {
         type: 'line',
-        label: 'Visitor',
+        label: 'Actual',
         data: this.genActualData(),
         fill: false,
         backgroundColor: '#71B37C',
@@ -165,7 +165,6 @@ class StoryPoint extends Component {
     };
     return (
       <div>
-        <h4><FaBarChart /> Burndown Chart</h4>
         <Line data={data1} options={options1} />
       </div>
     );

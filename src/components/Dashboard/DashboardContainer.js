@@ -171,6 +171,7 @@ class DashboardContainer extends Component {
             <Line data={data} options={options1} />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
+            <h4><FaBarChart /> Remaing points in each day</h4>
             <StoryPoint
               key={project.id}
               project={project}
