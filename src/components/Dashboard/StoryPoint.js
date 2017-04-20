@@ -30,7 +30,7 @@ class StoryPoint extends Component {
       const end = moment(this.endSprint()).dayOfYear();
       day = end - start;
     }
-    return day;
+    return day + 1;
   }
 
   convertToLocalDate(serverDate) {
@@ -69,8 +69,28 @@ class StoryPoint extends Component {
     for (let i = 0; i < this.calAmountOfDay(); i += 1) {
       expectecData.push(totalPoint - (gradient * i));
     }
-    // return [this.calTotalPoint(), 65, 40, 49, 60, 37, 0];
     return expectecData;
+  }
+
+  genActualData() {
+    const actualData = [];
+    let thisDate = this.startSprint();
+    let remainingPoint = this.calTotalPoint();
+    if (this.props.tasks[0]) {
+      for (let i = 0; i < this.calAmountOfDay(); i += 1) {
+        let countedPoint = 0;
+        for (let j = 0; j < this.props.tasks.length; j += 1) {
+          const doneDate = moment(this.props.tasks[j].done_date);
+          if (doneDate.isSame(thisDate)) {
+            countedPoint += 1;
+          }
+        }
+        remainingPoint -= countedPoint;
+        actualData.push(remainingPoint);
+        thisDate = moment(thisDate).add(1, 'days');
+      }
+    }
+    return actualData;
   }
 
   render() {
@@ -92,7 +112,7 @@ class StoryPoint extends Component {
       {
         type: 'line',
         label: 'Visitor',
-        data: [20, 18, 5, 6, 5, 4, 9],
+        data: this.genActualData(),
         fill: false,
         backgroundColor: '#71B37C',
         borderColor: '#71B37C',
@@ -135,6 +155,9 @@ class StoryPoint extends Component {
             },
             labels: {
               show: true,
+            },
+            ticks: {
+              beginAtZero: true,
             },
           },
         ],
