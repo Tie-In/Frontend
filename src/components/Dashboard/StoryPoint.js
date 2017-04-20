@@ -6,10 +6,6 @@ import moment from 'moment';
 class StoryPoint extends Component {
   constructor(props) {
     super(props);
-    // this.day = this.calAmountOfDay();
-    // this.genXLable = this.genXLable.bind(this);
-    // this.calAmountOfDay = this.calAmountOfDay.bind(this);
-    // this.calTotalPoint = this.calTotalPoint.bind(this);
   }
 
   startSprint() {
@@ -23,7 +19,7 @@ class StoryPoint extends Component {
   calAmountOfDay() {
     const start = moment(this.startSprint()).dayOfYear();
     let day = 0;
-    if (!moment(this.endSprint()).isValid()) {
+    if (!this.props.sprint.is_ended) {
       const today = moment().dayOfYear();
       day = today - start;
     } else {
@@ -51,20 +47,10 @@ class StoryPoint extends Component {
     return labels;
   }
 
-  calTotalPoint() {
-    let point = 0;
-    if (this.props.tasks[0]) {
-      for (let i = 0; i < this.props.tasks.length; i += 1) {
-        point += this.props.tasks[i].story_point;
-      }
-    }
-    return point;
-  }
-
   genExpectedData() {
     const expectecData = [];
     const sprintDuration = this.props.project.sprint_duration * 7;
-    const totalPoint = this.calTotalPoint();
+    const totalPoint = this.props.sprint.sprint_points;
     const gradient = totalPoint / sprintDuration;
     for (let i = 0; i < this.calAmountOfDay(); i += 1) {
       expectecData.push(totalPoint - (gradient * i));
@@ -75,7 +61,7 @@ class StoryPoint extends Component {
   genActualData() {
     const actualData = [];
     let thisDate = this.startSprint();
-    let remainingPoint = this.calTotalPoint();
+    let remainingPoint = this.props.sprint.sprint_points;
     if (this.props.tasks[0]) {
       for (let i = 0; i < this.calAmountOfDay(); i += 1) {
         let countedPoint = 0;
@@ -94,6 +80,7 @@ class StoryPoint extends Component {
   }
 
   render() {
+    console.log(this.props.sprint);
     const data1 = {
       labels: this.genXLable(),
       datasets: [{
@@ -122,7 +109,7 @@ class StoryPoint extends Component {
       }],
     };
     const options1 = {
-      // responsive: true,
+      responsive: true,
       tooltips: {
         mode: 'label',
       },

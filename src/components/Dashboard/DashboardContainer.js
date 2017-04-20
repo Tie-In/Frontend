@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Line, Pie, Bar } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 import { Row, Col, FormGroup, FormControl } from 'react-bootstrap';
 import moment from 'moment';
 import DocumentTitle from 'react-document-title';
 import FaBarChart from 'react-icons/lib/fa/bar-chart';
 import StoryPoint from './StoryPoint';
+import TaskStatus from './TaskStatus';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class DashboardContainer extends Component {
@@ -109,14 +110,14 @@ class DashboardContainer extends Component {
         data: [28, 48, 40, 19, 86, 27, 90],
       }],
     };
-    const pieData = {
-      labels: ['Red', 'Green', 'Yellow'],
-      datasets: [{
-        data: [300, 50, 100],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      }],
-    };
+    // const pieData = {
+    //   labels: ['Red', 'Green', 'Yellow'],
+    //   datasets: [{
+    //     data: [300, 50, 100],
+    //     backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+    //     hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+    //   }],
+    // };
     const barData = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
@@ -181,7 +182,12 @@ class DashboardContainer extends Component {
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
             <h4><FaBarChart /> Burndown Chart</h4>
-            <Pie data={pieData} />
+            <TaskStatus
+              data={barData}
+              project={project}
+              tasks={this.state.tasks}
+              sprint={this.state.currentSprint}
+            />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
             <h4><FaBarChart /> Burndown Chart</h4>
