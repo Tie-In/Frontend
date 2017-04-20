@@ -1,4 +1,4 @@
-import { Row, FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bootstrap';
+import { Row, FormGroup, Col, Button, ControlLabel } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

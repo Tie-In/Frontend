@@ -123,7 +123,7 @@ class TagManage extends Component {
 								</Button>
 							</div>
 							<div className="dropdown-menu" style={menuStyle} bsRole="menu">
-								<CirclePicker 
+								<CirclePicker
 									onChangeComplete={(color) => { this.setState({ editTagColor: color.hex, openDropdownEdit: false }) } }
 								/>
 							</div>

@@ -13,7 +13,7 @@ class OrganizationNavbar extends Component {
     const { user, organization } = this.props;
     const path = `/organizations/${organization.id}`;
     const data = [
-      { id: 1, name: 'Setting', path: `${path}/setting` },
+      { id: 1, name: (organization.id ? 'Setting' : ''), path: (organization.id ? `${path}/setting` : '') },
     ];
     const wrappedText = {
       width: 150,
