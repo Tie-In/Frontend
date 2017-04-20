@@ -73,7 +73,11 @@
   background-repeat: no-repeat;
 }
 
-.name {
+.suggestion-user {
   margin-left: 68px;
+  line-height: 45px;
+}
+
+.suggestion-feature {
   line-height: 45px;
 }

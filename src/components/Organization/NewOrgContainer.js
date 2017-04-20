@@ -25,7 +25,7 @@ function renderSuggestion(suggestion) {
   return (
     <span className="suggestion-content">
       <span> <img src={suggestion.image} alt="profile-pic" /></span>
-      <span className="name">
+      <span className="suggestion-user">
         <span>{suggestionText}</span>
       </span>
     </span>
@@ -165,8 +165,8 @@ class NewOrgContainer extends Component {
         <Col smOffset={0} xs={9} md={10}>
           <span className="suggestion-content">
             <span> <img src={contributor.image} alt="profile-pic" /></span>
-            <span className="name">
-              <span>{contributor.username}</span>
+            <span className="suggestion-user">
+              <span>{contributor.username} ({contributor.email})</span>
             </span>
           </span>
         </Col>

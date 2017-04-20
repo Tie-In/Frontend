@@ -70,6 +70,7 @@
   position: absolute;
 }
 
+/* feature label */
 .label.label-primary {
   background-image: none;
   background-color: #ffffff;
@@ -78,4 +79,21 @@
   border-color: #a7a7a7;
   border: solid 1px;
   box-shadow: none;
+}
+
+/*tag label*/
+.label.label-default {
+  font-weight: normal;
+} 
+
+.setting-tabs > li > a{
+  color: black;
+}
+
+.setting-tabs > li > a:hover{
+  color: #A25E5D;
+}
+
+.setting-tabs > li.active > a {
+  color: #A25E5D !important;
 }

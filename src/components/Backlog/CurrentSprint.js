@@ -98,7 +98,7 @@ class CurrentSprint extends Component {
       <div>
         <Row style={{ borderBottom: 'solid 1px' }}>
           <Col sm={4}>
-            <h4>Sprint {sprint.number} (Current)</h4>
+            <h4 className="backlog-title">Sprint {sprint.number} (Current)</h4>
           </Col>
           <Col sm={3}>
             <p style={{ paddingTop: 10 }}>Sprint points: {sprint.sprint_points}</p>
