@@ -6,6 +6,7 @@ class TaskStatus extends Component {
     super(props);
     this.state = {
       statusName: [],
+      numbers: [],
     };
     this.getStatusNames = this.getStatusNames.bind(this);
     this.getNumberOfTasks = this.getNumberOfTasks.bind(this);
@@ -13,6 +14,7 @@ class TaskStatus extends Component {
 
   async componentWillMount() {
     this.getStatusNames();
+    this.getNumberOfTasks();
   }
 
   getStatusNames() {
@@ -32,15 +34,13 @@ class TaskStatus extends Component {
     this.state.statusName.forEach((status) => {
       let count = 0;
       tasks.forEach((task) => {
-
-        console.log(task.status.name);
-        console.log(status);
+        if (task.status.name === status) {
+          count += 1;
+        }
       });
-      console.log('=========');
       numbers.push(count);
     });
-    // console.log(tasks);
-    return [300, 50, 100];
+    return numbers;
   }
 
   render() {
