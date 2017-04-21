@@ -40,11 +40,11 @@ class DashboardContainer extends Component {
       return '-';
     }
     const date = moment.utc(serverDate).local();
-    return `${moment(date).get('year')}-${moment(date).get('month') + 1}-${moment(date).get('date')}`;
+    return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
   }
 
   render() {
-    // console.log(this.state.tasks);
+    console.log(this.state.project);
     const options1 = {
       // responsive: true,
       tooltips: {
@@ -110,14 +110,6 @@ class DashboardContainer extends Component {
         data: [28, 48, 40, 19, 86, 27, 90],
       }],
     };
-    // const pieData = {
-    //   labels: ['Red', 'Green', 'Yellow'],
-    //   datasets: [{
-    //     data: [300, 50, 100],
-    //     backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-    //     hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-    //   }],
-    // };
     const barData = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
@@ -148,6 +140,7 @@ class DashboardContainer extends Component {
     };
     const start = this.getLocalDate(this.props.project.sprints.slice(-1)[0].start_date);
     const end = this.getLocalDate(this.props.project.sprints.slice(-1)[0].end_date);
+    const duration = this.state.project.sprint_duration;
 
     return (
       <DocumentTitle title={`${project.name}・Dashboard`}>
@@ -164,9 +157,11 @@ class DashboardContainer extends Component {
             </Col>
           </Row>
           <hr className="header-line" />
-          <p>Total estimated points: {this.state.currentSprint.sprint_points}</p>
-          <p>Start date: {start}</p>
-          <p>End date: {end}</p>
+          <p>Total estimated points : {this.state.currentSprint.sprint_points}</p>
+          <p>Status : {this.state.currentSprint.is_ended ? 'end' : 'working'}</p>
+          <p>Start date : {start}</p>
+          <p>End date : {end}</p>
+          <p>Sprint duration : {duration > 1 ? `${duration} weeks` : `${duration} week`}</p>
           <Col xs={12} md={6} style={columnStyle}>
             <h4><FaBarChart /> Burndown Chart</h4>
             <Line data={data} options={options1} />
@@ -183,10 +178,9 @@ class DashboardContainer extends Component {
           <Col xs={12} md={6} style={columnStyle}>
             <h4><FaBarChart /> Burndown Chart</h4>
             <TaskStatus
-              data={barData}
-              project={project}
+              key={project.id}
               tasks={this.state.tasks}
-              sprint={this.state.currentSprint}
+              project={this.state.project}
             />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>

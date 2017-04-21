@@ -1,13 +1,8 @@
 import React, { PropTypes, Component } from 'react';
-import FaBarChart from 'react-icons/lib/fa/bar-chart';
 import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 
 class StoryPoint extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   startSprint() {
     return this.convertToLocalDate(this.props.sprint.start_date);
   }
@@ -80,7 +75,7 @@ class StoryPoint extends Component {
   }
 
   render() {
-    console.log(this.props.sprint);
+    // console.log(this.props.sprint);
     const data1 = {
       labels: this.genXLable(),
       datasets: [{
