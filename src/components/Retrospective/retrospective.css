@@ -19,3 +19,16 @@ button {
 .disabled {
   pointer-events: none;
 }
+/*--------Manage category--------*/
+#colorMenu {
+  padding: 10px 10px 10px 10px;
+}
+.round-button {
+    display:block;
+    width:20px;
+    height:20px;
+    border-radius: 50%;
+    border: 1.5px solid #D0CBC7;
+    background-color: white;
+    right: 200px;
+}

@@ -20,9 +20,9 @@ class Management extends Component {
 
   async componentWillMount() {
     const { params, projectActions } = this.props;
-    const sprintSelected = this.state.sprints[this.state.sprints.length - 1];
+    const selectedSprint = this.state.sprints[this.state.sprints.length - 1];
     try {
-      const res = await apiHelper.get(`/api/retrospectives/${sprintSelected.retrospective.id}`);
+      const res = await apiHelper.get(`/api/retrospectives/${selectedSprint.retrospective.id}`);
       this.setState({ viewpoints: res.data.viewpoints });
 
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
@@ -33,6 +33,7 @@ class Management extends Component {
     } catch (err) {
       console.log(err);
     }
+    console.log(selectedSprint.retrospective);
   }
 
   render() {

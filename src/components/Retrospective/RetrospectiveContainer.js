@@ -22,10 +22,13 @@ class RetrospectiveContainer extends Component {
     };
 
     this.startRetro = this.startRetro.bind(this);
+    this.startManage = this.startManage.bind(this);
     this.handleSelectSprint = this.handleSelectSprint.bind(this);
+    this.getPath = this.getPath.bind(this);
   }
 
   async componentWillMount() {
+    console.log(this.state.sprints);
     const { params, projectActions } = this.props;
     try {
       const res = await apiHelper.get(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`);
@@ -41,8 +44,11 @@ class RetrospectiveContainer extends Component {
     }
   }
 
+  getPath() {
+    return `/organizations/${this.state.organization.id}/projects/${this.state.project.id}`;
+  }
+
   async startRetro() {
-    const path = `/organizations/${this.state.organization.id}/projects/${this.state.project.id}`;
     try {
       const res = await apiHelper.post('/api/retrospectives', {
         retrospective: {
@@ -53,7 +59,20 @@ class RetrospectiveContainer extends Component {
     } catch (err) {
       console.log(err.response);
     }
-    document.location.href = `${path}/retrospective/new`;
+    document.location.href = `${this.getPath()}/retrospective/new`;
+  }
+
+  async startManage() {
+    try {
+      await apiHelper.put(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`, {
+        retrospective: {
+          status: 'categorise',
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    document.location.href = `${this.getPath()}/retrospective/management`;
   }
 
   async handleSelectSprint(e) {
@@ -88,18 +107,19 @@ class RetrospectiveContainer extends Component {
     });
 
     const startBtn = () => {
-      const path = `/organizations/${this.state.organization.id}/projects/${this.state.project.id}`;
+      console.log(this.state.viewpoints);
       if (this.state.permission === 'admin') {
         if (!this.state.selectedSprint.is_ended) {
           return (<Button className="disabled">Start Retrospective</Button>);
-        } else if (this.state.viewpoints === undefined) {
+        } else if (this.state.viewpoints === undefined || this.state.viewpoints.length === 0) {
           return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
         } else if (this.state.selectedSprint === latestSprint) {
-          return (<Button href={`${path}/retrospective/management`}>Manage</Button>);
+          return (<Button onClick={this.startManage}>Manage</Button>);
         }
       }
-      if (this.state.viewpoints === undefined && this.state.selectedSprint.is_ended) {
-        return (<Button href={`${path}/retrospective/new`}>Join</Button>);
+      if ((this.state.viewpoints === undefined || this.state.viewpoints.length === 0)
+          && this.state.selectedSprint.is_ended) {
+        return (<Button href={`${this.getPath()}/retrospective/new`}>Join</Button>);
       }
     };
 
