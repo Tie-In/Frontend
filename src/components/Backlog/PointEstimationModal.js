@@ -41,6 +41,7 @@ class PointEstimationModal extends Component {
                   <FormControl
                     placeholder="Point"
                     type="number"
+                    max={this.props.maxPoint} min={0}
                     onChange={(e) => { this.handleSetPoint(e, task.id); }}
                   />
                 </FormGroup>
@@ -60,7 +61,9 @@ class PointEstimationModal extends Component {
           aria-labelledby="contained-modal-title"
         >
           <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title">Point Estimation</Modal.Title>
+            <Modal.Title id="contained-modal-title">
+              Point Estimation <span>Max story point: {this.props.maxPoint}</span>
+            </Modal.Title>
             <hr />
           </Modal.Header>
           <Modal.Body>
@@ -84,6 +87,7 @@ PointEstimationModal.propTypes = {
   close: PropTypes.func.isRequired,
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   setSprintTasks: PropTypes.func.isRequired,
+  maxPoint: PropTypes.number.isRequired,
 };
 
 export default PointEstimationModal;

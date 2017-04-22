@@ -48,6 +48,7 @@ class NewProject extends Component {
         sprint_duration: 2,
         users: [],
         organization_id: this.props.params.organizationId,
+        max_story_point: 30,
       },
       allUsers: [],
       value: '',
@@ -129,7 +130,7 @@ class NewProject extends Component {
         });
         const project = response.data;
         this.props.projectActions.setProject(project);
-        document.location.href = `/organizations/${project.organization_id}/projects/${project.id}`;
+        document.location.href = `/organizations/${project.organization_id}/projects/${project.id}/planning/features`;
       } catch (err) {
         const errData = err.response.data.errors;
         if (errData.name) {
@@ -277,6 +278,20 @@ class NewProject extends Component {
                     onChange={this.handleInputChange}
                   />
                   <h6 style={errorStyle}>{this.state.sprintError}</h6>
+                </FormGroup>
+              </Col>
+              <Col xs={12} md={6}>
+                <FormGroup controlId="formInlineContributor">
+                  <ControlLabel>
+                    Max story point per task
+                  </ControlLabel>
+                  <FormControl
+                    type="number" placeholder="Max storypoint"
+                    name="max_story_point"
+                    min="0"
+                    value={this.state.input.max_story_point}
+                    onChange={this.handleInputChange}
+                  />
                 </FormGroup>
               </Col>
             </Row>

@@ -2,7 +2,6 @@ import {
   Glyphicon,
   OverlayTrigger,
   Tooltip,
-  FormControl,
 } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 
@@ -14,12 +13,24 @@ class FactorRow extends Component {
       rating: '',
     };
     this.updateRating = this.updateRating.bind(this);
+    this.checkValue = this.checkValue.bind(this);
   }
 
   updateRating(e) {
     this.setState({ rating: e.target.value });
+
     const value = e.target.value * this.props.weight;
     this.props.returnImpact(this.props.index, e.target.value, value);
+  }
+
+  checkValue() {
+    const { rating } = this.state;
+
+    if (rating > 5) {
+      this.setState({ rating: 5 });
+    } else if (rating < 0) {
+      this.setState({ rating: 0 });
+    }
   }
 
   render() {
@@ -31,7 +42,6 @@ class FactorRow extends Component {
     const inputStyle = {
       width: '50px',
     };
-    const impact = weight * this.state.rating;
     return (
       <tr>
         <td>
@@ -40,17 +50,16 @@ class FactorRow extends Component {
             <Glyphicon style={factorStyle} glyph="info-sign" />
           </OverlayTrigger>
         </td>
-        <td className="text-center">{weight}</td>
         <td className="text-center">
           <input
             id="inputRating"
             type="number" min="0" max="5"
             style={inputStyle}
             onChange={this.updateRating}
+            value={this.state.rating}
+            onBlur={() => { this.checkValue(); }}
           />
         </td>
-        <td 
-          className="text-center">{impact}</td>
       </tr>
     );
   }
