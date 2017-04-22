@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Line, Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import { Row, Col, FormGroup, FormControl } from 'react-bootstrap';
 import moment from 'moment';
 import DocumentTitle from 'react-document-title';
 import FaBarChart from 'react-icons/lib/fa/bar-chart';
 import StoryPoint from './StoryPoint';
 import TaskStatus from './TaskStatus';
+import DevTask from './DevTask';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class DashboardContainer extends Component {
@@ -110,20 +111,6 @@ class DashboardContainer extends Component {
         data: [28, 48, 40, 19, 86, 27, 90],
       }],
     };
-    const barData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label: 'My First dataset',
-          backgroundColor: 'rgba(255,99,132,0.2)',
-          borderColor: 'rgba(255,99,132,1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-          hoverBorderColor: 'rgba(255,99,132,1)',
-          data: [65, 59, 80, 81, 56, 55, 40],
-        },
-      ],
-    };
     const columnStyle = {
       marginBottom: '20px',
     };
@@ -141,6 +128,11 @@ class DashboardContainer extends Component {
     const start = this.getLocalDate(this.props.project.sprints.slice(-1)[0].start_date);
     const end = this.getLocalDate(this.props.project.sprints.slice(-1)[0].end_date);
     const duration = this.state.project.sprint_duration;
+    // console.log(this.state.sprints);
+
+    if (!this.state.tasks) {
+      return null;
+    }
 
     return (
       <DocumentTitle title={`${project.name}・Dashboard`}>
@@ -185,7 +177,11 @@ class DashboardContainer extends Component {
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
             <h4><FaBarChart /> Burndown Chart</h4>
-            <Bar data={barData} />
+            <DevTask
+              key={project.id}
+              tasks={this.state.tasks}
+              project={this.state.project}
+            />
           </Col>
         </div>
       </DocumentTitle>

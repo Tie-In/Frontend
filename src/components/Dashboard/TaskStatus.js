@@ -4,17 +4,18 @@ import { Pie } from 'react-chartjs-2';
 class TaskStatus extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      statusName: [],
-      numbers: [],
-    };
+    // this.state = {
+    //   statusName: [],
+    //   numbers: [],
+    // };
+    this.statusName = [];
     this.getStatusNames = this.getStatusNames.bind(this);
     this.getNumberOfTasks = this.getNumberOfTasks.bind(this);
   }
 
   async componentWillMount() {
     this.getStatusNames();
-    this.getNumberOfTasks();
+    // this.getNumberOfTasks();
   }
 
   getStatusNames() {
@@ -22,16 +23,17 @@ class TaskStatus extends Component {
     this.props.project.statuses.forEach((status) => {
       data.push(status.name);
     });
-    this.setState({
-      statusName: data,
-    });
+    this.statusName = data;
+    // this.setState({
+    //   statusName: data,
+    // });
   }
 
   getNumberOfTasks() {
     const numbers = [];
     const tasks = this.props.tasks;
     // console.log(tasks);
-    this.state.statusName.forEach((status) => {
+    this.statusName.forEach((status) => {
       let count = 0;
       tasks.forEach((task) => {
         if (task.status.name === status) {
@@ -45,7 +47,7 @@ class TaskStatus extends Component {
 
   render() {
     const pieData = {
-      labels: this.state.statusName,
+      labels: this.statusName,
       datasets: [{
         data: this.getNumberOfTasks(),
         backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
