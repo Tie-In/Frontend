@@ -18,6 +18,7 @@ class FactorRow extends Component {
 
   updateRating(e) {
     this.setState({ rating: e.target.value });
+
     const value = e.target.value * this.props.weight;
     this.props.returnImpact(this.props.index, e.target.value, value);
   }
@@ -41,7 +42,6 @@ class FactorRow extends Component {
     const inputStyle = {
       width: '50px',
     };
-    const impact = weight * this.state.rating;
     return (
       <tr>
         <td>
@@ -50,7 +50,6 @@ class FactorRow extends Component {
             <Glyphicon style={factorStyle} glyph="info-sign" />
           </OverlayTrigger>
         </td>
-        <td className="text-center">{weight}</td>
         <td className="text-center">
           <input
             id="inputRating"
@@ -61,9 +60,6 @@ class FactorRow extends Component {
             onBlur={() => { this.checkValue(); }}
           />
         </td>
-        <td
-          className="text-center"
-        >{impact}</td>
       </tr>
     );
   }

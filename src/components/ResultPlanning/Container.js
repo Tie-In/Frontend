@@ -20,13 +20,13 @@ class Container extends Component {
   }
 
   async componentWillMount() {
-    const { projectActions, project } = this.props;
+    const { projectActions, params } = this.props;
     try {
-      const response = await apiHelper.get(`/api/projects/${project.id}`);
-      const projectData = response.data;
-      projectActions.setProject(projectData);
+      const response = await apiHelper.get(`/api/projects/${params.projectId}`);
+      const project = response.data;
+      projectActions.setProject(project);
 
-      const responseEffort = await apiHelper.get(`/api/effort_estimations/${projectData.effort_estimation.id}`);
+      const responseEffort = await apiHelper.get(`/api/effort_estimations/${project.effort_estimation.id}`);
       const data = responseEffort.data;
       this.setState(data);
     } catch (err) {
