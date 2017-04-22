@@ -2,21 +2,15 @@ import React, { PropTypes, Component } from 'react';
 import { Pie } from 'react-chartjs-2';
 
 class TaskStatus extends Component {
-  constructor(props) {
-    super(props);
-    this.statusName = [];
-  }
-
   async componentWillMount() {
     this.getStatusNames();
   }
 
   getStatusNames() {
-    const data = [];
+    this.statusName = [];
     this.props.project.statuses.forEach((status) => {
-      data.push(status.name);
+      this.statusName.push(status.name);
     });
-    this.statusName = data;
   }
 
   getNumberOfTasks() {
@@ -43,10 +37,22 @@ class TaskStatus extends Component {
         hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
       }],
     };
+    const options = {
+      tooltips: {
+        callbacks: {
+          label: (tooltipItem, data) => {
+            const allData = data.datasets[tooltipItem.datasetIndex].data;
+            const tooltipLabel = data.labels[tooltipItem.index];
+            const tooltipData = allData[tooltipItem.index];
+            return `${tooltipLabel} : ${tooltipData} ${tooltipData > 1 ? 'tasks' : 'task'}`;
+          },
+        },
+      },
+    };
 
     return (
       <div>
-        <Pie data={pieData} />
+        <Pie data={pieData} options={options} />
       </div>
     );
   }

@@ -3,12 +3,6 @@ import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 
 class StoryPoint extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
   startSprint() {
     return this.convertToLocalDate(this.props.sprint.start_date);
   }
@@ -54,7 +48,7 @@ class StoryPoint extends Component {
     const totalPoint = this.props.sprint.sprint_points;
     const gradient = totalPoint / sprintDuration;
     for (let i = 0; i < this.calAmountOfDay(); i += 1) {
-      expectecData.push(totalPoint - (gradient * i));
+      expectecData.push(Math.round(totalPoint - (gradient * i)));
     }
     return expectecData;
   }
@@ -85,6 +79,17 @@ class StoryPoint extends Component {
     const data1 = {
       labels: this.genXLable(),
       datasets: [{
+        type: 'line',
+        label: 'Actual',
+        data: this.genActualData(),
+        fill: false,
+        backgroundColor: '#71B37C',
+        borderColor: '#71B37C',
+        hoverBackgroundColor: '#71B37C',
+        hoverBorderColor: '#71B37C',
+        yAxisID: 'y-axis-1',
+      },
+      {
         label: 'Expected',
         type: 'line',
         data: this.genExpectedData(),
@@ -95,17 +100,6 @@ class StoryPoint extends Component {
         pointBackgroundColor: '#EC932F',
         pointHoverBackgroundColor: '#EC932F',
         pointHoverBorderColor: '#EC932F',
-        yAxisID: 'y-axis-1',
-      },
-      {
-        type: 'line',
-        label: 'Actual',
-        data: this.genActualData(),
-        fill: false,
-        backgroundColor: '#71B37C',
-        borderColor: '#71B37C',
-        hoverBackgroundColor: '#71B37C',
-        hoverBorderColor: '#71B37C',
         yAxisID: 'y-axis-1',
       }],
     };

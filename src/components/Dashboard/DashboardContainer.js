@@ -45,7 +45,6 @@ class DashboardContainer extends Component {
   }
 
   render() {
-    console.log(this.state.project);
     const options1 = {
       // responsive: true,
       tooltips: {
@@ -128,6 +127,7 @@ class DashboardContainer extends Component {
     const start = this.getLocalDate(this.props.project.sprints.slice(-1)[0].start_date);
     const end = this.getLocalDate(this.props.project.sprints.slice(-1)[0].end_date);
     const duration = this.state.project.sprint_duration;
+    const contributors = this.state.project.project_contributes.length;
     // console.log(this.state.sprints);
 
     if (!this.state.tasks) {
@@ -153,6 +153,7 @@ class DashboardContainer extends Component {
           <p>Status : {this.state.currentSprint.is_ended ? 'end' : 'working'}</p>
           <p>Start date : {start}</p>
           <p>End date : {end}</p>
+          <p>Number of contributor : {contributors}</p>
           <p>Sprint duration : {duration > 1 ? `${duration} weeks` : `${duration} week`}</p>
           <Col xs={12} md={6} style={columnStyle}>
             <h4><FaBarChart /> Burndown Chart</h4>
