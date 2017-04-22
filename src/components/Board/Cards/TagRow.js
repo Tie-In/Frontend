@@ -185,10 +185,10 @@ class TagRow extends Component {
 
     return (
       <div>
-        <Col xs={3} componentClass={ControlLabel}>
+        <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
           Tags
         </Col>
-        <Col xs={9}>
+        <Col xs={8}>
           <Autosuggest
             suggestions={suggestions}
             alwaysRenderSuggestions={this.state.isShow}

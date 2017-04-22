@@ -9,7 +9,7 @@ class EditModal extends Component {
     super(props);
 
     const { item } = this.props;
-    const tempItem = item;
+    const tempItem = item;``
     this.state = {
       input: {
         name: tempItem.name,
@@ -85,10 +85,10 @@ class EditModal extends Component {
           <Modal.Body>
             <Form horizontal>
               <FormGroup>
-                <Col xs={3} componentClass={ControlLabel}>
+                <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                   Name
                 </Col>
-                <Col xs={9}>
+                <Col xs={8}>
                   <FormControl
                     type="text" placeholder="Name"
                     name="name"
@@ -98,10 +98,10 @@ class EditModal extends Component {
                 </Col>
               </FormGroup>
               <FormGroup>
-                <Col xs={3} componentClass={ControlLabel}>
+                <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                   Description
                 </Col>
-                <Col xs={9}>
+                <Col xs={8}>
                   <FormControl
                     type="text" placeholder="Description"
                     name="description"
@@ -111,10 +111,10 @@ class EditModal extends Component {
                 </Col>
               </FormGroup>
               <FormGroup>
-                <Col xs={3} componentClass={ControlLabel}>
+                <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                   Feature
                 </Col>
-                <Col xs={9}>
+                <Col xs={8}>
                   <AutosuggestionBlock
                     data={this.props.featureSelection}
                     setValue={this.setFeature} initSelect={item.feature}
@@ -122,10 +122,10 @@ class EditModal extends Component {
                 </Col>
               </FormGroup>
               <FormGroup>
-                <Col xs={3} componentClass={ControlLabel}>
+                <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                   Assignee
                 </Col>
-                <Col xs={9}>
+                <Col xs={8}>
                   <AutosuggestionBlock
                     data={this.props.userSelection}
                     setValue={this.setAssignee}
@@ -141,7 +141,7 @@ class EditModal extends Component {
                 />
               </FormGroup>
               <FormGroup>
-                <Col xs={3} componentClass={ControlLabel}>
+                <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                   Start Date
                 </Col>
                 <Col xs={3}>
@@ -152,7 +152,7 @@ class EditModal extends Component {
                     onChange={this.handleInputChange}
                   />
                 </Col>
-                <Col xs={3} componentClass={ControlLabel}>
+                <Col xs={2} componentClass={ControlLabel}>
                   End date
                 </Col>
                 <Col xs={3}>
@@ -165,7 +165,7 @@ class EditModal extends Component {
                 </Col>
               </FormGroup>
               <FormGroup>
-                <Col xs={3} componentClass={ControlLabel}>
+                <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                   Estimate time
                 </Col>
                 <Col xs={3}>
@@ -176,7 +176,7 @@ class EditModal extends Component {
                     onChange={this.handleInputChange}
                   />
                 </Col>
-                <Col xs={3} componentClass={ControlLabel}>
+                <Col xs={2} componentClass={ControlLabel}>
                   Story point
                 </Col>
                 <Col xs={3}>

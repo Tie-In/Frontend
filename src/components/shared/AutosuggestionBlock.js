@@ -89,7 +89,7 @@ class AutosuggestionBlock extends Component {
       return [];
     }
     const regex = new RegExp('\\b' + inputValue, 'i');
-    return this.props.data.filter(person => regex.test(getSuggestionValue(person)));
+    return this.props.data.filter((person) => { return regex.test(getSuggestionValue(person)); });
   }
 
   removeResult() {
@@ -115,7 +115,7 @@ class AutosuggestionBlock extends Component {
           </span>
         </Col>
         <Col smOffset={0} xs={2} md={2}>
-          <Button bsStyle="primary" onClick={() => this.removeResult()}>
+          <Button bsStyle="primary" style={{ marginTop: 5 }} onClick={() => { return this.removeResult(); }}>
             <Glyphicon glyph="remove" />
           </Button>
         </Col>

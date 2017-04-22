@@ -265,6 +265,7 @@ class BacklogContainer extends Component {
           close={this.closePointEstimationModal}
           tasks={this.state.sprintTasks}
           setSprintTasks={this.setSprintTasks}
+          maxPoint={project.max_story_point}
         />
       </div>
     );

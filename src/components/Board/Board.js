@@ -64,7 +64,6 @@ class Board extends Component {
   }
 
   startScrolling(direction) {
-    // if (!this.state.isScrolling) {
     switch (direction) {
       case 'toLeft':
         this.setState({ isScrolling: true }, this.scrollLeft());
@@ -75,7 +74,6 @@ class Board extends Component {
       default:
         break;
     }
-    // }
   }
 
   scrollRight() {
