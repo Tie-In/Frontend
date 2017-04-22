@@ -38,6 +38,8 @@ class Management extends Component {
   }
 
   render() {
+    const colors = ['#FCB900', '#8ED1FC', '#FF6900', '#cddc39', '#F78DA7', '#00D084',
+      '#0693E3', '#ABB8C3', '#9900EF', '#795548', '#EB144C', '#697689'];
     const comments = (kind) => {
       if (this.state.viewpoints) {
         return this.state.viewpoints.map((data) => {
@@ -46,6 +48,7 @@ class Management extends Component {
             return (<Comment
               key={index}
               comment={data.comment}
+              colors={colors}
             />);
           }
         });
@@ -58,8 +61,8 @@ class Management extends Component {
           <h3 className="header-label">Retrospective management</h3>
           <hr className="header-line" />
 
-          <Row>
-            <Col><Categories id="cat" /></Col>
+          <Row id="addCatRow">
+            <Col sm={12}><Categories id="cat" colors={colors} /></Col>
           </Row>
           <Row>
             <Col sm={12}>

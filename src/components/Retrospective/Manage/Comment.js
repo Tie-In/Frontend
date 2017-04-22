@@ -31,19 +31,25 @@ class Comment extends Component {
     const { comment } = this.props;
     const categoryColor = {
       backgroundColor: this.state.color,
-      // border: '0px',
     };
     return (
       <div>
         <Col sm={4}>
           <Panel>
             {comment}
-            <Dropdown dropup>
+            <Dropdown className="pull-right" dropup>
               <div bsRole="toggle">
-                <button onClick={() => { this.setState({ openDropdown: !this.state.openDropdown }); }} className="round-button" style={categoryColor} />
+                <button
+                  onClick={() => { this.setState({ openDropdown: !this.state.openDropdown }); }}
+                  className="round-button" style={categoryColor}
+                />
               </div>
               <div id="colorMenu" className="dropdown-menu" bsRole="menu">
-                <ColorPicker setColor={this.selectColor} toggle={this.toggleDropdown} />
+                <ColorPicker
+                  setColor={this.selectColor}
+                  toggle={this.toggleDropdown}
+                  colors={this.props.colors}
+                />
               </div>
             </Dropdown>
           </Panel>
@@ -54,6 +60,7 @@ class Comment extends Component {
 }
 Comment.propTypes = {
   comment: PropTypes.string.isRequired,
+  colors: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Comment;

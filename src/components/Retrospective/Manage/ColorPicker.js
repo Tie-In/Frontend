@@ -8,12 +8,10 @@ class ColorPicker extends Component {
   }
 
   render() {
-    const colors = ['#FF6900', '#FCB900', '#7BDCB5', '#00D084', '#8ED1FC',
-      '#0693E3', '#ABB8C3', '#EB144C', '#F78DA7', '#9900EF'];
     return (
       <div>
         <CirclePicker
-          colors={colors}
+          colors={this.props.colors}
           onChangeComplete={this.selectColor}
         />
       </div>
@@ -24,6 +22,7 @@ class ColorPicker extends Component {
 ColorPicker.propTypes = {
   setColor: PropTypes.func.isRequired,
   toggle: PropTypes.func.isRequired,
+  colors: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default ColorPicker;

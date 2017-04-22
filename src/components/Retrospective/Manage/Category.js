@@ -2,15 +2,18 @@ import React, { Component, PropTypes } from 'react';
 
 class Category extends Component {
   render() {
+    const categoryColor = {
+      backgroundColor: this.props.color,
+    };
     return (
-      <li key={this.props.key} className="tag">{this.props.category}</li>
+      <li className="tag" style={categoryColor}>{this.props.category}</li>
     );
   }
 }
 
 Category.propTypes = {
-  key: PropTypes.number.isRequired,
   category: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
 };
 
 export default Category;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import update from 'immutability-helper';
 import List from './List';
 import Form from './Form';
@@ -32,7 +32,10 @@ class Categories extends Component {
     return (
       <div className="form">
         <div className="tags">
-          <List categories={this.state.categories} />
+          <List
+            categories={this.state.categories}
+            colors={this.props.colors}
+          />
           <Form
             addCat={this.addCat}
             editPrevCat={this.editPrevCat}
@@ -41,11 +44,15 @@ class Categories extends Component {
             backspace={this.state.backspace}
           />
         </div>
-        <small>Press <code>enter</code> or <code>,</code> to add a tag.
-        Press <code>backspace</code> to edit previous tag.</small>
+        <small>Press <code>enter</code> or <code>,</code> to add a category.
+        Press <code>backspace</code> to delete previous category.</small>
       </div>
     );
   }
 }
+
+Categories.propTypes = {
+  colors: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default Categories;
