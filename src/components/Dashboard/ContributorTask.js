@@ -27,30 +27,31 @@ class ContributorTask extends Component {
 
   genDataSet() {
     this.dataSets = [];
-    this.statusName.forEach((status) => {
-      if (status !== 'To do') {
-        const color = randomColor({
-          hue: 'red',
-          format: 'rgb',
-          luminosity: 'light', // light, bright, dark
-        });
-        console.log(color);
-        this.dataSets.push({
-          label: status,
-          data: this.calUsersPoint(status),
-          // backgroundColor: color,
-          // borderColor: 'rgba(255,99,132,1)',
-          // borderWidth: 1,
-          // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-          // hoverBorderColor: 'rgba(255,99,132,1)',
-          backgroundColor: 'rgba(255,99,132,0.2)',
-          hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-          borderColor: 'rgba(255,99,132,1)',
-          hoverBorderColor: 'rgba(255,99,132,1)',
-          borderWidth: 1,
-        });
+
+    if (this.props.tasks.length > 0) {
+      for (let i = 0; i < this.statusName.length; i += 1) {
+        if (this.statusName[i] !== 'To do') {
+          // const color = randomColor({
+          //   hue: 'red',
+          //   format: 'rgba',
+          //   // luminosity: 'light',
+          //   alpha: '1', // light, bright, dark
+          // });
+          // console.log(color)
+          this.dataSets.push({
+            label: this.statusName[i],
+            data: this.calUsersPoint(this.statusName[i]),
+            backgroundColor: this.props.colors[i],
+            hoverBackgroundColor: this.props.colorsHover[i],
+            // backgroundColor: 'rgba(255,99,132,0.2)',
+            // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            // borderColor: 'rgba(255,99,132,1)',
+            // hoverBorderColor: 'rgba(255,99,132,1)',
+            // borderWidth: 1,
+          });
+        }
       }
-    });
+    }
     return this.dataSets;
   }
 
@@ -65,12 +66,12 @@ class ContributorTask extends Component {
       });
       points.push(count);
     });
-    console.log(points);
+    // console.log(points);
     return points;
   }
 
   render() {
-    console.log(this.props.tasks);
+    // console.log(this.props.tasks);
     const barData = {
       labels: this.xLabels,
       datasets: this.genDataSet(),
@@ -133,6 +134,8 @@ class ContributorTask extends Component {
 ContributorTask.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   project: PropTypes.object.isRequired,
+  colors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  colorsHover: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default ContributorTask;

@@ -128,7 +128,26 @@ class DashboardContainer extends Component {
     const end = this.getLocalDate(this.props.project.sprints.slice(-1)[0].end_date);
     const duration = this.state.project.sprint_duration;
     const contributors = this.state.project.project_contributes.length;
-    // console.log(this.state.sprints);
+    const colors = [
+      'rgba(244, 159, 144, 0.6)',
+      'rgba(181, 60, 41, 0.6)',
+      'rgba(255, 228, 165, 0.6)',
+      'rgba(211, 80, 86, 0.6)',
+      'rgba(244, 159, 144, 0.6)',
+      'rgba(255, 63, 73, 0.6)',
+      'rgba(255, 63, 73, 0.6)',
+      'rgba(178, 53, 70, 0.6)',
+    ];
+    const colorsHover = [
+      'rgba(244, 159, 144, 0.9)',
+      'rgba(181, 60, 41, 0.9)',
+      'rgba(255, 228, 165, 0.9)',
+      'rgba(211, 80, 86, 0.9)',
+      'rgba(244, 159, 144, 0.9)',
+      'rgba(255, 63, 73, 0.9)',
+      'rgba(255, 63, 73, 0.9)',
+      'rgba(178, 53, 70, 0.9)',
+    ];
 
     if (!this.state.tasks) {
       return null;
@@ -166,6 +185,8 @@ class DashboardContainer extends Component {
               project={project}
               tasks={this.state.tasks}
               sprint={this.state.currentSprint}
+              colors={colors}
+              colorsHover={colorsHover}
             />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
@@ -174,6 +195,8 @@ class DashboardContainer extends Component {
               key={project.id}
               tasks={this.state.tasks}
               project={this.state.project}
+              colors={colors}
+              colorsHover={colorsHover}
             />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
@@ -182,6 +205,8 @@ class DashboardContainer extends Component {
               key={project.id}
               tasks={this.state.tasks}
               project={this.state.project}
+              colors={colors}
+              colorsHover={colorsHover}
             />
           </Col>
         </div>

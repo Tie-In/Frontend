@@ -33,8 +33,8 @@ class TaskStatus extends Component {
       labels: this.statusName,
       datasets: [{
         data: this.getNumberOfTasks(),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        backgroundColor: this.props.colors,
+        hoverBackgroundColor: this.props.colorsHover,
       }],
     };
     const options = {
@@ -61,6 +61,8 @@ class TaskStatus extends Component {
 TaskStatus.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   project: PropTypes.object.isRequired,
+  colors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  colorsHover: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default TaskStatus;
