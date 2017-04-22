@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import DocumentTitle from 'react-document-title';
 import Comment from './Comment';
+import Categories from './Categories';
 import * as projectActionsCreator from '../../../actions/project-actions';
 import * as permissionActionsCreator from '../../../actions/permission-actions';
 import * as apiHelper from '../../../helpers/apiHelper';
@@ -58,6 +59,9 @@ class Management extends Component {
           <hr className="header-line" />
 
           <Row>
+            <Col><Categories id="cat" /></Col>
+          </Row>
+          <Row>
             <Col sm={12}>
               <h4 className="header-label">Good</h4>
               {comments('good')}
@@ -84,7 +88,6 @@ class Management extends Component {
 }
 
 Management.propTypes = {
-  organization: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
 };
 

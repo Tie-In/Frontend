@@ -32,3 +32,52 @@ button {
     background-color: white;
     right: 200px;
 }
+/*--------Add category--------*/
+/*body {
+  font-family: 'open sans', 'helvetica neue', helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #222;
+  background: #ecf0f1;
+}*/
+
+#cat {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+          transform: translate(-50%);
+  min-width: 700px;
+}
+
+.tags {
+  background: #fff;
+  padding: 5px;
+  overflow: hidden;
+}
+
+.tag {
+  color: #fff;
+  font-weight: bold;
+  background: #3498db;
+  float: left;
+  padding: 5px 10px;
+  border-radius: 10em;
+  margin: 5px;
+}
+.tag button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.tag-input {
+  padding: 5px 10px;
+  box-sizing: border-box;
+  color: #7f8c8d;
+  border: 0;
+  float: left;
+  margin: 10px 0;
+  font-size: 16px;
+  outline: 0;
+}

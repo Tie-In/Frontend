@@ -16,10 +16,10 @@ class Comment extends Component {
   }
 
   toggleDropdown(open) {
-    console.log('Toggle');
-    console.log(`Before ${this.state.openDropdown}`);
+    // console.log('Toggle');
+    // console.log(`Before ${this.state.openDropdown}`);
     this.setState({ openDropdown: open });
-    console.log(this.state.openDropdown);
+    // console.log(this.state.openDropdown);
   }
 
   selectColor(colorHex) {
@@ -27,7 +27,7 @@ class Comment extends Component {
   }
 
   render() {
-    console.log(`Render ${this.state.openDropdown}`);
+    // console.log(`Render ${this.state.openDropdown}`);
     const { comment } = this.props;
     const categoryColor = {
       backgroundColor: this.state.color,
