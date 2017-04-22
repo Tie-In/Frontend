@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { Dropdown, MenuItem, Glyphicon } from 'react-bootstrap';
+import { Glyphicon } from 'react-bootstrap';
 import SidebarNav from './SidebarNav';
 import DropdownUser from './DropdownUser';
 import 'simple-line-icons/css/simple-line-icons.css';

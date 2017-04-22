@@ -28,9 +28,19 @@ class ProjectCard extends Component {
       overflowX: 'auto',
       whiteSpace: 'nowrap',
     };
+
+    const tempPath = `/organizations/${project.organization_id}/projects/${project.id}`;
+    let newPath = '';
+    if (!project.effort_estimation) {
+      newPath = `${tempPath}/planning/features`;
+    } else if (project.current_sprint_id !== null) {
+      newPath = `${tempPath}/board`;
+    } else {
+      newPath = `${tempPath}/backlog`;
+    }
     return (
       <div className="card" style={cardStyle}>
-        <LinkContainer to={{ pathname: `/organizations/${project.organization_id}/projects/${project.id}` }}>
+        <LinkContainer to={{ pathname: newPath }}>
           <a key={project.name}><h3>{project.name}</h3></a>
         </LinkContainer>
         <p style={descriptionStyle}>{project.description}</p>

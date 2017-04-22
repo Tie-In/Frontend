@@ -151,7 +151,7 @@ class BacklogContainer extends Component {
   }
 
   render() {
-    const { project } = this.props;
+    const { project, permission } = this.props;
     const rowStyle = {
       paddingTop: 5,
       paddingBottom: 5,
@@ -238,17 +238,19 @@ class BacklogContainer extends Component {
             </div> : <div />
           }
           <Row>
-            <Col sm={8}>
+            <Col sm={permission.project === 'admin' ? 8 : 12}>
               <h3 className="header-label">Backlog</h3>
               <hr className="header-line" />
               <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
             </Col>
-            <Col sm={4}>
-              <h3 className="header-label">New sprint:</h3>
-              <hr className="header-line" />
-              <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
-              <div id="nextButton">{nextButton()}</div>
-            </Col>
+            { permission.project === 'admin' ?
+              <Col sm={4}>
+                <h3 className="header-label">New sprint:</h3>
+                <hr className="header-line" />
+                <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
+                <div id="nextButton">{nextButton()}</div>
+              </Col> : <div />
+            }
           </Row>
         </div>
         <EditTaskModal
@@ -272,11 +274,13 @@ class BacklogContainer extends Component {
 BacklogContainer.propTypes = {
   params: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
+  permission: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     project: state.project,
+    permission: state.permission,
   };
 }
 

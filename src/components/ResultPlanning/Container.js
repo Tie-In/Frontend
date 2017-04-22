@@ -1,8 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { Row, Col, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import DocumentTitle from 'react-document-title';
 import { technicalFactors, environmentalFactors } from './informations';
+import * as projectActionsCreator from '../../actions/project-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class Container extends Component {
@@ -18,9 +20,14 @@ class Container extends Component {
   }
 
   async componentWillMount() {
+    const { projectActions, project } = this.props;
     try {
-      const response = await apiHelper.get(`/api/effort_estimations/${this.props.params.projectId}`);
-      const data = response.data;
+      const response = await apiHelper.get(`/api/projects/${project.id}`);
+      const projectData = response.data;
+      projectActions.setProject(projectData);
+
+      const responseEffort = await apiHelper.get(`/api/effort_estimations/${projectData.effort_estimation.id}`);
+      const data = responseEffort.data;
       this.setState(data);
     } catch (err) {
       console.log(err);
@@ -133,7 +140,6 @@ class Container extends Component {
 }
 
 Container.propTypes = {
-  params: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
 };
 
@@ -144,4 +150,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Container);
+function mapDispatchToProps(dispatch) {
+  return {
+    projectActions: bindActionCreators(projectActionsCreator, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Container);

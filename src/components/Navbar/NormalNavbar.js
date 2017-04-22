@@ -13,10 +13,10 @@ class NormalNavbar extends Component {
     const { user, organization, project } = this.props;
     const path = `/organizations/${organization.id}/projects/${project.id}`;
     const data = [
-      { id: 1, name: 'Project', path: `${path}#` },
-      { id: 2, name: 'Backlog', path: `${path}/backlog` },
+      { id: 1, name: 'Detail', path: `${path}` },
+      { id: 2, name: 'Planning', path: `${path}/planning` },
       { id: 3, name: 'New task', path: `${path}/tasks/new` },
-      { id: 4, name: 'Planning', path: `${path}/planning` },
+      { id: 4, name: 'Backlog', path: `${path}/backlog` },
       { id: 5, name: 'Active sprint', path: `${path}/board` },
       { id: 6, name: 'Retrospective', path: `${path}/retrospective` },
       { id: 7, name: 'Dashboard', path: `${path}/dashboard` },
