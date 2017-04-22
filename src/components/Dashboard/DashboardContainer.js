@@ -124,10 +124,10 @@ class DashboardContainer extends Component {
     const h3 = {
       marginBottom: 0,
     };
-    const start = this.getLocalDate(this.props.project.sprints.slice(-1)[0].start_date);
-    const end = this.getLocalDate(this.props.project.sprints.slice(-1)[0].end_date);
-    const duration = this.state.project.sprint_duration;
-    const contributors = this.state.project.project_contributes.length;
+    const start = this.getLocalDate(this.state.currentSprint.start_date);
+    const end = this.getLocalDate(this.state.currentSprint.end_date);
+    const duration = project.sprint_duration;
+    const contributors = project.project_contributes.length;
     const colors = [
       'rgba(244, 159, 144, 0.6)',
       'rgba(181, 60, 41, 0.6)',
@@ -152,6 +152,7 @@ class DashboardContainer extends Component {
     if (!this.state.tasks) {
       return null;
     }
+    console.log(project);
 
     return (
       <DocumentTitle title={`${project.name}・Dashboard`}>
