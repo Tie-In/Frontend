@@ -20,7 +20,7 @@ import ProjectSetting from './Projects/ProjectSetting';
 import DashboardContainer from './Dashboard/DashboardContainer';
 import RetrospectiveContainer from './Retrospective/RetrospectiveContainer';
 import NewRetrospective from './Retrospective/NewRetrospective';
-import Management from './Retrospective/Management';
+import Management from './Retrospective/Manage/Management';
 
 module.exports = {
   Login,

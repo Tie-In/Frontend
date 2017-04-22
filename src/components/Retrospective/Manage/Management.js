@@ -3,11 +3,11 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import DocumentTitle from 'react-document-title';
-import Category from './Category';
-import * as projectActionsCreator from '../../actions/project-actions';
-import * as permissionActionsCreator from '../../actions/permission-actions';
-import * as apiHelper from '../../helpers/apiHelper';
-import './retrospective.css';
+import Comment from './Comment';
+import * as projectActionsCreator from '../../../actions/project-actions';
+import * as permissionActionsCreator from '../../../actions/permission-actions';
+import * as apiHelper from '../../../helpers/apiHelper';
+import '../retrospective.css';
 
 class Management extends Component {
   constructor(props) {
@@ -42,7 +42,7 @@ class Management extends Component {
         return this.state.viewpoints.map((data) => {
           const index = this.state.viewpoints.indexOf(data);
           if (data.kind === kind) {
-            return (<Category
+            return (<Comment
               key={index}
               comment={data.comment}
             />);
