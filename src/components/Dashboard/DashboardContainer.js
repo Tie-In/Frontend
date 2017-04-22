@@ -7,7 +7,7 @@ import DocumentTitle from 'react-document-title';
 import FaBarChart from 'react-icons/lib/fa/bar-chart';
 import StoryPoint from './StoryPoint';
 import TaskStatus from './TaskStatus';
-import DevTask from './DevTask';
+import ContributorTask from './ContributorTask';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class DashboardContainer extends Component {
@@ -177,7 +177,7 @@ class DashboardContainer extends Component {
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
             <h4><FaBarChart /> Burndown Chart</h4>
-            <DevTask
+            <ContributorTask
               key={project.id}
               tasks={this.state.tasks}
               project={this.state.project}

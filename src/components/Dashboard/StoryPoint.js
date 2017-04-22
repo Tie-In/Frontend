@@ -3,6 +3,12 @@ import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 
 class StoryPoint extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
+
   startSprint() {
     return this.convertToLocalDate(this.props.sprint.start_date);
   }
