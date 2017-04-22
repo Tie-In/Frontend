@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { Bar } from 'react-chartjs-2';
-import randomColor from 'randomcolor';
 
 class ContributorTask extends Component {
   async componentWillMount() {
@@ -23,6 +22,8 @@ class ContributorTask extends Component {
       this.xLabels.push(contributor.user.username);
       this.usersIds.push(contributor.user.id);
     });
+    this.xLabels.push('Unknown');
+    this.usersIds.push(null);
   }
 
   genDataSet() {
@@ -31,23 +32,11 @@ class ContributorTask extends Component {
     if (this.props.tasks.length > 0) {
       for (let i = 0; i < this.statusName.length; i += 1) {
         if (this.statusName[i] !== 'To do') {
-          // const color = randomColor({
-          //   hue: 'red',
-          //   format: 'rgba',
-          //   // luminosity: 'light',
-          //   alpha: '1', // light, bright, dark
-          // });
-          // console.log(color)
           this.dataSets.push({
             label: this.statusName[i],
             data: this.calUsersPoint(this.statusName[i]),
             backgroundColor: this.props.colors[i],
             hoverBackgroundColor: this.props.colorsHover[i],
-            // backgroundColor: 'rgba(255,99,132,0.2)',
-            // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            // borderColor: 'rgba(255,99,132,1)',
-            // hoverBorderColor: 'rgba(255,99,132,1)',
-            // borderWidth: 1,
           });
         }
       }

@@ -19,14 +19,24 @@ class DashboardContainer extends Component {
       currentSprint: this.props.project.sprints.slice(-1)[0],
       tasks: [],
     };
+    this.handleSelectSprint = this.handleSelectSprint.bind(this);
+  }
+
+  getLocalDate(serverDate) {
+    if (serverDate === null) {
+      return '-';
+    }
+    const date = moment.utc(serverDate).local();
+    return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
   }
 
   async componentWillMount() {
     try {
-      const sprint = this.state.sprints.slice(-1);
+      const { project } = this.props;
+      console.log(project.current_sprint_id);
       const sprintResponse = await apiHelper.get('/api/tasks', {
-        project: this.props.project.id,
-        sprint: sprint[0].id,
+        project: project.id,
+        sprint: project.current_sprint_id,
       });
       this.setState({
         tasks: sprintResponse.data,
@@ -36,12 +46,26 @@ class DashboardContainer extends Component {
     }
   }
 
-  getLocalDate(serverDate) {
-    if (serverDate === null) {
-      return '-';
+  async handleSelectSprint(e) {
+    const inputIndex = e.target.value - 1;
+    // console.log(inputIndex);
+    try {
+      const { project } = this.props;
+      const id = project.sprints[inputIndex].id;
+      // console.log(id);
+      const sprintResponse = await apiHelper.get('/api/tasks', {
+        project: project.id,
+        sprint: 3,
+      });
+      // const newSprint = project.sprints[inputIndex];
+      console.log(sprintResponse);
+      this.setState({
+        tasks: sprintResponse.data,
+        // currentSprint: newSprint,
+      });
+    } catch (err) {
+      console.log(err.response);
     }
-    const date = moment.utc(serverDate).local();
-    return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
   }
 
   render() {
@@ -85,6 +109,7 @@ class DashboardContainer extends Component {
       },
     };
     const { project } = this.props;
+    console.log(project);
     const data = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [{
@@ -113,7 +138,7 @@ class DashboardContainer extends Component {
     const columnStyle = {
       marginBottom: '20px',
     };
-    const selectSprint = {
+    const selectStyle = {
       marginBottom: 0,
       marginTop: '12px',
       // display: 'inline',
@@ -148,11 +173,20 @@ class DashboardContainer extends Component {
       'rgba(255, 63, 73, 0.9)',
       'rgba(178, 53, 70, 0.9)',
     ];
+    const selectSprint = this.state.sprints.map((sprint) => {
+      if (sprint.number === this.state.sprints.length) {
+        return (
+          <option value={sprint.number} key={`sprint${sprint.number}`} defaultValue>{sprint.number}</option>
+        );
+      }
+      return (
+        <option value={sprint.number} key={`sprint${sprint.number}`}>{sprint.number}</option>
+      );
+    });
 
     if (!this.state.tasks) {
       return null;
     }
-    console.log(project);
 
     return (
       <DocumentTitle title={`${project.name}・Dashboard`}>
@@ -160,10 +194,10 @@ class DashboardContainer extends Component {
           <Row style={row}>
             <Col md={10}><h3 className="header-label" style={h3}>Dashboard : Sprint {this.state.currentSprint.number}</h3></Col>
             <Col md={2}>
-              <FormGroup style={selectSprint}>
+              <FormGroup style={selectStyle} onChange={this.handleSelectSprint}>
                 <FormControl componentClass="select">
                   <option value="">Select sprint</option>
-                  <option value="1">1</option>
+                  {selectSprint}
                 </FormControl>
               </FormGroup>
             </Col>
@@ -180,7 +214,7 @@ class DashboardContainer extends Component {
             <Line data={data} options={options1} />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4><FaBarChart /> Remaing points in each day</h4>
+            <h4><FaBarChart /> Remaining points in each day</h4>
             <StoryPoint
               key={project.id}
               project={project}
@@ -195,7 +229,7 @@ class DashboardContainer extends Component {
             <TaskStatus
               key={project.id}
               tasks={this.state.tasks}
-              project={this.state.project}
+              project={project}
               colors={colors}
               colorsHover={colorsHover}
             />
@@ -205,7 +239,7 @@ class DashboardContainer extends Component {
             <ContributorTask
               key={project.id}
               tasks={this.state.tasks}
-              project={this.state.project}
+              project={project}
               colors={colors}
               colorsHover={colorsHover}
             />
