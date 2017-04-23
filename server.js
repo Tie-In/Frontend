@@ -3,7 +3,7 @@ const path = require('path');
 const proxy = require('http-proxy-middleware');
 
 const app = express();
-const port = 9000;
+const port = Number(process.env.PORT || 3000);
 
 app.use('/static', express.static(path.join(__dirname, '/build/static')));
 app.use('/api', proxy({ target: 'https://tieinservice.herokuapp.com/', changeOrigin: true }));
