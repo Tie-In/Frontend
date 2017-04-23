@@ -33,9 +33,11 @@ button {
     right: 200px;
 }
 /*--------Add category--------*/
-#addCatRow {
-  /*position: relative;*/
-}
+/*#addCatRow {
+  position: fixed;
+  float: right;
+  z-index: 99;
+}*/
 
 #cat {
   position: absolute;

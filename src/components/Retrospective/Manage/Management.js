@@ -65,15 +65,19 @@ class Management extends Component {
   }
 
   async sendCategories() {
-    try {
-      const res = await apiHelper.post('/api/viewpoint_categories', {
-        viewpoint_categories: this.state.categories,
-        retrospective_id: this.state.sprints[this.state.sprints.length - 1].retrospective.id,
-      });
-      console.log(res);
-    } catch (err) {
-      console.log(err.response);
-    }
+    // try {
+    //   const res = await apiHelper.post('/api/viewpoint_categories', {
+    //     viewpoint_categories: this.state.categories,
+    //     retrospective_id: this.state.sprints[this.state.sprints.length - 1].retrospective.id,
+    //   });
+    //   console.log(res);
+    // } catch (err) {
+    //   console.log(err.response);
+    // }
+  }
+
+  setComment(color, id) {
+    console.log(`${id} ${color}`);
   }
 
   render() {
@@ -83,9 +87,11 @@ class Management extends Component {
           const index = this.state.viewpoints.indexOf(data);
           if (data.kind === kind) {
             return (<Comment
-              key={index}
+              key={data.id}
               comment={data.comment}
               categories={this.state.categories}
+              setComment={this.setComment}
+              commentID={data.id}
             />);
           }
         });

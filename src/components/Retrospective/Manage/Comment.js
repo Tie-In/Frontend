@@ -24,6 +24,7 @@ class Comment extends Component {
 
   selectColor(colorHex) {
     this.setState({ color: colorHex });
+    this.props.setComment(colorHex, this.props.commentID);
   }
 
   render() {
@@ -61,6 +62,8 @@ class Comment extends Component {
 Comment.propTypes = {
   comment: PropTypes.string.isRequired,
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setComment: PropTypes.func.isRequired,
+  commentID: PropTypes.number.isRequired,
 };
 
 export default Comment;
