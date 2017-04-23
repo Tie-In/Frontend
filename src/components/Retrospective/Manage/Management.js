@@ -16,7 +16,16 @@ class Management extends Component {
     this.state = {
       sprints: this.props.project.sprints,
       viewpoints: [],
+      categories: [],
+      category: {
+        name: '',
+        color: '',
+      },
+      colors: ['#FCB900', '#8ED1FC', '#FF6900', '#cddc39', '#F78DA7', '#00D084',
+        '#0693E3', '#ABB8C3', '#9900EF', '#795548', '#EB144C', '#697689'],
     };
+    this.setCategories = this.setCategories.bind(this);
+    this.sendCategories = this.sendCategories.bind(this);
   }
 
   async componentWillMount() {
@@ -37,9 +46,37 @@ class Management extends Component {
     console.log(selectedSprint.retrospective);
   }
 
+  setCategories(categories) {
+    let cats = [];
+    let cat = {
+      name: '',
+      color: '',
+    };
+    if (!categories.target) {
+      categories.forEach((category, index) => {
+        cat.name = category;
+        cat.color = this.state.colors[index];
+        cats[index] = cat;
+        this.setState({ categories: cats }, () => {
+          console.log(this.state.categories);
+        });
+      });
+    }
+  }
+
+  async sendCategories() {
+    try {
+      const res = await apiHelper.post('/api/viewpoint_categories', {
+        viewpoint_categories: this.state.categories,
+        retrospective_id: this.state.sprints[this.state.sprints.length - 1].retrospective.id,
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err.response);
+    }
+  }
+
   render() {
-    const colors = ['#FCB900', '#8ED1FC', '#FF6900', '#cddc39', '#F78DA7', '#00D084',
-      '#0693E3', '#ABB8C3', '#9900EF', '#795548', '#EB144C', '#697689'];
     const comments = (kind) => {
       if (this.state.viewpoints) {
         return this.state.viewpoints.map((data) => {
@@ -48,7 +85,7 @@ class Management extends Component {
             return (<Comment
               key={index}
               comment={data.comment}
-              colors={colors}
+              categories={this.state.categories}
             />);
           }
         });
@@ -62,7 +99,14 @@ class Management extends Component {
           <hr className="header-line" />
 
           <Row id="addCatRow">
-            <Col sm={12}><Categories id="cat" colors={colors} /></Col>
+            <Col sm={12}>
+              <Categories
+                id="cat"
+                colors={this.state.colors}
+                sprint={this.state.sprints[this.state.sprints.length - 1]}
+                setCategories={this.setCategories}
+              />
+            </Col>
           </Row>
           <Row>
             <Col sm={12}>
@@ -70,20 +114,21 @@ class Management extends Component {
               {comments('good')}
             </Col>
           </Row>
-
           <Row>
             <Col sm={12}>
               <h4 className="header-label">Bad</h4>
               {comments('bad')}
             </Col>
           </Row>
-
           <Row>
             <Col sm={12}>
               <h4 className="header-label">Try</h4>
               {comments('try')}
             </Col>
           </Row>
+          <div id="nextBtn"><Button onClick={this.sendCategories}>
+            Next
+          </Button></div>
         </div>
       </DocumentTitle>
     );

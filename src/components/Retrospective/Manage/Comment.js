@@ -48,7 +48,7 @@ class Comment extends Component {
                 <ColorPicker
                   setColor={this.selectColor}
                   toggle={this.toggleDropdown}
-                  colors={this.props.colors}
+                  categories={this.props.categories}
                 />
               </div>
             </Dropdown>
@@ -60,7 +60,7 @@ class Comment extends Component {
 }
 Comment.propTypes = {
   comment: PropTypes.string.isRequired,
-  colors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  categories: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Comment;

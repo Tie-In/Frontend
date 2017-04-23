@@ -5,7 +5,7 @@
   text-align: center;
   font-weight: bold;
 }
-#startBtn, #submitBtn {
+#startBtn, #submitBtn, #nextBtn {
  text-align: center;
 }
 p {
@@ -34,7 +34,7 @@ button {
 }
 /*--------Add category--------*/
 #addCatRow {
-  /*position: fixed;*/
+  /*position: relative;*/
 }
 
 #cat {
