@@ -226,7 +226,7 @@ class BacklogContainer extends Component {
       }
       return (<Button className="disabled">Next</Button>);
     };
-
+    console.log(permission);
     return (
       this.state.loading ? <div /> :
       <div>
