@@ -7,7 +7,6 @@ class TaskStatus extends Component {
     this.state = {
       tasks: this.props.tasks,
     };
-    this.getNumberOfTasks = this.getNumberOfTasks.bind(this);
   }
 
   async componentWillMount() {
@@ -27,20 +26,13 @@ class TaskStatus extends Component {
 
   getNumberOfTasks() {
     const numbers = [];
-    // console.log(this.state.tasks);
     this.statusName.forEach((status) => {
       let count = 0;
       this.state.tasks.forEach((task) => {
-        // console.log(task);
-        if (!task.status) {
+        if (task.status.name === status) {
           count += 1;
-        } else {
-          if (task.status.name === status) {
-            count += 1;
-          }
         }
       });
-      // console.log('=======');
       numbers.push(count);
     });
     return numbers;

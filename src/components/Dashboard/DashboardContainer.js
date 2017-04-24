@@ -16,18 +16,11 @@ class DashboardContainer extends Component {
     this.state = {
       project: this.props.project,
       sprints: this.props.project.sprints,
-      currentSprint: this.props.project.sprints.slice(-1)[0],
+      // selectedSprint: this.props.project.sprints.slice(-1)[0],
+      selectedSprint: {},
       tasks: [],
     };
     this.handleSelectSprint = this.handleSelectSprint.bind(this);
-  }
-
-  getLocalDate(serverDate) {
-    if (serverDate === null) {
-      return '-';
-    }
-    const date = moment.utc(serverDate).local();
-    return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
   }
 
   async componentWillMount() {
@@ -38,13 +31,26 @@ class DashboardContainer extends Component {
         project: project.id,
         sprint: project.current_sprint_id,
       });
+
+      const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
+      const data = responseSprint.data;
+
       this.setState({
         tasks: sprintResponse.data,
+        selectedSprint: data,
       });
-      console.log(this.state.tasks);
+      console.log(this.state.selectedSprint);
     } catch (err) {
       console.log(err);
     }
+  }
+
+  getLocalDate(serverDate) {
+    if (serverDate === null) {
+      return '-';
+    }
+    const date = moment.utc(serverDate).local();
+    return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
   }
 
   async handleSelectSprint(e) {
@@ -62,7 +68,7 @@ class DashboardContainer extends Component {
       const newSprint = project.sprints[inputIndex];
       this.setState({
         tasks: sprintResponse.data,
-        currentSprint: newSprint,
+        selectedSprint: newSprint,
       });
       console.log(this.state.tasks);
     } catch (err) {
@@ -116,7 +122,7 @@ class DashboardContainer extends Component {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [{
         type: 'line',
-        label: 'My First dataset',
+        label: 'Actual',
         fillColor: 'rgba(220,220,220,0.2)',
         strokeColor: 'rgba(220,220,220,1)',
         pointColor: 'rgba(220,220,220,1)',
@@ -127,7 +133,7 @@ class DashboardContainer extends Component {
       },
       {
         type: 'line',
-        label: 'My Second dataset',
+        label: 'Expected',
         fillColor: 'rgba(151,187,205,0.2)',
         strokeColor: 'rgba(151,187,205,1)',
         pointColor: 'rgba(151,187,205,1)',
@@ -151,8 +157,12 @@ class DashboardContainer extends Component {
     const h3 = {
       marginBottom: 0,
     };
-    const start = this.getLocalDate(this.state.currentSprint.start_date);
-    const end = this.getLocalDate(this.state.currentSprint.end_date);
+    const h4 = {
+      color: '#A25E5D',
+      marginTop: '20px',
+    };
+    const start = this.getLocalDate(this.state.selectedSprint.start_date);
+    const end = this.getLocalDate(this.state.selectedSprint.end_date);
     const duration = project.sprint_duration;
     const contributors = project.project_contributes.length;
     const colors = [
@@ -194,7 +204,7 @@ class DashboardContainer extends Component {
       <DocumentTitle title={`${project.name}・Dashboard`}>
         <div>
           <Row style={row}>
-            <Col md={10}><h3 className="header-label" style={h3}>Dashboard : Sprint {this.state.currentSprint.number}</h3></Col>
+            <Col md={10}><h3 className="header-label" style={h3}>Dashboard : Sprint {this.state.selectedSprint.number}</h3></Col>
             <Col md={2}>
               <FormGroup style={selectStyle} onChange={this.handleSelectSprint}>
                 <FormControl componentClass="select">
@@ -205,29 +215,29 @@ class DashboardContainer extends Component {
             </Col>
           </Row>
           <hr className="header-line" />
-          <p>Total estimated points : {this.state.currentSprint.sprint_points}</p>
-          <p>Status : {this.state.currentSprint.is_ended ? 'end' : 'working'}</p>
+          <p>Total estimated points : {this.state.selectedSprint.sprint_points}</p>
+          <p>Status : {this.state.selectedSprint.is_ended ? 'end' : 'working'}</p>
           <p>Start date : {start}</p>
           <p>End date : {end}</p>
           <p>Number of contributor : {contributors}</p>
-          <p>Sprint duration : {duration > 1 ? `${duration} weeks` : `${duration} week`}</p>
+          <p style={{ marginBottom: '10px' }}>Sprint duration : {duration > 1 ? `${duration} weeks` : `${duration} week`}</p>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4><FaBarChart /> Burndown Chart</h4>
+            <h4 style={h4}><FaBarChart /> Remaining tasks in each sprint</h4>
             <Line data={data} options={options1} />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4><FaBarChart /> Remaining points in each day</h4>
+            <h4 style={h4}><FaBarChart /> Remaining points in each day</h4>
             <StoryPoint
               key={project.id}
               project={project}
               tasks={this.state.tasks}
-              sprint={this.state.currentSprint}
+              sprint={this.state.selectedSprint}
               colors={colors}
               colorsHover={colorsHover}
             />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4><FaBarChart /> Burndown Chart</h4>
+            <h4 style={h4}><FaBarChart /> Number of tasks of each status</h4>
             <TaskStatus
               key={project.id}
               tasks={this.state.tasks}
@@ -237,7 +247,7 @@ class DashboardContainer extends Component {
             />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4><FaBarChart /> Burndown Chart</h4>
+            <h4 style={h4}><FaBarChart /> Story points in charge of each user</h4>
             <ContributorTask
               key={project.id}
               tasks={this.state.tasks}
