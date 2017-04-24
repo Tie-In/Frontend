@@ -28,11 +28,9 @@ class Categories extends Component {
   editPrevCat() {
     const i = this.state.categories.length - 1;
     const lastCat = this.state.categories[i];
-    console.log(lastCat);
     this.setState({
       categories: update(this.state.categories, { $splice: [[i, 1]] }),
     }, () => {
-      console.log(this.state.categories);
       this.props.addCategories(this.state.categories);
     });
     return lastCat;

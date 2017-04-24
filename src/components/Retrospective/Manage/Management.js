@@ -17,6 +17,7 @@ class Management extends Component {
       sprints: this.props.project.sprints,
       viewpoints: [],
       categories: [],
+      tempCategories: [],
       category: {
         name: '',
         color: '',
@@ -25,7 +26,8 @@ class Management extends Component {
         '#0693E3', '#ABB8C3', '#9900EF', '#795548', '#EB144C', '#697689'],
     };
     this.addCategories = this.addCategories.bind(this);
-    this.sendCategories = this.sendCategories.bind(this);
+    this.sendCategory = this.sendCategory.bind(this);
+    this.hasCategory = this.hasCategory.bind(this);
   }
 
   async componentWillMount() {
@@ -39,6 +41,12 @@ class Management extends Component {
       const project = response.data;
       projectActions.setProject(project);
 
+      const catsRes = await apiHelper.get('/api/viewpoint_categories', {
+        retrospective: selectedSprint.retrospective.id,
+      });
+
+      this.setState({ tempCategories: catsRes.data });
+      console.log(this.state.tempCategories);
       console.log(this.state.viewpoints);
     } catch (err) {
       console.log(err);
@@ -51,28 +59,45 @@ class Management extends Component {
     categories.forEach((category, index) => {
       cats.push({ name: category, color: this.state.colors[index] });
     });
-    this.setState({ categories: cats });
+    this.setState({ categories: cats }, () => {
+      this.sendCategory();
+    });
   }
 
-  async sendCategories() {
-    // try {
-    //   const res = await apiHelper.post('/api/viewpoint_categories', {
-    //     viewpoint_categories: this.state.categories,
-    //     retrospective_id: this.state.sprints[this.state.sprints.length - 1].retrospective.id,
-    //   });
-    //   console.log(res);
-    // } catch (err) {
-    //   console.log(err.response);
-    // }
-    document.location.href = `/organizations/${this.props.organization.id}/projects/${this.props.project.id}/retrospective/management/important`;
+  hasCategory() {
+    const { categories, tempCategories } = this.state;
+    const lastCat = categories[categories.length - 1];
+    let found = false;
+    if (tempCategories.length > 0) {
+      tempCategories.forEach((cat) => {
+        if (cat.name === lastCat.name) {
+          found = true;
+        }
+      });
+    }
+    return found;
   }
 
-  setComment(color, id) {
-    console.log(`${id} ${color}`);
+  async sendCategory() {
+    const { categories, sprints } = this.state;
+    const lastCat = categories[categories.length - 1];
+    if (!this.hasCategory()) {
+      try {
+        const res = await apiHelper.post('/api/viewpoint_categories', {
+          viewpoint_category: {
+            name: lastCat.name,
+            color: lastCat.color,
+            retrospective_id: sprints[sprints.length - 1].retrospective.id,
+          },
+        });
+        console.log(res);
+      } catch (err) {
+        console.log(err.response);
+      }
+    }
   }
 
   render() {
-    console.log(this.state.categories);
     const comments = (kind) => {
       if (this.state.viewpoints) {
         return this.state.viewpoints.map((data) => {
@@ -81,7 +106,6 @@ class Management extends Component {
               key={data.id}
               comment={data.comment}
               categories={this.state.categories}
-              setComment={this.setComment}
               commentID={data.id}
             />);
           }
@@ -123,9 +147,9 @@ class Management extends Component {
               {comments('try')}
             </Col>
           </Row>
-          <div id="nextBtn"><Button onClick={this.sendCategories}>
+          {/* <div id="nextBtn"><Button onClick={this.sendCategory}>
             Next
-          </Button></div>
+          </Button></div> */}
         </div>
       </DocumentTitle>
     );

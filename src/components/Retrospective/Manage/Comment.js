@@ -3,7 +3,6 @@ import React, { PropTypes, Component } from 'react';
 import ColorPicker from './ColorPicker';
 
 class Comment extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +20,6 @@ class Comment extends Component {
 
   selectColor(colorHex) {
     this.setState({ color: colorHex });
-    this.props.setComment(colorHex, this.props.commentID);
   }
 
   render() {
@@ -37,9 +35,7 @@ class Comment extends Component {
             <Dropdown className="pull-right" dropup>
               <div bsRole="toggle">
                 <button
-                  onClick={() => { this.setState({ openDropdown: !this.state.openDropdown }, () => {
-                    console.log(this.state.openDropdown);
-                  }); }}
+                  onClick={() => { this.setState({ openDropdown: !this.state.openDropdown }); }}
                   className="round-button" style={categoryColor}
                 />
               </div>
@@ -62,8 +58,6 @@ class Comment extends Component {
 Comment.propTypes = {
   comment: PropTypes.string.isRequired,
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
-  setComment: PropTypes.func.isRequired,
-  commentID: PropTypes.number.isRequired,
 };
 
 export default Comment;

@@ -11,7 +11,6 @@ class ColorPicker extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.categories);
     this.setState({ colors: this.props.categories.map((category) => {
       return category.color;
     }) });
@@ -22,7 +21,6 @@ class ColorPicker extends Component {
   }
 
   render() {
-    console.log(this.state.colors);
     return (
       <div>
         <CirclePicker
