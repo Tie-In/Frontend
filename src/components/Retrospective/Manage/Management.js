@@ -107,6 +107,7 @@ class Management extends Component {
               comment={data.comment}
               categories={this.state.categories}
               commentID={data.id}
+              sprint={this.state.sprints[this.state.sprints.length - 1]}
             />);
           }
         });
@@ -158,7 +159,6 @@ class Management extends Component {
 
 Management.propTypes = {
   project: PropTypes.object.isRequired,
-  organization: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

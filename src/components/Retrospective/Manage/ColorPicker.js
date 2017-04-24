@@ -16,8 +16,9 @@ class ColorPicker extends Component {
     }) });
   }
 
-  selectColor = (color) => {
+  handleChange = (color) => {
     this.props.setColor(color.hex);
+    this.props.setCat();
   }
 
   render() {
@@ -25,7 +26,7 @@ class ColorPicker extends Component {
       <div>
         <CirclePicker
           colors={this.state.colors}
-          onChangeComplete={this.selectColor}
+          onChangeComplete={this.handleChange}
         />
       </div>
     );
@@ -34,6 +35,7 @@ class ColorPicker extends Component {
 
 ColorPicker.propTypes = {
   setColor: PropTypes.func.isRequired,
+  setCat: PropTypes.func.isRequired,
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
