@@ -2,9 +2,23 @@ import React, { PropTypes, Component } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 class ContributorTask extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tasks: this.props.tasks,
+    };
+    this.getStatusNames = this.getStatusNames.bind(this);
+    this.calUsersPoint = this.calUsersPoint.bind(this);
+    this.genDataSet = this.genDataSet.bind(this);
+  }
+
   async componentWillMount() {
     this.getStatusNames();
     this.genUserLable();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ tasks: nextProps.tasks });
   }
 
   getStatusNames() {
@@ -29,7 +43,7 @@ class ContributorTask extends Component {
   genDataSet() {
     this.dataSets = [];
 
-    if (this.props.tasks.length > 0) {
+    if (this.state.tasks.length > 0) {
       for (let i = 0; i < this.statusName.length; i += 1) {
         if (this.statusName[i] !== 'To do') {
           this.dataSets.push({
@@ -48,7 +62,7 @@ class ContributorTask extends Component {
     const points = [];
     this.usersIds.forEach((id) => {
       let count = 0;
-      this.props.tasks.forEach((task) => {
+      this.state.tasks.forEach((task) => {
         if (id === task.assignee_id && status === task.status.name) {
           count += task.story_point;
         }
@@ -60,7 +74,7 @@ class ContributorTask extends Component {
   }
 
   render() {
-    // console.log(this.props.tasks);
+    // console.log(this.state.tasks);
     const barData = {
       labels: this.xLabels,
       datasets: this.genDataSet(),

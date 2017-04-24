@@ -2,8 +2,20 @@ import React, { PropTypes, Component } from 'react';
 import { Pie } from 'react-chartjs-2';
 
 class TaskStatus extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tasks: this.props.tasks,
+    };
+    this.getNumberOfTasks = this.getNumberOfTasks.bind(this);
+  }
+
   async componentWillMount() {
     this.getStatusNames();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ tasks: nextProps.tasks });
   }
 
   getStatusNames() {
@@ -15,14 +27,20 @@ class TaskStatus extends Component {
 
   getNumberOfTasks() {
     const numbers = [];
-    const tasks = this.props.tasks;
+    // console.log(this.state.tasks);
     this.statusName.forEach((status) => {
       let count = 0;
-      tasks.forEach((task) => {
-        if (task.status.name === status) {
+      this.state.tasks.forEach((task) => {
+        // console.log(task);
+        if (!task.status) {
           count += 1;
+        } else {
+          if (task.status.name === status) {
+            count += 1;
+          }
         }
       });
+      // console.log('=======');
       numbers.push(count);
     });
     return numbers;

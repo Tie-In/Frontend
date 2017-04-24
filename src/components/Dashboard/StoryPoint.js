@@ -92,6 +92,7 @@ class StoryPoint extends Component {
         pointHoverBackgroundColor: this.props.colorsHover[1],
         pointHoverBorderColor: this.props.colorsHover[1],
         yAxisID: 'y-axis-1',
+        steppedLine: true,
       },
       {
         label: 'Expected',

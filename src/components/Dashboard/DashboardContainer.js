@@ -33,7 +33,7 @@ class DashboardContainer extends Component {
   async componentWillMount() {
     try {
       const { project } = this.props;
-      console.log(project.current_sprint_id);
+      // console.log(project.current_sprint_id);
       const sprintResponse = await apiHelper.get('/api/tasks', {
         project: project.id,
         sprint: project.current_sprint_id,
@@ -41,6 +41,7 @@ class DashboardContainer extends Component {
       this.setState({
         tasks: sprintResponse.data,
       });
+      console.log(this.state.tasks);
     } catch (err) {
       console.log(err);
     }
@@ -52,19 +53,20 @@ class DashboardContainer extends Component {
     try {
       const { project } = this.props;
       const id = project.sprints[inputIndex].id;
-      // console.log(id);
+      console.log(`selected id : ${id}`);
       const sprintResponse = await apiHelper.get('/api/tasks', {
         project: project.id,
-        sprint: 3,
+        sprint: id,
       });
-      // const newSprint = project.sprints[inputIndex];
       console.log(sprintResponse);
+      const newSprint = project.sprints[inputIndex];
       this.setState({
         tasks: sprintResponse.data,
-        // currentSprint: newSprint,
+        currentSprint: newSprint,
       });
+      console.log(this.state.tasks);
     } catch (err) {
-      console.log(err.response);
+      console.log(err);
     }
   }
 
@@ -109,7 +111,7 @@ class DashboardContainer extends Component {
       },
     };
     const { project } = this.props;
-    console.log(project);
+    // console.log(project);
     const data = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [{
@@ -176,7 +178,7 @@ class DashboardContainer extends Component {
     const selectSprint = this.state.sprints.map((sprint) => {
       if (sprint.number === this.state.sprints.length) {
         return (
-          <option value={sprint.number} key={`sprint${sprint.number}`} defaultValue>{sprint.number}</option>
+          <option value={sprint.number} key={`sprint${sprint.number}`} selected>{sprint.number}</option>
         );
       }
       return (
