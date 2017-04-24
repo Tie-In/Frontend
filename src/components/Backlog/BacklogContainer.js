@@ -9,6 +9,7 @@ import EditTaskModal from './EditTaskModal';
 import PointEstimationModal from './PointEstimationModal';
 import './backlog.css';
 import * as projectActions from '../../actions/project-actions';
+import * as permissionActions from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class BacklogContainer extends Component {
@@ -91,10 +92,15 @@ class BacklogContainer extends Component {
   }
 
   async reloadPage() {
+    const { user, params } = this.props;
     try {
-      const responseProject = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
+      const responseProject = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = responseProject.data;
       this.props.projectActions.setProject(project);
+      const perLevel = project.project_contributes.find((x) => {
+        return x.user_id === user.id;
+      }).permission_level;
+      permissionActions.setProject(perLevel);
 
       const response = await apiHelper.get('/api/tasks', {
         project: this.props.params.projectId,
@@ -151,7 +157,7 @@ class BacklogContainer extends Component {
   }
 
   render() {
-    const { project } = this.props;
+    const { project, permission } = this.props;
     const rowStyle = {
       paddingTop: 5,
       paddingBottom: 5,
@@ -203,7 +209,7 @@ class BacklogContainer extends Component {
             <Col xs={10} md={10} onClick={() => { this.showEditTaskModal(task); }}>
               <span id="taskName">{task.name}
                 { task.feature ?
-                  <Label className="pull-right" style={{ marginTop: 3 }}>
+                  <Label bsStyle="primary" className="pull-right" style={{ marginTop: 3 }}>
                     {task.feature.name}
                   </Label> : <div />
                 }
@@ -226,7 +232,6 @@ class BacklogContainer extends Component {
       }
       return (<Button className="disabled">Next</Button>);
     };
-
     return (
       this.state.loading ? <div /> :
       <div>
@@ -238,17 +243,19 @@ class BacklogContainer extends Component {
             </div> : <div />
           }
           <Row>
-            <Col sm={8}>
+            <Col sm={permission.project === 'admin' ? 8 : 12}>
               <h3 className="header-label">Backlog</h3>
               <hr className="header-line" />
               <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
             </Col>
-            <Col sm={4}>
-              <h3 className="header-label">New sprint:</h3>
-              <hr className="header-line" />
-              <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
-              <div id="nextButton">{nextButton()}</div>
-            </Col>
+            { permission.project === 'admin' ?
+              <Col sm={4}>
+                <h3 className="header-label">New sprint:</h3>
+                <hr className="header-line" />
+                <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
+                <div id="nextButton">{nextButton()}</div>
+              </Col> : <div />
+            }
           </Row>
         </div>
         <EditTaskModal
@@ -263,6 +270,7 @@ class BacklogContainer extends Component {
           close={this.closePointEstimationModal}
           tasks={this.state.sprintTasks}
           setSprintTasks={this.setSprintTasks}
+          maxPoint={project.max_story_point}
         />
       </div>
     );
@@ -272,17 +280,21 @@ class BacklogContainer extends Component {
 BacklogContainer.propTypes = {
   params: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
+  permission: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     project: state.project,
+    permission: state.permission,
+    user: state.user,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     projectActions: bindActionCreators(projectActions, dispatch),
+    permissionActions: bindActionCreators(permissionActions, dispatch),
   };
 }
 

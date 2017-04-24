@@ -32,7 +32,7 @@ class FactorsTable extends Component {
 
   computeResult() {
     let temp = 0;
-    this.state.impacts.map((data) => {
+    this.state.impacts.forEach((data) => {
       temp += parseFloat(data);
     });
     this.props.setValue(this.props.valueTitle, temp);
@@ -80,19 +80,13 @@ class FactorsTable extends Component {
           <thead style={headerStyle}>
             <tr>
               <th className="text-center">Factor</th>
-              <th className="text-center">Weight</th>
               <th className="text-center">Rating ( 0 - 5 )</th>
-              <th className="text-center">Impact</th>
             </tr>
           </thead>
           <tbody>
             {this.renderRows()}
           </tbody>
         </Table>
-        <div style={resultStyle}>
-          <Glyphicon style={iconStyle} glyph="scale" />
-          {resultLabel} = {result}
-        </div>
       </div>
     );
   }

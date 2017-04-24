@@ -86,10 +86,10 @@ class EditTaskModal extends Component {
         <div className="editTaskContainer">
           <Form horizontal>
             <FormGroup>
-              <Col xs={3} componentClass={ControlLabel}>
+              <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                 Name
               </Col>
-              <Col xs={9}>
+              <Col xs={8}>
                 <FormControl
                   type="text" placeholder="Name"
                   name="name"
@@ -99,10 +99,10 @@ class EditTaskModal extends Component {
               </Col>
             </FormGroup>
             <FormGroup>
-              <Col xs={3} componentClass={ControlLabel}>
+              <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                 Description
               </Col>
-              <Col xs={9}>
+              <Col xs={8}>
                 <FormControl
                   type="text" placeholder="Description"
                   name="description"
@@ -112,10 +112,10 @@ class EditTaskModal extends Component {
               </Col>
             </FormGroup>
             <FormGroup>
-              <Col xs={3} componentClass={ControlLabel}>
+              <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                 Feature
               </Col>
-              <Col xs={9}>
+              <Col xs={8}>
                 <AutosuggestionBlock
                   data={this.state.allFeatures}
                   setValue={this.setFeature} initSelect={input.feature}
@@ -123,10 +123,10 @@ class EditTaskModal extends Component {
               </Col>
             </FormGroup>
             <FormGroup>
-              <Col xs={3} componentClass={ControlLabel}>
+              <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                 Assignee
               </Col>
-              <Col xs={9}>
+              <Col xs={8}>
                 <AutosuggestionBlock
                   data={this.state.allUsers}
                   setValue={this.setAssignee}
