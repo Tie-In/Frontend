@@ -21,6 +21,7 @@ import DashboardContainer from './Dashboard/DashboardContainer';
 import RetrospectiveContainer from './Retrospective/RetrospectiveContainer';
 import NewRetrospective from './Retrospective/NewRetrospective';
 import Management from './Retrospective/Manage/Management';
+import Important from './Retrospective/Manage/Important';
 
 module.exports = {
   Login,
@@ -46,4 +47,5 @@ module.exports = {
   RetrospectiveContainer,
   NewRetrospective,
   Management,
+  Important,
 };

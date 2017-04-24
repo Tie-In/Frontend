@@ -74,6 +74,7 @@ class Management extends Component {
     // } catch (err) {
     //   console.log(err.response);
     // }
+    document.location.href = `/organizations/${this.props.organization.id}/projects/${this.props.project.id}/retrospective/management/important`;
   }
 
   setComment(color, id) {
@@ -143,6 +144,7 @@ class Management extends Component {
 
 Management.propTypes = {
   project: PropTypes.object.isRequired,
+  organization: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
