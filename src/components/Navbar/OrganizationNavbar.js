@@ -13,7 +13,8 @@ class OrganizationNavbar extends Component {
     const { user, organization } = this.props;
     const path = `/organizations/${organization.id}`;
     const data = [
-      { id: 1, name: 'Setting', path: `${path}/setting` },
+      { id: 1, name: 'Home', path: `${path}`, margin: 0 },
+      { id: 2, name: 'Setting', path: `${path}/setting`, margin: 75 },
     ];
     const wrappedText = {
       width: 150,
@@ -24,7 +25,7 @@ class OrganizationNavbar extends Component {
     };
     const menuNode = data.map((menu) => {
       return (
-        <li key={menu.id} style={{ marginRight: 75 }}>
+        <li key={menu.id} style={{ marginRight: menu.margin }}>
           <Link to={menu.path} activeClassName="active">{menu.name}</Link>
         </li>
       );
