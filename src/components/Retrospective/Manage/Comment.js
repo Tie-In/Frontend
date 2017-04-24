@@ -1,4 +1,4 @@
-import { Row, Col, Panel, Dropdown } from 'react-bootstrap';
+import { Col, Panel, Dropdown } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import ColorPicker from './ColorPicker';
 
@@ -16,10 +16,7 @@ class Comment extends Component {
   }
 
   toggleDropdown(open) {
-    // console.log('Toggle');
-    // console.log(`Before ${this.state.openDropdown}`);
     this.setState({ openDropdown: open });
-    // console.log(this.state.openDropdown);
   }
 
   selectColor(colorHex) {
@@ -28,7 +25,6 @@ class Comment extends Component {
   }
 
   render() {
-    // console.log(`Render ${this.state.openDropdown}`);
     const { comment } = this.props;
     const categoryColor = {
       backgroundColor: this.state.color,
@@ -41,16 +37,20 @@ class Comment extends Component {
             <Dropdown className="pull-right" dropup>
               <div bsRole="toggle">
                 <button
-                  onClick={() => { this.setState({ openDropdown: !this.state.openDropdown }); }}
+                  onClick={() => { this.setState({ openDropdown: !this.state.openDropdown }, () => {
+                    console.log(this.state.openDropdown);
+                  }); }}
                   className="round-button" style={categoryColor}
                 />
               </div>
               <div id="colorMenu" className="dropdown-menu" bsRole="menu">
-                <ColorPicker
-                  setColor={this.selectColor}
-                  toggle={this.toggleDropdown}
-                  categories={this.props.categories}
-                />
+                { this.state.openDropdown ?
+                  <ColorPicker
+                    setColor={this.selectColor}
+                    toggle={this.toggleDropdown}
+                    categories={this.props.categories}
+                  /> : <div />
+                }
               </div>
             </Dropdown>
           </Panel>

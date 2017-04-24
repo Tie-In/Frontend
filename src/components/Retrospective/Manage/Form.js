@@ -26,7 +26,7 @@ class Form extends Component {
 
   handleKeyDown(e) {
     const key = e.keyCode;
-    if (key === this.state.backspace) {
+    if (key === this.state.backspace && this.state.input === '') {
       this.editPrevCat();
     }
   }

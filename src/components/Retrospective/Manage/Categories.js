@@ -21,17 +21,19 @@ class Categories extends Component {
     this.setState({
       categories: update(this.state.categories, { $push: [category] }),
     }, () => {
-      this.props.setCategories(this.state.categories);
+      this.props.addCategories(this.state.categories);
     });
   }
 
   editPrevCat() {
     const i = this.state.categories.length - 1;
     const lastCat = this.state.categories[i];
+    console.log(lastCat);
     this.setState({
       categories: update(this.state.categories, { $splice: [[i, 1]] }),
     }, () => {
-      this.props.setCategories(this.state.categories);
+      console.log(this.state.categories);
+      this.props.addCategories(this.state.categories);
     });
     return lastCat;
   }
@@ -53,7 +55,7 @@ class Categories extends Component {
           />
         </div>
         <small>Press <code>enter</code> or <code>,</code> to add a category.
-        Press <code>backspace</code> to delete previous category.</small>
+        Press <code>backspace</code> to edit previous category.</small>
       </div>
     );
   }
@@ -61,7 +63,7 @@ class Categories extends Component {
 
 Categories.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setCategories: PropTypes.func.isRequired,
+  addCategories: PropTypes.func.isRequired,
 };
 
 export default Categories;

@@ -24,7 +24,7 @@ class Management extends Component {
       colors: ['#FCB900', '#8ED1FC', '#FF6900', '#cddc39', '#F78DA7', '#00D084',
         '#0693E3', '#ABB8C3', '#9900EF', '#795548', '#EB144C', '#697689'],
     };
-    this.setCategories = this.setCategories.bind(this);
+    this.addCategories = this.addCategories.bind(this);
     this.sendCategories = this.sendCategories.bind(this);
   }
 
@@ -46,22 +46,12 @@ class Management extends Component {
     console.log(selectedSprint.retrospective);
   }
 
-  setCategories(categories) {
-    let cats = [];
-    let cat = {
-      name: '',
-      color: '',
-    };
-    if (!categories.target) {
-      categories.forEach((category, index) => {
-        cat.name = category;
-        cat.color = this.state.colors[index];
-        cats[index] = cat;
-        this.setState({ categories: cats }, () => {
-          console.log(this.state.categories);
-        });
-      });
-    }
+  addCategories(categories) {
+    const cats = [];
+    categories.forEach((category, index) => {
+      cats.push({ name: category, color: this.state.colors[index] });
+    });
+    this.setState({ categories: cats });
   }
 
   async sendCategories() {
@@ -82,10 +72,10 @@ class Management extends Component {
   }
 
   render() {
+    console.log(this.state.categories);
     const comments = (kind) => {
       if (this.state.viewpoints) {
         return this.state.viewpoints.map((data) => {
-          const index = this.state.viewpoints.indexOf(data);
           if (data.kind === kind) {
             return (<Comment
               key={data.id}
@@ -111,7 +101,7 @@ class Management extends Component {
                 id="cat"
                 colors={this.state.colors}
                 sprint={this.state.sprints[this.state.sprints.length - 1]}
-                setCategories={this.setCategories}
+                addCategories={this.addCategories}
               />
             </Col>
           </Row>

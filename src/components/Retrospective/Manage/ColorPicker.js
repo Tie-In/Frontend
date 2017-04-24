@@ -1,29 +1,28 @@
 import React, { Component, PropTypes } from 'react';
 import { CirclePicker } from 'react-color';
-import update from 'immutability-helper';
 
 class ColorPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cats: [],
+      cats: this.props.categories,
       colors: [],
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ cats: nextProps.categories });
-    this.state.cats.map((cat) => {
-      this.setState({ colors: update(this.state.colors, { $push: [cat.color] }) });
-    });
+  componentWillMount() {
+    console.log(this.props.categories);
+    this.setState({ colors: this.props.categories.map((category) => {
+      return category.color;
+    }) });
   }
 
   selectColor = (color) => {
     this.props.setColor(color.hex);
-    this.props.toggle(false);
   }
 
   render() {
+    console.log(this.state.colors);
     return (
       <div>
         <CirclePicker
@@ -37,7 +36,6 @@ class ColorPicker extends Component {
 
 ColorPicker.propTypes = {
   setColor: PropTypes.func.isRequired,
-  toggle: PropTypes.func.isRequired,
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
