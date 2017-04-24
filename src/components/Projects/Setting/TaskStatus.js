@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  Col, Row, Table, Glyphicon, Button, FormGroup, FormControl, DropdownButton, MenuItem,
+  Col, Row, Table, Glyphicon, Button, FormGroup, FormControl,
 } from 'react-bootstrap';
-import AddMemberRow from './AddMemberRow';
 
 class TaskStatus extends Component {
   constructor(props) {
@@ -27,27 +26,27 @@ class TaskStatus extends Component {
     const name = e.target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
   create() {
-    this.props.create(this.state.newStatus)
+    this.props.create(this.state.newStatus);
     this.setState({
       onCreate: false,
       newState: '',
-    })
+    });
   }
 
   edit(status) {
-    const pass = this.props.edit(status.id, this.state.editStatus, this.state.editStatusIndex - 1)
+    const pass = this.props.edit(status.id, this.state.editStatus, this.state.editStatusIndex - 1);
     if (pass) {
       this.setState({ onEdit: -1 });
     }
   }
 
   del(id) {
-    this.props.del(id); 
+    this.props.del(id);
     this.setState({ onDelete: -1 });
   }
 
@@ -61,16 +60,16 @@ class TaskStatus extends Component {
           </Col>
           <Col sm={4}>
             <div className="pull-right">
-              <Button 
-                bsStyle="primary" style={{ marginRight: 5}}
+              <Button
+                bsStyle="primary" style={{ marginRight: 5 }}
                 onClick={() => { this.setState({ onDelete: -1 }); }}
               >
                 Cancel
               </Button>
-              <Button 
+              <Button
                 bsStyle="primary"
                 style={{ color: 'red' }}
-                onClick={() => this.del(id)}
+                onClick={() => { this.del(id); }}
               >
                 Delete status
               </Button>
@@ -84,13 +83,13 @@ class TaskStatus extends Component {
       return (
         <td>
           <Col xs={1}>
-            <FormControl 
-              componentClass="select" name="editStatusIndex" 
+            <FormControl
+              componentClass="select" name="editStatusIndex"
               defaultValue={index + 1} 
               onChange={this.handleInputChange}
             >
               { statuses.map((_, i) => {
-                return <option key={i} value={i + 1}>{i + 1}</option>
+                return (<option key={i} value={i + 1}>{i + 1}</option>);
               })}
             </FormControl>
           </Col>
@@ -104,13 +103,13 @@ class TaskStatus extends Component {
           </Col>
           <Col sm={4} smOffset={2}>
             <div className="pull-right">
-              <Button 
-                bsStyle="primary" style={{ marginRight: 5}}
+              <Button
+                bsStyle="primary" style={{ marginRight: 5 }}
                 onClick={() => { this.setState({ onEdit: -1 }); }}
               >
                 Cancel
               </Button>
-              <Button onClick={() => this.edit(status)}>
+              <Button onClick={() => { this.edit(status); }}>
                 Save change
               </Button>
             </div>
@@ -119,11 +118,11 @@ class TaskStatus extends Component {
       );
     };
 
-    const normalRow = (status, index) => { 
+    const normalRow = (status, index) => {
       return (
         <td style={{ verticalAlign: 'middle' }}>
           <Col xs={1}>{index + 1}</Col>
-          { index + 1 !== statuses.length ? 
+          { index + 1 !== statuses.length ?
             <Col xs={8}>{status.name}</Col>
             :
             <div>
@@ -133,16 +132,16 @@ class TaskStatus extends Component {
               </Col>
             </div>
           }
-          { permission !== 'user' ? 
+          { permission !== 'user' ?
             <Col xs={3} style={{ textAlign: 'center' }}>
-              <a 
-                style={{ cursor: 'pointer', marginRight: 20 }} 
+              <a
+                style={{ cursor: 'pointer', marginRight: 20 }}
                 onClick={() => this.setState({ onEdit: index, editStatus: status.name })}
               >
                 <Glyphicon glyph="pencil" /> Edit
               </a>
-              <a 
-                style={{ cursor: 'pointer' }} onClick={() => this.setState({ onDelete: index})}
+              <a
+                style={{ cursor: 'pointer' }} onClick={() => this.setState({ onDelete: index })}
               >
                 <Glyphicon glyph="remove" /> Delete
               </a>
@@ -165,7 +164,7 @@ class TaskStatus extends Component {
               <tbody>
                 { statuses.map((status, index) => {
                   return (<tr key={status.id} style={{ height: 45 }}>
-                      { this.state.onEdit === index ? 
+                      { this.state.onEdit === index ?
                         editRow(status, index)
                         :
                         this.state.onDelete === index ?
@@ -193,20 +192,20 @@ class TaskStatus extends Component {
               </FormGroup>
             </Col>
             <Col xs={3}>
-              <Button 
+              <Button
                 bsStyle="primary" style={{ marginRight: 5 }}
                 onClick={() => { this.setState({ onCreate: false }); }}
               >
                 Cancel
               </Button>
-              <Button onClick={() => this.create()}>
+              <Button onClick={() => { this.create(); }}>
                 Create status
               </Button>
             </Col>
           </Row>
           :
           <Row>
-            { permission !== 'user' ? 
+            { permission !== 'user' ?
               <Col xs={12} md={8} mdOffset={4}>
                 <Button
                   className="pull-right" onClick={() => { this.setState({ onCreate: true }); }}
