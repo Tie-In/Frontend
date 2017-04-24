@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import {
   Button, Col, Row,
-  FormGroup, ControlLabel, Glyphicon, Label, Dropdown, FormControl,
+  FormGroup, ControlLabel, Glyphicon, Label, Dropdown,
 } from 'react-bootstrap';
 import Autosuggest from 'react-autosuggest';
-import WrapperColorpicker from './WrapperColorpicker';
-import * as apiHelper from '../../helpers/apiHelper';
+import CustomMenu from './CustomMenu';
 import '../../style/autosuggestStyle.css';
 
 function escapeRegexCharacters(str) {
@@ -51,9 +50,7 @@ class TagRow extends Component {
 
     this.color = '';
     this.toggleDropdown = this.toggleDropdown.bind(this);
-    this.inputClick = this.inputClick.bind(this);
-    this.selectColor = this.selectColor.bind(this);
-    this.createTag = this.createTag.bind(this);
+    this.setNewTag = this.setNewTag.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
@@ -161,37 +158,21 @@ class TagRow extends Component {
     );
   }
 
-  inputClick() {
-    this.setState({ openDropdown: true });
-  }
-
   toggleDropdown() {
     this.setState({ openDropdown: !this.state.openDropdown });
   }
 
-  selectColor(colorHex) {
-    this.color = colorHex;
-  }
-
-  async createTag() {
-    const newTag = {
-      name: this.state.newName,
-      color: this.color,
-      project_id: this.props.projectId,
-    };
+  setNewTag(tag) {
     const temp = this.state.selected;
     const resultTemp = this.state.result;
-    const response = await apiHelper.post('/api/tags', newTag);
-    temp.push(response.data);
-    resultTemp.push({ id: response.data.id });
+    temp.push(tag);
+    resultTemp.push({ id: tag.id });
     this.props.setValue(resultTemp);
     this.setState({
       openDropdown: false,
       selected: temp,
-      newName: '',
       result: resultTemp,
     });
-    this.color = '';
   }
 
   handleInputChange(e) {
@@ -211,10 +192,7 @@ class TagRow extends Component {
       onChange: this.onChange,
       onClick: this.onSuggestionSelected,
     };
-    const menuStyle = {
-      padding: '5px 5px 5px 5px',
-    };
-
+    console.log(openDropdown);
     return (
       <div>
         <Col xs={12} md={4}>
@@ -235,7 +213,7 @@ class TagRow extends Component {
           </FormGroup>
         </Col>
         <Col xs={4} md={2}>
-          <Dropdown id="NewTagInNewTasl" defaultOpen={openDropdown} dropup>
+          <Dropdown id="NewTagInNewTask" dropup>
             <div bsRole="toggle">
               <Button
                 onClick={this.toggleDropdown}
@@ -245,19 +223,7 @@ class TagRow extends Component {
                 New tag
               </Button>
             </div>
-            <div className="dropdown-menu" style={menuStyle} bsRole="menu">
-              <FormGroup>
-                <FormControl
-                  type="text" placeholder="Tag name"
-                  onClick={this.inputClick}
-                  name="newName"
-                  onChange={this.handleInputChange}
-                />
-              </FormGroup>
-              <WrapperColorpicker setColor={this.selectColor} />
-              <br />
-              <Button onClick={this.createTag}>Create</Button>
-            </div>
+            <CustomMenu bsRole="menu" projectId={this.props.projectId} addTag={this.setNewTag} />
           </Dropdown>
         </Col>
         <Col xs={12} md={4}>

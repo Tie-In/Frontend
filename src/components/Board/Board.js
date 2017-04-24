@@ -51,8 +51,13 @@ class Board extends Component {
   }
 
   componentDidMount() {
-    setInterval(this.pollingData, 30000);
+    // setInterval(this.pollingData, 30000);
   }
+
+  // componentWillUnmount() {
+  //   console.log('in');
+  //   clearInterval();
+  // }
 
   async pollingData() {
     const { project } = this.props;

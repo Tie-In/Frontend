@@ -9,6 +9,7 @@ import EditTaskModal from './EditTaskModal';
 import PointEstimationModal from './PointEstimationModal';
 import './backlog.css';
 import * as projectActions from '../../actions/project-actions';
+import * as permissionActions from '../../actions/permission-actions';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class BacklogContainer extends Component {
@@ -91,10 +92,15 @@ class BacklogContainer extends Component {
   }
 
   async reloadPage() {
+    const { user, params } = this.props;
     try {
-      const responseProject = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
+      const responseProject = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = responseProject.data;
       this.props.projectActions.setProject(project);
+      const perLevel = project.project_contributes.find((x) => {
+        return x.user_id === user.id;
+      }).permission_level;
+      permissionActions.setProject(perLevel);
 
       const response = await apiHelper.get('/api/tasks', {
         project: this.props.params.projectId,
@@ -203,7 +209,7 @@ class BacklogContainer extends Component {
             <Col xs={10} md={10} onClick={() => { this.showEditTaskModal(task); }}>
               <span id="taskName">{task.name}
                 { task.feature ?
-                  <Label className="pull-right" style={{ marginTop: 3 }}>
+                  <Label bsStyle="primary" className="pull-right" style={{ marginTop: 3 }}>
                     {task.feature.name}
                   </Label> : <div />
                 }
@@ -226,7 +232,6 @@ class BacklogContainer extends Component {
       }
       return (<Button className="disabled">Next</Button>);
     };
-    console.log(permission);
     return (
       this.state.loading ? <div /> :
       <div>
@@ -275,19 +280,21 @@ class BacklogContainer extends Component {
 BacklogContainer.propTypes = {
   params: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
-  permission: PropTypes.string.isRequired,
+  permission: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     project: state.project,
     permission: state.permission,
+    user: state.user,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     projectActions: bindActionCreators(projectActions, dispatch),
+    permissionActions: bindActionCreators(permissionActions, dispatch),
   };
 }
 

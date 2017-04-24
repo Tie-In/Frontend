@@ -69,10 +69,14 @@ class Card extends Component {
         id={style ? item.id : null} onClick={() => { this.setModal(true); }}
       >
         <div className="item-name">
-          {item.name} <Badge pullRight>{item.story_point}</Badge>
+          {item.name}
+          <span className="pull-right">
+            <Badge>{item.story_point}</Badge>
+          </span>
         </div>
         <div className="item-container">
           <div className="item-content">
+            {/*<Label bsStyle="primary" style={{ marginRight: 5 }}>{item.feature ? item.feature.name : ''}</Label>*/}
             <p>{item.description}</p>
           </div>
           <div className="item-footer">
