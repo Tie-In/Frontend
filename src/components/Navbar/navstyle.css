@@ -28,7 +28,7 @@ header[role="banner"] #logo-main {
   color: white;
 }
 #navbar-primary.navbar-default .navbar-nav > li:hover > a, .active {
-  color: #F9F2E8 !important;
+  color: #f9dfbb !important;
   font-weight: bold;
   /*background-color: #F9F2E8;*/
 }

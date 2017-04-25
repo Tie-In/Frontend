@@ -65,7 +65,7 @@ class StoryPoint extends Component {
         for (let j = 0; j < this.props.tasks.length; j += 1) {
           const doneDate = moment(this.props.tasks[j].done_date);
           if (doneDate.isSame(thisDate)) {
-            countedPoint += 1;
+            countedPoint += this.props.tasks[j].story_point;
           }
         }
         remainingPoint -= countedPoint;

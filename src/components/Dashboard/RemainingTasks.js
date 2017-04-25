@@ -28,9 +28,6 @@ class RemainingTasks extends Component {
         actualData.push(remainingTask);
       }
     }
-    if (amountSprint === 1) {
-      actualData.splice(0, 0, actualData[0]);
-    }
     return actualData;
   }
 
@@ -40,9 +37,6 @@ class RemainingTasks extends Component {
     const amountSprint = project.sprints.length;
     for (let i = 0; i < amountSprint; i += 1) {
       labels.push(i + 1);
-    }
-    if (amountSprint === 1) {
-      labels.splice(0, 0, '');
     }
 
     return labels;
@@ -60,9 +54,6 @@ class RemainingTasks extends Component {
 
     for (let i = 0; i < amountSprint; i += 1) {
       expectecData.push(Math.round(total - (gradient * i)));
-    }
-    if (amountSprint === 1) {
-      expectecData.splice(0, 0, total);
     }
     return expectecData;
   }
