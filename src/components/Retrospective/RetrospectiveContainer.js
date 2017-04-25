@@ -40,7 +40,6 @@ class RetrospectiveContainer extends Component {
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
       projectActions.setProject(project);
-      console.log(this.state.viewpoints);
     } catch (err) {
       console.log(err);
     }
@@ -50,12 +49,11 @@ class RetrospectiveContainer extends Component {
   }
   async startRetro() {
     try {
-      const res = await apiHelper.post('/api/retrospectives', {
+      await apiHelper.post('/api/retrospectives', {
         retrospective: {
           sprint_id: this.state.selectedSprint.id,
         },
       });
-      console.log(res);
     } catch (err) {
       console.log(err.response);
     }
@@ -79,7 +77,7 @@ class RetrospectiveContainer extends Component {
     try {
       const res = await apiHelper.get(`/api/retrospectives/${tempSprint.retrospective.id}`);
       this.setState({ viewpoints: res.data.viewpoints });
-      console.log(this.state.viewpoints);
+      // console.log(this.state.viewpoints);
     } catch (err) {
       this.setState({ viewpoints: err.response });
       console.log(err.response);
@@ -91,9 +89,7 @@ class RetrospectiveContainer extends Component {
   }
   hasUser() {
     let has = false;
-    console.log(this.props.user);
     this.state.contributors.forEach((user) => {
-      console.log(user);
       if (user.user_id === this.props.user.id) {
         has = true;
       }
