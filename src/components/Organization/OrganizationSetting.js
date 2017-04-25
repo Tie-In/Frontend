@@ -3,6 +3,7 @@ import {
   Col, Row,
   Nav, NavItem, Glyphicon,
 } from 'react-bootstrap';
+import DocumentTitle from 'react-document-title';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as organizationActions from '../../actions/organization-actions';
@@ -76,7 +77,7 @@ class OrganizationSetting extends Component {
   render() {
     const { tabIndex } = this.state;
     const { organization, permission } = this.props;
-    console.log(permission);
+
     const switchRender = (tab) => {
       if (tab === 1) {
         return (<Information organization={organization} update={this.updateSetting} />);
@@ -96,22 +97,24 @@ class OrganizationSetting extends Component {
     };
 
     return (
-      <div className="tiein-container">
-        <h3 className="header-label">Organization setting</h3>
-        <hr className="header-line" />
-        <form>
-          <Row>
-            <Col xs={12}>
-              <Nav className="setting-tabs" bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
-                <NavItem eventKey={1}><Glyphicon glyph="info-sign" /> Information</NavItem>
-                <NavItem eventKey={2}><Glyphicon glyph="user" /> Contributors</NavItem>
-              </Nav>
-            </Col>
-          </Row>
-          <br />
-          {switchRender(tabIndex)}
-        </form>
-      </div>
+      <DocumentTitle title={`${organization.name}・Setting`}>
+        <div className="tiein-container">
+          <h3 className="header-label">Organization setting</h3>
+          <hr className="header-line" />
+          <form>
+            <Row>
+              <Col xs={12}>
+                <Nav className="setting-tabs" bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
+                  <NavItem eventKey={1}><Glyphicon glyph="info-sign" /> Information</NavItem>
+                  <NavItem eventKey={2}><Glyphicon glyph="user" /> Contributors</NavItem>
+                </Nav>
+              </Col>
+            </Row>
+            <br />
+            {switchRender(tabIndex)}
+          </form>
+        </div>
+      </DocumentTitle>
     );
   }
 }

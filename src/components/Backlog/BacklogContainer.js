@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Row, Col, Button, Label } from 'react-bootstrap';
+import DocumentTitle from 'react-document-title';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import 'simple-line-icons/css/simple-line-icons.css';
@@ -233,45 +234,47 @@ class BacklogContainer extends Component {
     };
     return (
       this.state.loading ? <div /> :
-      <div>
-        <div className="tiein-container">
-          { project.current_sprint_id !== null ?
-            <div>
-              <CurrentSprint reloadPage={this.reloadPage} project={project} />
-              <br />
-            </div> : <div />
-          }
-          <Row>
-            <Col sm={permission.project === 'admin' ? 8 : 12}>
-              <h3 className="header-label">Backlog</h3>
-              <hr className="header-line" />
-              <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
-            </Col>
-            { permission.project === 'admin' ?
-              <Col sm={4}>
-                <h3 className="header-label">New sprint:</h3>
-                <hr className="header-line" />
-                <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
-                <div id="nextButton">{nextButton()}</div>
-              </Col> : <div />
+      <DocumentTitle title={`${project.name}・Backlog`}>
+        <div>
+          <div className="tiein-container">
+            { project.current_sprint_id !== null ?
+              <div>
+                <CurrentSprint reloadPage={this.reloadPage} project={project} />
+                <br />
+              </div> : <div />
             }
-          </Row>
+            <Row>
+              <Col sm={permission.project === 'admin' ? 8 : 12}>
+                <h3 className="header-label">Backlog</h3>
+                <hr className="header-line" />
+                <ul className="backlog" id="taskslist">{backlogTaskNode}</ul>
+              </Col>
+              { permission.project === 'admin' ?
+                <Col sm={4}>
+                  <h3 className="header-label">New sprint:</h3>
+                  <hr className="header-line" />
+                  <ul className="sprint" id="taskslist">{sprintTaskNode}</ul>
+                  <div id="nextButton">{nextButton()}</div>
+                </Col> : <div />
+              }
+            </Row>
+          </div>
+          <EditTaskModal
+            task={this.state.task}
+            show={this.state.showEditTask}
+            setUpdatedTask={this.setUpdatedTask}
+            close={this.closeEditTaskModal}
+            project={this.props.project}
+          />
+          <PointEstimationModal
+            show={this.state.showPointEstimation}
+            close={this.closePointEstimationModal}
+            tasks={this.state.sprintTasks}
+            setSprintTasks={this.setSprintTasks}
+            maxPoint={project.max_story_point}
+          />
         </div>
-        <EditTaskModal
-          task={this.state.task}
-          show={this.state.showEditTask}
-          setUpdatedTask={this.setUpdatedTask}
-          close={this.closeEditTaskModal}
-          project={this.props.project}
-        />
-        <PointEstimationModal
-          show={this.state.showPointEstimation}
-          close={this.closePointEstimationModal}
-          tasks={this.state.sprintTasks}
-          setSprintTasks={this.setSprintTasks}
-          maxPoint={project.max_story_point}
-        />
-      </div>
+      </DocumentTitle>
     );
   }
 }

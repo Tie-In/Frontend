@@ -76,7 +76,7 @@ class OrganizationHome extends Component {
         return project.users.find((u) => { return u.id === user.id; });
       });
     };
-    console.log(organization);
+
     return (
       this.state.loading ? <div /> :
       <DocumentTitle title={organization.name}>
