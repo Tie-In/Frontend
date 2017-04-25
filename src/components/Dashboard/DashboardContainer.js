@@ -1,12 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Line, Pie, Bar } from 'react-chartjs-2';
 import { Row, Col, FormGroup, FormControl } from 'react-bootstrap';
+import moment from 'moment';
 import DocumentTitle from 'react-document-title';
 import FaBarChart from 'react-icons/lib/fa/bar-chart';
+import StoryPoint from './StoryPoint';
+import TaskStatus from './TaskStatus';
+import ContributorTask from './ContributorTask';
+import RemianingTasks from './RemainingTasks';
 import * as apiHelper from '../../helpers/apiHelper';
-import * as projectActionsCreator from '../../actions/project-actions';
 
 class DashboardContainer extends Component {
   constructor(props) {
@@ -14,154 +16,78 @@ class DashboardContainer extends Component {
     this.state = {
       project: this.props.project,
       sprints: this.props.project.sprints,
-      currentSprint: this.props.project.sprints.slice(-1)[0],
-      tasks: '',
+      selectedSprint: {},
+      tasks: [],
+      statuses: [],
+      totalTasks: [],
     };
-    this.getDates = this.getDates.bind(this);
+    this.handleSelectSprint = this.handleSelectSprint.bind(this);
   }
 
   async componentWillMount() {
     try {
-      const sprint = this.state.sprints.slice(-1);
-      const sprintResponse = await apiHelper.get('/api/tasks', {
-        project: this.props.project.id,
-        sprint: sprint[0].id,
+      const { project } = this.props;
+      const taskResponse = await apiHelper.get('/api/tasks', {
+        project: project.id,
       });
+      console.log(taskResponse.data);
+
+      const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
+
       this.setState({
-        tasks: sprintResponse.data,
+        selectedSprint: responseSprint.data.sprint,
+        tasks: responseSprint.data.sprint.tasks,
+        statuses: responseSprint.data.statuses,
+        totalTasks: taskResponse.data,
       });
+      // console.log(this.state.tasks);
+      // console.log(this.state.selectedSprint);
+      // console.log(this.state.statuses);
     } catch (err) {
       console.log(err);
     }
   }
 
-  getDates() {
-    console.log(this.state.currentSprint);
-    return ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  getLocalDate(serverDate) {
+    if (serverDate === null) {
+      return '-';
+    }
+    const date = moment.utc(serverDate).local();
+    return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
+  }
+
+  async handleSelectSprint(e) {
+    const inputIndex = e.target.value - 1;
+    // console.log(inputIndex);
+    try {
+      const { project } = this.props;
+      const id = project.sprints[inputIndex].id;
+      console.log('=======');
+      console.log(`selected id : ${id}`);
+
+      const responseSprint = await apiHelper.get(`/api/sprints/${id}`);
+
+      this.setState({
+        selectedSprint: responseSprint.data.sprint,
+        tasks: responseSprint.data.sprint.tasks,
+        statuses: responseSprint.data.statuses,
+      });
+      // console.log(this.state.tasks);
+      // console.log(this.state.selectedSprint);
+      // console.log(this.state.statuses);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
-    const data1 = {
-      labels: this.getDates(),
-      datasets: [{
-        label: 'Sales',
-        type: 'line',
-        data: [51, 65, 40, 49, 60, 37, 40],
-        fill: false,
-        borderColor: '#EC932F',
-        backgroundColor: '#EC932F',
-        pointBorderColor: '#EC932F',
-        pointBackgroundColor: '#EC932F',
-        pointHoverBackgroundColor: '#EC932F',
-        pointHoverBorderColor: '#EC932F',
-        yAxisID: 'y-axis-1',
-      },
-      {
-        type: 'line',
-        label: 'Visitor',
-        data: [200, 185, 590, 621, 250, 400, 95],
-        fill: false,
-        backgroundColor: '#71B37C',
-        borderColor: '#71B37C',
-        hoverBackgroundColor: '#71B37C',
-        hoverBorderColor: '#71B37C',
-        yAxisID: 'y-axis-1',
-      }],
-    };
-    const options1 = {
-      // responsive: true,
-      tooltips: {
-        mode: 'label',
-      },
-      elements: {
-        line: {
-          fill: false,
-          tension: 0,
-        },
-      },
-      scales: {
-        xAxes: [
-          {
-            display: true,
-            gridLines: {
-              display: false,
-            },
-            labels: {
-              show: true,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            type: 'linear',
-            display: true,
-            position: 'left',
-            id: 'y-axis-1',
-            gridLines: {
-              display: false,
-            },
-            labels: {
-              show: true,
-            },
-          },
-        ],
-      },
-    };
     const { project } = this.props;
-    const data = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [{
-        type: 'line',
-        label: 'My First dataset',
-        fillColor: 'rgba(220,220,220,0.2)',
-        strokeColor: 'rgba(220,220,220,1)',
-        pointColor: 'rgba(220,220,220,1)',
-        pointStrokeColor: '#fff',
-        pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(220,220,220,1)',
-        data: [65, 59, 80, 81, 56, 55, 40],
-      },
-      {
-        type: 'line',
-        label: 'My Second dataset',
-        fillColor: 'rgba(151,187,205,0.2)',
-        strokeColor: 'rgba(151,187,205,1)',
-        pointColor: 'rgba(151,187,205,1)',
-        pointStrokeColor: '#fff',
-        pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(151,187,205,1)',
-        data: [28, 48, 40, 19, 86, 27, 90],
-      }],
-    };
-    const pieData = {
-      labels: ['Red', 'Green', 'Yellow'],
-      datasets: [{
-        data: [300, 50, 100],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      }],
-    };
-    const barData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label: 'My First dataset',
-          backgroundColor: 'rgba(255,99,132,0.2)',
-          borderColor: 'rgba(255,99,132,1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-          hoverBorderColor: 'rgba(255,99,132,1)',
-          data: [65, 59, 80, 81, 56, 55, 40],
-        },
-      ],
-    };
     const columnStyle = {
       marginBottom: '20px',
     };
-    const selectSprint = {
+    const selectStyle = {
       marginBottom: 0,
       marginTop: '12px',
-      // display: 'inline',
     };
     const row = {
       paddingBottom: 0,
@@ -169,39 +95,116 @@ class DashboardContainer extends Component {
     const h3 = {
       marginBottom: 0,
     };
+    const h4 = {
+      color: '#A25E5D',
+      marginTop: '20px',
+    };
+    const start = this.getLocalDate(this.state.selectedSprint.start_date);
+    const end = this.getLocalDate(this.state.selectedSprint.end_date);
+    const duration = project.sprint_duration;
+    const contributors = project.project_contributes.length;
+    const colors = [
+      'rgba(244, 159, 144, 0.6)',
+      'rgba(181, 60, 41, 0.6)',
+      'rgba(255, 228, 165, 0.6)',
+      'rgba(211, 80, 86, 0.6)',
+      'rgba(244, 159, 144, 0.6)',
+      'rgba(255, 63, 73, 0.6)',
+      'rgba(255, 63, 73, 0.6)',
+      'rgba(178, 53, 70, 0.6)',
+    ];
+    const colorsHover = [
+      'rgba(244, 159, 144, 0.9)',
+      'rgba(181, 60, 41, 0.9)',
+      'rgba(255, 228, 165, 0.9)',
+      'rgba(211, 80, 86, 0.9)',
+      'rgba(244, 159, 144, 0.9)',
+      'rgba(255, 63, 73, 0.9)',
+      'rgba(255, 63, 73, 0.9)',
+      'rgba(178, 53, 70, 0.9)',
+    ];
+    const selectSprint = this.state.sprints.map((sprint) => {
+      if (sprint.number === this.state.sprints.length) {
+        return (
+          <option value={sprint.number} key={`sprint${sprint.number}`} selected>{sprint.number}</option>
+        );
+      }
+      return (
+        <option value={sprint.number} key={`sprint${sprint.number}`}>{sprint.number}</option>
+      );
+    });
+
+    if (!this.state.tasks) {
+      return null;
+    }
+
     return (
       <DocumentTitle title={`${project.name}・Dashboard`}>
         <div>
           <Row style={row}>
-            <Col md={10}><h3 className="header-label" style={h3}>Dashboard : Sprint {this.state.currentSprint.number}</h3></Col>
+            <Col md={10}><h3 className="header-label" style={h3}>Dashboard : Sprint {this.state.selectedSprint.number}</h3></Col>
             <Col md={2}>
-              <FormGroup style={selectSprint}>
+              <FormGroup style={selectStyle} onChange={this.handleSelectSprint}>
                 <FormControl componentClass="select">
                   <option value="">Select sprint</option>
-                  <option value="1">1</option>
+                  {selectSprint}
                 </FormControl>
               </FormGroup>
             </Col>
           </Row>
           <hr className="header-line" />
-          <p>Total estimated points: {this.state.currentSprint.sprint_points}</p>
-          <p>Start date: {this.state.currentSprint.start_date}</p>
-          <p>End date: {this.state.currentSprint.end_date}</p>
+          <p>Total estimated points : {this.state.selectedSprint.sprint_points}</p>
+          <p>Status : {this.state.selectedSprint.is_ended ? 'end' : 'working'}</p>
+          <p>Start date : {start}</p>
+          <p>End date : {end}</p>
+          <p>Number of contributor : {contributors}</p>
+          <p style={{ marginBottom: '10px' }}>Sprint duration : {duration > 1 ? `${duration} weeks` : `${duration} week`}</p>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4><FaBarChart /> Burndown Chart</h4>
-            <Line data={data} options={options1} />
+            <h4 style={h4}><FaBarChart /> Remaining tasks in each sprint</h4>
+            <RemianingTasks
+              key={project.id}
+              project={project}
+              tasks={this.state.tasks}
+              sprint={this.state.selectedSprint}
+              colors={colors}
+              colorsHover={colorsHover}
+              totalTasks={this.state.totalTasks}
+            />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4><FaBarChart /> Burndown Chart</h4>
-            <Line data={data1} options={options1} />
+            <h4 style={h4}><FaBarChart /> Remaining points in each day</h4>
+            <StoryPoint
+              key={project.id}
+              project={project}
+              tasks={this.state.tasks}
+              sprint={this.state.selectedSprint}
+              colors={colors}
+              colorsHover={colorsHover}
+            />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4><FaBarChart /> Burndown Chart</h4>
-            <Pie data={pieData} />
+            <h4 style={h4}><FaBarChart /> Number of tasks of each status</h4>
+            <TaskStatus
+              key={project.id}
+              tasks={this.state.tasks}
+              project={project}
+              colors={colors}
+              colorsHover={colorsHover}
+              statuses={this.state.statuses}
+              sprint={this.state.selectedSprint}
+            />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
-            <h4><FaBarChart /> Burndown Chart</h4>
-            <Bar data={barData} />
+            <h4 style={h4}><FaBarChart /> Story points in charge of each user</h4>
+            <ContributorTask
+              key={project.id}
+              tasks={this.state.tasks}
+              project={project}
+              colors={colors}
+              colorsHover={colorsHover}
+              statuses={this.state.statuses}
+              sprint={this.state.selectedSprint}
+            />
           </Col>
         </div>
       </DocumentTitle>
@@ -220,10 +223,4 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    projectActions: bindActionCreators(projectActionsCreator, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardContainer);
+export default connect(mapStateToProps)(DashboardContainer);
