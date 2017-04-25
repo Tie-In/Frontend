@@ -97,3 +97,7 @@
 .setting-tabs > li.active > a {
   color: #A25E5D !important;
 }
+
+.error-label {
+  color: #d9534f;
+}

@@ -57,6 +57,7 @@ class ProjectHome extends Component {
               })) : <div />
             }
           </div>
+          <br />
           <div>
             {project.effort_estimation === undefined ?
               <LinkContainer to={`/organizations/${this.props.project.organization_id}/projects/${this.props.project.id}/planning/features`}>
