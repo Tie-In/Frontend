@@ -105,20 +105,15 @@ class ContributorTask extends Component {
     const options = {
       tooltips: {
         callbacks: {
-          // label: (tooltipItem, data) => {
-          //   // const allData = data.datasets[tooltipItem.datasetIndex].data;
-          //   // const tooltipLabel = data.labels[tooltipItem.index];
-          //   // const tooltipData = allData[tooltipItem.index];
-          //   // let total = 0;
-          //   // for (let i in allData) {
-          //   //   if (Object.prototype.hasOwnProperty.call(allData, i)) {
-          //   //     total += allData[i];
-          //   //   }
-          //   // }
-          //   // const tooltipPercentage = Math.round((tooltipData / total) * 100);
-          //   // return `${tooltipLabel} : tooltipData (${tooltipPercentage} %)`;
-          // },
+          label: (tooltipItem, data) => {
+            const allData = data.datasets[tooltipItem.datasetIndex].data;
+            // const tooltipLabel = data.labels[tooltipItem.index];
+            const dataLabel = data.datasets[tooltipItem.datasetIndex].label;
+            const tooltipData = allData[tooltipItem.index];
+            return `${dataLabel} : ${tooltipData} ${tooltipData > 1 ? 'points' : 'point'}`;
+          },
         },
+        mode: 'label',
       },
       scales: {
         xAxes: [{
