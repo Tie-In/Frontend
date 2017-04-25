@@ -122,6 +122,7 @@ class NewProject extends Component {
                     name="name"
                     onChange={this.handleInputChange}
                   />
+                  <h6 className="error-label">{error}</h6>
                 </FormGroup>
               </Col>
             </Row>

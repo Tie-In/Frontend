@@ -46,6 +46,7 @@ class BacklogContainer extends Component {
         return f.id === updatedTask.feature_id;
       });
     }
+    
     try {
       await apiHelper.put(`/api/tasks/${updatedTask.id}`, updatedTask);
       this.closeEditTaskModal();
