@@ -3,13 +3,13 @@ import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 
 class RemainingTasks extends Component {
-  startSprint() {
-    return this.convertToLocalDate(this.props.sprint.start_date);
-  }
-
-  endSprint() {
-    return this.convertToLocalDate(this.props.sprint.end_date);
-  }
+  // startSprint() {
+  //   return this.convertToLocalDate(this.props.sprint.start_date);
+  // }
+  //
+  // endSprint() {
+  //   return this.convertToLocalDate(this.props.sprint.end_date);
+  // }
 
   calAmountOfDay() {
     const start = moment(this.startSprint()).dayOfYear();
@@ -24,48 +24,46 @@ class RemainingTasks extends Component {
     return day + 1;
   }
 
-  convertToLocalDate(serverDate) {
-    if (serverDate === null) {
-      return '-';
-    }
-    const date = moment.utc(serverDate).local();
-    return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
-  }
+  // convertToLocalDate(serverDate) {
+  //   if (serverDate === null) {
+  //     return '-';
+  //   }
+  //   const date = moment.utc(serverDate).local();
+  //   return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
+  // }
 
   genActualData() {
-    const actualData = [];
     const { project, totalTasks } = this.props;
+    const actualData = [totalTasks.length];
     let remainingTask = totalTasks.length;
+    const amountSprint = project.sprints.length;
 
-    let thisDate = this.startSprint();
-    let remainingPoint = this.props.sprint.sprint_points;
-    const day = this.calAmountOfDay();
-
-    // console.log(this.props.statuses);
-    // const done = this.props.statuses.find((status) => { return status.name === 'Done'; });
-
-    if (this.props.tasks[0]) {
-      for (let i = 0; i < day; i += 1) {
-        let countedPoint = 0;
-        for (let j = 0; j < this.props.tasks.length; j += 1) {
-          const doneDate = moment(this.props.tasks[j].done_date);
-          if (doneDate.isSame(thisDate)) {
-            countedPoint += 1;
+    if (remainingTask > 0) {
+      for (let i = 0; i < amountSprint; i += 1) {
+        let doneTask = 0;
+        for (let j = 0; j < remainingTask; j += 1) {
+          const startSprint = project.sprints[i].start_date;
+          const endSprint = project.sprints[i].end_date;
+          // console.log(`sprint ${i} : ${startSprint} - ${endSprint}`);
+          if (totalTasks[j].is_done) {
+            const doneDate = moment(totalTasks[j].done_date);
+            if (moment(doneDate).isBetween(startSprint, endSprint, null, '[]')) {
+              doneTask += 1;
+            }
           }
         }
-        remainingPoint -= countedPoint;
-        actualData.push(remainingPoint);
-        thisDate = moment(thisDate).add(1, 'days');
+        remainingTask -= doneTask;
+        actualData.push(remainingTask);
       }
     }
-    if (day === 1) {
+    if (amountSprint === 1) {
       actualData.splice(0, 0, actualData[0]);
     }
     return actualData;
   }
 
   genXLable() {
-    const labels = [];
+    const labels = [0];
     const { project } = this.props;
     const amountSprint = project.sprints.length;
     for (let i = 0; i < amountSprint; i += 1) {
