@@ -33,7 +33,6 @@ class StoryPoint extends Component {
   }
 
   genXLable() {
-    console.log(this.props.sprint);
     const labels = [];
     const day = this.calAmountOfDay();
     for (let i = 0; i < day; i += 1) {
@@ -70,8 +69,6 @@ class StoryPoint extends Component {
 
     // console.log(this.props.statuses);
     // const done = this.props.statuses.find((status) => { return status.name === 'Done'; });
-    //
-    // console.log(done[0]);
 
     if (this.props.tasks[0]) {
       for (let i = 0; i < day; i += 1) {
@@ -90,7 +87,6 @@ class StoryPoint extends Component {
     if (day === 1) {
       actualData.splice(0, 0, actualData[0]);
     }
-    console.log(actualData);
     return actualData;
   }
 

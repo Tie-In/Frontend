@@ -30,6 +30,7 @@ class ContributorTask extends Component {
     this.props.project.statuses.forEach((status) => {
       this.statusName.push(status.name);
     });
+    // console.log(this.props.project.statuses);
   }
 
   genUserLable() {

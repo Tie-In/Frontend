@@ -10,38 +10,48 @@ class TaskStatus extends Component {
     };
   }
 
-  async componentWillMount() {
-    this.getStatusNames();
-  }
+  // async componentWillMount() {
+  //   this.getStatusNames();
+  // }
 
   componentWillReceiveProps(nextProps) {
     this.setState({ tasks: nextProps.tasks });
   }
 
   getStatusNames() {
-    this.statusName = [];
-    this.props.project.statuses.forEach((status) => {
-      this.statusName.push(status.name);
-    });
+    const { sprint, project, statuses } = this.props;
+    const statusName = [];
+    if (sprint.id === project.current_sprint_id) {
+      statuses.forEach((status) => {
+        statusName.push(status.name);
+      });
+    } else if (sprint.tasks) {
+      statusName.push('Done');
+      statusName.push('Postpone');
+    }
+    return statusName;
   }
 
   getNumberOfTasks() {
     const numbers = [];
-    this.statusName.forEach((status) => {
-      let count = 0;
-      this.state.tasks.forEach((task) => {
-        // if (task.status.name === status) {
-          count += 1;
-        // }
+    const { sprint, project, statuses } = this.props;
+
+    console.log(sprint);
+    if (sprint.id === project.current_sprint_id) {
+      console.log('current sprint');
+      statuses.forEach((status) => {
+        numbers.push(status.tasks.length);
       });
-      numbers.push(count);
-    });
+    } else if (sprint.tasks) {
+      numbers.push(sprint.done_count);
+      numbers.push(sprint.postpone_count);
+    }
     return numbers;
   }
 
   render() {
     const pieData = {
-      labels: this.statusName,
+      labels: this.getStatusNames(),
       datasets: [{
         data: this.getNumberOfTasks(),
         backgroundColor: this.props.colors,

@@ -62,6 +62,7 @@ class DashboardContainer extends Component {
     try {
       const { project } = this.props;
       const id = project.sprints[inputIndex].id;
+      console.log('=======');
       console.log(`selected id : ${id}`);
       const taskResponse = await apiHelper.get('/api/tasks', {
         project: project.id,
@@ -75,7 +76,6 @@ class DashboardContainer extends Component {
         tasks: taskResponse.data,
         statuses: responseSprint.data.statuses,
       });
-      console.log('=======');
       console.log(this.state.tasks);
       console.log(this.state.selectedSprint);
       console.log(this.state.statuses);
@@ -254,6 +254,7 @@ class DashboardContainer extends Component {
               colors={colors}
               colorsHover={colorsHover}
               statuses={this.state.statuses}
+              sprint={this.state.selectedSprint}
             />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
@@ -265,6 +266,7 @@ class DashboardContainer extends Component {
               colors={colors}
               colorsHover={colorsHover}
               statuses={this.state.statuses}
+              sprint={this.state.selectedSprint}
             />
           </Col>
         </div>
