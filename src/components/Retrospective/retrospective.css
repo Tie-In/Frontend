@@ -79,3 +79,33 @@ button {
 code {
   color: #A25E5D;
 }
+
+/*--------Important--------*/
+input[type='checkbox'] {
+  display: none;
+}
+#imptHeader .panel-heading {
+  background: #ad7977 !important;
+  color: #ffffff !important;
+}
+label {
+  font-weight: normal;
+  display: inline-flex;
+}
+label:hover {
+  cursor: pointer;
+}
+label > .glyphicon {
+  padding-top: 2px;
+  padding-right: 15px;
+}
+label > .glyphicon-star, label:hover > .glyphicon-star-empty {
+  display: none;
+}
+label:hover > .glyphicon-star, input:checked + label > .glyphicon-star {
+  display: block;
+  color: #ffde00;
+}
+input:checked + label > .glyphicon-star-empty{
+  display: none;
+}

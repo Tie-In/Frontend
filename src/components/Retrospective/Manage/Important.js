@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, Panel, Checkbox } from 'react-bootstrap';
+import { Row, Col, Panel, Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import update from 'immutability-helper';
+import 'simple-line-icons/css/simple-line-icons.css';
 import * as apiHelper from '../../../helpers/apiHelper';
 import '../retrospective.css';
 
@@ -73,9 +74,10 @@ class Important extends Component {
         return this.state.viewpoints.map((data) => {
           if (this.state.viewpoints && data.kind === 'try') {
             return (
-              <Checkbox onClick={this.handleSelect} name={data.comment} id={data.id}>
-                {data.comment}
-              </Checkbox>
+              <div>
+                <input type="checkbox" onClick={this.handleSelect} name={data.comment} id={data.id} />
+                <label htmlFor={data.id}><Glyphicon glyph="star" /><Glyphicon glyph="star-empty" />{data.comment}</label>
+              </div>
             );
           }
         });
@@ -113,7 +115,7 @@ class Important extends Component {
                 </Panel>
               </Col>
               <Col md={3}>
-                <Panel header="Important">
+                <Panel id="imptHeader" header="Important">
                   {imps()}
                 </Panel>
               </Col>

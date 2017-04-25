@@ -28,7 +28,6 @@ class RetrospectiveContainer extends Component {
   }
 
   async componentWillMount() {
-    console.log(this.state.sprints);
     const { params, projectActions } = this.props;
     try {
       const res = await apiHelper.get(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`);
@@ -107,7 +106,6 @@ class RetrospectiveContainer extends Component {
     });
 
     const startBtn = () => {
-      console.log(this.state.viewpoints);
       if (this.state.permission === 'admin') {
         if (!this.state.selectedSprint.is_ended) {
           return (<Button className="disabled">Start Retrospective</Button>);

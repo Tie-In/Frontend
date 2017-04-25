@@ -1,5 +1,6 @@
 import { Col, Panel, Dropdown } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
+
 import ColorPicker from './ColorPicker';
 import * as apiHelper from '../../../helpers/apiHelper';
 
