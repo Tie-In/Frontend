@@ -193,7 +193,7 @@ class BacklogContainer extends Component {
               })
               }
             </Col>
-            { this.props.project.current_sprint_id === null ?
+            { this.props.project.current_sprint_id === null && permission.project === 'admin' ?
               <Col xs={1} md={1}>
                 <span className="icon-plus" id="addButton" onClick={() => { this.switchTask(task, 'add'); }} />
               </Col> : <div />
@@ -240,7 +240,7 @@ class BacklogContainer extends Component {
           <div className="tiein-container">
             { project.current_sprint_id !== null ?
               <div>
-                <CurrentSprint reloadPage={this.reloadPage} project={project} />
+                <CurrentSprint reloadPage={this.reloadPage} project={project} permission={permission.project} />
                 <br />
               </div> : <div />
             }

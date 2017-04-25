@@ -90,27 +90,33 @@ class CurrentSprint extends Component {
               })
               }
             </Col>
+            <Col xs={1}>
+              <Badge>{task.story_point}</Badge>
+            </Col>
           </li>
         </Row>
       );
     });
     return (
       <div>
-        <Row style={{ borderBottom: 'solid 1px' }}>
+        <Row>
           <Col sm={4}>
-            <h4 className="backlog-title">Sprint {sprint.number} (Current)</h4>
+            <h3 className="backlog-title" style={{ marginBottom: 0 }}>Sprint {sprint.number} (Current)</h3>
           </Col>
           <Col sm={3}>
-            <p style={{ paddingTop: 10 }}>Sprint points: {sprint.sprint_points}</p>
+            <p style={{ marginTop: 30 }}>Sprint points: {sprint.sprint_points}</p>
           </Col>
           <Col sm={3}>
-            <p style={{ paddingTop: 10 }}>Start date: {moment(sprint.start_date).format('L')}</p>
+            <p style={{ marginTop: 30 }}>Start date: {moment(sprint.start_date).format('L')}</p>
           </Col>
           <Col sm={2}>
-            <Button onClick={this.stopSprint}>Stop sprint</Button>
+            { this.props.permission === 'admin' ?
+              <Button style={{ marginTop: 20 }} onClick={this.stopSprint}>Stop sprint</Button>
+              : <div />
+            }
           </Col>
         </Row>
-        <br />
+        <hr className="header-line" />
         <Row>
           <Col sm={12}>
             <ul className="backlog" id="taskslist">{currentTaskNode}</ul>
@@ -124,6 +130,7 @@ class CurrentSprint extends Component {
 CurrentSprint.propTypes = {
   reloadPage: PropTypes.func.isRequired,
   project: PropTypes.object.isRequired,
+  permission: PropTypes.string.isRequired,
 };
 
 export default CurrentSprint;
