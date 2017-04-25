@@ -6,108 +6,105 @@ class ContributorTask extends Component {
     super(props);
     this.state = {
       tasks: this.props.tasks,
-      sprint: this.props.sprint,
+      // sprint: this.props.sprint,
     };
-    this.getStatusNames = this.getStatusNames.bind(this);
+    // this.getStatusNames = this.getStatusNames.bind(this);
     this.calUsersPoint = this.calUsersPoint.bind(this);
     this.genDataSet = this.genDataSet.bind(this);
-  }
-
-  async componentWillMount() {
-    this.getStatusNames();
-    this.genUserLable();
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       tasks: nextProps.tasks,
-      sprint: nextProps.sprint,
+      // sprint: nextProps.sprint,
     });
   }
 
-  getStatusNames() {
-    this.statusName = [];
-    this.props.project.statuses.forEach((status) => {
-      this.statusName.push(status.name);
-    });
-    // console.log(this.props.project.statuses);
-  }
+  // getStatusNames() {
+  //   // console.log(this.props.statuses);
+  //   const statusName = [];
+  //   this.props.statuses.forEach((status) => {
+  //     statusName.push(status.name);
+  //   });
+  //   return statusName;
+  // }
 
   genUserLable() {
-    this.xLabels = [];
+    const xLabels = [];
     this.usersIds = [];
     const contributors = this.props.project.project_contributes;
     contributors.forEach((contributor) => {
-      this.xLabels.push(contributor.user.username);
+      xLabels.push(contributor.user.username);
       this.usersIds.push(contributor.user.id);
     });
-    this.xLabels.push('Unknown');
+    xLabels.push('Unknown');
     this.usersIds.push(null);
+    return xLabels;
+  }
+
+  calUsersPoint(status) {
+    console.log(status);
+    const points = [];
+    const { sprint, tasks } = this.props;
+
+    this.usersIds.forEach((id) => {
+      let count = 0;
+      if (status !== -1) {
+        tasks.forEach((task) => {
+          if (id === task.assignee_id && status.id === task.status_id) {
+            count += task.story_point;
+          }
+        });
+      } else {
+        sprint.tasks.forEach((task) => {
+          if (id === task.assignee_id) {
+            count += task.story_point;
+          }
+        });
+      }
+      points.push(count);
+    });
+    console.log(points);
+    return points;
   }
 
   genDataSet() {
     this.dataSets = [];
-
+    const { statuses, sprint, project } = this.props;
     if (this.state.tasks.length > 0) {
-      for (let i = 0; i < this.statusName.length; i += 1) {
-        if (this.statusName[i] !== 'To do') {
-          this.dataSets.push({
-            label: this.statusName[i],
-            data: this.calUsersPoint(this.statusName[i]),
-            backgroundColor: this.props.colors[i],
-            hoverBackgroundColor: this.props.colorsHover[i],
-          });
+      if (sprint.id === project.current_sprint_id) {
+        for (let i = 0; i < statuses.length; i += 1) {
+          if (statuses[i].name !== 'To do') {
+            this.dataSets.push({
+              label: statuses[i].name,
+              data: this.calUsersPoint(statuses[i]),
+              backgroundColor: this.props.colors[i],
+              hoverBackgroundColor: this.props.colorsHover[i],
+            });
+          }
         }
+      } else {
+        this.dataSets.push({
+          label: 'Done',
+          data: this.calUsersPoint(-1),
+          backgroundColor: this.props.colors[0],
+          hoverBackgroundColor: this.props.colorsHover[0],
+        });
       }
     }
     return this.dataSets;
   }
 
-  calUsersPoint(status) {
-    const points = [];
-    this.usersIds.forEach((id) => {
-      let count = 0;
-      this.state.tasks.forEach((task) => {
-        // if (id === task.assignee_id && status === task.status.name) {
-          count += task.story_point;
-        // }
-      });
-      points.push(count);
-    });
-    // console.log(points);
-    return points;
-  }
-
   render() {
-    // console.log(this.state.tasks);
     const barData = {
-      labels: this.xLabels,
+      labels: this.genUserLable(),
       datasets: this.genDataSet(),
-      // datasets: [
-      //   {
-      //     label: 'Done',
-      //     data: this.calUsersPoint(),
-      //     backgroundColor: 'rgba(255,99,132,0.2)',
-      //     borderColor: 'rgba(255,99,132,1)',
-      //     borderWidth: 1,
-      //     hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      //     hoverBorderColor: 'rgba(255,99,132,1)',
-      //   },
-      //   {
-      //     label: 'Doing',
-      //     data: [15, 19, 3, 5, 2, 3],
-      //     backgroundColor: 'rgba(255, 159, 64, 0.2)',
-      //     borderColor: 'rgba(255, 159, 64, 1)',
-      //     borderWidth: 1,
-      //   },
-      // ],
     };
     const options = {
       tooltips: {
         callbacks: {
           label: (tooltipItem, data) => {
             const allData = data.datasets[tooltipItem.datasetIndex].data;
-            // const tooltipLabel = data.labels[tooltipItem.index];
             const dataLabel = data.datasets[tooltipItem.datasetIndex].label;
             const tooltipData = allData[tooltipItem.index];
             return `${dataLabel} : ${tooltipData} ${tooltipData > 1 ? 'points' : 'point'}`;

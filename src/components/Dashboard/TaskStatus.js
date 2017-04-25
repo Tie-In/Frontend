@@ -10,10 +10,6 @@ class TaskStatus extends Component {
     };
   }
 
-  // async componentWillMount() {
-  //   this.getStatusNames();
-  // }
-
   componentWillReceiveProps(nextProps) {
     this.setState({ tasks: nextProps.tasks });
   }
@@ -35,10 +31,7 @@ class TaskStatus extends Component {
   getNumberOfTasks() {
     const numbers = [];
     const { sprint, project, statuses } = this.props;
-
-    console.log(sprint);
     if (sprint.id === project.current_sprint_id) {
-      console.log('current sprint');
       statuses.forEach((status) => {
         numbers.push(status.tasks.length);
       });

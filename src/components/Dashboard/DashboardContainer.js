@@ -37,7 +37,7 @@ class DashboardContainer extends Component {
 
       this.setState({
         selectedSprint: responseSprint.data.sprint,
-        tasks: taskResponse.data,
+        tasks: responseSprint.data.sprint.tasks,
         statuses: responseSprint.data.statuses,
       });
       console.log(this.state.tasks);
