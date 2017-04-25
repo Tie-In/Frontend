@@ -4,6 +4,10 @@ import {
 } from 'react-bootstrap';
 import { CirclePicker } from 'react-color';
 
+const preventSubmit = (e) => {
+  e.preventDefault();
+};
+
 class TagManage extends Component {
   constructor(props) {
     super(props);
@@ -54,7 +58,7 @@ class TagManage extends Component {
   }
 
   del(id) {
-    this.props.del(id); 
+    this.props.del(id);
     this.setState({ onDelete: -1 });
   }
 
@@ -80,7 +84,7 @@ class TagManage extends Component {
           <Col sm={4}>
             <div className="pull-right">
               <Button
-                bsStyle="primary" style={{ marginRight: 5}}
+                bsStyle="primary" style={{ marginRight: 5 }}
                 onClick={() => { this.setState({ onDelete: -1 }); }}
               >
                 Cancel
@@ -101,49 +105,51 @@ class TagManage extends Component {
     const editRow = (tag) => {
       return (
         <td>
-          <Col xs={5}>
-            <FormControl
-              type="text" placeholder="Tag name"
-              name="editTagName"
-              value={this.state.editTagName}
-              onChange={this.handleInputChange}
-            />
-          </Col>
-          <Col xs={3}>
-            <Dropdown id="tagsDropdown" open={this.state.openDropdownEdit}>
-              <div bsRole="toggle">
+          <form onSubmit={preventSubmit}>
+            <Col xs={5}>
+              <FormControl
+                type="text" placeholder="Tag name"
+                name="editTagName"
+                value={this.state.editTagName}
+                onChange={this.handleInputChange}
+              />
+            </Col>
+            <Col xs={3}>
+              <Dropdown id="tagsDropdown" open={this.state.openDropdownEdit}>
+                <div bsRole="toggle">
+                  <Button
+                    onClick={this.toggleDropdownEdit}
+                    style={{ color: this.state.editTagColor }}
+                    bsStyle="primary"
+                  >
+                    <div
+                      style={{ backgroundColor: this.state.editTagColor, width: 15, height: 15, display: 'inline-block' }}
+                    /> {this.state.editTagColor}
+                  </Button>
+                </div>
+                <div className="dropdown-menu" style={menuStyle} bsRole="menu">
+                  <CirclePicker
+                    onChangeComplete={(color) => {
+                      this.setState({ editTagColor: color.hex, openDropdownEdit: false });
+                    }}
+                  />
+                </div>
+              </Dropdown>
+            </Col>
+            <Col sm={4}>
+              <div className="pull-right">
                 <Button
-                  onClick={this.toggleDropdownEdit}
-                  style={{ color: this.state.editTagColor }}
-                  bsStyle="primary"
+                  bsStyle="primary" style={{ marginRight: 5 }}
+                  onClick={() => { this.setState({ onEdit: -1 }); }}
                 >
-                  <div
-                    style={{ backgroundColor: this.state.editTagColor, width: 15, height: 15, display: 'inline-block' }}
-                  /> {this.state.editTagColor}
+                  Cancel
+                </Button>
+                <Button onClick={() => { this.edit(tag); }} type="submit">
+                  Save change
                 </Button>
               </div>
-              <div className="dropdown-menu" style={menuStyle} bsRole="menu">
-                <CirclePicker
-                  onChangeComplete={(color) => {
-                    this.setState({ editTagColor: color.hex, openDropdownEdit: false });
-                  }}
-                />
-              </div>
-            </Dropdown>
-          </Col>
-          <Col sm={4}>
-            <div className="pull-right">
-              <Button
-                bsStyle="primary" style={{ marginRight: 5 }}
-                onClick={() => { this.setState({ onEdit: -1 }); }}
-              >
-                Cancel
-              </Button>
-              <Button onClick={() => { this.edit(tag); }}>
-                Save change
-              </Button>
-            </div>
-          </Col>
+            </Col>
+          </form>
         </td>
       );
     };
@@ -175,6 +181,15 @@ class TagManage extends Component {
       );
     };
 
+    const selectRender = (tag, index) => {
+      if (this.state.onEdit === index) {
+        return editRow(tag, index);
+      } else if (this.state.onDelete === index) {
+        return deleteRow(tag.id);
+      }
+      return normalRow(tag, index);
+    };
+
     return (
       <div>
         <Row>
@@ -188,18 +203,15 @@ class TagManage extends Component {
               <tbody>
                 { tags.length > 0 ?
                   tags.map((tag, index) => {
-                    return (<tr key={tag.id} style={{ height: 45 }}>
-                        { this.state.onEdit === index ?
-                          editRow(tag, index)
-                          :
-                          this.state.onDelete === index ?
-                            deleteRow(tag.id)
-                            :
-                            normalRow(tag, index)
-                        }
-                    </tr>);
+                    return (
+                      <tr key={tag.id} style={{ height: 45 }}>{selectRender(tag, index)}</tr>
+                    );
                   }) :
-                  <tr style={{ height: 45 }}><h5 style={{ paddingLeft: 10, paddingTop: 3 }}>No tag found</h5></tr>
+                  <tr style={{ height: 45 }}>
+                    <td>
+                      <h5 style={{ paddingLeft: 10, paddingTop: 3 }}>No tag found</h5>
+                    </td>
+                  </tr>
                 }
               </tbody>
             </Table>
@@ -207,56 +219,58 @@ class TagManage extends Component {
         </Row>
         { this.state.onCreate ?
           <Row>
-            <Col xs={6}>
-              <FormGroup controlId="formInlineDetail">
-                <FormControl
-                  type="text" placeholder="Tag name"
-                  name="newTagName"
-                  value={this.state.newTagName}
-                  onChange={this.handleInputChange}
-                />
-              </FormGroup>
-            </Col>
-            <Col xs={3}>
-            <Dropdown id="tagsDropdown" open={this.state.openDropdownCreate}>
-              <div bsRole="toggle">
-                <Button
-                  onClick={this.toggleDropdownCreate}
-                  style={{ color: this.state.newTagColor }}
-                  bsStyle="primary"
-                >
-                  <div
-                    style={{
-                      backgroundColor: this.state.newTagColor,
-                      width: 15,
-                      height: 15,
-                      display: 'inline-block',
+            <form onSubmit={preventSubmit}>
+              <Col xs={6}>
+                <FormGroup controlId="formInlineDetail">
+                  <FormControl
+                    type="text" placeholder="Tag name"
+                    name="newTagName"
+                    value={this.state.newTagName}
+                    onChange={this.handleInputChange}
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs={3}>
+              <Dropdown id="tagsDropdown" open={this.state.openDropdownCreate}>
+                <div bsRole="toggle">
+                  <Button
+                    onClick={this.toggleDropdownCreate}
+                    style={{ color: this.state.newTagColor }}
+                    bsStyle="primary"
+                  >
+                    <div
+                      style={{
+                        backgroundColor: this.state.newTagColor,
+                        width: 15,
+                        height: 15,
+                        display: 'inline-block',
+                      }}
+                    /> {this.state.newTagColor}
+                  </Button>
+                </div>
+                <div className="dropdown-menu" style={menuStyle} bsRole="menu">
+                  <CirclePicker
+                    onChangeComplete={(color) => {
+                      this.setState({ newTagColor: color.hex, openDropdownCreate: false });
                     }}
-                  /> {this.state.newTagColor}
-                </Button>
-              </div>
-              <div className="dropdown-menu" style={menuStyle} bsRole="menu">
-                <CirclePicker
-                  onChangeComplete={(color) => {
-                    this.setState({ newTagColor: color.hex, openDropdownCreate: false });
+                  />
+                </div>
+              </Dropdown>
+              </Col>
+              <Col xs={3}>
+                <Button
+                  bsStyle="primary" style={{ marginRight: 5 }}
+                  onClick={() => {
+                    this.setState({ onCreate: false, newTagColor: this.defaultColor });
                   }}
-                />
-              </div>
-            </Dropdown>
-            </Col>
-            <Col xs={3}>
-              <Button
-                bsStyle="primary" style={{ marginRight: 5 }}
-                onClick={() => {
-                  this.setState({ onCreate: false, newTagColor: this.defaultColor });
-                }}
-              >
-                Cancel
-              </Button>
-              <Button onClick={() => { this.create(); }}>
-                Create tag
-              </Button>
-            </Col>
+                >
+                  Cancel
+                </Button>
+                <Button onClick={() => { this.create(); }} type="submit">
+                  Create tag
+                </Button>
+              </Col>
+            </form>
           </Row>
           :
           <Row>

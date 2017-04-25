@@ -23,19 +23,23 @@ class OrganizationNavbar extends Component {
       textOverflow: 'ellipsis',
       textAlign: 'left',
     };
-    const menuNode = data.map((menu) => {
-      let selected = new RegExp(menu.path).test(window.location.href);
-      if (menu.name === 'Home') {
-        selected = window.location.href.endsWith(menu.path);
-      }
-      return (
-        <li key={menu.id} style={{ marginRight: menu.margin }}>
-          <Link to={menu.path} className={selected ? 'active' : null} onClick={() => { this.setState({}); }}>
-            {menu.name}
-          </Link>
-        </li>
-      );
-    });
+    const url = window.location.href;
+    let menuNode = [];
+    if (organization.id) {
+      menuNode = data.map((menu) => {
+        let selected = new RegExp(menu.path).test(url);
+        if (menu.name === 'Home') {
+          selected = url.endsWith(menu.path);
+        }
+        return (
+          <li key={menu.id} style={{ marginRight: menu.margin }}>
+            <Link to={menu.path} className={selected ? 'active' : null} onClick={() => { this.setState({}); }}>
+              {menu.name}
+            </Link>
+          </li>
+        );
+      });
+    }
 
     return (
       <div className="App">
