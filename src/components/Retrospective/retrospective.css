@@ -92,11 +92,11 @@ label {
   font-weight: normal;
   display: inline-flex;
 }
-label:hover {
+#try > label:hover {
   cursor: pointer;
 }
 label > .glyphicon {
-  padding-top: 2px;
+  padding-top: 3px;
   padding-right: 15px;
 }
 label > .glyphicon-star, label:hover > .glyphicon-star-empty {
@@ -108,4 +108,7 @@ label:hover > .glyphicon-star, input:checked + label > .glyphicon-star {
 }
 input:checked + label > .glyphicon-star-empty{
   display: none;
+}
+.list-group > li {
+  list-style: none;
 }

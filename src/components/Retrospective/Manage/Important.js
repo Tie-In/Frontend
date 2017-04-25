@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, Panel, Glyphicon, ListGroup, ListGroupItem, Button } from 'react-bootstrap';
+import { Row, Col, Panel, Glyphicon, ListGroup, ListGroupItem, Button, Label } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import update from 'immutability-helper';
@@ -97,14 +97,18 @@ class Important extends Component {
       return comments.map((comment) => {
         if (comment.kind === 'try' && cat.id === comment.viewpoint_category_id) {
           return (
-            <div>
+            <div id="try">
               <input type="checkbox" onClick={this.handleSelect} name={comment.comment} id={comment.id} />
               <label htmlFor={comment.id}><Glyphicon glyph="star" /><Glyphicon glyph="star-empty" />{comment.comment}</label>
             </div>
           );
-        } else if (cat.id === comment.viewpoint_category_id) {
+        } else if (comment.kind === 'good' && cat.id === comment.viewpoint_category_id) {
           return (
-            <li>{comment.comment}</li>
+            <li><label><Glyphicon glyph="ok" />{comment.comment}</label></li>
+          );
+        } else if (comment.kind === 'bad' && cat.id === comment.viewpoint_category_id) {
+          return (
+            <li><label><Glyphicon glyph="remove" />{comment.comment}</label></li>
           );
         }
       });
@@ -112,10 +116,16 @@ class Important extends Component {
 
     const commentsByCategory = (comments) => {
       return this.state.categories.map((cat) => {
+        const labelStyle = {
+          backgroundColor: cat.color,
+          color: 'white',
+          marginTop: 3,
+          marginRight: 10,
+        };
         if (this.hasCat(comments, cat)) {
           return (
             <ListGroupItem>
-              {cat.name}
+              <Label style={labelStyle}>{cat.name}</Label>
               {list(comments, cat)}
             </ListGroupItem>
           );
@@ -195,6 +205,7 @@ Important.propTypes = {
 function mapStateToProps(state) {
   return {
     project: state.project,
+    organization: state.organization,
   };
 }
 
