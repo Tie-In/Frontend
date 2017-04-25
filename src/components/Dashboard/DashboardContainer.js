@@ -30,9 +30,9 @@ class DashboardContainer extends Component {
       const taskResponse = await apiHelper.get('/api/tasks', {
         project: project.id,
       });
-      console.log(taskResponse.data);
 
-      const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
+      const lastestSprint = project.sprints[project.sprints.length-1].id;
+      const responseSprint = await apiHelper.get(`/api/sprints/${lastestSprint}`);
 
       this.setState({
         selectedSprint: responseSprint.data.sprint,
@@ -40,9 +40,6 @@ class DashboardContainer extends Component {
         statuses: responseSprint.data.statuses,
         totalTasks: taskResponse.data,
       });
-      // console.log(this.state.tasks);
-      // console.log(this.state.selectedSprint);
-      // console.log(this.state.statuses);
     } catch (err) {
       console.log(err);
     }
@@ -72,9 +69,6 @@ class DashboardContainer extends Component {
         tasks: responseSprint.data.sprint.tasks,
         statuses: responseSprint.data.statuses,
       });
-      // console.log(this.state.tasks);
-      // console.log(this.state.selectedSprint);
-      // console.log(this.state.statuses);
     } catch (err) {
       console.log(err);
     }

@@ -12,24 +12,16 @@ class RemainingTasks extends Component {
     if (remainingTask > 0) {
       for (let i = 0; i < amountSprint; i += 1) {
         let doneTask = 0;
-        console.log('--------');
         for (let j = 0; j < totalTasks.length; j += 1) {
           const startSprint = project.sprints[i].start_date;
           const endSprint = project.sprints[i].end_date;
-          // console.log(`sprint ${i} : ${startSprint} - ${endSprint}`);
           if (totalTasks[j].is_done) {
             const doneDate = totalTasks[j].done_date;
             const isBetween = moment(doneDate).isBetween(startSprint, endSprint, null, '[]');
             const thisSprint = totalTasks[j].sprint_id === project.sprints[i].id;
-            // console.log(totalTasks[j]);
-            // console.log(`${thisSprint} : ${totalTasks[j].sprint_id} - ${project.sprints[i].id}`);
-            console.log(`${isBetween} : ${doneDate} | ${startSprint} - ${endSprint}`);
-            console.log(totalTasks[j]);
-            console.log(`${thisSprint} : ${totalTasks[j].sprint_id} - ${project.sprints[i].id}`);
             if (isBetween && thisSprint) {
               doneTask += 1;
             }
-            console.log('===');
           }
         }
         remainingTask -= doneTask;
