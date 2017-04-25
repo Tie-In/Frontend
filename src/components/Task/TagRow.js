@@ -185,14 +185,14 @@ class TagRow extends Component {
   }
 
   render() {
-    const { value, suggestions, openDropdown } = this.state;
+    const { value, suggestions } = this.state;
     const inputProps = {
       placeholder: 'Select tag',
       value,
       onChange: this.onChange,
       onClick: this.onSuggestionSelected,
     };
-    console.log(openDropdown);
+
     return (
       <div>
         <Col xs={12} md={4}>

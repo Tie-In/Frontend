@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Button, Row, Col, Image } from 'react-bootstrap';
+import { Button, Row, Col, Image, Glyphicon } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
 import ProjectCard from './ProjectCard';
 import * as organizationActions from '../../actions/organization-actions';
@@ -52,7 +52,7 @@ class OrganizationHome extends Component {
     };
     if (projects.length > 0) {
       return (<Button href={newProjectPath}>
-        Create new project
+        <Glyphicon glyph="plus" /> Create new project
       </Button>);
     }
     return (
@@ -62,7 +62,7 @@ class OrganizationHome extends Component {
         </a>
         <br />
         <Button href={newProjectPath} style={buttonDefaultStyle}>
-          Create new project
+          <Glyphicon glyph="plus" /> Create new project
         </Button>
       </div>
     );
@@ -75,7 +75,7 @@ class OrganizationHome extends Component {
         return project.users.find((u) => { return u.id === user.id; });
       });
     };
-    console.log(organization);
+
     return (
       this.state.loading ? <div /> :
       <DocumentTitle title={organization.name}>

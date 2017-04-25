@@ -14,7 +14,7 @@ class NormalNavbar extends Component {
     const path = `/organizations/${organization.id}/projects/${project.id}`;
     const data = [
       { id: 1, name: 'Detail', path: `${path}` },
-      { id: 2, name: 'Planning', path: `${path}/planning` },
+      { id: 2, name: 'Estimation', path: `${path}/planning` },
       { id: 3, name: 'New task', path: `${path}/tasks/new` },
       { id: 4, name: 'Backlog', path: `${path}/backlog` },
       { id: 5, name: 'Active sprint', path: `${path}/board` },
@@ -33,9 +33,15 @@ class NormalNavbar extends Component {
       if (project.current_sprint_id === null && menu.name === 'Active sprint') {
         return null;
       }
+      let selected = new RegExp(menu.path).test(window.location.href);
+      if (menu.name === 'Detail') {
+        selected = window.location.href.endsWith(menu.path);
+      }
       return (
         <li key={menu.id}>
-          <Link to={menu.path} activeClassName="active">{menu.name}</Link>
+          <Link to={menu.path} className={selected ? 'active' : null} onClick={() => { this.setState({}); }}>
+            {menu.name}
+          </Link>
         </li>
       );
     });

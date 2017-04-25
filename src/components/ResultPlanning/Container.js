@@ -62,12 +62,13 @@ class Container extends Component {
                 </thead>
                 <tbody>
                   { features.map((feature) => {
-                    return (<tr>
-                      <td>{feature.name}</td>
-                      <td>
-                        <center>{feature.complexity}</center>
-                      </td>
-                    </tr>);
+                    return (
+                      <tr key={feature.id}>
+                        <td>{feature.name}</td>
+                        <td>
+                          <center>{feature.complexity}</center>
+                        </td>
+                      </tr>);
                   })
                   }
                 </tbody>
@@ -89,7 +90,7 @@ class Container extends Component {
                   <tbody>
                     { technicalFactors.map((factor) => {
                       return (
-                        <tr>
+                        <tr key={factor.id}>
                           <td>{factor.name}</td>
                           <td>
                             <center>
@@ -117,7 +118,7 @@ class Container extends Component {
                   <tbody>
                     { environmentalFactors.map((factor) => {
                       return (
-                        <tr>
+                        <tr key={factor.id}>
                           <td>{factor.name}</td>
                           <td>
                             <center>

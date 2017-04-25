@@ -1,4 +1,4 @@
-import { Row, FormGroup, Col, Button, FormControl, ControlLabel } from 'react-bootstrap';
+import { Row, FormGroup, Col, Button, ControlLabel } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -6,6 +6,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import DatePicker from 'react-datepicker';
 import update from 'react-addons-update';
 import moment from 'moment';
+import FormRow from './FormRow';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../style/customDatepicker.css';
 import * as userActions from '../../actions/user-actions';
@@ -65,7 +66,6 @@ class Register extends Component {
         noError = false;
       }
     });
-
     if (noError) {
       try {
         const response = await apiHelper.post('/api/users', {
@@ -108,27 +108,19 @@ class Register extends Component {
 
   errorLabel(inputType) {
     const { error } = this.state;
-    // modified this with global
-    const errorStyle = {
-      color: '#d9534f',
-      marginLeft: '25px',
-    };
     // reformat propert to use in error
     const errorBreak = inputType.replace('_', ' ');
     const errorWord = errorBreak.charAt(0).toUpperCase() + errorBreak.substr(1);
     if (error[inputType] !== '') {
-      return (<h6 style={errorStyle}>{errorWord} {error[inputType]}</h6>);
+      return (`${errorWord} ${error[inputType]}`);
     }
-    return null;
+    return '';
   }
 
-  handleInputChange(e) {
-    const value = e.target.value;
-    const name = e.target.name;
-
+  handleInputChange(type, text) {
     this.setState({
       input: update(this.state.input, {
-        [name]: { $set: value },
+        [type]: { $set: text },
       }),
     });
   }
@@ -144,97 +136,49 @@ class Register extends Component {
 
 
   render() {
-    const { error } = this.state;
+    const { input, error } = this.state;
     return (
       <div className="tiein-container">
         <h3 className="header-label">Register</h3>
         <hr className="header-line" />
         <form>
           <Row>
-            <Col sm={6}>
-              <FormGroup
-                validationState={error.firstname === '' ? null : 'error'}
-              >
-                <ControlLabel>Firstname</ControlLabel>
-                <FormControl
-                  placeholder="Firstname"
-                  name="firstname"
-                  onChange={this.handleInputChange}
-                />
-                {this.errorLabel('firstname')}
-              </FormGroup>
-            </Col>
-            <Col sm={6}>
-              <FormGroup
-                validationState={error.lastname === '' ? null : 'error'}
-              >
-                <ControlLabel>Lastname</ControlLabel>
-                <FormControl
-                  placeholder="Lastname"
-                  name="lastname"
-                  onChange={this.handleInputChange}
-                />
-                {this.errorLabel('lastname')}
-              </FormGroup>
-            </Col>
+            <FormRow
+              title="Firstname" name="firstname"
+              value={input.firstname}
+              handleInput={this.handleInputChange} error={this.errorLabel('firstname')}
+            />
+            <FormRow
+              title="Lastname" name="lastname"
+              value={input.lastname}
+              handleInput={this.handleInputChange} error={this.errorLabel('lastname')}
+            />
           </Row>
           <Row>
-            <Col sm={6}>
-              <FormGroup
-                validationState={error.email === '' ? null : 'error'}
-              >
-                <ControlLabel>Email address</ControlLabel>
-                <FormControl
-                  placeholder="Email"
-                  name="email"
-                  onChange={this.handleInputChange}
-                />
-              </FormGroup>
-              {this.errorLabel('email')}
-            </Col>
-            <Col sm={6}>
-              <FormGroup
-                validationState={error.username === '' ? null : 'error'}
-              >
-                <ControlLabel>Username</ControlLabel>
-                <FormControl
-                  placeholder="Username"
-                  name="username"
-                  onChange={this.handleInputChange}
-                />
-                {this.errorLabel('username')}
-              </FormGroup>
-            </Col>
+            <FormRow
+              title="Email" name="email"
+              value={input.email}
+              handleInput={this.handleInputChange} error={this.errorLabel('email')}
+            />
+            <FormRow
+              title="Username" name="username"
+              value={input.username}
+              handleInput={this.handleInputChange} error={this.errorLabel('username')}
+            />
           </Row>
           <Row>
-            <Col sm={6}>
-              <FormGroup
-                validationState={error.password === '' ? null : 'error'}
-              >
-                <ControlLabel>Password</ControlLabel>
-                <FormControl
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  onChange={this.handleInputChange}
-                />
-                {this.errorLabel('password')}
-              </FormGroup>
-            </Col>
-            <Col sm={6}>
-              <FormGroup
-                validationState={error.password_confirmation === '' ? null : 'error'}
-              >
-                <ControlLabel>Confirm password</ControlLabel>
-                <FormControl
-                  type="password"
-                  name="password_confirmation"
-                  placeholder="Password confirmation"
-                  onChange={this.handleInputChange}
-                />
-                {this.errorLabel('password_confirmation')}
-              </FormGroup>
-            </Col>
+            <FormRow
+              title="Password" name="password"
+              value={input.password}
+              handleInput={this.handleInputChange} error={this.errorLabel('password')}
+              type="password"
+            />
+            <FormRow
+              title="Confirm password" name="password_confirmation"
+              value={input.password_confirmation}
+              handleInput={this.handleInputChange} error={this.errorLabel('password_confirmation')}
+              type="password"
+            />
           </Row>
           <Row>
             <Col sm={6}>
@@ -251,22 +195,14 @@ class Register extends Component {
                   peekNextMonth showMonthDropdown showYearDropdown
                   dropdownMode="select"
                 />
-                {this.errorLabel('birth_date')}
+                <h6 className="error-label">{this.errorLabel('birth_date')}</h6>
               </FormGroup>
             </Col>
-            <Col sm={6}>
-              <FormGroup
-                validationState={error.phone_number === '' ? null : 'error'}
-              >
-                <ControlLabel>Phone number</ControlLabel>
-                <FormControl
-                  placeholder="Phone number"
-                  name="phone_number"
-                  onChange={this.handleInputChange}
-                />
-                {this.errorLabel('phone_number')}
-              </FormGroup>
-            </Col>
+            <FormRow
+              title="Phone number" name="phone_number"
+              value={input.phone_number}
+              handleInput={this.handleInputChange} error={this.errorLabel('phone_number')}
+            />
           </Row>
           <br />
           <Row>

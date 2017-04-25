@@ -5,7 +5,7 @@
   text-align: center;
   font-weight: bold;
 }
-#startBtn, #submitBtn {
+#startBtn, #submitBtn, #nextBtn, #doneBtn {
  text-align: center;
 }
 p {
@@ -18,4 +18,97 @@ button {
 }
 .disabled {
   pointer-events: none;
+}
+/*--------Manage category--------*/
+#colorMenu {
+  padding: 10px 10px 10px 10px;
+}
+.round-button {
+    display:block;
+    width:20px;
+    height:20px;
+    border-radius: 50%;
+    border: 1.5px solid #D0CBC7;
+    background-color: white;
+    right: 200px;
+}
+/*--------Add category--------*/
+/*#addCatRow {
+  position: fixed;
+  float: right;
+  z-index: 99;
+}*/
+
+#cat {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+          transform: translate(-50%);
+  min-width: 700px;
+}
+.tags {
+  background: #fff;
+  padding: 5px;
+  overflow: hidden;
+}
+.tag {
+  list-style-type: none;
+  color: #fff;
+  background: #3498db;
+  float: left;
+  padding: 5px 10px;
+  border-radius: 10em;
+  margin: 5px;
+}
+.tag button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.tag-input {
+  padding: 5px 10px;
+  box-sizing: border-box;
+  color: #7f8c8d;
+  border: 0;
+  float: left;
+  margin: 10px 0;
+  font-size: 16px;
+  outline: 0;
+}
+code {
+  color: #A25E5D;
+}
+
+/*--------Important--------*/
+input[type='checkbox'] {
+  display: none;
+}
+#imptHeader .panel-heading {
+  background: #ad7977 !important;
+  color: #ffffff !important;
+}
+label {
+  font-weight: normal;
+  display: inline-flex;
+}
+#try > label:hover {
+  cursor: pointer;
+}
+label > .glyphicon {
+  padding-top: 3px;
+  padding-right: 15px;
+}
+label > .glyphicon-star, label:hover > .glyphicon-star-empty {
+  display: none;
+}
+label:hover > .glyphicon-star, input:checked + label > .glyphicon-star {
+  display: block;
+  color: #ffde00;
+}
+input:checked + label > .glyphicon-star-empty{
+  display: none;
+}
+.list-group > li {
+  list-style: none;
 }

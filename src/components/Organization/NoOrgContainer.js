@@ -1,6 +1,7 @@
 import { Image, Button } from 'react-bootstrap';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import AddOrg from '../../images/newproject.png';
 
 class NoOrgContainer extends Component {
   componentWillMount() {
@@ -22,7 +23,6 @@ class NoOrgContainer extends Component {
       position: 'absolute',
       left: '50%',
       transform: 'translate(-50%, 0)',
-      // marginTop: '8px',
     };
     const pStyle = {
       margin: '0 0 0',
@@ -30,7 +30,7 @@ class NoOrgContainer extends Component {
     return (
       <div style={articleStyles}>
         <a href="/organizations/new">
-          <Image src={'src/images/add-org.png'} alt="Image" />
+          <Image src={AddOrg} alt="Image" />
         </a>
         <p style={pStyle} />
         <Button href="/organizations/new" style={buttonDefaultStyle}>Create new organization</Button>

@@ -5,7 +5,7 @@ import {
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import linkState from 'react-link-state';
+import update from 'react-addons-update';
 import List from './List';
 import * as planningActions from '../../actions/planning-actions';
 
@@ -26,6 +26,7 @@ class FeaturePlanningContainer extends Component {
     this.addFeature = this.addFeature.bind(this);
     this.sendFeatures = this.sendFeatures.bind(this);
     this.removeFeature = this.removeFeature.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   addFeature() {
@@ -55,6 +56,17 @@ class FeaturePlanningContainer extends Component {
     e.preventDefault();
   }
 
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
+    });
+  }
+
   removeFeature(index) {
     const temp = this.state.features;
     temp.splice(index, 1);
@@ -62,7 +74,7 @@ class FeaturePlanningContainer extends Component {
   }
 
   render() {
-    const { features } = this.state;
+    const { features, input } = this.state;
     return (
       <div className="tiein-container">
         <h3 className="header-label">Add Planning Feature</h3>
@@ -74,7 +86,9 @@ class FeaturePlanningContainer extends Component {
                 <ControlLabel>Feature</ControlLabel>
                 <FormControl
                   placeholder="Feature name"
-                  valueLink={linkState(this, 'input.name')}
+                  name="name"
+                  value={input.name}
+                  onChange={this.handleInputChange}
                 />
               </FormGroup>
             </Col>
@@ -83,7 +97,9 @@ class FeaturePlanningContainer extends Component {
                 <ControlLabel>Level</ControlLabel>
                 <FormControl
                   componentClass="select" placeholder="Complexity"
-                  valueLink={linkState(this, 'input.complexity')}
+                  name="complexity"
+                  value={input.complexity}
+                  onChange={this.handleInputChange}
                 >
                   <option value="">Select Level</option>
                   <option value="simple">Simple</option>
