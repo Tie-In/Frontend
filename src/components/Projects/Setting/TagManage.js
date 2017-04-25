@@ -118,7 +118,7 @@ class TagManage extends Component {
                   bsStyle="primary"
                 >
                   <div
-                    style={{ backgroundColor: this.state.editTagColor, width: 15, height: 15, display: 'inline-block' }} 
+                    style={{ backgroundColor: this.state.editTagColor, width: 15, height: 15, display: 'inline-block' }}
                   /> {this.state.editTagColor}
                 </Button>
               </div>
@@ -158,13 +158,15 @@ class TagManage extends Component {
           </Col>
           <Col xs={3} style={{ textAlign: 'center' }}>
             <a
-              style={{ cursor: 'pointer', marginRight: 20 }} 
-              onClick={() => this.setState({ onEdit: index, editTagName: tag.name, editTagColor: tag.color })}
+              style={{ cursor: 'pointer', marginRight: 20 }}
+              onClick={() => {
+                this.setState({ onEdit: index, editTagName: tag.name, editTagColor: tag.color });
+              }}
             >
               <Glyphicon glyph="pencil" /> Edit
             </a>
             <a
-              style={{ cursor: 'pointer' }} onClick={() => this.setState({ onDelete: index})}
+              style={{ cursor: 'pointer' }} onClick={() => { this.setState({ onDelete: index }); }}
             >
               <Glyphicon glyph="remove" /> Delete
             </a>
@@ -184,18 +186,20 @@ class TagManage extends Component {
                 </tr>
               </thead>
               <tbody>
-                { tags.map((tag, index) => {
-                  return (<tr key={tag.id} style={{ height: 45 }}>
-                      { this.state.onEdit === index ?
-                        editRow(tag, index)
-                        :
-                        this.state.onDelete === index ?
-                          deleteRow(tag.id)
+                { tags.length > 0 ?
+                  tags.map((tag, index) => {
+                    return (<tr key={tag.id} style={{ height: 45 }}>
+                        { this.state.onEdit === index ?
+                          editRow(tag, index)
                           :
-                          normalRow(tag, index)
-                      }
-                  </tr>);
-                })
+                          this.state.onDelete === index ?
+                            deleteRow(tag.id)
+                            :
+                            normalRow(tag, index)
+                        }
+                    </tr>);
+                  }) :
+                  <tr style={{ height: 45 }}><h5 style={{ paddingLeft: 10, paddingTop: 3 }}>No tag found</h5></tr>
                 }
               </tbody>
             </Table>

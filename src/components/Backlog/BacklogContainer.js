@@ -100,8 +100,7 @@ class BacklogContainer extends Component {
       const perLevel = project.project_contributes.find((x) => {
         return x.user_id === user.id;
       }).permission_level;
-      permissionActions.setProject(perLevel);
-
+      this.props.permissionActions.setProject(perLevel);
       const response = await apiHelper.get('/api/tasks', {
         project: this.props.params.projectId,
         sprint: 'backlog',
