@@ -29,6 +29,7 @@ import {
   RetrospectiveContainer,
   NewRetrospective,
   Management,
+  Important,
 } from './components';
 import configureStore from './store/configure-store';
 
@@ -63,6 +64,7 @@ ReactDOM.render(
         <Route path="retrospective" component={RetrospectiveContainer} />
         <Route path="retrospective/new" component={NewRetrospective} />
         <Route path="retrospective/management" component={Management} />
+        <Route path="retrospective/management/important" component={Important} />
       </Route>
       <Route path="/" component={StartApp}>
         <Route path="register" component={Register} />
