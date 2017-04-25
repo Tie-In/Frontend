@@ -55,6 +55,7 @@ class Container extends Component {
   }
 
   async submit() {
+    // console.log(this.state.technicals);
     try {
       await apiHelper.post('/api/effort_estimations', {
         effort_estimations: this.state,

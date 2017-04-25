@@ -28,8 +28,12 @@ class FactorRow extends Component {
 
     if (rating > 5) {
       this.setState({ rating: 5 });
+      const value = 5 * this.props.weight;
+      this.props.returnImpact(this.props.index, 5, value);
     } else if (rating < 0) {
       this.setState({ rating: 0 });
+      const value = 0 * this.props.weight;
+      this.props.returnImpact(this.props.index, 0, value);
     }
   }
 
