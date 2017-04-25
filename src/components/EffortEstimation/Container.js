@@ -15,7 +15,7 @@ class Container extends Component {
     super(props);
 
     this.state = {
-      project_id: this.props.project.id,
+      project_id: this.props.params.projectId,
       technicals: {},
       environmentals: {},
       t_factor: 0,

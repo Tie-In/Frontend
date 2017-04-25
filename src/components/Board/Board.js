@@ -16,6 +16,7 @@ class Board extends Component {
   static propTypes = {
     listsActions: PropTypes.object.isRequired,
     projectActions: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
     lists: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
@@ -28,6 +29,8 @@ class Board extends Component {
     this.scrollLeft = this.scrollLeft.bind(this);
     this.stopScrolling = this.stopScrolling.bind(this);
     this.startScrolling = this.startScrolling.bind(this);
+    this.pollingData = this.pollingData.bind(this);
+    this.stopPolling = this.stopPolling.bind(this);
     this.state = {
       isScrolling: false,
       sprintNumber: '',
@@ -35,6 +38,7 @@ class Board extends Component {
       allTags: [],
       allFeatures: [],
     };
+    this.interval = setInterval(this.pollingData, 15000);
   }
 
   async componentWillMount() {
@@ -42,25 +46,39 @@ class Board extends Component {
       const response = await apiHelper.get(`/api/projects/${this.props.params.projectId}`);
       const project = response.data;
       this.props.projectActions.setProject(project);
-      if (project.current_sprint_id) {
-        const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
-        const data = responseSprint.data;
-        this.setState({ sprintNumber: data.sprint.number });
-        const statuses = data.statuses;
-        this.props.listsActions.setList(statuses);
-      }
-      const responseUser = await apiHelper.get('/api/users', {
-        project: project.id,
-      }, true);
-      const users = responseUser.data;
-      this.setState({
-        allUsers: users,
-        allTags: project.tags,
-        allFeatures: project.features,
-      });
+      this.pollingData();
     } catch (err) {
       console.log(err);
     }
+  }
+
+  componentDidMount() {
+    this.interval;
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  async pollingData() {
+    const { project } = this.props;
+    if (project.current_sprint_id) {
+      const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
+      // console.log(responseSprint);
+      const data = responseSprint.data;
+      this.setState({ sprintNumber: data.sprint.number });
+      const statuses = data.statuses;
+      this.props.listsActions.setList(statuses);
+    }
+    const responseUser = await apiHelper.get('/api/users', {
+      project: project.id,
+    }, true);
+    const users = responseUser.data;
+    this.setState({
+      allUsers: users,
+      allTags: project.tags,
+      allFeatures: project.features,
+    });
   }
 
   startScrolling(direction) {
@@ -108,6 +126,10 @@ class Board extends Component {
     };
   }
 
+  stopPolling() {
+    clearInterval(this.interval);
+  }
+
   render() {
     const { lists = [] } = this.props;
     const width = 300 * (lists.length + 1);
@@ -129,6 +151,7 @@ class Board extends Component {
               stopScrolling={this.stopScrolling}
               isScrolling={this.state.isScrolling}
               x={i}
+              stopPolling={this.stopPolling}
             />);
           },
           )}
@@ -141,6 +164,7 @@ class Board extends Component {
 function mapStateToProps(state) {
   return {
     lists: state.lists.lists,
+    project: state.project,
   };
 }
 

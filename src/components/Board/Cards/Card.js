@@ -62,14 +62,16 @@ class Card extends Component {
   render() {
     const { style } = this.props;
     const { item } = this.state;
-
     return (
       <div
         style={style} className="item"
         id={style ? item.id : null} onClick={() => { this.setModal(true); }}
       >
         <div className="item-name">
-          {item.name} <Badge pullRight>{item.story_point}</Badge>
+          {item.name}
+          <span className="pull-right">
+            <Badge>{item.story_point}</Badge>
+          </span>
         </div>
         <div className="item-container">
           <div className="item-content">

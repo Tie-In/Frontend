@@ -25,6 +25,7 @@ class NewProject extends Component {
         feature_id: '',
         tags: [],
       },
+      error: '',
     };
 
     this.create = this.create.bind(this);
@@ -70,12 +71,15 @@ class NewProject extends Component {
   }
 
   async create() {
-    try {
-      const response = await apiHelper.post('/api/tasks', this.state.input);
-      const task = response.data;
-      location.reload();
-    } catch (err) {
-      console.log(err);
+    if (this.state.input.name !== '') {
+      try {
+        await apiHelper.post('/api/tasks', this.state.input);
+        location.reload();
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      this.setState({ error: "Task's name is required" });
     }
   }
 
@@ -92,6 +96,7 @@ class NewProject extends Component {
 
   render() {
     const { project, params } = this.props;
+    const { error } = this.state;
     const buttonGroup = {
       marginTop: '20px',
     };
@@ -108,7 +113,7 @@ class NewProject extends Component {
               <Col xs={12}>
                 <h3 className="header-label">Create new task</h3>
                 <hr className="header-line" />
-                <FormGroup controlId="formInlineName">
+                <FormGroup controlId="formInlineName" validationState={error === '' ? null : 'error'}>
                   <ControlLabel>
                     Task&#39;s name
                   </ControlLabel>
@@ -117,6 +122,7 @@ class NewProject extends Component {
                     name="name"
                     onChange={this.handleInputChange}
                   />
+                  <h6 className="error-label">{error}</h6>
                 </FormGroup>
               </Col>
             </Row>

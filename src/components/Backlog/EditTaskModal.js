@@ -25,11 +25,14 @@ class EditTaskModal extends Component {
       allFeatures: [],
       allUsers: [],
       allTags: null,
+      error: '',
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.setFeature = this.setFeature.bind(this);
     this.setAssignee = this.setAssignee.bind(this);
     this.setTags = this.setTags.bind(this);
+    this.updateTask = this.updateTask.bind(this);
+    this.onClose = this.onClose.bind(this);
   }
 
   async componentWillMount() {
@@ -55,6 +58,11 @@ class EditTaskModal extends Component {
     this.setState({ input: nextProps.task });
   }
 
+  onClose() {
+    this.setState({ error: '' });
+    this.props.close();
+  }
+
   setFeature(id) {
     const temp = this.state.input;
     temp.feature_id = id;
@@ -69,7 +77,9 @@ class EditTaskModal extends Component {
 
   setTags(idArr) {
     const temp = this.state.input;
-    const renew = idArr.map((t) => { return this.state.allTags.find((tag) => { return tag.id === t.id; }); });
+    const renew = idArr.map((t) => {
+      return this.state.allTags.find((tag) => { return tag.id === t.id; });
+    });
     temp.tags = renew;
     this.setState({ input: temp });
   }
@@ -79,13 +89,22 @@ class EditTaskModal extends Component {
     this.setState({ input: update(this.state.input, { [name]: { $set: e.target.value } }) });
   }
 
-  render() {
+  updateTask() {
     const { input } = this.state;
+    if (input.name !== '') {
+      this.props.setUpdatedTask(input);
+    } else {
+      this.setState({ error: "Task's name is required" });
+    }
+  }
+
+  render() {
+    const { input, error } = this.state;
     const editTask = () => {
       return (
         <div className="editTaskContainer">
           <Form horizontal>
-            <FormGroup>
+            <FormGroup validationState={error === '' ? null : 'error'}>
               <Col xs={2} xsOffset={1} componentClass={ControlLabel}>
                 Name
               </Col>
@@ -96,6 +115,7 @@ class EditTaskModal extends Component {
                   value={input.name || ''}
                   onChange={this.handleInputChange}
                 />
+                <h6 className="error-label">{error}</h6>
               </Col>
             </FormGroup>
             <FormGroup>
@@ -154,7 +174,7 @@ class EditTaskModal extends Component {
       <div className="modal-container">
         <Modal
           show={this.props.show}
-          onHide={this.props.close}
+          onHide={this.onClose}
           container={this}
           aria-labelledby="contained-modal-title"
         >
@@ -166,7 +186,7 @@ class EditTaskModal extends Component {
             {editTask()}
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={() => { this.props.setUpdatedTask(this.state.input); }}>Update</Button>
+            <Button onClick={() => { this.updateTask(); }}>Update</Button>
           </Modal.Footer>
         </Modal>
       </div>

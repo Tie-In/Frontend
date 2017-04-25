@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Row, Col, Button, FormGroup, FormControl } from 'react-bootstrap';
-import linkState from 'react-link-state';
+import update from 'react-addons-update';
 import DocumentTitle from 'react-document-title';
 import List from './List';
 import * as projectActionsCreator from '../../actions/project-actions';
@@ -25,6 +25,7 @@ class NewRetrospective extends Component {
     this.addComment = this.addComment.bind(this);
     this.removeComment = this.removeComment.bind(this);
     this.setComments = this.setComments.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   async componentWillMount() {
@@ -68,27 +69,33 @@ class NewRetrospective extends Component {
 
   async setComments() {
     const { organization, project } = this.props;
-    console.log(project);
     const path = `/organizations/${organization.id}/projects/${project.id}`;
     const latestSprint = this.props.project.sprints[this.props.project.sprints.length - 1];
-    console.log(this.props.project);
-    console.log(latestSprint);
-    console.log(latestSprint.retrospective.id);
 
     try {
-      console.log(this.state.comments)
       const res = await apiHelper.post('/api/viewpoints', {
         viewpoints: this.state.comments,
         retrospective_id: latestSprint.retrospective.id,
       });
-      console.log(res);
     } catch (err) {
       console.log(err.response);
     }
     document.location.href = `${path}/retrospective`;
   }
 
+  handleInputChange(e) {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({
+      input: update(this.state.input, {
+        [name]: { $set: value },
+      }),
+    });
+  }
+
   render() {
+    const { input } = this.state;
     const submitButton = () => {
       if (this.state.comments.length > 0) {
         return (<Button onClick={this.setComments}>Submit</Button>);
@@ -108,7 +115,9 @@ class NewRetrospective extends Component {
                   <FormControl
                     id="nameField"
                     placeholder="Add comment"
-                    valueLink={linkState(this, 'input.comment')}
+                    name="comment"
+                    value={input.comment}
+                    onChange={this.handleInputChange}
                   />
                 </FormGroup>
               </Col>
@@ -116,7 +125,9 @@ class NewRetrospective extends Component {
                 <FormGroup>
                   <FormControl
                     componentClass="select"
-                    valueLink={linkState(this, 'input.kind')}
+                    name="kind"
+                    value={input.kind}
+                    onChange={this.handleInputChange}
                   >
                     <option value="">Select Type</option>
                     <option value="good">Good</option>

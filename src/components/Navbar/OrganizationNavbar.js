@@ -13,7 +13,8 @@ class OrganizationNavbar extends Component {
     const { user, organization } = this.props;
     const path = `/organizations/${organization.id}`;
     const data = [
-      { id: 1, name: 'Setting', path: `${path}/setting` },
+      { id: 1, name: 'Home', path: `${path}`, margin: 0 },
+      { id: 2, name: 'Setting', path: `${path}/setting`, margin: 75 },
     ];
     const wrappedText = {
       width: 150,
@@ -22,13 +23,23 @@ class OrganizationNavbar extends Component {
       textOverflow: 'ellipsis',
       textAlign: 'left',
     };
-    const menuNode = data.map((menu) => {
-      return (
-        <li key={menu.id} style={{ marginRight: 75 }}>
-          <Link to={menu.path} activeClassName="active">{menu.name}</Link>
-        </li>
-      );
-    });
+    const url = window.location.href;
+    let menuNode = [];
+    if (organization.id) {
+      menuNode = data.map((menu) => {
+        let selected = new RegExp(menu.path).test(url);
+        if (menu.name === 'Home') {
+          selected = url.endsWith(menu.path);
+        }
+        return (
+          <li key={menu.id} style={{ marginRight: menu.margin }}>
+            <Link to={menu.path} className={selected ? 'active' : null} onClick={() => { this.setState({}); }}>
+              {menu.name}
+            </Link>
+          </li>
+        );
+      });
+    }
 
     return (
       <div className="App">

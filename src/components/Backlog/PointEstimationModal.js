@@ -9,21 +9,57 @@ class PointEstimationModal extends Component {
     this.state = {
       tasks: this.props.tasks,
       totalPoints: 0,
+      trySend: false,
     };
     this.handleSetPoint = this.handleSetPoint.bind(this);
+    this.setSprint = this.setSprint.bind(this);
+    this.getIndex = this.getIndex.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({ tasks: nextProps.tasks });
   }
 
-  handleSetPoint(e, id) {
+  getIndex(id) {
     const changedTask = this.state.tasks.find((x) => {
       return x.id === id;
     });
-    const index = this.state.tasks.indexOf(changedTask);
+    return this.state.tasks.indexOf(changedTask);
+  }
+
+  setSprint() {
+    let hasBlank = false;
+    this.state.tasks.forEach((task) => {
+      if (task.story_point === null) {
+        hasBlank = true;
+      }
+    });
+    if (hasBlank) {
+      this.setState({ trySend: true });
+    } else {
+      this.setState({ trySend: false });
+      this.props.setSprintTasks(this.state.tasks);
+    }
+  }
+
+  handleSetPoint(e, id) {
+    const index = this.getIndex(id);
     this.setState({
       tasks: update(this.state.tasks, { [index]: { story_point: { $set: e.target.value } } }),
+    });
+  }
+
+  checkValue(e, id) {
+    const { maxPoint } = this.props;
+    const index = this.getIndex(id);
+    let value = e.target.value;
+    if (Number(value) > Number(maxPoint)) {
+      value = maxPoint;
+    } else if (value <= 0 && value !== '') {
+      value = 1;
+    }
+    this.setState({
+      tasks: update(this.state.tasks, { [index]: { story_point: { $set: value } } }),
     });
   }
 
@@ -37,12 +73,19 @@ class PointEstimationModal extends Component {
                 <div id="taskName">{task.name}</div>
               </Col>
               <Col xs={3} md={3}>
-                <FormGroup controlId="point" bsSize="small" className="pull-right">
+                <FormGroup
+                  controlId="point" bsSize="small" className="pull-right"
+                  validationState={
+                    (task.story_point === null || task.story_point === '') && this.state.trySend ? 'error' : null
+                  }
+                >
                   <FormControl
                     placeholder="Point"
                     type="number"
-                    max={this.props.maxPoint} min={0}
+                    max={this.props.maxPoint} min={1}
+                    value={task.story_point || ''}
                     onChange={(e) => { this.handleSetPoint(e, task.id); }}
+                    onBlur={(e) => { this.checkValue(e, task.id); }}
                   />
                 </FormGroup>
               </Col>
@@ -50,6 +93,12 @@ class PointEstimationModal extends Component {
           </Col>
         );
       });
+    };
+
+    const totalPoint = () => {
+      return this.state.tasks.reduce((acc, task) => {
+        return acc + Number(task.story_point || 0);
+      }, 0);
     };
 
     return (
@@ -62,7 +111,13 @@ class PointEstimationModal extends Component {
         >
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title">
-              Point Estimation <span>Max story point: {this.props.maxPoint}</span>
+              Point Estimation
+              <span className="pull-right" style={{ marginRight: 15, marginTop: 5, fontSize: 14 }}>
+                <p>
+                  <span style={{ marginRight: 10 }}>Max point per task: {this.props.maxPoint}</span>
+                  <span>Total sprint point: {totalPoint()}</span>
+                </p>
+              </span>
             </Modal.Title>
             <hr />
           </Modal.Header>
@@ -72,7 +127,7 @@ class PointEstimationModal extends Component {
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={() => { this.props.setSprintTasks(this.state.tasks); }}>
+            <Button onClick={() => { this.setSprint(); }}>
               Start Sprint
             </Button>
           </Modal.Footer>

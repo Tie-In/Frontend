@@ -4,6 +4,7 @@ import {
   Nav, NavItem, Glyphicon,
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import DocumentTitle from 'react-document-title';
 import { bindActionCreators } from 'redux';
 import * as projectActions from '../../actions/project-actions';
 import * as apiHelper from '../../helpers/apiHelper';
@@ -202,24 +203,26 @@ class ProjectSetting extends Component {
     };
 
     return (
-      <div className="tiein-container">
-        <h3 className="header-label">Project setting</h3>
-        <hr className="header-line" />
-        <Form>
-          <Row>
-            <Col xs={12}>
-              <Nav className="setting-tabs" bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
-                <NavItem eventKey={1}><Glyphicon glyph="info-sign" /> Information</NavItem>
-                <NavItem eventKey={2}><Glyphicon glyph="user" /> Contributors</NavItem>
-                <NavItem eventKey={3}><Glyphicon glyph="th-list" /> Task status</NavItem>
-                <NavItem eventKey={4}><Glyphicon glyph="tags" /> Tags</NavItem>
-              </Nav>
-            </Col>
-          </Row>
-          <br />
-          {switchRender(tabIndex)}
-        </Form>
-      </div>
+      <DocumentTitle title={`${project.name}・Setting`}>
+        <div className="tiein-container">
+          <h3 className="header-label">Project setting</h3>
+          <hr className="header-line" />
+          <Form>
+            <Row>
+              <Col xs={12}>
+                <Nav className="setting-tabs" bsStyle="tabs" activeKey={tabIndex} onSelect={this.handleSelect}>
+                  <NavItem eventKey={1}><Glyphicon glyph="info-sign" /> Information</NavItem>
+                  <NavItem eventKey={2}><Glyphicon glyph="user" /> Contributors</NavItem>
+                  <NavItem eventKey={3}><Glyphicon glyph="th-list" /> Task status</NavItem>
+                  <NavItem eventKey={4}><Glyphicon glyph="tags" /> Tags</NavItem>
+                </Nav>
+              </Col>
+            </Row>
+            <br />
+            {switchRender(tabIndex)}
+          </Form>
+        </div>
+      </DocumentTitle>
     );
   }
 }
