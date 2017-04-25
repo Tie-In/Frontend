@@ -5,7 +5,7 @@
   text-align: center;
   font-weight: bold;
 }
-#startBtn, #submitBtn, #nextBtn {
+#startBtn, #submitBtn, #nextBtn, #doneBtn {
  text-align: center;
 }
 p {

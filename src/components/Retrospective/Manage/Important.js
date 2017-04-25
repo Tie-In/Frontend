@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, Panel, Glyphicon } from 'react-bootstrap';
+import { Row, Col, Panel, Glyphicon, ListGroup, ListGroupItem, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import update from 'immutability-helper';
@@ -14,21 +14,45 @@ class Important extends Component {
       viewpoints: [],
       selectedSprint: this.props.project.sprints[this.props.project.sprints.length - 1],
       importants: [],
+      categories: [],
+      found: false,
     };
 
     this.setImportant = this.setImportant.bind(this);
     this.getImportantID = this.getImportantID.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
+    this.doneRetrospective = this.doneRetrospective.bind(this);
   }
 
   async componentWillMount() {
     try {
       const res = await apiHelper.get(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`);
       this.setState({ viewpoints: res.data.viewpoints });
+
+      const catsRes = await apiHelper.get('/api/viewpoint_categories', {
+        retrospective: this.state.selectedSprint.retrospective.id,
+      });
+      this.setState({ categories: catsRes.data });
+
       console.log(this.state.viewpoints);
+      console.log(this.state.categories);
     } catch (err) {
       console.log(err);
     }
+  }
+
+  async doneRetrospective() {
+    try {
+      const res = await apiHelper.put(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`, {
+        is_important: {
+          viewpoints: this.state.importants,
+        },
+      });
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+    document.location.href = `/organizations/${this.props.organization.id}/projects/${this.props.project.id}/retrospective/`;
   }
 
   handleSelect(e) {
@@ -58,30 +82,57 @@ class Important extends Component {
     }
   }
 
-  render() {
-    const comments = (kind) => {
-      if (this.state.viewpoints) {
-        return this.state.viewpoints.map((data) => {
-          if (this.state.viewpoints && data.kind === kind) {
-            return (<li>{data.comment}</li>);
-          }
-        });
+  hasCat(comments, cat) {
+    let found = false;
+    comments.forEach((comment) => {
+      if (cat.id === comment.viewpoint_category_id) {
+        found = true;
       }
+    });
+    return found;
+  }
+
+  render() {
+    const list = (comments, cat) => {
+      return comments.map((comment) => {
+        if (comment.kind === 'try' && cat.id === comment.viewpoint_category_id) {
+          return (
+            <div>
+              <input type="checkbox" onClick={this.handleSelect} name={comment.comment} id={comment.id} />
+              <label htmlFor={comment.id}><Glyphicon glyph="star" /><Glyphicon glyph="star-empty" />{comment.comment}</label>
+            </div>
+          );
+        } else if (cat.id === comment.viewpoint_category_id) {
+          return (
+            <li>{comment.comment}</li>
+          );
+        }
+      });
     };
 
-    const tries = () => {
+    const commentsByCategory = (comments) => {
+      return this.state.categories.map((cat) => {
+        if (this.hasCat(comments, cat)) {
+          return (
+            <ListGroupItem>
+              {cat.name}
+              {list(comments, cat)}
+            </ListGroupItem>
+          );
+        }
+      });
+    };
+
+    const comments = (kind) => {
+      const commentsByType = [];
       if (this.state.viewpoints) {
-        return this.state.viewpoints.map((data) => {
-          if (this.state.viewpoints && data.kind === 'try') {
-            return (
-              <div>
-                <input type="checkbox" onClick={this.handleSelect} name={data.comment} id={data.id} />
-                <label htmlFor={data.id}><Glyphicon glyph="star" /><Glyphicon glyph="star-empty" />{data.comment}</label>
-              </div>
-            );
+        this.state.viewpoints.forEach((data) => {
+          if (data.kind === kind) {
+            commentsByType.push(data);
           }
         });
       }
+      return commentsByCategory(commentsByType);
     };
 
     const imps = () => {
@@ -101,17 +152,23 @@ class Important extends Component {
             <Row>
               <Col md={3}>
                 <Panel header="Good">
-                  {comments('good')}
+                  <ListGroup fill>
+                    {comments('good')}
+                  </ListGroup>
                 </Panel>
               </Col>
               <Col md={3}>
                 <Panel header="Bad">
-                  {comments('bad')}
+                  <ListGroup fill>
+                    {comments('bad') }
+                  </ListGroup>
                 </Panel>
               </Col>
               <Col md={3}>
                 <Panel header="Try">
-                  {tries()}
+                  <ListGroup fill>
+                    {comments('try')}
+                  </ListGroup>
                 </Panel>
               </Col>
               <Col md={3}>
@@ -120,6 +177,9 @@ class Important extends Component {
                 </Panel>
               </Col>
             </Row>
+            <div id="doneBtn"><Button onClick={this.doneRetrospective}>
+              Done
+            </Button></div>
           </Row>
         </div>
       </DocumentTitle>
@@ -129,6 +189,7 @@ class Important extends Component {
 
 Important.propTypes = {
   project: PropTypes.object.isRequired,
+  organization: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

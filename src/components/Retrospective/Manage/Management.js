@@ -148,9 +148,11 @@ class Management extends Component {
               {comments('try')}
             </Col>
           </Row>
-          {/* <div id="nextBtn"><Button onClick={this.sendCategory}>
-            Next
-          </Button></div> */}
+          <div id="nextBtn">
+            <Button href={`/organizations/${this.props.organization.id}/projects/${this.props.project.id}/retrospective/management/important`}>
+              Next
+            </Button>
+          </div>
         </div>
       </DocumentTitle>
     );
@@ -159,6 +161,7 @@ class Management extends Component {
 
 Management.propTypes = {
   project: PropTypes.object.isRequired,
+  organization: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
