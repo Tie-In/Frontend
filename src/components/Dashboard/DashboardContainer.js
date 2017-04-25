@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Line } from 'react-chartjs-2';
 import { Row, Col, FormGroup, FormControl } from 'react-bootstrap';
 import moment from 'moment';
 import DocumentTitle from 'react-document-title';
@@ -8,6 +7,7 @@ import FaBarChart from 'react-icons/lib/fa/bar-chart';
 import StoryPoint from './StoryPoint';
 import TaskStatus from './TaskStatus';
 import ContributorTask from './ContributorTask';
+import RemianingTasks from './RemainingTasks';
 import * as apiHelper from '../../helpers/apiHelper';
 
 class DashboardContainer extends Component {
@@ -16,10 +16,10 @@ class DashboardContainer extends Component {
     this.state = {
       project: this.props.project,
       sprints: this.props.project.sprints,
-      // selectedSprint: this.props.project.sprints.slice(-1)[0],
       selectedSprint: {},
       tasks: [],
       statuses: [],
+      totalTasks: [],
     };
     this.handleSelectSprint = this.handleSelectSprint.bind(this);
   }
@@ -27,11 +27,10 @@ class DashboardContainer extends Component {
   async componentWillMount() {
     try {
       const { project } = this.props;
-      // console.log(project.current_sprint_id);
       const taskResponse = await apiHelper.get('/api/tasks', {
         project: project.id,
-        sprint: project.current_sprint_id,
       });
+      console.log(taskResponse.data);
 
       const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
 
@@ -39,10 +38,11 @@ class DashboardContainer extends Component {
         selectedSprint: responseSprint.data.sprint,
         tasks: responseSprint.data.sprint.tasks,
         statuses: responseSprint.data.statuses,
+        totalTasks: taskResponse.data,
       });
-      console.log(this.state.tasks);
-      console.log(this.state.selectedSprint);
-      console.log(this.state.statuses);
+      // console.log(this.state.tasks);
+      // console.log(this.state.selectedSprint);
+      // console.log(this.state.statuses);
     } catch (err) {
       console.log(err);
     }
@@ -64,100 +64,30 @@ class DashboardContainer extends Component {
       const id = project.sprints[inputIndex].id;
       console.log('=======');
       console.log(`selected id : ${id}`);
-      const taskResponse = await apiHelper.get('/api/tasks', {
-        project: project.id,
-        sprint: id,
-      });
 
       const responseSprint = await apiHelper.get(`/api/sprints/${id}`);
 
       this.setState({
         selectedSprint: responseSprint.data.sprint,
-        tasks: taskResponse.data,
+        tasks: responseSprint.data.sprint.tasks,
         statuses: responseSprint.data.statuses,
       });
-      console.log(this.state.tasks);
-      console.log(this.state.selectedSprint);
-      console.log(this.state.statuses);
+      // console.log(this.state.tasks);
+      // console.log(this.state.selectedSprint);
+      // console.log(this.state.statuses);
     } catch (err) {
       console.log(err);
     }
   }
 
   render() {
-    const options1 = {
-      // responsive: true,
-      tooltips: {
-        mode: 'label',
-      },
-      elements: {
-        line: {
-          fill: false,
-          tension: 0,
-        },
-      },
-      scales: {
-        xAxes: [
-          {
-            display: true,
-            gridLines: {
-              display: false,
-            },
-            labels: {
-              show: true,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            type: 'linear',
-            display: true,
-            position: 'left',
-            id: 'y-axis-1',
-            gridLines: {
-              display: false,
-            },
-            labels: {
-              show: true,
-            },
-          },
-        ],
-      },
-    };
     const { project } = this.props;
-    // console.log(project);
-    const data = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [{
-        type: 'line',
-        label: 'Actual',
-        fillColor: 'rgba(220,220,220,0.2)',
-        strokeColor: 'rgba(220,220,220,1)',
-        pointColor: 'rgba(220,220,220,1)',
-        pointStrokeColor: '#fff',
-        pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(220,220,220,1)',
-        data: [65, 59, 80, 81, 56, 55, 40],
-      },
-      {
-        type: 'line',
-        label: 'Expected',
-        fillColor: 'rgba(151,187,205,0.2)',
-        strokeColor: 'rgba(151,187,205,1)',
-        pointColor: 'rgba(151,187,205,1)',
-        pointStrokeColor: '#fff',
-        pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(151,187,205,1)',
-        data: [28, 48, 40, 19, 86, 27, 90],
-      }],
-    };
     const columnStyle = {
       marginBottom: '20px',
     };
     const selectStyle = {
       marginBottom: 0,
       marginTop: '12px',
-      // display: 'inline',
     };
     const row = {
       paddingBottom: 0,
@@ -231,7 +161,15 @@ class DashboardContainer extends Component {
           <p style={{ marginBottom: '10px' }}>Sprint duration : {duration > 1 ? `${duration} weeks` : `${duration} week`}</p>
           <Col xs={12} md={6} style={columnStyle}>
             <h4 style={h4}><FaBarChart /> Remaining tasks in each sprint</h4>
-            <Line data={data} options={options1} />
+            <RemianingTasks
+              key={project.id}
+              project={project}
+              tasks={this.state.tasks}
+              sprint={this.state.selectedSprint}
+              colors={colors}
+              colorsHover={colorsHover}
+              totalTasks={this.state.totalTasks}
+            />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
             <h4 style={h4}><FaBarChart /> Remaining points in each day</h4>
@@ -242,7 +180,6 @@ class DashboardContainer extends Component {
               sprint={this.state.selectedSprint}
               colors={colors}
               colorsHover={colorsHover}
-              statuses={this.state.statuses}
             />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>

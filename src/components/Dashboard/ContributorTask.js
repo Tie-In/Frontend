@@ -2,33 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 class ContributorTask extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tasks: this.props.tasks,
-      // sprint: this.props.sprint,
-    };
-    // this.getStatusNames = this.getStatusNames.bind(this);
-    this.calUsersPoint = this.calUsersPoint.bind(this);
-    this.genDataSet = this.genDataSet.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      tasks: nextProps.tasks,
-      // sprint: nextProps.sprint,
-    });
-  }
-
-  // getStatusNames() {
-  //   // console.log(this.props.statuses);
-  //   const statusName = [];
-  //   this.props.statuses.forEach((status) => {
-  //     statusName.push(status.name);
-  //   });
-  //   return statusName;
-  // }
-
   genUserLable() {
     const xLabels = [];
     this.usersIds = [];
@@ -43,7 +16,6 @@ class ContributorTask extends Component {
   }
 
   calUsersPoint(status) {
-    console.log(status);
     const points = [];
     const { sprint, tasks } = this.props;
 
@@ -64,14 +36,13 @@ class ContributorTask extends Component {
       }
       points.push(count);
     });
-    console.log(points);
     return points;
   }
 
   genDataSet() {
     this.dataSets = [];
-    const { statuses, sprint, project } = this.props;
-    if (this.state.tasks.length > 0) {
+    const { statuses, sprint, project, tasks } = this.props;
+    if (tasks.length > 0) {
       if (sprint.id === project.current_sprint_id) {
         for (let i = 0; i < statuses.length; i += 1) {
           if (statuses[i].name !== 'To do') {
@@ -115,10 +86,18 @@ class ContributorTask extends Component {
       scales: {
         xAxes: [{
           stacked: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Contributor',
+          },
         }],
         yAxes: [{
           stacked: true,
           beginAtZero: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Work point',
+          },
         }],
       },
     };

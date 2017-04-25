@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 
-class StoryPoint extends Component {
+class RemainingTasks extends Component {
   startSprint() {
     return this.convertToLocalDate(this.props.sprint.start_date);
   }
@@ -32,37 +32,11 @@ class StoryPoint extends Component {
     return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
   }
 
-  genXLable() {
-    const labels = [];
-    const day = this.calAmountOfDay();
-    for (let i = 0; i < day; i += 1) {
-    // for (let i = 0; i < 5; i += 1) {
-      const newDate = moment(this.startSprint()).add(i, 'days');
-      labels.push(this.convertToLocalDate(newDate));
-    }
-    if (day === 1) {
-      labels.splice(0, 0, '');
-    }
-    return labels;
-  }
-
-  genExpectedData() {
-    const expectecData = [];
-    const sprintDuration = this.props.project.sprint_duration * 7;
-    const totalPoint = this.props.sprint.sprint_points;
-    const gradient = totalPoint / sprintDuration;
-    const day = this.calAmountOfDay();
-    for (let i = 0; i < day; i += 1) {
-      expectecData.push(Math.round(totalPoint - (gradient * i)));
-    }
-    if (day === 1) {
-      expectecData.splice(0, 0, totalPoint);
-    }
-    return expectecData;
-  }
-
   genActualData() {
     const actualData = [];
+    const { project, totalTasks } = this.props;
+    let remainingTask = totalTasks.length;
+
     let thisDate = this.startSprint();
     let remainingPoint = this.props.sprint.sprint_points;
     const day = this.calAmountOfDay();
@@ -88,6 +62,38 @@ class StoryPoint extends Component {
       actualData.splice(0, 0, actualData[0]);
     }
     return actualData;
+  }
+
+  genXLable() {
+    const labels = [];
+    const { project } = this.props;
+    const amountSprint = project.sprints.length;
+    for (let i = 0; i < amountSprint; i += 1) {
+      labels.push(i + 1);
+    }
+    if (amountSprint === 1) {
+      labels.splice(0, 0, '');
+    }
+
+    return labels;
+  }
+
+  genExpectedData() {
+    const expectecData = [];
+    const { project, totalTasks } = this.props;
+    const totalweek = project.effort_estimation.lower_weeks;
+    const duration = project.sprint_duration;
+    const estimatedSprint = totalweek / duration;
+    const gradient = totalTasks.length / estimatedSprint;
+    const amountSprint = project.sprints.length;
+
+    for (let i = 0; i < amountSprint; i += 1) {
+      expectecData.push(Math.round(totalTasks.length - (gradient * i)));
+    }
+    if (amountSprint === 1) {
+      expectecData.splice(0, 0, totalTasks.length);
+    }
+    return expectecData;
   }
 
   render() {
@@ -152,7 +158,7 @@ class StoryPoint extends Component {
             },
             scaleLabel: {
               display: true,
-              labelString: 'Day in sprint',
+              labelString: 'Sprint',
             },
           },
         ],
@@ -173,7 +179,7 @@ class StoryPoint extends Component {
             },
             scaleLabel: {
               display: true,
-              labelString: 'Remaining point',
+              labelString: 'Remaining tasks',
             },
           },
         ],
@@ -187,12 +193,13 @@ class StoryPoint extends Component {
   }
 }
 
-StoryPoint.propTypes = {
+RemainingTasks.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   sprint: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   colors: PropTypes.arrayOf(PropTypes.string).isRequired,
   colorsHover: PropTypes.arrayOf(PropTypes.string).isRequired,
+  totalTasks: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default StoryPoint;
+export default RemainingTasks;
