@@ -62,7 +62,7 @@ class PointEstimationModal extends Component {
         >
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title">
-              Point Estimation <span>Max story point: {this.props.maxPoint}</span>
+              Point Estimation <span className="pull-right" style={{ marginRight: 10 }}>Max story point: {this.props.maxPoint}</span>
             </Modal.Title>
             <hr />
           </Modal.Header>
