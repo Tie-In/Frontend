@@ -129,7 +129,6 @@ class NewRetrospective extends Component {
                     value={input.kind}
                     onChange={this.handleInputChange}
                   >
-                    <option value="">Select Type</option>
                     <option value="good">Good</option>
                     <option value="bad">Bad</option>
                     <option value="try">Try</option>
