@@ -117,7 +117,7 @@ class RetrospectiveContainer extends Component {
         } else if (this.state.selectedSprint === latestSprint && this.state.status === 'in_progress') {
           return (<Button onClick={this.startManage}>Manage</Button>);
         }
-      } else if (this.state.selectedSprint === latestSprint
+      } else if (this.state.selectedSprint === latestSprint && this.state.status === 'in_progress'
         && this.state.selectedSprint.is_ended && !this.hasUser()) {
         return (<Button href={`${this.getPath()}/retrospective/new`}>Join</Button>);
       }
