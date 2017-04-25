@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Row, Col, Button, Panel, FormGroup, FormControl, Glyphicon } from 'react-bootstrap';
+import ReactTooltip from 'react-tooltip';
 import DocumentTitle from 'react-document-title';
 import * as projectActionsCreator from '../../actions/project-actions';
 import * as permissionActionsCreator from '../../actions/permission-actions';
@@ -40,6 +41,7 @@ class RetrospectiveContainer extends Component {
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
       projectActions.setProject(project);
+      console.log(this.state.contributors);
     } catch (err) {
       console.log(err);
     }
@@ -97,22 +99,26 @@ class RetrospectiveContainer extends Component {
     return has;
   }
   render() {
+    const imgStyle = {
+      marginRight: '7px',
+    };
     const latestSprint = this.state.sprints[this.state.sprints.length - 1];
     const selectSprint = this.state.sprints.map((sprint) => {
       if (sprint.number === this.state.sprints.length) {
         return (
-          <option value={sprint.number} selected>{sprint.number}</option>
+          <option value={sprint.number} selected>Sprint {sprint.number}</option>
         );
       }
       return (
-        <option value={sprint.number}>{sprint.number}</option>
+        <option value={sprint.number}>Sprint {sprint.number}</option>
       );
     });
     const startBtn = () => {
       if (this.state.permission === 'admin') {
         if (!this.state.selectedSprint.is_ended) {
           return (<Button className="disabled">Start Retrospective</Button>);
-        } else if (this.state.viewpoints === undefined || this.state.viewpoints.length === 0) {
+        } else if ((this.state.viewpoints === undefined || this.state.viewpoints.length === 0)
+          && this.state.status !== 'in_progress') {
           return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
         } else if (this.state.selectedSprint === latestSprint && this.state.status === 'in_progress') {
           return (<Button onClick={this.startManage}>Manage</Button>);
@@ -136,6 +142,26 @@ class RetrospectiveContainer extends Component {
         });
       }
     };
+    const users = () => {
+      const ids = [];
+      return this.state.contributors.map((user) => {
+        if (ids.indexOf(user.user_id) === -1) {
+          ids.push(user.user_id);
+          return (
+            <div className="pull-right">
+              <img
+                src={user.user.image}
+                style={imgStyle}
+                alt="contributor-thumbnail"
+                data-tip={`${user.user.firstname} ${user.user.lastname}`}
+                key={user.user.username}
+              />
+            </div>
+          );
+        }
+      });
+    };
+
     return (
       <DocumentTitle title={`${this.props.project.name}・Retrospective`}>
         <div className="tiein-container">
@@ -158,6 +184,9 @@ class RetrospectiveContainer extends Component {
                 <p>Latest retrospective: {latestSprint.number - 1}</p>
                 <p>Current sprint: {latestSprint.number}</p>
               </Col>
+              <Col md={6}>
+                {users()}
+              </Col>
             </Row>
             <Row>
               <Col md={4}>
@@ -178,6 +207,7 @@ class RetrospectiveContainer extends Component {
             </Row>
             <div id="startBtn">{startBtn()}</div>
           </Row>
+          <ReactTooltip effect="solid" place="bottom" />
         </div>
       </DocumentTitle>
     );

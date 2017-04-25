@@ -11,6 +11,13 @@
 p {
   margin-bottom: 0px;
 }
+#tryList {
+  list-style: none;
+}
+#tryList .glyphicon-star {
+  padding-right: 13px;
+  color: #ffde00;
+}
 /*--------Add comments--------*/
 button {
   margin: 0 auto;
