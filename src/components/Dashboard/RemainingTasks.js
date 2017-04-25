@@ -3,35 +3,6 @@ import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 
 class RemainingTasks extends Component {
-  // startSprint() {
-  //   return this.convertToLocalDate(this.props.sprint.start_date);
-  // }
-  //
-  // endSprint() {
-  //   return this.convertToLocalDate(this.props.sprint.end_date);
-  // }
-
-  calAmountOfDay() {
-    const start = moment(this.startSprint()).dayOfYear();
-    let day = 0;
-    if (!this.props.sprint.is_ended) {
-      const today = moment().dayOfYear();
-      day = today - start;
-    } else {
-      const end = moment(this.endSprint()).dayOfYear();
-      day = end - start;
-    }
-    return day + 1;
-  }
-
-  // convertToLocalDate(serverDate) {
-  //   if (serverDate === null) {
-  //     return '-';
-  //   }
-  //   const date = moment.utc(serverDate).local();
-  //   return `${moment(date).get('year')}/${moment(date).get('month') + 1}/${moment(date).get('date')}`;
-  // }
-
   genActualData() {
     const { project, totalTasks } = this.props;
     const actualData = [totalTasks.length];
@@ -41,15 +12,24 @@ class RemainingTasks extends Component {
     if (remainingTask > 0) {
       for (let i = 0; i < amountSprint; i += 1) {
         let doneTask = 0;
-        for (let j = 0; j < remainingTask; j += 1) {
+        console.log('--------');
+        for (let j = 0; j < totalTasks.length; j += 1) {
           const startSprint = project.sprints[i].start_date;
           const endSprint = project.sprints[i].end_date;
           // console.log(`sprint ${i} : ${startSprint} - ${endSprint}`);
           if (totalTasks[j].is_done) {
-            const doneDate = moment(totalTasks[j].done_date);
-            if (moment(doneDate).isBetween(startSprint, endSprint, null, '[]')) {
+            const doneDate = totalTasks[j].done_date;
+            const isBetween = moment(doneDate).isBetween(startSprint, endSprint, null, '[]');
+            const thisSprint = totalTasks[j].sprint_id === project.sprints[i].id;
+            // console.log(totalTasks[j]);
+            // console.log(`${thisSprint} : ${totalTasks[j].sprint_id} - ${project.sprints[i].id}`);
+            console.log(`${isBetween} : ${doneDate} | ${startSprint} - ${endSprint}`);
+            console.log(totalTasks[j]);
+            console.log(`${thisSprint} : ${totalTasks[j].sprint_id} - ${project.sprints[i].id}`);
+            if (isBetween && thisSprint) {
               doneTask += 1;
             }
+            console.log('===');
           }
         }
         remainingTask -= doneTask;
@@ -77,25 +57,25 @@ class RemainingTasks extends Component {
   }
 
   genExpectedData() {
-    const expectecData = [];
     const { project, totalTasks } = this.props;
     const totalweek = project.effort_estimation.lower_weeks;
     const duration = project.sprint_duration;
     const estimatedSprint = totalweek / duration;
     const gradient = totalTasks.length / estimatedSprint;
     const amountSprint = project.sprints.length;
+    const total = totalTasks.length;
+    const expectecData = [total];
 
     for (let i = 0; i < amountSprint; i += 1) {
-      expectecData.push(Math.round(totalTasks.length - (gradient * i)));
+      expectecData.push(Math.round(total - (gradient * i)));
     }
     if (amountSprint === 1) {
-      expectecData.splice(0, 0, totalTasks.length);
+      expectecData.splice(0, 0, total);
     }
     return expectecData;
   }
 
   render() {
-    // console.log(this.props.sprint);
     const data1 = {
       labels: this.genXLable(),
       datasets: [{
@@ -192,8 +172,6 @@ class RemainingTasks extends Component {
 }
 
 RemainingTasks.propTypes = {
-  tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
-  sprint: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   colors: PropTypes.arrayOf(PropTypes.string).isRequired,
   colorsHover: PropTypes.arrayOf(PropTypes.string).isRequired,

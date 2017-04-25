@@ -98,6 +98,9 @@ class ContributorTask extends Component {
             display: true,
             labelString: 'Work point',
           },
+          ticks: {
+            beginAtZero: true,
+          },
         }],
       },
     };

@@ -33,43 +33,32 @@ class StoryPoint extends Component {
   }
 
   genXLable() {
-    const labels = [];
+    const labels = [''];
     const day = this.calAmountOfDay();
     for (let i = 0; i < day; i += 1) {
-    // for (let i = 0; i < 5; i += 1) {
       const newDate = moment(this.startSprint()).add(i, 'days');
       labels.push(this.convertToLocalDate(newDate));
-    }
-    if (day === 1) {
-      labels.splice(0, 0, '');
     }
     return labels;
   }
 
   genExpectedData() {
-    const expectecData = [];
     const sprintDuration = this.props.project.sprint_duration * 7;
     const totalPoint = this.props.sprint.sprint_points;
+    const expectecData = [totalPoint];
     const gradient = totalPoint / sprintDuration;
     const day = this.calAmountOfDay();
     for (let i = 0; i < day; i += 1) {
       expectecData.push(Math.round(totalPoint - (gradient * i)));
     }
-    if (day === 1) {
-      expectecData.splice(0, 0, totalPoint);
-    }
     return expectecData;
   }
 
   genActualData() {
-    const actualData = [];
     let thisDate = this.startSprint();
     let remainingPoint = this.props.sprint.sprint_points;
+    const actualData = [remainingPoint];
     const day = this.calAmountOfDay();
-
-    // console.log(this.props.statuses);
-    // const done = this.props.statuses.find((status) => { return status.name === 'Done'; });
-
     if (this.props.tasks[0]) {
       for (let i = 0; i < day; i += 1) {
         let countedPoint = 0;
@@ -84,14 +73,10 @@ class StoryPoint extends Component {
         thisDate = moment(thisDate).add(1, 'days');
       }
     }
-    if (day === 1) {
-      actualData.splice(0, 0, actualData[0]);
-    }
     return actualData;
   }
 
   render() {
-    // console.log(this.props.sprint);
     const data1 = {
       labels: this.genXLable(),
       datasets: [{
