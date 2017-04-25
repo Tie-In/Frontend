@@ -6,6 +6,7 @@ class ContributorTask extends Component {
     super(props);
     this.state = {
       tasks: this.props.tasks,
+      sprint: this.props.sprint,
     };
     this.getStatusNames = this.getStatusNames.bind(this);
     this.calUsersPoint = this.calUsersPoint.bind(this);
@@ -18,7 +19,10 @@ class ContributorTask extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ tasks: nextProps.tasks });
+    this.setState({
+      tasks: nextProps.tasks,
+      sprint: nextProps.sprint,
+    });
   }
 
   getStatusNames() {
@@ -63,9 +67,9 @@ class ContributorTask extends Component {
     this.usersIds.forEach((id) => {
       let count = 0;
       this.state.tasks.forEach((task) => {
-        if (id === task.assignee_id && status === task.status.name) {
+        // if (id === task.assignee_id && status === task.status.name) {
           count += task.story_point;
-        }
+        // }
       });
       points.push(count);
     });
@@ -137,8 +141,10 @@ class ContributorTask extends Component {
 ContributorTask.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   project: PropTypes.object.isRequired,
+  sprint: PropTypes.object.isRequired,
   colors: PropTypes.arrayOf(PropTypes.string).isRequired,
   colorsHover: PropTypes.arrayOf(PropTypes.string).isRequired,
+  statuses: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default ContributorTask;

@@ -19,6 +19,7 @@ class DashboardContainer extends Component {
       // selectedSprint: this.props.project.sprints.slice(-1)[0],
       selectedSprint: {},
       tasks: [],
+      statuses: [],
     };
     this.handleSelectSprint = this.handleSelectSprint.bind(this);
   }
@@ -27,19 +28,21 @@ class DashboardContainer extends Component {
     try {
       const { project } = this.props;
       // console.log(project.current_sprint_id);
-      const sprintResponse = await apiHelper.get('/api/tasks', {
+      const taskResponse = await apiHelper.get('/api/tasks', {
         project: project.id,
         sprint: project.current_sprint_id,
       });
 
       const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
-      const data = responseSprint.data;
 
       this.setState({
-        tasks: sprintResponse.data,
-        selectedSprint: data,
+        selectedSprint: responseSprint.data.sprint,
+        tasks: taskResponse.data,
+        statuses: responseSprint.data.statuses,
       });
+      console.log(this.state.tasks);
       console.log(this.state.selectedSprint);
+      console.log(this.state.statuses);
     } catch (err) {
       console.log(err);
     }
@@ -60,17 +63,22 @@ class DashboardContainer extends Component {
       const { project } = this.props;
       const id = project.sprints[inputIndex].id;
       console.log(`selected id : ${id}`);
-      const sprintResponse = await apiHelper.get('/api/tasks', {
+      const taskResponse = await apiHelper.get('/api/tasks', {
         project: project.id,
         sprint: id,
       });
-      console.log(sprintResponse);
-      const newSprint = project.sprints[inputIndex];
+
+      const responseSprint = await apiHelper.get(`/api/sprints/${id}`);
+
       this.setState({
-        tasks: sprintResponse.data,
-        selectedSprint: newSprint,
+        selectedSprint: responseSprint.data.sprint,
+        tasks: taskResponse.data,
+        statuses: responseSprint.data.statuses,
       });
+      console.log('=======');
       console.log(this.state.tasks);
+      console.log(this.state.selectedSprint);
+      console.log(this.state.statuses);
     } catch (err) {
       console.log(err);
     }
@@ -234,6 +242,7 @@ class DashboardContainer extends Component {
               sprint={this.state.selectedSprint}
               colors={colors}
               colorsHover={colorsHover}
+              statuses={this.state.statuses}
             />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
@@ -244,6 +253,7 @@ class DashboardContainer extends Component {
               project={project}
               colors={colors}
               colorsHover={colorsHover}
+              statuses={this.state.statuses}
             />
           </Col>
           <Col xs={12} md={6} style={columnStyle}>
@@ -254,6 +264,7 @@ class DashboardContainer extends Component {
               project={project}
               colors={colors}
               colorsHover={colorsHover}
+              statuses={this.state.statuses}
             />
           </Col>
         </div>

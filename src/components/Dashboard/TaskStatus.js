@@ -6,6 +6,7 @@ class TaskStatus extends Component {
     super(props);
     this.state = {
       tasks: this.props.tasks,
+      sprint: this.props.sprint,
     };
   }
 
@@ -29,9 +30,9 @@ class TaskStatus extends Component {
     this.statusName.forEach((status) => {
       let count = 0;
       this.state.tasks.forEach((task) => {
-        if (task.status.name === status) {
+        // if (task.status.name === status) {
           count += 1;
-        }
+        // }
       });
       numbers.push(count);
     });
@@ -70,9 +71,11 @@ class TaskStatus extends Component {
 
 TaskStatus.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sprint: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   colors: PropTypes.arrayOf(PropTypes.string).isRequired,
   colorsHover: PropTypes.arrayOf(PropTypes.string).isRequired,
+  statuses: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default TaskStatus;

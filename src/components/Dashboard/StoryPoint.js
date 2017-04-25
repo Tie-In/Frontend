@@ -33,11 +33,16 @@ class StoryPoint extends Component {
   }
 
   genXLable() {
+    console.log(this.props.sprint);
     const labels = [];
-    for (let i = 0; i < this.calAmountOfDay(); i += 1) {
+    const day = this.calAmountOfDay();
+    for (let i = 0; i < day; i += 1) {
     // for (let i = 0; i < 5; i += 1) {
       const newDate = moment(this.startSprint()).add(i, 'days');
       labels.push(this.convertToLocalDate(newDate));
+    }
+    if (day === 1) {
+      labels.splice(0, 0, '');
     }
     return labels;
   }
@@ -47,8 +52,12 @@ class StoryPoint extends Component {
     const sprintDuration = this.props.project.sprint_duration * 7;
     const totalPoint = this.props.sprint.sprint_points;
     const gradient = totalPoint / sprintDuration;
-    for (let i = 0; i < this.calAmountOfDay(); i += 1) {
+    const day = this.calAmountOfDay();
+    for (let i = 0; i < day; i += 1) {
       expectecData.push(Math.round(totalPoint - (gradient * i)));
+    }
+    if (day === 1) {
+      expectecData.splice(0, 0, totalPoint);
     }
     return expectecData;
   }
@@ -57,8 +66,15 @@ class StoryPoint extends Component {
     const actualData = [];
     let thisDate = this.startSprint();
     let remainingPoint = this.props.sprint.sprint_points;
+    const day = this.calAmountOfDay();
+
+    // console.log(this.props.statuses);
+    // const done = this.props.statuses.find((status) => { return status.name === 'Done'; });
+    //
+    // console.log(done[0]);
+
     if (this.props.tasks[0]) {
-      for (let i = 0; i < this.calAmountOfDay(); i += 1) {
+      for (let i = 0; i < day; i += 1) {
         let countedPoint = 0;
         for (let j = 0; j < this.props.tasks.length; j += 1) {
           const doneDate = moment(this.props.tasks[j].done_date);
@@ -71,6 +87,10 @@ class StoryPoint extends Component {
         thisDate = moment(thisDate).add(1, 'days');
       }
     }
+    if (day === 1) {
+      actualData.splice(0, 0, actualData[0]);
+    }
+    console.log(actualData);
     return actualData;
   }
 
@@ -131,6 +151,13 @@ class StoryPoint extends Component {
             labels: {
               show: true,
             },
+            ticks: {
+              beginAtZero: true,
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Day in sprint',
+            },
           },
         ],
         yAxes: [
@@ -148,6 +175,10 @@ class StoryPoint extends Component {
             ticks: {
               beginAtZero: true,
             },
+            scaleLabel: {
+              display: true,
+              labelString: 'Remaining point',
+            },
           },
         ],
       },
@@ -162,6 +193,7 @@ class StoryPoint extends Component {
 
 StoryPoint.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  statuses: PropTypes.arrayOf(PropTypes.object).isRequired,
   sprint: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   colors: PropTypes.arrayOf(PropTypes.string).isRequired,
