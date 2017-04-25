@@ -30,6 +30,7 @@ class Board extends Component {
     this.stopScrolling = this.stopScrolling.bind(this);
     this.startScrolling = this.startScrolling.bind(this);
     this.pollingData = this.pollingData.bind(this);
+    this.stopPolling = this.stopPolling.bind(this);
     this.state = {
       isScrolling: false,
       sprintNumber: '',
@@ -37,6 +38,7 @@ class Board extends Component {
       allTags: [],
       allFeatures: [],
     };
+    this.interval = setInterval(this.pollingData, 15000);
   }
 
   async componentWillMount() {
@@ -51,19 +53,18 @@ class Board extends Component {
   }
 
   componentDidMount() {
-    // setInterval(this.pollingData, 30000);
+    this.interval;
   }
 
-  // componentWillUnmount() {
-  //   console.log('in');
-  //   clearInterval();
-  // }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
 
   async pollingData() {
     const { project } = this.props;
     if (project.current_sprint_id) {
       const responseSprint = await apiHelper.get(`/api/sprints/${project.current_sprint_id}`);
-      console.log(responseSprint);
+      // console.log(responseSprint);
       const data = responseSprint.data;
       this.setState({ sprintNumber: data.sprint.number });
       const statuses = data.statuses;
@@ -125,6 +126,10 @@ class Board extends Component {
     };
   }
 
+  stopPolling() {
+    clearInterval(this.interval);
+  }
+
   render() {
     const { lists = [] } = this.props;
     const width = 300 * (lists.length + 1);
@@ -146,6 +151,7 @@ class Board extends Component {
               stopScrolling={this.stopScrolling}
               isScrolling={this.state.isScrolling}
               x={i}
+              stopPolling={this.stopPolling}
             />);
           },
           )}

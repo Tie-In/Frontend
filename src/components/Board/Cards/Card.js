@@ -62,7 +62,6 @@ class Card extends Component {
   render() {
     const { style } = this.props;
     const { item } = this.state;
-
     return (
       <div
         style={style} className="item"
@@ -76,7 +75,6 @@ class Card extends Component {
         </div>
         <div className="item-container">
           <div className="item-content">
-            {/*<Label bsStyle="primary" style={{ marginRight: 5 }}>{item.feature ? item.feature.name : ''}</Label>*/}
             <p>{item.description}</p>
           </div>
           <div className="item-footer">

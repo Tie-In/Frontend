@@ -111,9 +111,8 @@ export default class Cards extends Component {
   render() {
     const { connectDropTarget, x, cards, isOver, canDrop } = this.props;
     const { placeholderIndex } = this.state;
-
     let isPlaceHold = false;
-    let cardList = [];
+    const cardList = [];
     cards.forEach((item, i) => {
       if (isOver && canDrop) {
         isPlaceHold = false;

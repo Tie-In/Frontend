@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  Col, Row, Modal, Button,
+  Col, Row, Modal, Button, Glyphicon,
 } from 'react-bootstrap';
 import AutosuggestionBlock from '../../shared/AutosuggestionBlock';
 import * as apiHelper from '../../../helpers/apiHelper';
@@ -64,7 +64,7 @@ class AddMemberRow extends Component {
               className="pull-right"
               onClick={() => { this.setState({ showModal: !showModal }); }}
             >
-              Add member
+              <Glyphicon glyph="plus" /> Add member
             </Button>
           </Col>
         </Row>

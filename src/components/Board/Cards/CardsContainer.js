@@ -20,12 +20,12 @@ export default class CardsContainer extends Component {
     const { item, x, moveCard, name } = this.props;
     const totalPoints = () => {
       let points = 0;
-      item.tasks.map((task) => {
+      item.tasks.forEach((task) => {
         points += task.story_point;
-      })
+      });
       return points;
-    }
-    
+    };
+
     return (
       <div className="desk">
         <div className="desk-head">
@@ -43,6 +43,7 @@ export default class CardsContainer extends Component {
           userSelection={this.props.userSelection}
           featureSelection={this.props.featureSelection}
           tagSelection={this.props.tagSelection}
+          stopPolling={this.props.stopPolling}
         />
       </div>
     );
