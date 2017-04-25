@@ -41,6 +41,7 @@ class RetrospectiveContainer extends Component {
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
       projectActions.setProject(project);
+      console.log(this.state.contributors);
     } catch (err) {
       console.log(err);
     }
@@ -116,7 +117,8 @@ class RetrospectiveContainer extends Component {
       if (this.state.permission === 'admin') {
         if (!this.state.selectedSprint.is_ended) {
           return (<Button className="disabled">Start Retrospective</Button>);
-        } else if (this.state.viewpoints === undefined || this.state.viewpoints.length === 0) {
+        } else if ((this.state.viewpoints === undefined || this.state.viewpoints.length === 0)
+          && this.state.status !== 'in_progress') {
           return (<Button onClick={this.startRetro}>Start Retrospective</Button>);
         } else if (this.state.selectedSprint === latestSprint && this.state.status === 'in_progress') {
           return (<Button onClick={this.startManage}>Manage</Button>);
@@ -140,19 +142,25 @@ class RetrospectiveContainer extends Component {
         });
       }
     };
-    const users = this.state.contributors.map((user) => {
-      return (
-        <div className="pull-right">
-          <img
-            src={user.user.image}
-            style={imgStyle}
-            alt="contributor-thumbnail"
-            data-tip={`${user.user.firstname} ${user.user.lastname}`}
-            key={user.user.username}
-          />
-        </div>
-      );
-    });
+    const users = () => {
+      const ids = [];
+      return this.state.contributors.map((user) => {
+        if (ids.indexOf(user.user_id) === -1) {
+          ids.push(user.user_id);
+          return (
+            <div className="pull-right">
+              <img
+                src={user.user.image}
+                style={imgStyle}
+                alt="contributor-thumbnail"
+                data-tip={`${user.user.firstname} ${user.user.lastname}`}
+                key={user.user.username}
+              />
+            </div>
+          );
+        }
+      });
+    };
 
     return (
       <DocumentTitle title={`${this.props.project.name}・Retrospective`}>
@@ -177,7 +185,7 @@ class RetrospectiveContainer extends Component {
                 <p>Current sprint: {latestSprint.number}</p>
               </Col>
               <Col md={6}>
-                {users}
+                {users()}
               </Col>
             </Row>
             <Row>
