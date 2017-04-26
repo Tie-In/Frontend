@@ -120,11 +120,11 @@ class DashboardContainer extends Component {
     const selectSprint = this.state.sprints.map((sprint) => {
       if (sprint.number === this.state.sprints.length) {
         return (
-          <option value={sprint.number} key={`sprint${sprint.number}`} selected>{sprint.number}</option>
+          <option value={sprint.number} key={`sprint${sprint.number}`} selected>Sprint {sprint.number}</option>
         );
       }
       return (
-        <option value={sprint.number} key={`sprint${sprint.number}`}>{sprint.number}</option>
+        <option value={sprint.number} key={`sprint${sprint.number}`}>Sprint {sprint.number}</option>
       );
     });
 
@@ -140,7 +140,6 @@ class DashboardContainer extends Component {
             <Col md={2}>
               <FormGroup style={selectStyle} onChange={this.handleSelectSprint}>
                 <FormControl componentClass="select">
-                  <option value="">Select sprint</option>
                   {selectSprint}
                 </FormControl>
               </FormGroup>

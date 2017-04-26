@@ -153,6 +153,7 @@ class Management extends Component {
               Next
             </Button>
           </div>
+          <br />
         </div>
       </DocumentTitle>
     );

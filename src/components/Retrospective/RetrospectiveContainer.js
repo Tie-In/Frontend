@@ -23,6 +23,7 @@ class RetrospectiveContainer extends Component {
       contributors: [],
       status: '',
     };
+    this.interval = setInterval(this.pollingData, 15000);
     this.startRetro = this.startRetro.bind(this);
     this.startManage = this.startManage.bind(this);
     this.handleSelectSprint = this.handleSelectSprint.bind(this);
@@ -32,16 +33,18 @@ class RetrospectiveContainer extends Component {
   async componentWillMount() {
     const { params, projectActions } = this.props;
     try {
-      const res = await apiHelper.get(`/api/retrospectives/${this.state.selectedSprint.retrospective.id}`);
-      this.setState({
-        viewpoints: res.data.viewpoints,
-        contributors: res.data.retrospective_contributes,
-        status: res.data.status,
-      });
       const response = await apiHelper.get(`/api/projects/${params.projectId}`);
       const project = response.data;
       projectActions.setProject(project);
-      console.log(this.state.contributors);
+      const temp = project.sprints[this.props.project.sprints.length - 1];
+      if (temp.retrospective) {
+        const res = await apiHelper.get(`/api/retrospectives/${project.sprints[this.props.project.sprints.length - 1].retrospective.id}`);
+        this.setState({
+          viewpoints: res.data.viewpoints,
+          contributors: res.data.retrospective_contributes,
+          status: res.data.status,
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -78,7 +81,11 @@ class RetrospectiveContainer extends Component {
     const tempSprint = this.state.sprints[tempIndex];
     try {
       const res = await apiHelper.get(`/api/retrospectives/${tempSprint.retrospective.id}`);
-      this.setState({ viewpoints: res.data.viewpoints });
+      this.setState({
+        viewpoints: res.data.viewpoints,
+        contributors: res.data.retrospective_contributes,
+        status: res.data.status,
+      });
       // console.log(this.state.viewpoints);
     } catch (err) {
       this.setState({ viewpoints: err.response });
@@ -106,11 +113,11 @@ class RetrospectiveContainer extends Component {
     const selectSprint = this.state.sprints.map((sprint) => {
       if (sprint.number === this.state.sprints.length) {
         return (
-          <option value={sprint.number} selected>Sprint {sprint.number}</option>
+          <option key={sprint.number} value={sprint.number} selected>Sprint {sprint.number}</option>
         );
       }
       return (
-        <option value={sprint.number}>Sprint {sprint.number}</option>
+        <option key={sprint.number} value={sprint.number}>Sprint {sprint.number}</option>
       );
     });
     const startBtn = () => {
@@ -133,11 +140,11 @@ class RetrospectiveContainer extends Component {
         return this.state.viewpoints.map((data) => {
           if (this.state.viewpoints && data.kind === 'try' && data.kind === kind) {
             if (data.is_important) {
-              return (<li id="tryList"><Glyphicon glyph="star" />{data.comment}</li>);
+              return (<li key={data.id} id="tryList"><Glyphicon glyph="star" />{data.comment}</li>);
             }
-            return (<li>{data.comment}</li>);
+            return (<li key={data.id}>{data.comment}</li>);
           } else if (this.state.viewpoints && data.kind === kind) {
-            return (<li>{data.comment}</li>);
+            return (<li key={data.id}>{data.comment}</li>);
           }
         });
       }
@@ -148,7 +155,7 @@ class RetrospectiveContainer extends Component {
         if (ids.indexOf(user.user_id) === -1) {
           ids.push(user.user_id);
           return (
-            <div className="pull-right">
+            <div key={user.id} className="pull-right">
               <img
                 src={user.user.image}
                 style={imgStyle}
@@ -175,7 +182,6 @@ class RetrospectiveContainer extends Component {
                     componentClass="select"
                     onChange={this.handleSelectSprint}
                   >
-                    <option value="">Select sprint</option>
                     {selectSprint}
                   </FormControl>
                 </FormGroup>
